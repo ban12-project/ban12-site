@@ -8,7 +8,7 @@ const Home = () => (
     </Head>
 
     <main>
-      <h1 className="title">
+      <h1 className="title font-bold">
         Welcome to <a href="https://nextjs.org">Next.js!</a>
       </h1>
 
@@ -59,6 +59,7 @@ const Home = () => (
 
     <style jsx>{`
       .container {
+        max-width: 100% !important;
         min-height: 100vh;
         padding: 0 0.5rem;
         display: flex;
