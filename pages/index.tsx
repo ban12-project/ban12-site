@@ -1,13 +1,13 @@
-import loadIntlMessages from '../helper/loadIntlMessages'
-import Welcome from '@/components/Welcome'
-
 import type { InferGetStaticPropsType, GetStaticProps } from 'next'
 
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
+import Welcome from '@/components/Welcome'
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   return {
     props: {
-      intlMessages: await loadIntlMessages(ctx)
+      ...await serverSideTranslations(ctx.locale ?? 'en', ['common'])
     },
   }
 }

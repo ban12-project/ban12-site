@@ -1,8 +1,4 @@
 {
   "extends": "next",
-  "plugins": ["formatjs"],
-  "root": true,
-  "rules": {
-    "formatjs/enforce-default-message": ["error", "literal"]
-  }
+  "root": true
 }

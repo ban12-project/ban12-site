@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { animated, useTrail } from '@react-spring/web'
-import { useIntl } from 'react-intl'
+import { useTranslation } from 'next-i18next'
 
-const Trail: React.FC<{ open: boolean }> = ({ open, children }) => {
+type Props = { open: boolean; children: React.ReactNode }
+
+const Trail: React.FC<Props> = ({ open, children }) => {
   const items = React.Children.toArray(children)
   const trail = useTrail(items.length, {
     config: { mass: 5, tension: 2000, friction: 200 },
@@ -35,7 +37,7 @@ const Trail: React.FC<{ open: boolean }> = ({ open, children }) => {
 }
 
 export default function Welcome() {
-  const intl = useIntl()
+  const { t } = useTranslation()
   const [open, setOpen] = useState(true)
 
   return (
@@ -43,14 +45,7 @@ export default function Welcome() {
       className="h-screen flex items-center justify-center"
       onClick={() => setOpen(state => !state)}
     >
-      <Trail open={open}>
-        {intl
-          .formatMessage({
-            description: '施工中',
-            defaultMessage: 'Under construction',
-          })
-          .split(' ')}
-      </Trail>
+      <Trail open={open}>{t('under-construction').split(' ')}</Trail>
     </div>
   )
 }

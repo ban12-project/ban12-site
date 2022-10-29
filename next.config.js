@@ -1,19 +1,21 @@
 // @ts-check
+const { i18n } = require('./next-i18next.config.js')
 
-/**
- * @type {import('next').NextConfig}
- */
-module.exports = {
-  i18n: {
-    locales: ['zh-CN', 'en-US'],
-    defaultLocale: 'en-US',
+// You can remove the following 2 lines when integrating our example.
+const { loadCustomBuildParams } = require('./next-utils.config')
+const { esmExternals = false, tsconfigPath } = loadCustomBuildParams()
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    esmExternals, // https://nextjs.org/blog/next-11-1#es-modules-support
   },
-  webpack(config, { dev }) {
-    if (!dev) {
-      // https://formatjs.io/docs/guides/advanced-usage#react-intl-without-parser-40-smaller
-      config.resolve.alias['@formatjs/icu-messageformat-parser'] =
-        '@formatjs/icu-messageformat-parser/no-parser'
-    }
-    return config
+  i18n,
+  reactStrictMode: true,
+  typescript: {
+    tsconfigPath,
   },
 }
+
+module.exports = nextConfig
+

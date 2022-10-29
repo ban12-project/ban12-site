@@ -1,12 +1,16 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { IntlProvider } from 'react-intl'
+import { appWithTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
+// import nextI18NextConfig from '../next-i18next.config.js'
+
 import '../styles/index.css'
 
 import type { AppProps } from 'next/app'
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+type Props = { children: React.ReactNode }
+
+const Layout: React.FC<Props> = ({ children }) => {
   const router = useRouter()
 
   return (
@@ -50,19 +54,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 }
 
 function App({ Component, pageProps }: AppProps) {
-  const { locale, defaultLocale } = useRouter()
-  
   return (
-    <IntlProvider
-      locale={locale as string}
-      defaultLocale={defaultLocale}
-      messages={pageProps.intlMessages}
-    >
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </IntlProvider>
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
   )
 }
 
-export default App
+// https://github.com/i18next/next-i18next#unserialisable-configs
+export default appWithTranslation(App /*, nextI18NextConfig */)
