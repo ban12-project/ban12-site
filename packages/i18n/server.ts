@@ -1,0 +1,30 @@
+import type { NextMiddleware } from 'next/server'
+
+import { createGetDictionary } from './get-dictionary'
+import { createMiddleware } from './middleware'
+
+export type Dictionaries<T = string> = Record<string, () => T>
+
+export interface I18nConfig {
+  defaultLocale: keyof Dictionaries
+  locales: Record<
+    keyof Dictionaries,
+    {
+      lang: string
+      label: string
+    }
+  >
+}
+
+export const createI18n = <T>(
+  i18nConfig: I18nConfig,
+  dictionaries: Dictionaries<T>,
+): {
+  middleware: NextMiddleware
+  getDictionary: (locale: keyof Dictionaries<T>) => T
+} => {
+  return {
+    getDictionary: createGetDictionary(dictionaries, i18nConfig.defaultLocale),
+    middleware: createMiddleware(i18nConfig),
+  }
+}
