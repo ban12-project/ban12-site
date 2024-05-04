@@ -7,7 +7,7 @@ import { useLocale } from './i18n'
 
 type Props = React.ComponentPropsWithRef<typeof NextLink>
 
-export default forwardRef<React.ElementRef<'a'>, Props>(function Link(
+export const Link = forwardRef<React.ElementRef<'a'>, Props>(function Link(
   { href, ...rest },
   forwardedRef,
 ) {
