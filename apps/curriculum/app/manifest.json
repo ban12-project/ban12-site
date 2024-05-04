@@ -1,0 +1,27 @@
+{
+  "name": "curriculum",
+  "short_name": "curriculum",
+  "description": "curriculum",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "blue",
+  "theme_color": "red",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "web",
+      "url": "https://ban12.com"
+    },
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
+    }
+  ]
+}
