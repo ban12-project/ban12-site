@@ -1,7 +1,7 @@
 {
-  "name": "curriculum",
-  "short_name": "curriculum",
-  "description": "curriculum",
+  "name": "Timetable",
+  "short_name": "Timetable",
+  "description": "Timetable",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
