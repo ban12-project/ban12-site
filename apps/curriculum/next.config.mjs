@@ -2,7 +2,7 @@ import withSerwistInit from '@serwist/next'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@repo/ui", "@repo/i18n"],
+  transpilePackages: ['@repo/ui', '@repo/i18n'],
 }
 
 const withSerwist = withSerwistInit({

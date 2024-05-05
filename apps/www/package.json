@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "prettier --write --ignore-unknown"
+  },
   "dependencies": {
     "@react-spring/web": "^9.7.3",
     "@repo/i18n": "workspace:*",

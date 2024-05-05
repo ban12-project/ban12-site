@@ -1,6 +1,6 @@
-const { resolve } = require("node:path");
+const { resolve } = require('node:path')
 
-const project = resolve(process.cwd(), "tsconfig.json");
+const project = resolve(process.cwd(), 'tsconfig.json')
 
 /*
  * This is a custom ESLint configuration for use a library
@@ -14,9 +14,9 @@ const project = resolve(process.cwd(), "tsconfig.json");
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   extends: [
-    "@vercel/style-guide/eslint/browser",
-    "@vercel/style-guide/eslint/typescript",
-    "@vercel/style-guide/eslint/react",
+    '@vercel/style-guide/eslint/browser',
+    '@vercel/style-guide/eslint/typescript',
+    '@vercel/style-guide/eslint/react',
   ].map(require.resolve),
   parserOptions: {
     project,
@@ -25,27 +25,27 @@ module.exports = {
     JSX: true,
   },
   settings: {
-    "import/resolver": {
+    'import/resolver': {
       typescript: {
         project,
       },
       node: {
-        extensions: [".mjs", ".js", ".jsx", ".ts", ".tsx"],
+        extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx'],
       },
     },
   },
-  ignorePatterns: ["node_modules/", "dist/", ".eslintrc.js", "**/*.css"],
+  ignorePatterns: ['node_modules/', 'dist/', '.eslintrc.js', '**/*.css'],
   // add rules configurations here
   rules: {
-    "import/no-default-export": "off",
-    "import/order": "off",
+    'import/no-default-export': 'off',
+    'import/order': 'off',
   },
   overrides: [
     {
-      files: ["*.config.js"],
+      files: ['*.config.js'],
       env: {
         node: true,
       },
     },
   ],
-};
+}
