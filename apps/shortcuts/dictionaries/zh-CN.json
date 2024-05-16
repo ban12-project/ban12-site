@@ -1,0 +1,39 @@
+{
+  "common": {
+    "cancel": "取消",
+    "search": "搜索",
+    "done": "完成",
+    "next": "下一步",
+    "optional": "可选",
+    "loading": "加载中",
+    "go-home": "返回主页"
+  },
+  "theme": {
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统"
+  },
+  "title": "快捷指令中心",
+  "description": "快捷指令可让你使用 App 快速完成任务，只需轻点一下或询问 Siri 即可。",
+  "see-all": "查看全部",
+  "about": "关于此快捷指令",
+  "set-up-shortcut": "添加快捷指令",
+  "icloud-link": "iCloud 链接",
+  "share-through-icloud": "通过 iCloud 共享快捷指令",
+  "share-on-iphone-or-ipad": "在 iPhone 或 iPad 上共享快捷指令",
+  "share-on-mac": "在 Mac 上共享快捷指令",
+  "details": {
+    "SHARE_SHEET": "在共享表单中显示",
+    "APPLE_WATCH": "在 Apple Watch 上显示",
+    "MENU_BAR_ON_MAC": "在菜单栏中固定",
+    "RECEIVES_SCREEN": "接收屏幕内容",
+    "QUICK_ACTIONS_ON_MAC": "作为快速操作使用"
+  },
+  "form-name": "新建快捷指令",
+  "form-description": "告诉我们一些关于这个快捷指令的信息",
+  "form-language": "此快捷指令的语言",
+  "post": {
+    "title": "发布快捷指令",
+    "description": "向世界分享你的快捷指令"
+  }
+}
