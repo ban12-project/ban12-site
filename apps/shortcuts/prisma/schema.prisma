@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Shortcut {
+  id              Int         @id @default(autoincrement())
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  uuid            String      @unique
+  icloud          String
+  name            String
+  description     String?
+  icon            String?
+  backgroundColor String?
+  details         String?
+  language        String      @default("zh-CN")
+  collection      Collection? @relation(fields: [collectionId], references: [id])
+  collectionId    Int?
+  album           Album?      @relation(fields: [albumId], references: [id])
+  albumId         Int?
+}
+
+// enum ShortcutDetail {
+//   // Appears in share sheet
+//   SHARE_SHEET
+//   // Appears on Apple Watch
+//   APPLE_WATCH
+//   // Appears in menu bar on mac
+//   MENU_BAR_ON_MAC
+//   // Appears in quick actions on mac
+//   QUICK_ACTIONS_ON_MAC
+//   // Receives What's On Screen
+//   RECEIVES_SCREEN
+// }
+
+model Album {
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  title        String
+  description  String
+  shortcuts    Shortcut[]
+  collection   Collection? @relation(fields: [collectionId], references: [id])
+  collectionId Int?
+}
+
+model Collection {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  title     String
+  image     String
+  shortcuts Shortcut[]
+  albums    Album[]
+}
+
+model Authenticator {
+  id                   String  @id
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+}
+
+model accounts {
+  id                 String  @id
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+}
+
+model sessions {
+  id           String
+  sessionToken String   @id
+  userId       String
+  expires      DateTime
+}
+
+model users {
+  id            String    @id @default("")
+  name          String?
+  email         String?
+  emailVerified DateTime?
+  image         String?
+  password      String?
+}
+
+model verification_tokens {
+  identifier String
+  token      String   @id
+  expires    DateTime
+}

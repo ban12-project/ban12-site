@@ -1,0 +1,39 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "search": "Search",
+    "done": "Done",
+    "next": "Next",
+    "optional": "Optional",
+    "loading": "Loading",
+    "go-home": "Go Home"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "title": "Shortcut Gallery",
+  "description": "A shortcut provides a quick way to get things done with your apps, with just a tap or by asking Siri.",
+  "see-all": "See All",
+  "about": "About This Shortcut",
+  "set-up-shortcut": "Set Up Shortcut",
+  "icloud-link": "iCloud Link",
+  "share-through-icloud": "Share a shortcut through iCloud",
+  "share-on-iphone-or-ipad": "Share shortcuts on iPhone or iPad",
+  "share-on-mac": "Share shortcuts on Mac",
+  "details": {
+    "SHARE_SHEET": "Show in Share Sheet",
+    "APPLE_WATCH": "Show on Apple Watch",
+    "MENU_BAR_ON_MAC": "Pin in Menu Bar",
+    "RECEIVES_SCREEN": "Receive What's On Screen",
+    "QUICK_ACTIONS_ON_MAC": "Use as Quick Action"
+  },
+  "form-name": "New Shortcut",
+  "form-description": "Tell us a little bit about this shortcut",
+  "form-language": "Language used for shortcuts",
+  "post": {
+    "title": "Post Shortcut",
+    "description": "Share your shortcut with the world"
+  }
+}

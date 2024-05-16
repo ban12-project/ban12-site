@@ -4,7 +4,15 @@
     "NODE_ENV",
     "NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY",
     "WEB_PUSH_EMAIL",
-    "WEB_PUSH_PRIVATE_KEY"
+    "WEB_PUSH_PRIVATE_KEY",
+    "NEXT_PUBLIC_CF_BEACON",
+    "NEXT_RUNTIME",
+    "ANALYZE",
+    "NEXT_PUBLIC_HOST_URL",
+    "SITE_NAME",
+    "GOOGLE_GEMINI_KEY",
+    "GOOGLE_GEMINI_MODEL",
+    "DATABASE_URL"
   ],
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
