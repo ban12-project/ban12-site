@@ -1,14 +1,21 @@
+import { Pool } from '@neondatabase/serverless'
 import NextAuth, { type NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { pathToRegexp } from 'path-to-regexp'
 import { z } from 'zod'
 
 import { i18n } from './i18n-config'
-import prisma from './lib/prisma'
 
 async function getUser(email: string) {
+  const connectionString = `${process.env.DATABASE_URL}`
+  const pool = new Pool({ connectionString })
   try {
-    const user = await prisma.users.findFirst({ where: { email } })
+    const {
+      rows: [user],
+    } = await pool.query('SELECT * FROM users WHERE email = $1 LIMIT 1', [
+      email,
+    ])
+    await pool.end()
     return user
   } catch (error) {
     console.error('Failed to fetch user:', error)
