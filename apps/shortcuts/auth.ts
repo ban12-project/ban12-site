@@ -15,7 +15,7 @@ async function getUser(email: string) {
     } = await pool.query('SELECT * FROM users WHERE email = $1 LIMIT 1', [
       email,
     ])
-    await pool.end()
+    pool.end()
     return user
   } catch (error) {
     console.error('Failed to fetch user:', error)

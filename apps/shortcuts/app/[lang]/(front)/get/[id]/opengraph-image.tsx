@@ -13,6 +13,7 @@ export default async function Image({ params }: { params: { id: string } }) {
   } = await pool.query('SELECT * FROM Shortcut WHERE id = $1 LIMIT 1', [
     params.id,
   ])
+  pool.end()
 
   if (!shortcut) notFound()
 
