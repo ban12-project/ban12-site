@@ -1,4 +1,4 @@
-import type { Album, Collection, Shortcut } from '@prisma/client'
+import type { album, collection, shortcut } from '@prisma/client'
 
 import { getAlbums, getCollections, getShortcuts } from '#/lib/actions'
 import { cn } from '#/lib/utils'
@@ -25,7 +25,7 @@ type Columns<T> = {
   className?: string
 }[]
 
-const shortcutsTableColumns: Columns<Shortcut> = [
+const shortcutsTableColumns: Columns<shortcut> = [
   {
     key: 'id',
     header: 'id',
@@ -99,7 +99,7 @@ const shortcutsTableColumns: Columns<Shortcut> = [
   },
 ]
 
-const collectionsTableColumns: Columns<Collection> = [
+const collectionsTableColumns: Columns<collection> = [
   {
     key: 'id',
     header: 'id',
@@ -127,7 +127,7 @@ const collectionsTableColumns: Columns<Collection> = [
   },
 ]
 
-const albumsTableColumns: Columns<Album> = [
+const albumsTableColumns: Columns<album> = [
   {
     key: 'id',
     header: 'id',

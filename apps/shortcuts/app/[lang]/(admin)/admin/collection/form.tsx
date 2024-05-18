@@ -1,6 +1,6 @@
 'use client'
 
-import type { Collection } from '@prisma/client'
+import type { collection } from '@prisma/client'
 import { useFormState, useFormStatus } from 'react-dom'
 
 import { createCollection, updateCollection } from '#/lib/actions'
@@ -9,7 +9,7 @@ import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
 
 type Props = {
-  fields?: Partial<Collection>
+  fields?: Partial<collection>
 }
 
 export default function Form({ fields }: Props) {

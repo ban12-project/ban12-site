@@ -1,6 +1,6 @@
 'use client'
 
-import type { Shortcut } from '@prisma/client'
+import type { shortcut } from '@prisma/client'
 import { useFormState, useFormStatus } from 'react-dom'
 
 import { updateShortcut } from '#/lib/actions'
@@ -9,7 +9,7 @@ import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
 
 type Props = {
-  shortcut: Shortcut
+  shortcut: shortcut
 }
 
 export default function EditForm({ shortcut }: Props) {

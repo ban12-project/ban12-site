@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinkProps } from 'next/link'
-import type { Shortcut } from '@prisma/client'
+import type { shortcut } from '@prisma/client'
 import { Layers2, Plus } from 'lucide-react'
 
 import { cn } from '#/lib/utils'
@@ -9,7 +9,7 @@ import Link from '#/components/link'
 interface ShortcutCardProps
   extends Partial<LinkProps>,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps> {
-  item: Shortcut
+  item: shortcut
 }
 
 export default function ShortcutCard({

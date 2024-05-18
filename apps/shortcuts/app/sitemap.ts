@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { Pool } from '@neondatabase/serverless'
-import type { Album, Collection, Shortcut } from '@prisma/client'
+import type { album, collection, shortcut } from '@prisma/client'
 import { i18n } from '#/i18n-config'
 
 export const dynamic = 'force-dynamic'
@@ -25,7 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   const shortcutsPromise = pool
-    .query<Shortcut>('SELECT * FROM Shortcut')
+    .query<shortcut>('SELECT * FROM shortcut')
     .then(({ rows: shortcuts }) =>
       shortcuts.map((shortcut) => ({
         url: `${process.env.NEXT_PUBLIC_HOST_URL}/get/${shortcut.id}`,
@@ -42,7 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     )
 
   const collectionsPromise = pool
-    .query<Collection>('SELECT * FROM Collection')
+    .query<collection>('SELECT * FROM collection')
     .then(({ rows: collections }) =>
       collections.map((collection) => ({
         url: `${process.env.NEXT_PUBLIC_HOST_URL}/collection/${collection.id}`,
@@ -59,7 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     )
 
   const albumsPromise = pool
-    .query<Album>('SELECT * FROM Album')
+    .query<album>('SELECT * FROM album')
     .then(({ rows: albums }) =>
       albums.map((album) => ({
         url: `${process.env.NEXT_PUBLIC_HOST_URL}/album/${album.id}`,

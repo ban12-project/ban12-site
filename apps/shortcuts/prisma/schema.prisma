@@ -12,7 +12,7 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Shortcut {
+model shortcut {
   id              Int         @id @default(autoincrement())
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -24,9 +24,9 @@ model Shortcut {
   backgroundColor String?
   details         String?
   language        String      @default("zh-CN")
-  collection      Collection? @relation(fields: [collectionId], references: [id])
+  collection      collection? @relation(fields: [collectionId], references: [id])
   collectionId    Int?
-  album           Album?      @relation(fields: [albumId], references: [id])
+  album           album?      @relation(fields: [albumId], references: [id])
   albumId         Int?
 }
 
@@ -43,28 +43,28 @@ model Shortcut {
 //   RECEIVES_SCREEN
 // }
 
-model Album {
+model album {
   id           Int         @id @default(autoincrement())
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
   title        String
   description  String
-  shortcuts    Shortcut[]
-  collection   Collection? @relation(fields: [collectionId], references: [id])
+  shortcuts    shortcut[]
+  collection   collection? @relation(fields: [collectionId], references: [id])
   collectionId Int?
 }
 
-model Collection {
+model collection {
   id        Int        @id @default(autoincrement())
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   title     String
   image     String
-  shortcuts Shortcut[]
-  albums    Album[]
+  shortcuts shortcut[]
+  albums    album[]
 }
 
-model Authenticator {
+model authenticator {
   id                   String  @id
   credentialID         String  @unique
   userId               String

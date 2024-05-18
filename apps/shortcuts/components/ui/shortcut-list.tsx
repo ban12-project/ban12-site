@@ -1,8 +1,8 @@
-import type { Shortcut } from '@prisma/client'
+import type { shortcut } from '@prisma/client'
 
 import ShortcutCard from './shortcut-card'
 
-type ShortcutListProps = { shortcuts: Shortcut[] }
+type ShortcutListProps = { shortcuts: shortcut[] }
 
 export default function ShortcutList({ shortcuts }: ShortcutListProps) {
   return (

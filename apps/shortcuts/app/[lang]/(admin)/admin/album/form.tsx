@@ -1,6 +1,6 @@
 'use client'
 
-import type { Album } from '@prisma/client'
+import type { album } from '@prisma/client'
 import { useFormState, useFormStatus } from 'react-dom'
 
 import { createAlbum, updateAlbum } from '#/lib/actions'
@@ -9,7 +9,7 @@ import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
 
 type Props = {
-  fields?: Partial<Album>
+  fields?: Partial<album>
 }
 
 export default function Form({ fields }: Props) {

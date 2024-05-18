@@ -1,7 +1,7 @@
 'use client'
 
 import { forwardRef, useEffect, useMemo, useRef } from 'react'
-import type { Shortcut } from '@prisma/client'
+import type { shortcut } from '@prisma/client'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
 
@@ -10,7 +10,7 @@ import { useResponsive } from '#/hooks/use-responsive'
 import ShortcutCard from './shortcut-card'
 
 type AlbumsProps = {
-  shortcuts: Shortcut[]
+  shortcuts: shortcut[]
 }
 
 let PADDING_LEFT: number,
@@ -50,7 +50,7 @@ const innerElementType = forwardRef<
   )
 })
 
-const Column: React.ComponentType<ListChildComponentProps<Shortcut[]>> = ({
+const Column: React.ComponentType<ListChildComponentProps<shortcut[]>> = ({
   index,
   style,
   data,
