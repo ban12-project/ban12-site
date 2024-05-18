@@ -3,7 +3,7 @@ import '#/app/globals.css'
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import { Inter } from 'next/font/google'
-import Script from 'next/script'
+import { Analytics } from '@vercel/analytics/react'
 import { getDictionary } from '#/get-dictionary'
 import { Locale } from '#/i18n-config'
 import { ThemeProvider } from 'next-themes'
@@ -78,14 +78,7 @@ export default function RootLayout({
 
         <SentryLoader />
 
-        {/* <!-- Cloudflare Web Analytics --> */}
-        {process.env.NEXT_PUBLIC_CF_BEACON && (
-          <Script
-            src="https://static.cloudflareinsights.com/beacon.min.js"
-            data-cf-beacon={`"token": "${process.env.NEXT_PUBLIC_CF_BEACON}"`}
-          />
-        )}
-        {/* <!-- End Cloudflare Web Analytics --> */}
+        <Analytics />
       </body>
     </html>
   )
