@@ -1,7 +1,7 @@
 import Image from 'next/image'
+import { Link } from '@repo/i18n/client'
 
 import { fetchCollections } from '#/lib/actions'
-import Link from '#/components/link'
 
 type CollectionsProps = {}
 
@@ -9,7 +9,7 @@ export default async function Collections({}: CollectionsProps) {
   const collections = await fetchCollections()
 
   return (
-    <section className="hidden-scrollbar flex snap-x snap-mandatory gap-x-3 overflow-x-auto overscroll-x-contain px-safe-max-4 lg:gap-x-5 lg:px-0 lg:pb-10">
+    <section className="hidden-scrollbar px-safe-max-4 flex snap-x snap-mandatory gap-x-3 overflow-x-auto overscroll-x-contain lg:gap-x-5 lg:px-0 lg:pb-10">
       {collections.map((item, index) => (
         <div
           className="box-content w-full flex-shrink-0 snap-center pb-10 pt-2.5 md:w-[400px] lg:snap-start last:lg:pr-[calc(var(--container-inset,0)*2)]"

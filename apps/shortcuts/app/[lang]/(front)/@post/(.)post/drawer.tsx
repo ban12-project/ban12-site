@@ -1,7 +1,7 @@
 'use client'
 
 import { PropsWithChildren, useState } from 'react'
-import { Messages } from '#/get-dictionary'
+import type { Messages } from '#/i18n'
 
 import { useResponsive } from '#/hooks/use-responsive'
 import PageDrawer from '#/components/ui/page-drawer'

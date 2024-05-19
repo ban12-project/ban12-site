@@ -1,5 +1,4 @@
-import { getDictionary } from '#/get-dictionary'
-import { Locale } from '#/i18n-config'
+import { getDictionary, type Locale } from '#/i18n'
 
 import ShortcutPost from '#/components/ui/shortcut-post'
 

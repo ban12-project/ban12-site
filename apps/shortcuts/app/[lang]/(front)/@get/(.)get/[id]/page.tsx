@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { getDictionary } from '#/get-dictionary'
+import { getDictionary } from '#/i18n'
 import { Loader } from 'lucide-react'
 
 import PageDrawer from '#/components/ui/page-drawer'

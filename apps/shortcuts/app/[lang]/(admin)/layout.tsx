@@ -1,11 +1,11 @@
 import '#/app/globals.css'
 
+import { LocaleProvider } from '@repo/i18n/client'
 import { auth, signOut } from '#/auth'
-import { Locale } from '#/i18n-config'
+import { i18n, type Locale } from '#/i18n'
 
 import { Button } from '#/components/ui/button'
 import { Toaster } from '#/components/ui/sonner'
-import { LocaleProvider } from '#/components/i18n'
 
 type RootLayoutProps = {
   params: { lang: Locale }
@@ -18,7 +18,7 @@ export default async function Layout({ params, children }: RootLayoutProps) {
   return (
     <html lang={params.lang}>
       <body>
-        <LocaleProvider locale={params.lang}>
+        <LocaleProvider locale={params.lang} i18n={i18n}>
           <header className="flex">
             {session && (
               <form

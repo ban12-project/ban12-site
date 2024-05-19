@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
-import { Messages } from '#/get-dictionary'
-import { Locale } from '#/i18n-config'
+import type { Locale, Messages } from '#/i18n'
 import { Plus, Share } from 'lucide-react'
 
 import { fetchShortcutByID } from '#/lib/actions'
@@ -22,7 +21,7 @@ export default async function ShortcutAdd({
 
   return (
     <>
-      <section className="flex-1 space-y-4 overflow-auto text-center p-safe-max-4">
+      <section className="p-safe-max-4 flex-1 space-y-4 overflow-auto text-center">
         <h3 className="text-3xl font-bold">{shortcut.name}</h3>
 
         {shortcut.description?.split('\n').map((item, index) => (
@@ -38,7 +37,7 @@ export default async function ShortcutAdd({
         />
       </section>
 
-      <footer className="w-full pt-4 text-lg pb-safe-max-8 px-safe-max-6">
+      <footer className="pb-safe-max-8 px-safe-max-6 w-full pt-4 text-lg">
         {/* <p className="font-semibold text-zinc-500/90">{messages.about}</p>
 
         <ul className="mb-6 mt-3 space-y-3">

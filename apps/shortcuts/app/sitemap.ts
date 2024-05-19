@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { Pool } from '@neondatabase/serverless'
 import type { album, collection, shortcut } from '@prisma/client'
-import { i18n } from '#/i18n-config'
+import { i18n } from '#/i18n'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'edge'

@@ -4,13 +4,12 @@ import {
   useSearchParams,
   useSelectedLayoutSegment,
 } from 'next/navigation'
-import { Messages } from '#/get-dictionary'
+import { useLocale } from '@repo/i18n/client'
+import type { Messages } from '#/i18n'
 import { useDebounceFn } from 'ahooks'
 import { CircleX, Search } from 'lucide-react'
 
 import { cn } from '#/lib/utils'
-
-import { useLocale } from '../i18n'
 
 interface SearchBarProps
   extends React.ButtonHTMLAttributes<React.ElementRef<'form'>> {
@@ -107,7 +106,7 @@ export default function SearchBar({
         />
         {query && (
           <CircleX
-            className="scale-75 animate-fadeIn"
+            className="animate-fadeIn scale-75"
             onClick={() => {
               setQuery('')
               safeBack()

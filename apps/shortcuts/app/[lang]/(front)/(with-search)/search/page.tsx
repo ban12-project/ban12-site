@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getDictionary } from '#/get-dictionary'
-import { Locale } from '#/i18n-config'
+import { getDictionary, type Locale } from '#/i18n'
 
 import { searchShortcuts } from '#/lib/actions'
 import ShortcutList from '#/components/ui/shortcut-list'

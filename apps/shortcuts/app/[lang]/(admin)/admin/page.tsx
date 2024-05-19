@@ -1,4 +1,5 @@
 import type { album, collection, shortcut } from '@prisma/client'
+import { Link } from '@repo/i18n/client'
 
 import { getAlbums, getCollections, getShortcuts } from '#/lib/actions'
 import { cn } from '#/lib/utils'
@@ -16,7 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from '#/components/ui/table'
-import Link from '#/components/link'
 
 type Columns<T> = {
   key: (keyof T extends string ? keyof T : never) | 'custom'

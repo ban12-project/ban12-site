@@ -1,10 +1,10 @@
 import React from 'react'
 import { LinkProps } from 'next/link'
 import type { shortcut } from '@prisma/client'
+import { Link } from '@repo/i18n/client'
 import { Layers2, Plus } from 'lucide-react'
 
 import { cn } from '#/lib/utils'
-import Link from '#/components/link'
 
 interface ShortcutCardProps
   extends Partial<LinkProps>,

@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Locale } from '#/i18n-config'
+import type { Locale } from '#/i18n'
 
 import prisma from '#/lib/prisma'
 import ShortcutList from '#/components/ui/shortcut-list'

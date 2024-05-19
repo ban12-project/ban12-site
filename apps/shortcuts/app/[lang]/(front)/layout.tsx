@@ -3,15 +3,14 @@ import '#/app/globals.css'
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import { Inter } from 'next/font/google'
+import { LocaleProvider } from '@repo/i18n/client'
 import { Analytics } from '@vercel/analytics/react'
-import { getDictionary } from '#/get-dictionary'
-import { Locale } from '#/i18n-config'
+import { getDictionary, i18n, type Locale } from '#/i18n'
 import { ThemeProvider } from 'next-themes'
 
 import { cn } from '#/lib/utils'
 import { Toaster } from '#/components/ui/sonner'
 import CSSPaintPolyfill from '#/components/css-paint-polyfill'
-import { LocaleProvider } from '#/components/i18n'
 
 const SentryLoader = dynamic(() => import('#/components/sentry-loader'), {
   ssr: false,
@@ -65,7 +64,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LocaleProvider locale={params.lang}>
+          <LocaleProvider locale={params.lang} i18n={i18n}>
             {children}
             {get}
             {post}

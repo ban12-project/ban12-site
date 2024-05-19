@@ -4,7 +4,7 @@ import Credentials from 'next-auth/providers/credentials'
 import { pathToRegexp } from 'path-to-regexp'
 import { z } from 'zod'
 
-import { i18n } from './i18n-config'
+import { i18n } from './i18n'
 
 async function getUser(email: string) {
   const connectionString = `${process.env.DATABASE_URL}`

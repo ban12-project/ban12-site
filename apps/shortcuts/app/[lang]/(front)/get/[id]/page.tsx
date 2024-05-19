@@ -1,10 +1,10 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getDictionary } from '#/get-dictionary'
+import { Link } from '@repo/i18n/client'
+import { getDictionary } from '#/i18n'
 
 import { fetchShortcutByID } from '#/lib/actions'
 import ShortcutAdd, { ShortcutAddProps } from '#/components/ui/shortcut-add'
-import Link from '#/components/link'
 
 export default async function ShortcutPage({
   params,

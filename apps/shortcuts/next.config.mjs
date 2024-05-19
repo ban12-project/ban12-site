@@ -11,6 +11,7 @@ const nextConfig = {
       },
     ],
   },
+  transpilePackages: ['@repo/i18n'],
   experimental: {
     instrumentationHook: true,
   },

@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getDictionary } from '#/get-dictionary'
-import { Locale } from '#/i18n-config'
+import { getDictionary, type Locale } from '#/i18n'
 
 import prisma from '#/lib/prisma'
 import AlbumList from '#/components/ui/album-list'
@@ -31,7 +30,7 @@ export default async function Collections({ params }: CollectionsProps) {
 
   return (
     <main>
-      <div className="container-full pb-5 pt-safe-max-4">
+      <div className="container-full pt-safe-max-4 pb-5">
         <h1 className="overflow-hidden text-ellipsis whitespace-nowrap text-3xl font-bold">
           {collection.title}
         </h1>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Messages } from '#/get-dictionary'
+import type { Messages } from '#/i18n'
 import { Drawer } from 'vaul'
 
 import { cn } from '#/lib/utils'
@@ -51,12 +51,12 @@ export default function PageDrawer({
         />
         <Drawer.Content
           className={cn(
-            'fixed bottom-0 left-0 right-0 z-50 flex h-[96%] flex-col rounded-t-[10px] bg-white outline-none dark:bg-black lg:left-auto lg:h-full lg:w-[460px] lg:rounded-none',
+            'fixed bottom-0 left-0 right-0 z-50 flex h-[96%] flex-col rounded-t-[10px] bg-white outline-none lg:left-auto lg:h-full lg:w-[460px] lg:rounded-none dark:bg-black',
             className,
           )}
         >
           <div
-            className="flex justify-between p-safe-max-4"
+            className="p-safe-max-4 flex justify-between"
             id={PAGE_DRAWER_HEADER_ID}
           >
             <Button variant="ios" size="auto" onClick={() => setOpen(false)}>

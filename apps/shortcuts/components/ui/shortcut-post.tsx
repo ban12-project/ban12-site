@@ -2,7 +2,8 @@
 
 import React, { useEffect, useRef } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Messages } from '#/get-dictionary'
+import { useLocale } from '@repo/i18n/client'
+import type { Messages } from '#/i18n'
 import { Loader2 } from 'lucide-react'
 import { createPortal, useFormState, useFormStatus } from 'react-dom'
 import { useForm, useFormContext } from 'react-hook-form'
@@ -11,7 +12,6 @@ import * as z from 'zod'
 import { postShortcut } from '#/lib/actions'
 import { IN_BROWSER } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
-import { useLocale } from '#/components/i18n'
 
 import {
   Form,
@@ -141,7 +141,7 @@ const SubmitButton = function SubmitButton({
 const initialState = { message: '', errors: {} }
 
 export default function ShortcutPost({ messages }: ShortcutPostProps) {
-  const { locale: language } = useLocale()
+  const { locale } = useLocale()
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
@@ -152,7 +152,7 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
       icon: '',
       backgroundColor: '',
       details: [],
-      language,
+      language: locale as FormSchemaType['language'],
     },
   })
 
@@ -215,7 +215,7 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
     <Form {...form}>
       <form
         action={handleAction}
-        className="flex-1 space-y-8 overflow-y-auto p-safe-max-4"
+        className="p-safe-max-4 flex-1 space-y-8 overflow-y-auto"
       >
         <FormField
           control={form.control}
