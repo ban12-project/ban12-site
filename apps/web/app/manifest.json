@@ -1,0 +1,23 @@
+{
+  "name": "Ban12",
+  "short_name": "Ban12",
+  "description": "Ban12",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "white",
+  "theme_color": "white",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "web",
+      "url": "https://ban12.com"
+    }
+  ]
+}
