@@ -171,7 +171,7 @@ export async function postShortcut(prevState: State, formData: FormData) {
 
   const result = await prisma.shortcut.create({
     data: {
-      updatedAt: 'CURRENT_TIMESTAMP',
+      updatedAt: new Date(),
       uuid,
       icloud,
       name,
@@ -323,7 +323,7 @@ export async function updateShortcut(
   const result = await prisma.shortcut.update({
     where: { id: Number.parseInt(id) },
     data: {
-      updatedAt: 'CURRENT_TIMESTAMP',
+      updatedAt: new Date(),
       uuid,
       icloud,
       name,
@@ -366,7 +366,7 @@ export async function createCollection(
 
   const result = await prisma.collection.create({
     data: {
-      updatedAt: 'CURRENT_TIMESTAMP',
+      updatedAt: new Date(),
       title,
       image,
     },
@@ -406,7 +406,7 @@ export async function updateCollection(
   const result = await prisma.collection.update({
     where: { id: Number.parseInt(id) },
     data: {
-      updatedAt: 'CURRENT_TIMESTAMP',
+      updatedAt: new Date(),
       title,
       image,
     },
@@ -447,7 +447,7 @@ export async function createAlbum(
 
   const result = await prisma.album.create({
     data: {
-      updatedAt: 'CURRENT_TIMESTAMP',
+      updatedAt: new Date(),
       title,
       description,
       collectionId: collectionId ? Number.parseInt(collectionId) : null,
@@ -489,7 +489,7 @@ export async function updateAlbum(
   const result = await prisma.album.update({
     where: { id: Number.parseInt(id) },
     data: {
-      updatedAt: 'CURRENT_TIMESTAMP',
+      updatedAt: new Date(),
       title,
       description,
       collectionId: collectionId ? Number.parseInt(collectionId) : null,
