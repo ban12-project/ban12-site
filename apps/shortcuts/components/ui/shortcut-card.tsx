@@ -4,7 +4,7 @@ import type { shortcut } from '@prisma/client'
 import { Link } from '@repo/i18n/client'
 import { Layers2, Plus } from 'lucide-react'
 
-import { cn } from '#/lib/utils'
+import { cn, negativeToHexColor } from '#/lib/utils'
 
 interface ShortcutCardProps
   extends Partial<LinkProps>,
@@ -26,7 +26,7 @@ export default function ShortcutCard({
       style={
         {
           '--background-color': item.backgroundColor
-            ? `#${Number.parseInt(item.backgroundColor).toString(16).replace(/ff$/gi, '')}`
+            ? negativeToHexColor(item.backgroundColor)
             : '',
         } as React.CSSProperties
       }

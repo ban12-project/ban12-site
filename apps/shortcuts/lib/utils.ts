@@ -21,3 +21,21 @@ export const formatSize = (size: number) => {
 }
 
 export const IN_BROWSER = typeof window !== 'undefined'
+
+export function negativeToHexColor(color: string) {
+  const negativeNumber = Number.parseInt(color)
+
+  // 将负数转换为 32 位无符号整数
+  const unsignedNumber = negativeNumber >>> 0
+
+  // 将无符号整数转换为 16 进制
+  let hexValue = unsignedNumber.toString(16)
+
+  // 确保长度为 8 位，不足的前面补 0
+  while (hexValue.length < 8) {
+    hexValue = '0' + hexValue
+  }
+
+  // 返回 ARGB 颜色值
+  return `#${hexValue}`
+}
