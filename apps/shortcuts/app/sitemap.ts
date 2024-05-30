@@ -28,13 +28,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .query<shortcut>('SELECT * FROM shortcut')
     .then(({ rows: shortcuts }) =>
       shortcuts.map((shortcut) => ({
-        url: `${process.env.NEXT_PUBLIC_HOST_URL}/get/${shortcut.id}`,
+        url: `${process.env.NEXT_PUBLIC_HOST_URL}/get/${shortcut.uuid}`,
         lastModified: new Date(shortcut.updatedAt),
         alternates: {
           languages: Object.fromEntries(
             locales.map((locale) => [
               locale,
-              `${process.env.NEXT_PUBLIC_HOST_URL}/${locale}/get/${shortcut.id}`,
+              `${process.env.NEXT_PUBLIC_HOST_URL}/${locale}/get/${shortcut.uuid}`,
             ]),
           ),
         },

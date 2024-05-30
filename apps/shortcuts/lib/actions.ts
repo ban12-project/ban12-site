@@ -211,9 +211,9 @@ export async function fetchCollections() {
   return collections
 }
 
-export async function fetchShortcutByID(id: string) {
+export async function fetchShortcutByID(uuid: string) {
   const shortcut = await prisma.shortcut.findUnique({
-    where: { id: Number.parseInt(id) },
+    where: { uuid },
   })
 
   return shortcut
@@ -277,7 +277,6 @@ export async function authenticate(
 const updateSchema = z.intersection(
   formSchema,
   z.object({
-    id: z.string(),
     uuid: z.string(),
     albumId: z.string().nullable(),
     collectionId: z.string().nullable(),
@@ -289,7 +288,6 @@ export async function updateShortcut(
   formData: FormData,
 ) {
   const validatedFields = updateSchema.safeParse({
-    id: formData.get('id'),
     uuid: formData.get('uuid'),
     albumId: formData.get('albumId'),
     collectionId: formData.get('collectionId'),
@@ -307,7 +305,6 @@ export async function updateShortcut(
   }
 
   const {
-    id,
     uuid,
     albumId,
     collectionId,
@@ -321,7 +318,7 @@ export async function updateShortcut(
   } = validatedFields.data
 
   const result = await prisma.shortcut.update({
-    where: { id: Number.parseInt(id) },
+    where: { uuid },
     data: {
       updatedAt: new Date(),
       uuid,

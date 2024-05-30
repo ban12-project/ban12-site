@@ -57,10 +57,7 @@ export default async function ShortcutAdd({
           variant="primary"
           asChild
         >
-          <a
-            href={`https://www.icloud.com/shortcuts/${shortcut.uuid}`}
-            rel="noopener noreferrer"
-          >
+          <a href={shortcut.icloud} rel="noopener noreferrer">
             <span className="mr-3 h-4 w-4 rounded-lg bg-white p-0.5">
               <Plus className="h-3 w-3 text-blue-500" strokeWidth={4} />
             </span>

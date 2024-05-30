@@ -31,7 +31,7 @@ export default function ShortcutCard({
         } as React.CSSProperties
       }
       data-bg-raw={item.backgroundColor}
-      href={`/get/${item.id}`}
+      href={`/get/${item.uuid}`}
       scroll={false}
       {...props}
     >

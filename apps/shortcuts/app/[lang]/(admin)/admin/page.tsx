@@ -27,9 +27,9 @@ type Columns<T> = {
 
 const shortcutsTableColumns: Columns<shortcut> = [
   {
-    key: 'id',
-    header: 'id',
-    cell: (shortcut) => shortcut.id,
+    key: 'uuid',
+    header: 'uuid',
+    cell: (shortcut) => shortcut.uuid,
     className: 'sticky left-0',
   },
   {
@@ -93,7 +93,7 @@ const shortcutsTableColumns: Columns<shortcut> = [
     key: 'custom',
     header: 'actions',
     cell: (shortcut) => (
-      <Link href={`/admin/shortcut/${shortcut.id}`}>edit</Link>
+      <Link href={`/admin/shortcut/${shortcut.uuid}`}>edit</Link>
     ),
     className: 'sticky right-0 text-right',
   },

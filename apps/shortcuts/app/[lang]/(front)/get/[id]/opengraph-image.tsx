@@ -10,7 +10,7 @@ export default async function Image({ params }: { params: { id: string } }) {
   const pool = new Pool({ connectionString })
   const {
     rows: [shortcut],
-  } = await pool.query('SELECT * FROM Shortcut WHERE id = $1 LIMIT 1', [
+  } = await pool.query('SELECT * FROM Shortcut WHERE uuid = $1 LIMIT 1', [
     params.id,
   ])
   pool.end()
