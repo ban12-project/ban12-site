@@ -24,18 +24,18 @@ export default function SentryLoader() {
 
       // You can remove this option if you're not planning to use the Sentry Session Replay feature:
       integrations: [
-        Sentry.replayIntegration({
-          // Additional Replay configuration goes in here, for example:
-          maskAllText: true,
-          blockAllMedia: true,
-        }),
+        // Sentry.replayIntegration({
+        //   // Additional Replay configuration goes in here, for example:
+        //   maskAllText: true,
+        //   blockAllMedia: true,
+        // }),
       ],
     })
   }
 
   return (
     <Script
-      src={`https://browser.sentry-cdn.com/${SDK_VERSION}/bundle.replay.min.js`}
+      src={`https://browser.sentry-cdn.com/${SDK_VERSION}/bundle.min.js`}
       async
       onLoad={onLoad}
     />
