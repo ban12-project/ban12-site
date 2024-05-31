@@ -4,11 +4,16 @@ import { Link } from '@repo/i18n/client'
 import { getDictionary } from '#/i18n'
 
 import { fetchShortcutByID } from '#/lib/actions'
-import ShortcutAdd, { ShortcutAddProps } from '#/components/ui/shortcut-add'
+import ShortcutAdd, {
+  preload,
+  type ShortcutAddProps,
+} from '#/components/ui/shortcut-add'
 
 export default async function ShortcutPage({
   params,
 }: Omit<ShortcutAddProps, 'messages'>) {
+  preload(params.id)
+
   const messages = await getDictionary(params.lang)
 
   return (

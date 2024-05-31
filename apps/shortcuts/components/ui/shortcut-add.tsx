@@ -11,6 +11,10 @@ export type ShortcutAddProps = {
   messages: Messages
 }
 
+export const preload = (id: string) => {
+  void fetchShortcutByID(id)
+}
+
 export default async function ShortcutAdd({
   params,
   messages,

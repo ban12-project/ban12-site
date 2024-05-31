@@ -4,11 +4,16 @@ import { Loader } from 'lucide-react'
 
 import PageDrawer from '#/components/ui/page-drawer'
 import ShareButton from '#/components/ui/share-button'
-import ShortcutAdd, { ShortcutAddProps } from '#/components/ui/shortcut-add'
+import ShortcutAdd, {
+  preload,
+  type ShortcutAddProps,
+} from '#/components/ui/shortcut-add'
 
 export default async function ShortcutPage({
   params,
 }: Omit<ShortcutAddProps, 'messages'>) {
+  preload(params.id)
+
   const messages = await getDictionary(params.lang)
 
   return (

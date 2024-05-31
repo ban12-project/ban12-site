@@ -4,6 +4,7 @@ import { Link } from '@repo/i18n/client'
 import { getDictionary, type Locale } from '#/i18n'
 import { Share2 } from 'lucide-react'
 
+import { fetchAlbums, fetchCollections } from '#/lib/actions'
 import AlbumList from '#/components/ui/album-list'
 import AlbumListSkeleton from '#/components/ui/album-list-skeleton'
 import Collections from '#/components/ui/collections'
@@ -14,7 +15,17 @@ type HomePageProps = {
   params: { lang: Locale }
 }
 
+const preload = () => {
+  // void evaluates the given expression and returns undefined
+  // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/void
+  void fetchCollections()
+  void fetchAlbums()
+}
+
 export default async function Home({ params }: HomePageProps) {
+  // starting load home page data
+  preload()
+
   const messages = await getDictionary(params.lang)
 
   return (

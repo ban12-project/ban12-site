@@ -1,5 +1,8 @@
 'use server'
 
+import 'server-only'
+
+import { cache } from 'react'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { GoogleGenerativeAI } from '@google/generative-ai'
@@ -195,7 +198,7 @@ export async function postShortcut(prevState: State, formData: FormData) {
   redirect('/')
 }
 
-export async function fetchAlbums() {
+export const fetchAlbums = cache(async () => {
   const albums = await prisma.album.findMany({
     include: {
       shortcuts: true,
@@ -203,21 +206,21 @@ export async function fetchAlbums() {
   })
 
   return albums
-}
+})
 
-export async function fetchCollections() {
+export const fetchCollections = cache(async () => {
   const collections = await prisma.collection.findMany()
 
   return collections
-}
+})
 
-export async function fetchShortcutByID(uuid: string) {
+export const fetchShortcutByID = cache(async (uuid: string) => {
   const shortcut = await prisma.shortcut.findUnique({
     where: { uuid },
   })
 
   return shortcut
-}
+})
 
 const searchSchema = z.object({
   query: z.string().min(1).max(64),
