@@ -10,5 +10,7 @@
     {
       "mode": "auto"
     }
-  ]
+  ],
+  "deno.enablePaths": ["./supabase/functions"],
+  "deno.importMap": "./supabase/functions/import_map.json"
 }

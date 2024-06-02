@@ -28,7 +28,14 @@
         "NEXT_PUBLIC_HOST_URL",
         "SITE_NAME",
         "GOOGLE_GEMINI_KEY",
-        "GOOGLE_GEMINI_MODEL"
+        "GOOGLE_GEMINI_MODEL",
+        "SUPABASE_ANON_KEY",
+        "SUPABASE_EDGE_FUNCTIONS_URL",
+        "S3_BUCKET_NAME",
+        "S3_BUCKET_REGION",
+        "S3_BUCKET_ENDPOINT",
+        "S3_BUCKET_ACCESS_KEY_ID",
+        "S3_BUCKET_SECRET_ACCESS_KEY"
       ]
     },
     "lint": {},

@@ -35,3 +35,7 @@ dist/
 
 # vercel
 .vercel
+
+# Supabase
+**/supabase/.branches
+**/supabase/.temp
