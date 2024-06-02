@@ -1,8 +1,16 @@
 import type { album, collection, shortcut } from '@prisma/client'
 import { Link } from '@repo/i18n/client'
 
-import { getAlbums, getCollections, getShortcuts } from '#/lib/actions'
+import {
+  deleteAlbum,
+  deleteCollection,
+  deleteShortcut,
+  getAlbums,
+  getCollections,
+  getShortcuts,
+} from '#/lib/actions'
 import { cn } from '#/lib/utils'
+import { Button } from '#/components/ui/button'
 import {
   ResizableHandle,
   ResizablePanel,
@@ -93,7 +101,10 @@ const shortcutsTableColumns: Columns<shortcut> = [
     key: 'custom',
     header: 'actions',
     cell: (shortcut) => (
-      <Link href={`/admin/shortcut/${shortcut.uuid}`}>edit</Link>
+      <>
+        <Link href={`/admin/shortcut/${shortcut.uuid}`}>edit</Link>
+        <RemoveButton action={deleteShortcut} id={shortcut.uuid} />
+      </>
     ),
     className: 'sticky right-0 text-right',
   },
@@ -118,10 +129,23 @@ const collectionsTableColumns: Columns<collection> = [
     className: 'w-24',
   },
   {
+    key: 'textColor',
+    header: 'textColor',
+    cell: (collection) => (
+      <span
+        className="block h-6 w-6 rounded-full bg-[var(--color,#fff)] shadow"
+        style={{ '--color': collection.textColor } as React.CSSProperties}
+      ></span>
+    ),
+  },
+  {
     key: 'custom',
     header: 'actions',
     cell: (collection) => (
-      <Link href={`/admin/collection/${collection.id}`}>edit</Link>
+      <>
+        <Link href={`/admin/collection/${collection.id}`}>edit</Link>
+        <RemoveButton action={deleteCollection} id={collection.id} />
+      </>
     ),
     className: 'sticky right-0 text-right',
   },
@@ -162,7 +186,12 @@ const albumsTableColumns: Columns<album> = [
   {
     key: 'custom',
     header: 'actions',
-    cell: (album) => <Link href={`/admin/album/${album.id}`}>edit</Link>,
+    cell: (album) => (
+      <>
+        <Link href={`/admin/album/${album.id}`}>edit</Link>
+        <RemoveButton action={deleteAlbum} id={album.id} />
+      </>
+    ),
     className: 'sticky right-0 text-right',
   },
 ]
@@ -223,7 +252,7 @@ export default async function AdminPage() {
       direction="horizontal"
       className="max-h-[calc(100vh-40px)]"
     >
-      <ResizablePanel defaultSize={33.33} className="[&>div]:max-h-full">
+      <ResizablePanel className="[&>div]:max-h-full">
         <AdminTable columns={shortcutsTableColumns} data={shortcuts}>
           <Link className="mr-2" href={`/admin/shortcut/create`}>
             Create
@@ -231,7 +260,7 @@ export default async function AdminPage() {
         </AdminTable>
       </ResizablePanel>
       <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={33.33} className="[&>div]:max-h-full">
+      <ResizablePanel className="[&>div]:max-h-full">
         <AdminTable columns={collectionsTableColumns} data={collections}>
           <Link className="mr-2" href={`/admin/collection/create`}>
             Create
@@ -239,7 +268,7 @@ export default async function AdminPage() {
         </AdminTable>
       </ResizablePanel>
       <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={33.33} className="[&>div]:max-h-full">
+      <ResizablePanel className="[&>div]:max-h-full">
         <AdminTable columns={albumsTableColumns} data={albums}>
           <Link className="mr-2" href={`/admin/album/create`}>
             Create
@@ -247,5 +276,20 @@ export default async function AdminPage() {
         </AdminTable>
       </ResizablePanel>
     </ResizablePanelGroup>
+  )
+}
+
+function RemoveButton({
+  action,
+  id,
+}: {
+  action: (formData: FormData) => void
+  id: string | number
+}) {
+  return (
+    <form action={action}>
+      <input defaultValue={id} className="hidden" name="id" />
+      <Button variant="link">del</Button>
+    </form>
   )
 }

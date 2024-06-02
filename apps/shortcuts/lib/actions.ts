@@ -345,6 +345,21 @@ export async function updateShortcut(
   redirect('/admin')
 }
 
+export async function deleteShortcut(formData: FormData) {
+  const id = formData.get('id') as string
+
+  if (!id) {
+    return 'Parameters missing'
+  }
+
+  await prisma.shortcut.delete({
+    where: { uuid: id },
+  })
+
+  revalidatePath('/admin')
+  redirect('/admin')
+}
+
 export const uploadFileToSupabaseStorage = async (file: File) => {
   const formData = new FormData()
   formData.append(file.name, file)
@@ -388,6 +403,7 @@ const collectionSchema = z.object({
       })
     }
   }),
+  textColor: z.string().min(4),
 })
 export async function createCollection(
   prevState: string | undefined,
@@ -396,13 +412,14 @@ export async function createCollection(
   const validatedFields = collectionSchema.safeParse({
     title: formData.get('title'),
     image: formData.get('image'),
+    textColor: formData.get('textColor'),
   })
 
   if (!validatedFields.success) {
     return 'Failed to validate form data'
   }
 
-  const { title, image } = validatedFields.data
+  const { title, image, textColor } = validatedFields.data
 
   const path = await uploadFileToSupabaseStorage(image)
 
@@ -411,6 +428,7 @@ export async function createCollection(
       updatedAt: new Date(),
       title,
       image: path,
+      textColor,
     },
   })
 
@@ -437,13 +455,14 @@ export async function updateCollection(
       id: formData.get('id'),
       title: formData.get('title'),
       image: formData.get('image'),
+      textColor: formData.get('textColor'),
     })
 
   if (!validatedFields.success) {
     return 'Failed to validate form data'
   }
 
-  const { id, title, image } = validatedFields.data
+  const { id, title, image, textColor } = validatedFields.data
 
   const path = await uploadFileToSupabaseStorage(image)
 
@@ -453,12 +472,28 @@ export async function updateCollection(
       updatedAt: new Date(),
       title,
       image: path,
+      textColor,
     },
   })
 
   if (!result) {
     return 'Failed to update data.'
   }
+
+  revalidatePath('/admin')
+  redirect('/admin')
+}
+
+export async function deleteCollection(formData: FormData) {
+  const id = formData.get('id') as string
+
+  if (!id) {
+    return 'Parameters missing'
+  }
+
+  await prisma.collection.delete({
+    where: { id: Number.parseInt(id) },
+  })
 
   revalidatePath('/admin')
   redirect('/admin')
@@ -543,6 +578,21 @@ export async function updateAlbum(
   if (!result) {
     return 'Failed to update data.'
   }
+
+  revalidatePath('/admin')
+  redirect('/admin')
+}
+
+export async function deleteAlbum(formData: FormData) {
+  const id = formData.get('id') as string
+
+  if (!id) {
+    return 'Parameters missing'
+  }
+
+  await prisma.album.delete({
+    where: { id: Number.parseInt(id) },
+  })
 
   revalidatePath('/admin')
   redirect('/admin')

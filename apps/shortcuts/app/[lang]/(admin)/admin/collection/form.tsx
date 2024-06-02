@@ -23,6 +23,7 @@ export default function Form({ fields }: Props) {
   fields = fields || {
     title: '',
     image: '',
+    textColor: '',
   }
 
   /* const handleAction = async (formData: FormData) => {
@@ -89,11 +90,21 @@ export default function Form({ fields }: Props) {
           image
         </Label>
         <Input
-          defaultValue={fields.image}
           className="col-span-3"
           name="image"
           type="file"
           accept="image/*"
+        />
+      </div>
+
+      <div className="grid grid-cols-4 items-center gap-4" key="textColor">
+        <Label htmlFor="name" className="text-right">
+          textColor
+        </Label>
+        <Input
+          defaultValue={fields.textColor}
+          className="col-span-3"
+          name="textColor"
         />
       </div>
 

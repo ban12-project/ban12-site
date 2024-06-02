@@ -24,7 +24,10 @@ export default async function Collections({}: CollectionsProps) {
             "
             href={`/collection/${item.id}`}
           >
-            <div className="absolute p-7 text-white lg:p-[30px]">
+            <div
+              className="absolute p-7 text-[var(--text-color,#fff)] lg:p-[30px]"
+              style={{ '--text-color': item.textColor } as React.CSSProperties}
+            >
               <h2 className="text-2xl font-bold" aria-hidden>
                 {item.title}
               </h2>

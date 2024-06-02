@@ -59,6 +59,7 @@ model collection {
   updatedAt DateTime   @updatedAt
   title     String
   image     String
+  textColor String
   shortcuts shortcut[]
   albums    album[]
 }
