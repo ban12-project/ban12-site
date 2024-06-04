@@ -4,7 +4,6 @@ import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import { Inter } from 'next/font/google'
 import { LocaleProvider } from '@repo/i18n/client'
-import { Analytics } from '@vercel/analytics/react'
 import { getDictionary, i18n, type Locale } from '#/i18n'
 import { ThemeProvider } from 'next-themes'
 
@@ -76,8 +75,6 @@ export default function RootLayout({
         {/* <CSSPaintPolyfill /> */}
 
         <SentryLoader />
-
-        <Analytics />
       </body>
     </html>
   )
