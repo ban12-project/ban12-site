@@ -20,8 +20,10 @@
     "turbo": "latest"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18",
+    "pnpm": ">=9"
   },
+  "packageManager": "pnpm@9.2.0",
   "prettier": {
     "arrowParens": "always",
     "trailingComma": "all",

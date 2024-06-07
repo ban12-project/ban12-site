@@ -71,6 +71,10 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@9.2.0",
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   }
