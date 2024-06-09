@@ -12,8 +12,10 @@ const nextConfig = {
     ],
   },
   transpilePackages: ['@repo/i18n'],
+  output: 'standalone',
   experimental: {
     instrumentationHook: true,
+    outputFileTracingRoot: new URL('../../', import.meta.url).pathname,
   },
 }
 

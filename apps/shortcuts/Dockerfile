@@ -1,0 +1,66 @@
+FROM node:20-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+FROM base AS builder
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk update
+RUN apk add --no-cache libc6-compat
+# Set working directory
+WORKDIR /app
+RUN pnpm add turbo@^2 -g
+COPY . .
+RUN turbo prune shortcuts --docker
+
+# Add lockfile and package.json's of isolated subworkspace
+FROM base AS installer
+RUN apk update
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+# First install the dependencies (as they change less often)
+COPY .gitignore .gitignore
+COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+# Build the project
+COPY --from=builder /app/out/full/ .
+COPY turbo.json turbo.json
+
+# Uncomment and use build args to enable remote caching
+ARG TURBO_TEAM
+ENV TURBO_TEAM=$TURBO_TEAM
+
+ARG TURBO_TOKEN
+ENV TURBO_TOKEN=$TURBO_TOKEN
+
+# workaround: Module not found: Can't resolve '@sentry/utils'
+# https://github.com/getsentry/sentry-javascript/issues/8658
+RUN pnpm install @sentry/utils --filter=shortcuts
+
+RUN pnpm turbo build --filter=shortcuts
+
+FROM base AS runner
+WORKDIR /app
+
+# Don't run production as root
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+USER nextjs
+
+COPY --from=installer /app/apps/shortcuts/next.config.mjs .
+COPY --from=installer /app/apps/shortcuts/package.json .
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=installer --chown=nextjs:nodejs /app/apps/shortcuts/.next/standalone ./
+COPY --from=installer --chown=nextjs:nodejs /app/apps/shortcuts/.next/static ./apps/shortcuts/.next/static
+COPY --from=installer --chown=nextjs:nodejs /app/apps/shortcuts/public ./apps/shortcuts/public
+
+EXPOSE 3000
+
+ENV PORT 3000
+
+CMD HOSTNAME="0.0.0.0" node apps/shortcuts/server.js
