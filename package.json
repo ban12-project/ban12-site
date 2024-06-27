@@ -1,4 +1,5 @@
 {
+  "name": "ban12-site",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -11,17 +12,17 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
-    "@repo/typescript-config": "workspace:*",
-    "eslint": "^8.57.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
-    "turbo": "latest"
+    "turbo": "^2.0.5"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20",
+    "pnpm": ">=9"
   },
+  "packageManager": "pnpm@9.2.0",
   "prettier": {
     "arrowParens": "always",
     "trailingComma": "all",
