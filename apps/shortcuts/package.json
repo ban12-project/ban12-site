@@ -23,7 +23,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@repo/i18n": "workspace:^",
-    "@sentry/nextjs": "^8.8.0",
+    "@sentry/nextjs": "^8.13.0",
     "ahooks": "^3.8.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
