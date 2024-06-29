@@ -7,10 +7,12 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { signIn } from '#/auth'
+import { db } from '#/drizzle/db'
+import { album, collection, shortcut } from '#/drizzle/schema'
+import { eq, sql } from 'drizzle-orm'
 import { AuthError } from 'next-auth'
 import { z } from 'zod'
 
-import prisma from './prisma'
 import type { ShortcutRecord } from './shortcut'
 
 const icloudSchema = z.object({
@@ -61,9 +63,13 @@ export async function getShortcutByiCloud(
     }
   }
 
-  const exists = await prisma.shortcut.findUnique({
-    where: { uuid },
-  })
+  const {
+    rows: [{ exists }],
+  } = await db.execute<{ exists: boolean }>(sql`
+    SELECT EXISTS (
+      SELECT 1 FROM ${shortcut} WHERE ${shortcut.uuid} = ${uuid}
+    ) AS exists
+  `)
 
   if (exists) {
     return {
@@ -159,7 +165,7 @@ export async function postShortcut(prevState: State, formData: FormData) {
     const model = genAI.getGenerativeModel({
       model: process.env.GOOGLE_GEMINI_MODEL,
     })
-    const albums = await prisma.album.findMany()
+    const albums = await getAlbums()
     const prompt = `Which of the following options describes "${name}, ${description}" Answer with numbers:
         Options:
         ${albums
@@ -172,20 +178,18 @@ export async function postShortcut(prevState: State, formData: FormData) {
     albumId = Number.parseInt(text)
   } catch (e) {}
 
-  const result = await prisma.shortcut.create({
-    data: {
-      updatedAt: new Date(),
-      uuid,
-      icloud,
-      name,
-      description,
-      icon,
-      backgroundColor,
-      details,
-      language,
-      collectionId: null,
-      albumId: albumId || null,
-    },
+  const result = await db.insert(shortcut).values({
+    updatedAt: new Date().toISOString(),
+    uuid,
+    icloud,
+    name,
+    description,
+    icon,
+    backgroundColor,
+    details,
+    language,
+    collectionId: null,
+    albumId: albumId || null,
   })
 
   if (!result) {
@@ -199,8 +203,8 @@ export async function postShortcut(prevState: State, formData: FormData) {
 }
 
 export const fetchAlbums = cache(async () => {
-  const albums = await prisma.album.findMany({
-    include: {
+  const albums = await db.query.album.findMany({
+    with: {
       shortcuts: true,
     },
   })
@@ -209,14 +213,14 @@ export const fetchAlbums = cache(async () => {
 })
 
 export const fetchCollections = cache(async () => {
-  const collections = await prisma.collection.findMany()
+  const collections = await db.query.collection.findMany()
 
   return collections
 })
 
 export const fetchShortcutByID = cache(async (uuid: string) => {
-  const shortcut = await prisma.shortcut.findUnique({
-    where: { uuid },
+  const shortcut = await db.query.shortcut.findFirst({
+    where: (shortcut, { eq }) => eq(shortcut.uuid, uuid),
   })
 
   return shortcut
@@ -238,21 +242,12 @@ export async function searchShortcuts(query: string) {
     }
   }
 
-  const shortcuts = await prisma.shortcut.findMany({
-    where: {
-      OR: [
-        {
-          name: {
-            contains: validatedFields.data.query,
-          },
-        },
-        {
-          description: {
-            contains: validatedFields.data.query,
-          },
-        },
-      ],
-    },
+  const shortcuts = await db.query.shortcut.findMany({
+    where: (shortcut, { or, ilike }) =>
+      or(
+        ilike(shortcut.name, `%${validatedFields.data.query}%`),
+        ilike(shortcut.description, `%${validatedFields.data.query}%`),
+      ),
   })
 
   return shortcuts
@@ -320,24 +315,24 @@ export async function updateShortcut(
     language,
   } = validatedFields.data
 
-  const result = await prisma.shortcut.update({
-    where: { uuid },
-    data: {
-      updatedAt: new Date(),
-      uuid,
-      icloud,
-      name,
-      description,
-      icon,
-      backgroundColor,
-      details,
-      language,
-      collectionId: collectionId ? Number.parseInt(collectionId) : null,
-      albumId: albumId ? Number.parseInt(albumId) : null,
-    },
-  })
-
-  if (!result) {
+  try {
+    await db
+      .update(shortcut)
+      .set({
+        updatedAt: new Date().toISOString(),
+        uuid,
+        icloud,
+        name,
+        description,
+        icon,
+        backgroundColor,
+        details,
+        language,
+        collectionId: collectionId ? Number.parseInt(collectionId) : null,
+        albumId: albumId ? Number.parseInt(albumId) : null,
+      })
+      .where(eq(shortcut.uuid, uuid))
+  } catch {
     return 'Failed to insert data.'
   }
 
@@ -352,9 +347,7 @@ export async function deleteShortcut(formData: FormData) {
     return 'Parameters missing'
   }
 
-  await prisma.shortcut.delete({
-    where: { uuid: id },
-  })
+  await db.delete(shortcut).where(eq(shortcut.uuid, id))
 
   revalidatePath('/admin')
   redirect('/admin')
@@ -423,16 +416,14 @@ export async function createCollection(
 
   const path = await uploadFileToSupabaseStorage(image)
 
-  const result = await prisma.collection.create({
-    data: {
-      updatedAt: new Date(),
+  try {
+    await db.insert(collection).values({
+      updatedAt: new Date().toISOString(),
       title,
       image: path,
       textColor,
-    },
-  })
-
-  if (!result) {
+    })
+  } catch {
     return 'Failed to insert data.'
   }
 
@@ -466,17 +457,17 @@ export async function updateCollection(
 
   const path = await uploadFileToSupabaseStorage(image)
 
-  const result = await prisma.collection.update({
-    where: { id: Number.parseInt(id) },
-    data: {
-      updatedAt: new Date(),
-      title,
-      image: path,
-      textColor,
-    },
-  })
-
-  if (!result) {
+  try {
+    await db
+      .update(collection)
+      .set({
+        updatedAt: new Date().toISOString(),
+        title,
+        image: path,
+        textColor,
+      })
+      .where(eq(collection.id, Number.parseInt(id)))
+  } catch {
     return 'Failed to update data.'
   }
 
@@ -491,9 +482,7 @@ export async function deleteCollection(formData: FormData) {
     return 'Parameters missing'
   }
 
-  await prisma.collection.delete({
-    where: { id: Number.parseInt(id) },
-  })
+  await db.delete(collection).where(eq(collection.id, Number.parseInt(id)))
 
   revalidatePath('/admin')
   redirect('/admin')
@@ -524,16 +513,14 @@ export async function createAlbum(
 
   const { title, description, collectionId } = validatedFields.data
 
-  const result = await prisma.album.create({
-    data: {
-      updatedAt: new Date(),
+  try {
+    await db.insert(album).values({
+      updatedAt: new Date().toISOString(),
       title,
       description,
       collectionId: collectionId ? Number.parseInt(collectionId) : null,
-    },
-  })
-
-  if (!result) {
+    })
+  } catch {
     return 'Failed to insert data.'
   }
 
@@ -565,17 +552,17 @@ export async function updateAlbum(
 
   const { id, title, description, collectionId } = validatedFields.data
 
-  const result = await prisma.album.update({
-    where: { id: Number.parseInt(id) },
-    data: {
-      updatedAt: new Date(),
-      title,
-      description,
-      collectionId: collectionId ? Number.parseInt(collectionId) : null,
-    },
-  })
-
-  if (!result) {
+  try {
+    await db
+      .update(album)
+      .set({
+        updatedAt: new Date().toISOString(),
+        title,
+        description,
+        collectionId: collectionId ? Number.parseInt(collectionId) : null,
+      })
+      .where(eq(album.id, Number.parseInt(id)))
+  } catch {
     return 'Failed to update data.'
   }
 
@@ -590,28 +577,26 @@ export async function deleteAlbum(formData: FormData) {
     return 'Parameters missing'
   }
 
-  await prisma.album.delete({
-    where: { id: Number.parseInt(id) },
-  })
+  await db.delete(album).where(eq(album.id, Number.parseInt(id)))
 
   revalidatePath('/admin')
   redirect('/admin')
 }
 
-export async function getShortcuts() {
-  const shortcuts = await prisma.shortcut.findMany()
+export const getShortcuts = cache(async () => {
+  const shortcuts = await db.query.shortcut.findMany()
 
   return shortcuts
-}
+})
 
-export async function getCollections() {
-  const collections = await prisma.collection.findMany()
+export const getCollections = cache(async () => {
+  const collections = await db.query.collection.findMany()
 
   return collections
-}
+})
 
-export async function getAlbums() {
-  const albums = await prisma.album.findMany()
+export const getAlbums = cache(async () => {
+  const albums = await db.query.album.findMany()
 
   return albums
-}
+})

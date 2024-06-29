@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
-
-import prisma from '#/lib/prisma'
+import { db } from '#/drizzle/db'
 
 import Form from '../form'
 
@@ -9,8 +8,9 @@ export default async function EditCollectionPage({
 }: {
   params: { id: string }
 }) {
-  const collection = await prisma.collection.findUnique({
-    where: { id: Number.parseInt(params.id) },
+  const collection = await db.query.collection.findFirst({
+    where: (collection, { eq }) =>
+      eq(collection.id, Number.parseInt(params.id)),
   })
 
   if (!collection) notFound()

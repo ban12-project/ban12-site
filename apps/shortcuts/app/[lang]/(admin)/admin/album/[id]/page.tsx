@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
-
-import prisma from '#/lib/prisma'
+import { db } from '#/drizzle/db'
 
 import Form from '../form'
 
@@ -9,8 +8,8 @@ export default async function EditAlbumPage({
 }: {
   params: { id: string }
 }) {
-  const album = await prisma.album.findUnique({
-    where: { id: Number.parseInt(params.id) },
+  const album = await db.query.album.findFirst({
+    where: (album, { eq }) => eq(album.id, Number.parseInt(params.id)),
   })
 
   if (!album) notFound()

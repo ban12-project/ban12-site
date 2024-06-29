@@ -1,5 +1,9 @@
-import type { album, collection, shortcut } from '@prisma/client'
 import { Link } from '@repo/i18n/client'
+import type {
+  SelectAlbum,
+  SelectCollection,
+  SelectShortcut,
+} from '#/drizzle/schema'
 
 import {
   deleteAlbum,
@@ -33,7 +37,7 @@ type Columns<T> = {
   className?: string
 }[]
 
-const shortcutsTableColumns: Columns<shortcut> = [
+const shortcutsTableColumns: Columns<SelectShortcut> = [
   {
     key: 'uuid',
     header: 'uuid',
@@ -110,7 +114,7 @@ const shortcutsTableColumns: Columns<shortcut> = [
   },
 ]
 
-const collectionsTableColumns: Columns<collection> = [
+const collectionsTableColumns: Columns<SelectCollection> = [
   {
     key: 'id',
     header: 'id',
@@ -151,7 +155,7 @@ const collectionsTableColumns: Columns<collection> = [
   },
 ]
 
-const albumsTableColumns: Columns<album> = [
+const albumsTableColumns: Columns<SelectAlbum> = [
   {
     key: 'id',
     header: 'id',
@@ -176,12 +180,12 @@ const albumsTableColumns: Columns<album> = [
   {
     key: 'createdAt',
     header: 'createdAt',
-    cell: (album) => album.createdAt.toString(),
+    cell: (album) => album.createdAt,
   },
   {
     key: 'updatedAt',
     header: 'updatedAt',
-    cell: (album) => album.updatedAt.toString(),
+    cell: (album) => album.updatedAt,
   },
   {
     key: 'custom',

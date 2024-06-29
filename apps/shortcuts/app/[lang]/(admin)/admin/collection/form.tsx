@@ -1,6 +1,6 @@
 'use client'
 
-import type { collection } from '@prisma/client'
+import type { SelectCollection } from '#/drizzle/schema'
 import { useFormState, useFormStatus } from 'react-dom'
 import { toast } from 'sonner'
 
@@ -10,7 +10,7 @@ import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
 
 type Props = {
-  fields?: Partial<collection>
+  fields?: Partial<SelectCollection>
 }
 
 export default function Form({ fields }: Props) {
@@ -102,7 +102,7 @@ export default function Form({ fields }: Props) {
           textColor
         </Label>
         <Input
-          defaultValue={fields.textColor}
+          defaultValue={fields.textColor || ''}
           className="col-span-3"
           name="textColor"
         />

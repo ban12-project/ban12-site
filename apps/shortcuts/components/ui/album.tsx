@@ -1,7 +1,7 @@
 'use client'
 
 import { forwardRef, useEffect, useMemo, useRef } from 'react'
-import type { shortcut } from '@prisma/client'
+import type { SelectShortcut } from '#/drizzle/schema'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
 
@@ -10,7 +10,7 @@ import { useResponsive } from '#/hooks/use-responsive'
 import ShortcutCard from './shortcut-card'
 
 type AlbumsProps = {
-  shortcuts: shortcut[]
+  shortcuts: SelectShortcut[]
 }
 
 let PADDING_LEFT: number,
@@ -50,11 +50,9 @@ const innerElementType = forwardRef<
   )
 })
 
-const Column: React.ComponentType<ListChildComponentProps<shortcut[]>> = ({
-  index,
-  style,
-  data,
-}) => (
+const Column: React.ComponentType<
+  ListChildComponentProps<SelectShortcut[]>
+> = ({ index, style, data }) => (
   <div
     className="pb-5"
     style={{
@@ -102,7 +100,7 @@ export default function Albums({ shortcuts }: AlbumsProps) {
   return (
     <div className="h-[148px]">
       <div
-        className="absolute px-safe-max-4 lg:px-[var(--container-inset,0)]"
+        className="px-safe-max-4 absolute lg:px-[var(--container-inset,0)]"
         ref={anchorRef}
       ></div>
       <AutoSizer defaultWidth={1440}>

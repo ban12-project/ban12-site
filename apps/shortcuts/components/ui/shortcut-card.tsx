@@ -1,7 +1,7 @@
 import React from 'react'
 import { LinkProps } from 'next/link'
-import type { shortcut } from '@prisma/client'
 import { Link } from '@repo/i18n/client'
+import type { SelectShortcut } from '#/drizzle/schema'
 import { Layers2, Plus } from 'lucide-react'
 
 import { cn, negativeToHexColor } from '#/lib/utils'
@@ -9,7 +9,7 @@ import { cn, negativeToHexColor } from '#/lib/utils'
 interface ShortcutCardProps
   extends Partial<LinkProps>,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps> {
-  item: shortcut
+  item: SelectShortcut
 }
 
 export default function ShortcutCard({

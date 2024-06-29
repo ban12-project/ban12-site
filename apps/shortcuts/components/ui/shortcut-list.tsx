@@ -1,8 +1,8 @@
-import type { shortcut } from '@prisma/client'
+import type { SelectShortcut } from '#/drizzle/schema'
 
 import ShortcutCard from './shortcut-card'
 
-type ShortcutListProps = { shortcuts: shortcut[] }
+type ShortcutListProps = { shortcuts: SelectShortcut[] }
 
 export default function ShortcutList({ shortcuts }: ShortcutListProps) {
   return (

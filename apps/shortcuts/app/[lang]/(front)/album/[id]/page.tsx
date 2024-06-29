@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { db } from '#/drizzle/db'
 import type { Locale } from '#/i18n'
 
-import prisma from '#/lib/prisma'
 import ShortcutList from '#/components/ui/shortcut-list'
 
 type ListPageProps = {
@@ -10,9 +10,9 @@ type ListPageProps = {
 }
 
 export default async function ListPage({ params }: ListPageProps) {
-  const album = await prisma.album.findUnique({
-    where: { id: Number.parseInt(params.id) },
-    include: {
+  const album = await db.query.album.findFirst({
+    where: (album, { eq }) => eq(album.id, Number.parseInt(params.id)),
+    with: {
       shortcuts: true,
     },
   })
@@ -30,8 +30,8 @@ export default async function ListPage({ params }: ListPageProps) {
 export async function generateMetadata({
   params,
 }: ListPageProps): Promise<Metadata> {
-  const album = await prisma.album.findUnique({
-    where: { id: Number.parseInt(params.id) },
+  const album = await db.query.album.findFirst({
+    where: (album, { eq }) => eq(album.id, Number.parseInt(params.id)),
   })
 
   if (!album) notFound()

@@ -17,6 +17,7 @@
     "shortcuts#build": {
       "env": [
         "DATABASE_URL",
+        "DIRECT_URL",
         "NEXT_RUNTIME",
         "ANALYZE",
         "NEXT_PUBLIC_HOST_URL",

@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { db } from '#/drizzle/db'
 import { getDictionary, type Locale } from '#/i18n'
 
-import prisma from '#/lib/prisma'
 import AlbumList from '#/components/ui/album-list'
 import ShortcutList from '#/components/ui/shortcut-list'
 
@@ -13,11 +13,12 @@ type CollectionsProps = {
 export default async function Collections({ params }: CollectionsProps) {
   const [messages, collection] = await Promise.all([
     getDictionary(params.lang),
-    prisma.collection.findUnique({
-      where: { id: Number.parseInt(params.id) },
-      include: {
+    db.query.collection.findFirst({
+      where: (collection, { eq }) =>
+        eq(collection.id, Number.parseInt(params.id)),
+      with: {
         albums: {
-          include: {
+          with: {
             shortcuts: true,
           },
         },
@@ -47,8 +48,9 @@ export default async function Collections({ params }: CollectionsProps) {
 export async function generateMetadata({
   params,
 }: CollectionsProps): Promise<Metadata> {
-  const collection = await prisma.collection.findUnique({
-    where: { id: Number.parseInt(params.id) },
+  const collection = await db.query.collection.findFirst({
+    where: (collection, { eq }) =>
+      eq(collection.id, Number.parseInt(params.id)),
   })
 
   if (!collection) notFound()
