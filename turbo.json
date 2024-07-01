@@ -16,6 +16,7 @@
     },
     "shortcuts#build": {
       "env": [
+        "AUTH_SECRET",
         "DATABASE_URL",
         "DIRECT_URL",
         "NEXT_RUNTIME",
