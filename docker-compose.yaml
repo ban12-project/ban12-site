@@ -1,0 +1,43 @@
+services:
+  shortcuts:
+    # build:
+    #   context: .
+    #   dockerfile: apps/shortcuts/Dockerfile
+    #   args:
+    #     - TURBO_TEAM=${TURBO_TEAM}
+    #     - TURBO_TOKEN=${TURBO_TOKEN}
+    #     - AUTH_SECRET=${AUTH_SECRET}
+    image: cooda/ban12-site-shortcuts:latest
+    env_file:
+      - .env.shortcuts
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - apps:/app/apps
+    networks:
+      - app_network
+
+  nginx:
+    image: macbre/nginx-http3
+    ports:
+      - 80:80/tcp
+      - 443:443/tcp
+      - 443:443/udp # use UDP for usage of HTTP/3
+    volumes:
+      - apps:/app/apps
+      - ./nginx/modules.conf:/etc/nginx/main.d/modules.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - /etc/letsencrypt/live/ban12.com/fullchain.pem:/etc/letsencrypt/live/ban12.com/fullchain.pem:ro
+      - /etc/letsencrypt/live/ban12.com/privkey.pem:/etc/letsencrypt/live/ban12.com/privkey.pem:ro
+    networks:
+      - app_network
+
+volumes:
+  apps:
+
+# Define a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+networks:
+  app_network:
+    external: true
