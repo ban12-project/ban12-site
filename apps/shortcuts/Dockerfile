@@ -36,10 +36,6 @@ ENV TURBO_TEAM=$TURBO_TEAM
 ARG TURBO_TOKEN
 ENV TURBO_TOKEN=$TURBO_TOKEN
 
-# workaround: Module not found: Can't resolve '@sentry/utils'
-# https://github.com/getsentry/sentry-javascript/issues/8658
-RUN pnpm install @sentry/utils --filter=shortcuts
-
 RUN pnpm turbo build --filter=shortcuts
 
 FROM base AS runner
@@ -59,8 +55,4 @@ COPY --from=installer --chown=nextjs:nodejs /app/apps/shortcuts/.next/standalone
 COPY --from=installer --chown=nextjs:nodejs /app/apps/shortcuts/.next/static ./apps/shortcuts/.next/static
 COPY --from=installer --chown=nextjs:nodejs /app/apps/shortcuts/public ./apps/shortcuts/public
 
-EXPOSE 3000
-
-ENV PORT 3000
-
-CMD HOSTNAME="0.0.0.0" node apps/shortcuts/server.js
+CMD node apps/shortcuts/server.js

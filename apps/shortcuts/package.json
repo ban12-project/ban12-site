@@ -25,6 +25,7 @@
     "@radix-ui/react-switch": "^1.1.0",
     "@repo/i18n": "workspace:^",
     "@sentry/nextjs": "^8.13.0",
+    "@sentry/utils": "^8.13.0",
     "ahooks": "^3.8.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
