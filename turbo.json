@@ -5,14 +5,14 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
+      "env": ["NEXT_PUBLIC_*"]
     },
     "timetable#build": {
-      "env": [
-        "NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY",
-        "WEB_PUSH_EMAIL",
-        "WEB_PUSH_PRIVATE_KEY"
-      ]
+      "env": ["WEB_PUSH_EMAIL", "WEB_PUSH_PRIVATE_KEY"],
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "shortcuts#build": {
       "env": [
@@ -20,7 +20,6 @@
         "DIRECT_URL",
         "NEXT_RUNTIME",
         "ANALYZE",
-        "NEXT_PUBLIC_HOST_URL",
         "SITE_NAME",
         "GOOGLE_GEMINI_KEY",
         "GOOGLE_GEMINI_MODEL",
@@ -31,7 +30,10 @@
         "S3_BUCKET_ENDPOINT",
         "S3_BUCKET_ACCESS_KEY_ID",
         "S3_BUCKET_SECRET_ACCESS_KEY"
-      ]
+      ],
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "lint": {},
     "type-check": {},
