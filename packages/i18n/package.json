@@ -7,10 +7,8 @@
     "./server": "./server.ts"
   },
   "peerDependencies": {
-    "@types/node": "^20.12.12",
     "next": "^14.2.3",
-    "react": "^18.3.1",
-    "typescript": "^5.4.5"
+    "react": "^18.3.1"
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.5.4",
@@ -22,9 +20,7 @@
     "@repo/typescript-config": "workspace:*",
     "@types/negotiator": "^0.6.3",
     "@types/node": "^20.12.12",
-    "@types/react": "^18.3.1",
-    "next": "^14.2.3",
-    "react": "^18.3.1",
+    "@types/react": "^18.3.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.5"
   }

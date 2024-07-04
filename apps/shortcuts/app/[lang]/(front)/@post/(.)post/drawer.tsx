@@ -1,14 +1,15 @@
 'use client'
 
-import { PropsWithChildren, useState } from 'react'
+import { useState } from 'react'
 import type { Messages } from '#/i18n'
 
 import { useResponsive } from '#/hooks/use-responsive'
 import PageDrawer from '#/components/ui/page-drawer'
 
-type Drawer = PropsWithChildren<{
+type Drawer = {
   messages: Messages
-}>
+  children?: React.ReactNode
+}
 
 const snapPoints = [0.7, 1]
 

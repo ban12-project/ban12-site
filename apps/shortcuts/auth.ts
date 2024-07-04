@@ -1,21 +1,16 @@
-import { Pool } from '@neondatabase/serverless'
 import NextAuth, { type NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { pathToRegexp } from 'path-to-regexp'
 import { z } from 'zod'
 
+import { db } from './drizzle/db'
 import { i18n } from './i18n'
 
 async function getUser(email: string) {
-  const connectionString = `${process.env.DATABASE_URL}`
-  const pool = new Pool({ connectionString })
   try {
-    const {
-      rows: [user],
-    } = await pool.query('SELECT * FROM users WHERE email = $1 LIMIT 1', [
-      email,
-    ])
-    pool.end()
+    const user = await db.query.users.findFirst({
+      where: (user, { eq }) => eq(user.email, email),
+    })
     return user
   } catch (error) {
     console.error('Failed to fetch user:', error)

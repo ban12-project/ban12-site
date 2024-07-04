@@ -50,9 +50,11 @@ const innerElementType = forwardRef<
   )
 })
 
-const Column: React.ComponentType<
-  ListChildComponentProps<SelectShortcut[]>
-> = ({ index, style, data }) => (
+const Column = ({
+  index,
+  style,
+  data,
+}: ListChildComponentProps<SelectShortcut[]>) => (
   <div
     className="pb-5"
     style={{

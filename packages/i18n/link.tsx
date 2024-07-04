@@ -25,7 +25,7 @@ export const Link = forwardRef<React.ElementRef<'a'>, Props>(function Link(
       ? `/${locale}${href}`
       : {
           ...href,
-          pathname: `/${locale}${href.pathname}`,
+          pathname: `/${locale}${href.pathname ?? ''}`,
         }
 
   return <NextLink {...rest} href={hrefWithLocale} ref={forwardedRef} />
