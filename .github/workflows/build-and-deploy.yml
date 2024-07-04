@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push - shortcuts
         uses: docker/build-push-action@v6
         with:
           push: true
@@ -32,6 +32,17 @@ jobs:
             "TURBO_TEAM=${{ vars.TURBO_TEAM }}"
             "TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}"
             "AUTH_SECRET=${{ secrets.AUTH_SECRET }}"
+          no-cache: true
+
+      - name: Build and push - toys
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: cooda/ban12-site-toys:latest
+          file: apps/toys/Dockerfile
+          build-args: |
+            "TURBO_TEAM=${{ vars.TURBO_TEAM }}"
+            "TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}"
           no-cache: true
 
   deploy:
@@ -68,6 +79,8 @@ jobs:
             cd ${{ vars.VPS_PROJECT_PATH }}
             tar -xzf config.tar.gz
             rm config.tar.gz
+            docker compose -f docker-compose.yaml down
+            docker volume rm $(docker volume ls -qf dangling=true)
             docker compose -f docker-compose.yaml pull
             docker compose -f docker-compose.yaml up -d --remove-orphans
             docker image prune --force

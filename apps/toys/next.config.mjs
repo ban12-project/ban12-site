@@ -15,6 +15,10 @@ const nextConfig = {
     return config
   },
   transpilePackages: ['@repo/i18n'],
+  output: 'standalone',
+  experimental: {
+    outputFileTracingRoot: new URL('../../', import.meta.url).pathname,
+  }
 }
 
 export default nextConfig
