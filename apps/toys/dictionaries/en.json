@@ -1,0 +1,23 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "search": "Search",
+    "done": "Done",
+    "next": "Next"
+  },
+  "hello": "Welcome to our QR code generation website! Our website supports the generation of many types of QR codes, including links, contacts, Wi-Fi, email, adding calendars, addresses, text messages, phone numbers, etc.",
+  "message": "You have {numPhotos, plural, =0{no photos.}=1 {one photo.}other {# photos.}}",
+  "home": {
+    "title": "The Utility - Toys by Ban12",
+    "description": "The utility on the web"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "page-hash": {
+    "title": "Online SHA256 Calculator - Calculate SHA256 Hash Value with WebAssembly",
+    "description": "Use our online SHA256 calculator with WebAssembly to quickly calculate and generate the SHA256 hash value. SHA256 is a secure hashing algorithm that can be used to protect your data and information. With the power of WebAssembly, our tool runs efficiently in your web browser without the need for any downloads or installations. Try it now for free!"
+  }
+}

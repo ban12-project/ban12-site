@@ -1,0 +1,16 @@
+{
+  "name": "calculate_hash",
+  "version": "0.1.0",
+  "files": [
+    "calculate_hash_bg.wasm",
+    "calculate_hash.js",
+    "calculate_hash_bg.js",
+    "calculate_hash.d.ts"
+  ],
+  "module": "calculate_hash.js",
+  "types": "calculate_hash.d.ts",
+  "sideEffects": [
+    "./calculate_hash.js",
+    "./snippets/*"
+  ]
+}
