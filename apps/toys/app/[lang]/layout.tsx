@@ -1,14 +1,12 @@
 import '#/app/globals.css'
 
 import Script from 'next/script'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
-import { Analytics } from '@vercel/analytics/react'
 import { getDictionary, i18n, type Locale } from '#/i18n'
 import { ThemeProvider } from 'next-themes'
 
-import * as gtag from '#/lib/gtag'
 import Header from '#/components/ui/header'
-import GoogleAnalytics from '#/components/google-analytics'
 import LenisMount from '#/components/lenis'
 
 export const metadata = {
@@ -73,10 +71,9 @@ export default async function RootLayout({
           </LocaleProvider>
         </ThemeProvider>
 
-        {gtag.GA_TRACKING_ID && (
-          <GoogleAnalytics GA_TRACKING_ID={gtag.GA_TRACKING_ID} />
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}
-        <Analytics />
       </body>
     </html>
   )
