@@ -11,6 +11,7 @@ import { ThemeProvider } from 'next-themes'
 import { cn } from '#/lib/utils'
 import { Toaster } from '#/components/ui/sonner'
 import CSSPaintPolyfill from '#/components/css-paint-polyfill'
+import { WebVitals } from '#/components/web-vitals'
 
 const SentryLoader = dynamic(() => import('#/components/sentry-loader'), {
   ssr: false,
@@ -78,7 +79,10 @@ export default function RootLayout({
         <SentryLoader />
 
         {process.env.NEXT_PUBLIC_GA_ID && (
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+          <>
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+            <WebVitals />
+          </>
         )}
       </body>
     </html>
