@@ -1,3 +1,11 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+catalogs:
+  # Can be referenced through "catalog:react18"
+  react18:
+    "react": "^18.2.0"
+    "react-dom": "^18.2.0"
+    "@types/react": "^18.3.3"
+    "@types/react-dom": "^18.2.25"
