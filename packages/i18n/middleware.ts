@@ -47,6 +47,10 @@ export function createMiddleware(i18n: I18nConfig): NextMiddleware {
     if (pathnameIsMissingLocale) {
       const locale = getLocale(request)
 
+      // Avoids double redirect: / => /en/ => /en
+      if (pathname === '/')
+        return NextResponse.redirect(new URL(`/${locale}`, request.url))
+
       // e.g. incoming request is /products
       // The new URL is now /en-US/products
       return NextResponse.redirect(
