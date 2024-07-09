@@ -45,6 +45,17 @@ jobs:
             "TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}"
           no-cache: true
 
+      - name: Build and push - web
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: cooda/ban12-site-web:latest
+          file: apps/web/Dockerfile
+          build-args: |
+            "TURBO_TEAM=${{ vars.TURBO_TEAM }}"
+            "TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}"
+          no-cache: true
+
   deploy:
     runs-on: ubuntu-latest
     needs: build

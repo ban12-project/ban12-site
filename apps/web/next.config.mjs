@@ -44,6 +44,10 @@ const nextConfig = {
 
     return config
   },
+  output: 'standalone',
+  experimental: {
+    outputFileTracingRoot: new URL('../../', import.meta.url).pathname,
+  },
 }
 
 /** @type {(phase: string, defaultConfig: import("next").NextConfig) => Promise<import("next").NextConfig>} */

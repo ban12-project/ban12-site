@@ -28,6 +28,16 @@ services:
     networks:
       - app_network
 
+  web:
+    image: cooda/ban12-site-web:latest
+    restart: always
+    ports:
+      - 3002:3000
+    volumes:
+      - web:/app/apps/web
+    networks:
+      - app_network
+
   nginx:
     image: macbre/nginx-http3
     ports:
@@ -37,6 +47,7 @@ services:
     volumes:
       - shortcuts:/app/apps/shortcuts
       - toys:/app/apps/toys
+      - web:/app/apps/web
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/modules.conf:/etc/nginx/main.d/modules.conf:ro
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
@@ -48,6 +59,7 @@ services:
 volumes:
   shortcuts:
   toys:
+  web:
 
 # Define a network, which allows containers to communicate
 # with each other, by using their container name as a hostname
