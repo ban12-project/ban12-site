@@ -25,6 +25,7 @@
         "GOOGLE_GEMINI_MODEL",
         "SUPABASE_ANON_KEY",
         "SUPABASE_EDGE_FUNCTIONS_URL",
+        "S3_DOMAIN",
         "S3_BUCKET_NAME",
         "S3_BUCKET_REGION",
         "S3_BUCKET_ENDPOINT",

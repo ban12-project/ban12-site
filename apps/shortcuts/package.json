@@ -10,8 +10,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.592.0",
-    "@aws-sdk/s3-presigned-post": "^3.592.0",
+    "@aws-sdk/client-s3": "^3.613.0",
+    "@aws-sdk/s3-request-presigner": "^3.613.0",
     "@ban12/tailwindcss-safe-area": "^0.2.3",
     "@formatjs/intl-localematcher": "^0.5.4",
     "@google/generative-ai": "^0.14.1",
