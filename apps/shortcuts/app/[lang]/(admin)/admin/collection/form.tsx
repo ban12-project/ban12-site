@@ -26,7 +26,7 @@ export default function Form({ fields }: Props) {
     textColor: '',
   }
 
-  /* const handleAction = async (formData: FormData) => {
+  const handleAction = async (formData: FormData) => {
     const file = formData.get('image') as File
 
     const response = await fetch(
@@ -45,17 +45,14 @@ export default function Form({ fields }: Props) {
       throw new Error('Failed to get pre-signed URL.')
     }
 
-    const { url, fields } = await response.json()
-
-    const fileFormData = new FormData()
-    Object.entries(fields).forEach(([key, value]) => {
-      fileFormData.append(key, value as string)
-    })
-    fileFormData.append('file', file)
+    const { url } = await response.json()
 
     const uploadResponse = await fetch(url, {
-      method: 'POST',
-      body: fileFormData,
+      method: 'PUT',
+      headers: {
+        'Content-Type': file.type,
+      },
+      body: file,
     })
 
     if (!uploadResponse.ok) {
@@ -63,13 +60,14 @@ export default function Form({ fields }: Props) {
       throw new Error('S3 Upload Error: ' + uploadResponse)
     }
 
-    console.log(JSON.stringify(uploadResponse, null, 2))
+    const { pathname } = new URL(url)
+    formData.set('image', pathname)
 
     await dispatch(formData)
-  } */
+  }
 
   return (
-    <form action={dispatch} className="grid gap-4 py-4">
+    <form action={handleAction} className="grid gap-4 py-4">
       {!isCreating && (
         <Input defaultValue={fields.id} className="hidden" name="id" />
       )}

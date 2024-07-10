@@ -353,49 +353,9 @@ export async function deleteShortcut(formData: FormData) {
   redirect('/admin')
 }
 
-export const uploadFileToSupabaseStorage = async (file: File) => {
-  const formData = new FormData()
-  formData.append(file.name, file)
-  const result = await fetch(
-    new URL(
-      '/functions/v1/file-upload-storage',
-      process.env.SUPABASE_EDGE_FUNCTIONS_URL,
-    ),
-    {
-      method: 'POST',
-      body: formData,
-      headers: {
-        Authorization: `Bearer ${process.env.SUPABASE_ANON_KEY}`,
-      },
-    },
-  )
-
-  if (!result.ok) {
-    throw new Error('Failed to upload file')
-  }
-
-  const { path } = await result.json()
-  return path as string
-}
-
 const collectionSchema = z.object({
   title: z.string().min(1),
-  // image: z.string().min(1),
-  image: z.instanceof(File).superRefine((val, ctx) => {
-    // 10MB limit
-    const MB_BYTES = 1024 * 1024
-    if (val.size > 10 * MB_BYTES) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.too_big,
-        type: 'array',
-        message: `The file must not be larger than ${10 * MB_BYTES} bytes: ${
-          val.size
-        }`,
-        maximum: 10 * MB_BYTES,
-        inclusive: true,
-      })
-    }
-  }),
+  image: z.string().min(1),
   textColor: z.string().min(4),
 })
 export async function createCollection(
@@ -413,8 +373,7 @@ export async function createCollection(
   }
 
   const { title, image, textColor } = validatedFields.data
-
-  const path = await uploadFileToSupabaseStorage(image)
+  const path = new URL(image, process.env.S3_DOMAIN!).href
 
   try {
     await db.insert(collection).values({
@@ -454,8 +413,7 @@ export async function updateCollection(
   }
 
   const { id, title, image, textColor } = validatedFields.data
-
-  const path = await uploadFileToSupabaseStorage(image)
+  const path = new URL(image, process.env.S3_DOMAIN!).href
 
   try {
     await db

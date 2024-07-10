@@ -1,5 +1,5 @@
-import { S3Client } from '@aws-sdk/client-s3'
-import { createPresignedPost } from '@aws-sdk/s3-presigned-post'
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 export const runtime = 'edge'
 
@@ -8,7 +8,6 @@ export async function POST(request: Request) {
 
   try {
     const client = new S3Client({
-      forcePathStyle: true,
       region: process.env.S3_BUCKET_REGION,
       endpoint: process.env.S3_BUCKET_ENDPOINT,
       credentials: {
@@ -16,21 +15,19 @@ export async function POST(request: Request) {
         secretAccessKey: process.env.S3_BUCKET_SECRET_ACCESS_KEY!,
       },
     })
-    const { url, fields } = await createPresignedPost(client, {
-      Bucket: process.env.S3_BUCKET_NAME!,
-      Key: globalThis.crypto.randomUUID(),
-      Conditions: [
-        ['content-length-range', 0, 10485760], // up to 10 MB
-        ['starts-with', '$Content-Type', contentType],
-      ],
-      Fields: {
-        acl: 'public-read',
-        'Content-Type': contentType,
-      },
-      Expires: 600, // Seconds before the presigned post expires. 3600 by default.
-    })
 
-    return Response.json({ url, fields })
+    const url = await getSignedUrl(
+      client,
+      new PutObjectCommand({
+        Bucket: process.env.S3_BUCKET_NAME!,
+        Key: globalThis.crypto.randomUUID(),
+        ACL: 'public-read',
+        ContentType: contentType,
+      }),
+      { expiresIn: 600 },
+    )
+
+    return Response.json({ url })
   } catch (error) {
     return Response.json({ error })
   }
