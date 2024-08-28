@@ -9,6 +9,8 @@ import ShortcutAdd, {
   type ShortcutAddProps,
 } from '#/components/ui/shortcut-add'
 
+export const runtime = 'edge'
+
 export default async function ShortcutPage({
   params,
 }: Omit<ShortcutAddProps, 'messages'>) {

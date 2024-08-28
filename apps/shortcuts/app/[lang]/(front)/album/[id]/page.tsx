@@ -9,6 +9,8 @@ type ListPageProps = {
   params: { id: string; lang: Locale }
 }
 
+export const runtime = 'edge'
+
 export default async function ListPage({ params }: ListPageProps) {
   const album = await db.query.album.findFirst({
     where: (album, { eq }) => eq(album.id, Number.parseInt(params.id)),

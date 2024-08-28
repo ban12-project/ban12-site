@@ -4,6 +4,8 @@ import ShortcutPost from '#/components/ui/shortcut-post'
 
 import Drawer from './drawer'
 
+export const runtime = 'edge'
+
 export default async function PostPage(props: { params: { lang: Locale } }) {
   const messages = await getDictionary(props.params.lang)
 

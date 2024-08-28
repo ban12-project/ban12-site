@@ -3,6 +3,8 @@ import { db } from '#/drizzle/db'
 
 import Form from '../form'
 
+export const runtime = 'edge'
+
 export default async function EditCollectionPage({
   params,
 }: {

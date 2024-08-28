@@ -37,6 +37,8 @@ type Columns<T> = {
   className?: string
 }[]
 
+export const runtime = 'edge'
+
 const shortcutsTableColumns: Columns<SelectShortcut> = [
   {
     key: 'uuid',

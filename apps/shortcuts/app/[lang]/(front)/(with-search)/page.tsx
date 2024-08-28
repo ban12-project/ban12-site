@@ -15,6 +15,8 @@ type HomePageProps = {
   params: { lang: Locale }
 }
 
+export const runtime = 'edge'
+
 const preload = () => {
   // void evaluates the given expression and returns undefined
   // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/void

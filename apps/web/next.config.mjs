@@ -2,7 +2,12 @@ import {
   PHASE_DEVELOPMENT_SERVER,
   PHASE_PRODUCTION_BUILD,
 } from 'next/constants.js'
+import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev'
 import bundleAnalyzer from '@next/bundle-analyzer'
+
+if (process.env.NODE_ENV === 'development') {
+  await setupDevPlatform()
+}
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',

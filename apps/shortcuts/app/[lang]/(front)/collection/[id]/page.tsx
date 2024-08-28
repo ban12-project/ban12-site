@@ -10,6 +10,8 @@ type CollectionsProps = {
   params: { id: string; lang: Locale }
 }
 
+export const runtime = 'edge'
+
 export default async function Collections({ params }: CollectionsProps) {
   const [messages, collection] = await Promise.all([
     getDictionary(params.lang),

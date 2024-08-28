@@ -22,3 +22,7 @@ catalogs:
   turbo:
     "turbo": "^2.1.1"
     "eslint-config-turbo": "^2.1.1"
+
+  cloudflare/pages:
+    "@cloudflare/next-on-pages": "^1.13.2"
+    "eslint-plugin-next-on-pages": "^1.13.2"
