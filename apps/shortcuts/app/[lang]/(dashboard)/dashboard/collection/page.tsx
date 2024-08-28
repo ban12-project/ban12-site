@@ -8,6 +8,8 @@ import { Columns, DashboardTable } from '#/components/dashboard-table'
 
 import { deleteCollection } from '../../actions'
 
+export const runtime = 'edge'
+
 const localizedHelper = new LocalizedHelper()
 
 const collectionsTableColumns: Columns<SelectCollection> = [

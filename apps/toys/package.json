@@ -7,7 +7,10 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "pages:build": "pnpm next-on-pages",
+    "preview": "npm run pages:build && wrangler pages dev",
+    "deploy": "npm run pages:build && wrangler pages deploy"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
@@ -48,7 +51,8 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:^",
+    "@cloudflare/next-on-pages": "catalog:",
+    "@repo/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/emscripten": "^1.39.13",
@@ -61,6 +65,7 @@
     "autoprefixer": "^10.4.20",
     "babel-plugin-react-compiler": "catalog:",
     "eslint": "catalog:",
+    "eslint-plugin-next-on-pages": "catalog:",
     "postcss": "^8.4.49",
     "tailwind-merge": "catalog:",
     "tailwindcss": "catalog:",

@@ -1,6 +1,11 @@
 import type { NextConfig } from 'next'
+import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev'
 import bundleAnalyzer from '@next/bundle-analyzer'
 import { withSentryConfig } from '@sentry/nextjs'
+
+if (process.env.NODE_ENV === 'development') {
+  await setupDevPlatform()
+}
 
 const nextConfig: NextConfig = {
   images: {

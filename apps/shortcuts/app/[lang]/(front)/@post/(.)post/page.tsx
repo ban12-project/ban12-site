@@ -3,6 +3,8 @@ import ShortcutPost from '#/components/shortcut-post'
 
 import Drawer from './drawer'
 
+export const runtime = 'edge'
+
 export default async function PostPage(props: {
   params: Promise<{ lang: Locale }>
 }) {

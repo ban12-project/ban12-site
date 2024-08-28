@@ -10,6 +10,8 @@ type Props = {
   }>
 }
 
+export const runtime = 'edge'
+
 export default async function Page(props: Props) {
   const params = await props.params
   const shortcut = await getShortcutByUuid(params.id)

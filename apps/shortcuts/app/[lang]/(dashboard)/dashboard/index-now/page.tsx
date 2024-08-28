@@ -3,6 +3,8 @@ import sitemap from '#/app/sitemap'
 
 import Form from './Form'
 
+export const runtime = 'edge'
+
 export default async function IndexNowPage() {
   const sitemapUrls = await sitemap()
 

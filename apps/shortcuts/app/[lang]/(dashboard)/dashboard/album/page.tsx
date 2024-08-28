@@ -8,6 +8,8 @@ import { Columns, DashboardTable } from '#/components/dashboard-table'
 
 import { deleteAlbum } from '../../actions'
 
+export const runtime = 'edge'
+
 const localizedHelper = new LocalizedHelper()
 
 const albumsTableColumns: Columns<SelectAlbum> = [

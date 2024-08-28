@@ -7,6 +7,8 @@ type Props = {
   params: Promise<{ lang: Locale }>
 }
 
+export const runtime = 'edge'
+
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
   const messages = await getDictionary(params.lang)

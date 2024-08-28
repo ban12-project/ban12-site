@@ -8,7 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "pages:build": "pnpm next-on-pages",
+    "preview": "npm run pages:build && wrangler pages dev",
+    "deploy": "npm run pages:build && wrangler pages deploy"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.4",
@@ -60,6 +63,7 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "catalog:",
+    "@cloudflare/next-on-pages": "catalog:",
     "@repo/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
@@ -72,6 +76,7 @@
     "babel-plugin-react-compiler": "catalog:",
     "drizzle-kit": "^0.30.1",
     "eslint": "catalog:",
+    "eslint-plugin-next-on-pages": "catalog:",
     "postcss": "catalog:",
     "tailwind-merge": "catalog:",
     "tailwindcss": "catalog:",

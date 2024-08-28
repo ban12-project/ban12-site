@@ -4,6 +4,8 @@ import { getAlbumById } from '#/lib/db/queries'
 
 import Form from '../form'
 
+export const runtime = 'edge'
+
 export default async function EditAlbumPage(props: {
   params: Promise<{ id: string }>
 }) {

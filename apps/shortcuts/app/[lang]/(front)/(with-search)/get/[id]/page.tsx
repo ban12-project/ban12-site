@@ -13,6 +13,8 @@ type Props = {
   params: Promise<ShortcutAddProps['params']>
 }
 
+export const runtime = 'edge'
+
 export default async function ShortcutPage(props: Props) {
   const params = await props.params
   preload(params.id)

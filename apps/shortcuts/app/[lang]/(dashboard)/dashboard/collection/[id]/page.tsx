@@ -4,6 +4,8 @@ import { getCollectionById } from '#/lib/db/queries'
 
 import Form from '../form'
 
+export const runtime = 'edge'
+
 export default async function EditCollectionPage(props: {
   params: Promise<{ id: string }>
 }) {

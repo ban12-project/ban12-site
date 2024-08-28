@@ -9,6 +9,8 @@ type ListPageProps = {
   params: Promise<{ id: string; lang: Locale }>
 }
 
+export const runtime = 'edge'
+
 export default async function ListPage({ params }: ListPageProps) {
   const { id, lang } = await params
   const album = await getAlbumByIdWithShortcuts(Number.parseInt(id))

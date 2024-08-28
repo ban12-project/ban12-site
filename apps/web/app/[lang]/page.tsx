@@ -2,6 +2,8 @@ import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import { getDictionary, Locale } from '#/i18n'
 
+export const runtime = 'edge'
+
 const View = dynamic(
   () =>
     import('#/components/view').then((mod) => ({

@@ -3,6 +3,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import type { NextConfig } from 'next'
+import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev'
+
+if (process.env.NODE_ENV === 'development') {
+  await setupDevPlatform()
+}
 
 const nextConfig: NextConfig = {
   reactStrictMode: true, // Recommended for the `pages` directory, default in `app`.
