@@ -10,8 +10,10 @@ type AlbumListProps = {
   albums?: Awaited<ReturnType<typeof fetchAlbums>>
 }
 
+const pageSize = 10
+
 export default async function AlbumList({ messages, albums }: AlbumListProps) {
-  albums ||= await fetchAlbums()
+  albums ||= await fetchAlbums(pageSize)
 
   return (
     <ul className="[&>li+li_.custom-border]:border-t [@media_only_screen_and_(min-resolution:192dpi){&>li+li_.custom-border}]:border-t-[.5px]">
@@ -36,7 +38,11 @@ export default async function AlbumList({ messages, albums }: AlbumListProps) {
               {item.description}
             </p>
           </div>
-          <Album shortcuts={item.shortcuts} />
+          <Album
+            shortcuts={item.shortcuts}
+            pageSize={pageSize}
+            currentPage={1}
+          />
         </li>
       ))}
     </ul>

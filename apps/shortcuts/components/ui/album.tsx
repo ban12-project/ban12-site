@@ -1,16 +1,21 @@
 'use client'
 
-import { forwardRef, useEffect, useMemo, useRef } from 'react'
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import type { SelectShortcut } from '#/drizzle/schema'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
+import InfiniteLoader from 'react-window-infinite-loader'
 
+import { fetchShortcutByAlbum } from '#/lib/actions'
 import { useResponsive } from '#/hooks/use-responsive'
 
 import ShortcutCard from './shortcut-card'
+import { Skeleton } from './skeleton'
 
 type AlbumsProps = {
   shortcuts: SelectShortcut[]
+  pageSize: number
+  currentPage: number
 }
 
 let PADDING_LEFT: number,
@@ -54,7 +59,10 @@ const Column = ({
   index,
   style,
   data,
-}: ListChildComponentProps<SelectShortcut[]>) => (
+  children,
+}: ListChildComponentProps<SelectShortcut[]> & {
+  children?: React.ReactNode
+}) => (
   <div
     className="pb-5"
     style={{
@@ -63,14 +71,20 @@ const Column = ({
       width: `${Number.parseFloat(style.width as string) - GAP_SIZE}px`,
     }}
   >
-    <ShortcutCard
-      className="block h-full [box-shadow:2px_4px_12px_#00000014] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)]"
-      item={data[index]}
-    />
+    {children || (
+      <ShortcutCard
+        className="block h-full [box-shadow:2px_4px_12px_#00000014] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)]"
+        item={data[index]}
+      />
+    )}
   </div>
 )
 
-export default function Albums({ shortcuts }: AlbumsProps) {
+export default function Albums({
+  shortcuts,
+  pageSize,
+  currentPage,
+}: AlbumsProps) {
   const anchorRef = useRef<React.ElementRef<'div'>>(null)
   const update = () => {
     if (!anchorRef.current) return
@@ -99,6 +113,25 @@ export default function Albums({ shortcuts }: AlbumsProps) {
     return 2
   }, [breakpoints])
 
+  const [items, setItems] = useState<SelectShortcut[]>([...shortcuts])
+  const [hasNextPage, setHasNextPage] = useState(shortcuts.length >= pageSize)
+
+  // Every items is loaded except for loading indicator
+  const isItemLoaded = (index: number) => !hasNextPage || index < items.length
+
+  // If there are more items to be loaded then add an extra row to hold a loading indicator.
+  const itemCount = hasNextPage ? items.length + 1 : items.length
+
+  const loadMoreItems = async (startIndex: number, stopIndex: number) => {
+    const newItems = await fetchShortcutByAlbum(
+      items[0].albumId!,
+      pageSize,
+      Math.floor(startIndex / pageSize) + 1,
+    )
+    setItems([...items, ...newItems])
+    setHasNextPage(newItems.length >= pageSize)
+  }
+
   return (
     <div className="h-[148px]">
       <div
@@ -107,21 +140,38 @@ export default function Albums({ shortcuts }: AlbumsProps) {
       ></div>
       <AutoSizer defaultWidth={1440}>
         {({ height, width }) => (
-          <FixedSizeList
-            itemSize={
-              (width - PADDING_LEFT - PADDING_RIGHT) / columnNumber +
-              GAP_SIZE / columnNumber
-            }
-            width={width}
-            height={height}
-            itemCount={shortcuts.length}
-            itemData={shortcuts}
-            outerElementType={outerElementType}
-            innerElementType={innerElementType}
-            layout="horizontal"
+          <InfiniteLoader
+            isItemLoaded={isItemLoaded}
+            itemCount={itemCount}
+            loadMoreItems={loadMoreItems}
+            threshold={2}
           >
-            {Column}
-          </FixedSizeList>
+            {({ onItemsRendered, ref }) => (
+              <FixedSizeList
+                itemSize={
+                  (width - PADDING_LEFT - PADDING_RIGHT) / columnNumber +
+                  GAP_SIZE / columnNumber
+                }
+                width={width}
+                height={height}
+                itemCount={itemCount}
+                itemData={items}
+                outerElementType={outerElementType}
+                innerElementType={innerElementType}
+                layout="horizontal"
+                onItemsRendered={onItemsRendered}
+                ref={ref}
+              >
+                {(props) => (
+                  <Column {...props}>
+                    {isItemLoaded(props.index) ? null : (
+                      <Skeleton className="h-full w-full rounded-3xl" />
+                    )}
+                  </Column>
+                )}
+              </FixedSizeList>
+            )}
+          </InfiniteLoader>
         )}
       </AutoSizer>
     </div>

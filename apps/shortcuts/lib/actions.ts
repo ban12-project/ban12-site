@@ -202,15 +202,34 @@ export async function postShortcut(prevState: State, formData: FormData) {
   redirect('/')
 }
 
-export const fetchAlbums = cache(async () => {
+export const fetchAlbums = cache(async (pageSize?: number) => {
   const albums = await db.query.album.findMany({
     with: {
-      shortcuts: true,
+      // use pageSize to limit the number of records returned, if not provided, return all records
+      shortcuts: pageSize
+        ? {
+            limit: pageSize,
+            orderBy: (shortcuts, { desc }) => desc(shortcuts.updatedAt),
+          }
+        : true,
     },
   })
 
   return albums
 })
+
+export const fetchShortcutByAlbum = cache(
+  async (albumId: number, pageSize: number, currentPage: number) => {
+    const shortcuts = await db.query.shortcut.findMany({
+      where: (shortcut, { eq }) => eq(shortcut.albumId, albumId),
+      limit: pageSize,
+      offset: (currentPage - 1) * pageSize,
+      orderBy: (shortcuts, { desc }) => desc(shortcuts.updatedAt),
+    })
+
+    return shortcuts
+  },
+)
 
 export const fetchCollections = cache(async () => {
   const collections = await db.query.collection.findMany()
