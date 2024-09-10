@@ -74,29 +74,20 @@ EOF
 
 ## 处理私有的 .env.local 环境变量
 
-项目构建时候会使用私有的 `secret` 这个文件应该会被 `.gitignore` 忽略掉，Git 仓库中不会有也不应该有。 Github Actions 支持一个 secret 一个 定义然后再使用。[Using secrets in GitHub Actions](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions)
+项目构建时候会使用私有的 `secret` 这个文件应该会被 `.gitignore` 忽略掉，Git 仓库中不会有也不应该有。[Using secrets in GitHub Actions](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions)
 
-实际项目中 `.env.local` 会包含很多变量，一个一个写太麻烦，先将整个文件内容 base64 放入一个名为 `ENV_LOCAL` 的 `secret` 中，使用的的时候 base64 解码然后写入项目目录下 `.env.local` 文件中
-
-```bash
-openssl base64 -A -in .env.local
-```
-
-将返回字符串复制到 GitHub project secret 中
+实际项目中将 `.env.local` 环境变量文件内容复制到 GitHub project secret 中
 
 [your project] -> Settings -> Secrets and variables -> Actions -> New repository secret
 
 Name `ENV_LOCAL`
 
-Secret [openssl 返回的字符串]
+Secret [私有 env 文件内容]
 
 ```yml
 - name: Create .env.local file
-  env:
-    # openssl base64 -A -in .env.local
-    ENV_LOCAL: ${{ secrets.ENV_LOCAL }}
-  # 将 ENV_LOCAL base64 decode 后写入项目 `.env.local` 中，随后会同步这个文件到 VPS 上
-  run: echo $ENV_LOCAL | base64 --decode > ${{ vars.ROOT_PATH }}/.env.local
+  # echo 后面的引号不能删除，会导致写入文件内容为空
+  run: echo "${{ secrets.ENV_LOCAL }}" > ${{ vars.ROOT_PATH }}/.env.local
 ```
 
 ## 压缩构建好的文件
@@ -217,10 +208,7 @@ jobs:
         run: pnpm install
 
       - name: Create .env.local file
-        env:
-          # openssl base64 -A -in .env.local
-          ENV_LOCAL: ${{ secrets.ENV_LOCAL }}
-        run: echo $ENV_LOCAL | base64 --decode > ${{ vars.ROOT_PATH }}/.env.local
+        run: echo "${{ secrets.ENV_LOCAL }}" > ${{ vars.ROOT_PATH }}/.env.local
 
       - name: Build
         run: |
