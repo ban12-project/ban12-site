@@ -10,8 +10,8 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "pages:build": "pnpm next-on-pages",
-    "preview": "npm run pages:build && wrangler pages dev",
-    "deploy": "npm run pages:build && wrangler pages deploy"
+    "preview": "pnpm pages:build && wrangler pages dev",
+    "deploy": "pnpm pages:build && wrangler pages deploy"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.4",

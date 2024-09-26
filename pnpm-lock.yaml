@@ -10,8 +10,8 @@ catalogs:
       specifier: ^0.2.4
       version: 0.2.4
     '@cloudflare/next-on-pages':
-      specifier: ^1.13.2
-      version: 1.13.2
+      specifier: ^1.13.3
+      version: 1.13.3
     '@next/bundle-analyzer':
       specifier: ^15.1.6
       version: 15.1.6
@@ -40,8 +40,8 @@ catalogs:
       specifier: ^9.17.0
       version: 9.17.0
     eslint-plugin-next-on-pages:
-      specifier: ^1.13.2
-      version: 1.13.2
+      specifier: ^1.13.3
+      version: 1.13.3
     eslint-plugin-turbo:
       specifier: ^2.4.2
       version: 2.4.2
@@ -339,7 +339,7 @@ importers:
     devDependencies:
       '@cloudflare/next-on-pages':
         specifier: 'catalog:'
-        version: 1.13.2(bufferutil@4.0.8)(vercel@37.1.2)(wrangler@3.76.0(bufferutil@4.0.8))
+        version: 1.13.3(bufferutil@4.0.8)(vercel@37.1.2)(wrangler@3.76.0(bufferutil@4.0.8))
       '@next/bundle-analyzer':
         specifier: 'catalog:'
         version: 15.1.6(bufferutil@4.0.8)
@@ -381,7 +381,7 @@ importers:
         version: 9.17.0(jiti@1.21.7)
       eslint-plugin-next-on-pages:
         specifier: 'catalog:'
-        version: 1.13.2(eslint@9.17.0(jiti@1.21.7))
+        version: 1.13.3(eslint@9.17.0(jiti@1.21.7))
       postcss:
         specifier: 'catalog:'
         version: 8.4.49
@@ -499,7 +499,7 @@ importers:
     devDependencies:
       '@cloudflare/next-on-pages':
         specifier: 'catalog:'
-        version: 1.13.2(bufferutil@4.0.8)(vercel@37.1.2)(wrangler@3.76.0(bufferutil@4.0.8))
+        version: 1.13.3(bufferutil@4.0.8)(vercel@37.1.2)(wrangler@3.76.0(bufferutil@4.0.8))
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
@@ -541,7 +541,7 @@ importers:
         version: 9.17.0(jiti@1.21.7)
       eslint-plugin-next-on-pages:
         specifier: 'catalog:'
-        version: 1.13.2(eslint@9.17.0(jiti@1.21.7))
+        version: 1.13.3(eslint@9.17.0(jiti@1.21.7))
       postcss:
         specifier: ^8.4.49
         version: 8.4.49
@@ -629,7 +629,7 @@ importers:
         version: 9.17.0(jiti@1.21.7)
       eslint-plugin-next-on-pages:
         specifier: 'catalog:'
-        version: 1.13.2(eslint@9.17.0(jiti@1.21.7))
+        version: 1.13.3(eslint@9.17.0(jiti@1.21.7))
       file-loader:
         specifier: ^6.2.0
         version: 6.2.0(webpack@5.96.1)
@@ -1106,8 +1106,8 @@ packages:
     resolution: {integrity: sha512-YLPHc8yASwjNkmcDMQMY35yiWjoKAKnhUbPRszBRS0YgH+IXtsMp61j+yTcnCE3oO2DgP0U3iejLC8FTtKDC8Q==}
     engines: {node: '>=16.13'}
 
-  '@cloudflare/next-on-pages@1.13.2':
-    resolution: {integrity: sha512-lIri+zuxj6SKqIlewOoC9g9dD5+GbUMAXRrkhApmWGekE0PFlEAR7tHHDkbMXix4ctp7K4lPBY/wWUd8oh+VtQ==}
+  '@cloudflare/next-on-pages@1.13.3':
+    resolution: {integrity: sha512-pPi0cCvSFLtWr/e3iqmpG4h0Apg3NWaw26arDDR7Ap2p/jDewsX4y6dDDRv1vZqfUw5xCgBB6xxNf5vjhbDCzA==}
     hasBin: true
     peerDependencies:
       '@cloudflare/workers-types': ^4.20240208.0
@@ -4773,8 +4773,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-plugin-next-on-pages@1.13.2:
-    resolution: {integrity: sha512-9rbzlUrI3gZcu6n4FandFAS5SZc2SxjKKsaDa3aq4ekke9hDlRZ+NNpTEbKet+2NuDp1Fm0dXqJTFPQLcuyPOA==}
+  eslint-plugin-next-on-pages@1.13.3:
+    resolution: {integrity: sha512-nktUoJQu9jhEA2/08ky6TOss/cx4qeZr5VPvbKFLFCAxmeQuyYwwzryIqsDbkqxWAJLgzLcDEES09zrZmmxHog==}
     peerDependencies:
       eslint: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
 
@@ -8417,7 +8417,7 @@ snapshots:
     dependencies:
       mime: 3.0.0
 
-  '@cloudflare/next-on-pages@1.13.2(bufferutil@4.0.8)(vercel@37.1.2)(wrangler@3.76.0(bufferutil@4.0.8))':
+  '@cloudflare/next-on-pages@1.13.3(bufferutil@4.0.8)(vercel@37.1.2)(wrangler@3.76.0(bufferutil@4.0.8))':
     dependencies:
       acorn: 8.14.0
       ast-types: 0.14.2
@@ -12264,7 +12264,7 @@ snapshots:
     dependencies:
       eslint: 9.17.0(jiti@1.21.7)
 
-  eslint-plugin-next-on-pages@1.13.2(eslint@9.17.0(jiti@1.21.7)):
+  eslint-plugin-next-on-pages@1.13.3(eslint@9.17.0(jiti@1.21.7)):
     dependencies:
       '@types/estree-jsx': 1.0.5
       comment-parser: 1.4.1
