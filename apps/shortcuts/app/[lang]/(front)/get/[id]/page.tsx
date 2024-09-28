@@ -39,5 +39,8 @@ export async function generateMetadata({
   return {
     title: shortcut.name,
     description: shortcut.description,
+    openGraph: {
+      images: `https://ban12.com/api/og?title=${shortcut.name}`,
+    },
   }
 }
