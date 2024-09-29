@@ -8,9 +8,9 @@
   "devDependencies": {
     "@ban12/tailwindcss-safe-area": "^0.2.3",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^22.5.4",
+    "@types/node": "catalog:",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "^5.5.4"
+    "typescript": "catalog:"
   }
 }

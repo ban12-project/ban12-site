@@ -32,7 +32,7 @@
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@serwist/next": "^9.0.2",
-    "@types/node": "^20.14.2",
+    "@types/node": "catalog:",
     "@types/react": "catalog:react18",
     "@types/react-dom": "catalog:react18",
     "@types/three": "^0.165.0",
@@ -40,12 +40,12 @@
     "file-loader": "^6.2.0",
     "glslify": "^7.1.1",
     "glslify-loader": "^2.0.0",
-    "postcss": "^8.4.38",
+    "postcss": "catalog:",
     "raw-loader": "^4.0.2",
     "serwist": "^9.0.2",
-    "tailwind-merge": "^2.3.0",
-    "tailwindcss": "^3.4.4",
-    "typescript": "^5",
+    "tailwind-merge": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
     "url-loader": "^4.1.1"
   }
 }
