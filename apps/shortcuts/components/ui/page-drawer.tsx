@@ -14,7 +14,7 @@ type PageDrawerProps = React.ComponentProps<typeof Drawer.Root> &
   React.InputHTMLAttributes<HTMLDivElement> & {
     header?: React.ReactNode
     children: React.ReactNode
-    messages: Messages['common']
+    messages: Messages
   }
 
 export const PAGE_DRAWER_HEADER_ID = 'PAGE_DRAWER_HEADER_ID'
@@ -55,12 +55,19 @@ export default function PageDrawer({
             className,
           )}
         >
+          <Drawer.Title className="sr-only">
+            {messages['set-up-shortcut']}
+          </Drawer.Title>
+          <Drawer.Description className="sr-only">
+            {messages['set-up-shortcut']}
+          </Drawer.Description>
+
           <div
             className="p-safe-max-4 flex justify-between"
             id={PAGE_DRAWER_HEADER_ID}
           >
             <Button variant="ios" size="auto" onClick={() => setOpen(false)}>
-              {messages['cancel']}
+              {messages.common.cancel}
             </Button>
 
             {header}

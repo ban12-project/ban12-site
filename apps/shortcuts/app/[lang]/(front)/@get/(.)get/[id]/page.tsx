@@ -17,7 +17,7 @@ export default async function ShortcutPage({
   const messages = await getDictionary(params.lang)
 
   return (
-    <PageDrawer messages={messages.common} header={<ShareButton />}>
+    <PageDrawer messages={messages} header={<ShareButton />}>
       <Suspense
         fallback={
           <div className="flex h-1/2 w-full flex-col items-center justify-center gap-2 text-zinc-500/90">

@@ -18,7 +18,7 @@ export default function Drawer({ messages, children }: Drawer) {
   const breakpoints = useResponsive()
 
   return breakpoints.lg ? (
-    <PageDrawer messages={messages.common} className="flex h-full flex-col">
+    <PageDrawer messages={messages} className="flex h-full flex-col">
       {children}
     </PageDrawer>
   ) : (
@@ -27,7 +27,7 @@ export default function Drawer({ messages, children }: Drawer) {
       fadeFromIndex={0}
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
-      messages={messages.common}
+      messages={messages}
       className="flex h-full max-h-[96%] flex-col"
     >
       {children}
