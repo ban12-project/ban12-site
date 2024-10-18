@@ -14,7 +14,7 @@ jobs:
         run: pnpm add --global vercel@latest
 
       - name: Get VERCEL_ORG_ID from GitHub Actions Variables
-        run: echo "VERCEL_ORG_ID=$(jq -r '.orgId' < ${{ vars.repo }})" >> "$GITHUB_ENV"
+        run: echo "VERCEL_ORG_ID=$(${{ vars.repo }} | jq -r '.orgId')" >> $GITHUB_ENV
 
       - name: Check if need to build all projects
         run: |
@@ -26,10 +26,10 @@ jobs:
 
       - name: Traverse projects from GitHub Actions Variables
         run: |
-          for item in $(jq -c '.projects[]' ${{ vars.repo }}); do
+          for item in $(echo ${{ vars.repo }} | jq -c '.projects[]'); do
             if [[ "$NEED_BUILD_ALL_PROJECTS" == "true" ]] || git diff --name-only HEAD^ HEAD | grep -q $(echo $item | jq -r '.directory'); then
-              sed -i "/^VERCEL_PROJECT_ID=/d" "$GITHUB_ENV"
-              echo "VERCEL_PROJECT_ID=$(echo $item | jq -r '.id')" >> "$GITHUB_ENV"
+              sed -i "/^VERCEL_PROJECT_ID=/d" $GITHUB_ENV
+              echo "VERCEL_PROJECT_ID=$(echo $item | jq -r '.id')" >> $GITHUB_ENV
               echo "build project id: $(echo $item | jq -r '.id')"
               echo "build project name: $(echo $item | jq -r '.name')"
               vercel deploy --token=${{ secrets.VERCEL_TOKEN }}
