@@ -1,0 +1,37 @@
+name: Vercel Preview Deployment
+on:
+  push:
+    branches-ignore:
+      - main
+jobs:
+  Deploy-Preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install Vercel CLI
+        run: pnpm add --global vercel@latest
+
+      - name: Get VERCEL_ORG_ID from GitHub Actions Variables
+        run: echo "VERCEL_ORG_ID=$(jq -r '.orgId' < ${{ vars.repo }})" >> "$GITHUB_ENV"
+
+      - name: Check if need to build all projects
+        run:
+          if git diff --name-only HEAD~1 | grep -q package.json packages pnpm-lock.yaml pnpm-workspace.yaml turbo.json; then
+            echo "NEED_BUILD_ALL_PROJECTS=true" >> "$GITHUB_ENV"
+          else
+            echo "NEED_BUILD_ALL_PROJECTS=false" >> "$GITHUB_ENV"
+          fi
+
+      - name: Traverse projects from GitHub Actions Variables
+        run: |
+          for item in $(jq -c '.projects[]' ${{ vars.repo }}); do
+            if [[ "$NEED_BUILD_ALL_PROJECTS" == "true" ]] || git diff --name-only HEAD^ HEAD | grep -q $(echo $item | jq -r '.directory'); then
+              sed -i "/^VERCEL_PROJECT_ID=/d" "$GITHUB_ENV"
+              echo "VERCEL_PROJECT_ID=$(echo $item | jq -r '.id')" >> "$GITHUB_ENV"
+              echo "build project id: $(echo $item | jq -r '.id')"
+              echo "build project name: $(echo $item | jq -r '.name')"
+              vercel deploy --token=${{ secrets.VERCEL_TOKEN }}
+            fi
+          done
