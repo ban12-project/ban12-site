@@ -8,13 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
       - name: Install pnpm
         uses: pnpm/action-setup@v4
+
       - name: Install Vercel CLI
         run: pnpm add --global vercel@latest
 
       - name: Get VERCEL_ORG_ID from GitHub Actions Variables
-        run: echo "VERCEL_ORG_ID=$('${{ vars.repo }}' | jq -r '.orgId')" >> $GITHUB_ENV
+        run: echo "VERCEL_ORG_ID=$(echo '${{ vars.repo }}' | jq -r '.orgId')" >> $GITHUB_ENV
 
       - name: Check if need to build all projects
         run: |
