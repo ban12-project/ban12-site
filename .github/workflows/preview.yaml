@@ -18,7 +18,7 @@ jobs:
 
       - name: Check if need to build all projects
         run:
-          if git diff --name-only HEAD~1 | grep -q package.json packages pnpm-lock.yaml pnpm-workspace.yaml turbo.json; then
+          if git diff --name-only HEAD~1 | grep -q 'package.json\|packages\|pnpm-lock.yaml\|pnpm-workspace.yaml\|turbo.json'; then
             echo "NEED_BUILD_ALL_PROJECTS=true" >> "$GITHUB_ENV"
           else
             echo "NEED_BUILD_ALL_PROJECTS=false" >> "$GITHUB_ENV"
