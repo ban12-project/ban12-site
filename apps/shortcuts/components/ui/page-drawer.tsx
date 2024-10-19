@@ -10,7 +10,9 @@ import { useResponsive } from '#/hooks/use-responsive'
 
 import { Button } from './button'
 
-type PageDrawerProps = React.ComponentProps<typeof Drawer.Root> &
+type RawDrawerProps = React.ComponentProps<typeof Drawer.Root>
+
+type PageDrawerProps = RawDrawerProps &
   React.InputHTMLAttributes<HTMLDivElement> & {
     header?: React.ReactNode
     children: React.ReactNode
@@ -31,16 +33,15 @@ export default function PageDrawer({
 
   const breakpoints = useResponsive()
 
-  const onClose = () => {
-    setTimeout(() => {
-      router.back()
-    }, 300) // delay 300ms to wait for drawer close animation
+  const onAnimationEnd: RawDrawerProps['onAnimationEnd'] = (open) => {
+    if (!open) router.back()
   }
 
   return (
     <Drawer.Root
       open={open}
-      onClose={onClose}
+      onOpenChange={setOpen}
+      onAnimationEnd={onAnimationEnd}
       direction={breakpoints.lg ? 'right' : 'bottom'}
       {...rest}
     >
