@@ -1,22 +1,11 @@
 import { type NextMiddleware } from 'next/server'
 
 import { auth } from './auth'
-import { i18n, middleware as i18nMiddleware } from './i18n'
+import { middleware as i18nMiddleware } from './i18n'
 
 export function middleware(...args: Parameters<NextMiddleware>) {
-  const [request] = args
-  const { pathname } = request.nextUrl
-
-  // Check if there is any supported locale in the pathname
-  const pathnameIsMissingLocale = Object.keys(i18n.locales).every(
-    (locale) =>
-      !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
-  )
-
-  if (pathnameIsMissingLocale) return i18nMiddleware(...args)
-
-  // @ts-ignore
-  return auth(...args)
+  // @ts-expect-error - `auth` is next-auth middleware
+  return i18nMiddleware(...args, auth)
 }
 
 export const config = {
