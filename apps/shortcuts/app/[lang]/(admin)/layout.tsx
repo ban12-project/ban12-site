@@ -8,11 +8,17 @@ import { Button } from '#/components/ui/button'
 import { Toaster } from '#/components/ui/sonner'
 
 type RootLayoutProps = {
-  params: { lang: Locale }
+  params: Promise<{ lang: Locale }>
   children: React.ReactNode
 }
 
-export default async function Layout({ params, children }: RootLayoutProps) {
+export default async function Layout(props: RootLayoutProps) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const session = await auth()
 
   return (

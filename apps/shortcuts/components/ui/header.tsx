@@ -14,8 +14,8 @@ type HeaderProps = {
 export function Header({ messages }: HeaderProps) {
   const [sticky, setSticky] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const ref = useRef<React.ElementRef<'header'>>(null)
-  const sentinelRef = useRef<React.ElementRef<'div'>>(null)
+  const ref = useRef<React.ComponentRef<'header'>>(null)
+  const sentinelRef = useRef<React.ComponentRef<'div'>>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(

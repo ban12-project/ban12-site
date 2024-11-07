@@ -9,9 +9,12 @@ import ShortcutAdd, {
   type ShortcutAddProps,
 } from '#/components/ui/shortcut-add'
 
-export default async function ShortcutPage({
-  params,
-}: Omit<ShortcutAddProps, 'messages'>) {
+type Props = Omit<ShortcutAddProps, 'messages' | 'params'> & {
+  params: Promise<ShortcutAddProps['params']>
+}
+
+export default async function ShortcutPage(props: Props) {
+  const params = await props.params
   preload(params.id)
 
   const messages = await getDictionary(params.lang)

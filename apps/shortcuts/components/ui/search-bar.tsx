@@ -12,7 +12,7 @@ import { CircleX, Search } from 'lucide-react'
 import { cn } from '#/lib/utils'
 
 interface SearchBarProps
-  extends React.ButtonHTMLAttributes<React.ElementRef<'form'>> {
+  extends React.ButtonHTMLAttributes<React.ComponentRef<'form'>> {
   messages: Messages['common']
   setSticky: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -22,7 +22,7 @@ export default function SearchBar({
   className,
   setSticky,
 }: SearchBarProps) {
-  const buttonRef = useRef<React.ElementRef<'button'>>(null)
+  const buttonRef = useRef<React.ComponentRef<'button'>>(null)
   const [width, setWidth] = useState(0)
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function SearchBar({
   }, [buttonRef])
 
   const searchParams = useSearchParams()
-  const { push, back, replace } = useRouter()
+  const router = useRouter()
   const { locale } = useLocale()
   const [query, setQuery] = useState(
     searchParams.get('query')?.toString() || '',
@@ -49,22 +49,22 @@ export default function SearchBar({
         return safeBack()
       }
       if (!isOnSearch) {
-        push(`/${locale}/search?${params.toString()}`)
+        router.push(`/${locale}/search?${params.toString()}`)
       } else {
-        replace(`/${locale}/search?${params.toString()}`)
+        router.replace(`/${locale}/search?${params.toString()}`)
       }
     },
     { wait: 300 },
   )
 
-  const onSubmit: React.FormEventHandler<React.ElementRef<'form'>> = (
+  const onSubmit: React.FormEventHandler<React.ComponentRef<'form'>> = (
     event,
   ) => {
     event.preventDefault()
     run()
   }
 
-  const onInput: React.FormEventHandler<React.ElementRef<'input'>> = (
+  const onInput: React.FormEventHandler<React.ComponentRef<'input'>> = (
     event,
   ) => {
     const query = event.currentTarget.value
@@ -82,9 +82,9 @@ export default function SearchBar({
     if (!isOnSearch) return
 
     if (window.history.length > 1) {
-      back()
+      router.back()
     } else {
-      push(`/${locale}`)
+      router.push(`/${locale}`)
     }
   }
 

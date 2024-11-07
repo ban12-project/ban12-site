@@ -10,7 +10,7 @@ import { i18n } from '#/i18n'
 import R3fEntry from '#/components/r3f-entry'
 
 type Props = Readonly<{
-  params: Readonly<{ lang: Locale }>
+  params: Promise<{ lang: Locale }>
   children: React.ReactNode
 }>
 
@@ -46,7 +46,11 @@ export const viewport: Viewport = {
   themeColor: '#FFFFFF',
 }
 
-export default function RootLayout({ children, params }: Props) {
+export default async function RootLayout(props: Props) {
+  const params = await props.params
+
+  const { children } = props
+
   return (
     <html lang={params.lang}>
       <body className={`${inter.className} bg-gray-50 dark:bg-gray-900`}>

@@ -74,7 +74,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       await Promise.all([shortcutsPromise, collectionsPromise, albumsPromise])
     ).flat()
   } catch (error) {
-    throw JSON.stringify(error, null, 2)
+    throw error as Error
   }
 
   return [...routesMap, ...fetchedRoutes]

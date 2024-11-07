@@ -1,15 +1,16 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useActionState, useEffect, useRef } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocale } from '@repo/i18n/client'
 import type { Messages } from '#/i18n'
 import { Loader2 } from 'lucide-react'
-import { createPortal, useFormState, useFormStatus } from 'react-dom'
+import { createPortal, useFormStatus } from 'react-dom'
 import { useForm, useFormContext } from 'react-hook-form'
 import * as z from 'zod'
 
 import { postShortcut } from '#/lib/actions'
+import { RecordType } from '#/lib/shortcut'
 import { IN_BROWSER } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 
@@ -98,7 +99,7 @@ const SubmitButton = function SubmitButton({
 }) {
   const { pending } = useFormStatus()
   const { formState, getValues } = useFormContext<FormSchemaType>()
-  const innerButtonRef = useRef<React.ElementRef<'button'>>(null)
+  const innerButtonRef = useRef<React.ComponentRef<'button'>>(null)
 
   const container = IN_BROWSER
     ? document.querySelector(`#${PAGE_DRAWER_HEADER_ID}`)
@@ -156,7 +157,7 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
     },
   })
 
-  const [state, dispatch] = useFormState(postShortcut, initialState)
+  const [state, dispatch] = useActionState(postShortcut, initialState)
   const otherFieldsVisibility =
     !!state.data && !form.formState.dirtyFields.icloud
 
@@ -177,12 +178,12 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
         state.data.fields.icon_color.value.toString(),
       )
 
-      if (state.data.recordType === 'SharedShortcut') {
+      if (state.data.recordType === RecordType.SharedShortcut) {
         formData.append('icon', state.data.fields.icon.value.downloadURL)
       }
     }
 
-    await dispatch(formData)
+    dispatch(formData)
   }
 
   useEffect(() => {
@@ -197,7 +198,7 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
     // fill the form with data from icloud
     form.setValue('name', state.data.fields.name.value)
 
-    if (state.data.recordType === 'GalleryShortcut') {
+    if (state.data.recordType === RecordType.GalleryShortcut) {
       form.setValue('description', state.data.fields.longDescription.value)
       form.setValue(
         'language',

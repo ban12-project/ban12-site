@@ -6,10 +6,11 @@ import type { Locale } from '#/i18n'
 import ShortcutList from '#/components/ui/shortcut-list'
 
 type ListPageProps = {
-  params: { id: string; lang: Locale }
+  params: Promise<{ id: string; lang: Locale }>
 }
 
-export default async function ListPage({ params }: ListPageProps) {
+export default async function ListPage(props: ListPageProps) {
+  const params = await props.params;
   const album = await db.query.album.findFirst({
     where: (album, { eq }) => eq(album.id, Number.parseInt(params.id)),
     with: {
@@ -27,9 +28,8 @@ export default async function ListPage({ params }: ListPageProps) {
   )
 }
 
-export async function generateMetadata({
-  params,
-}: ListPageProps): Promise<Metadata> {
+export async function generateMetadata(props: ListPageProps): Promise<Metadata> {
+  const params = await props.params;
   const album = await db.query.album.findFirst({
     where: (album, { eq }) => eq(album.id, Number.parseInt(params.id)),
   })

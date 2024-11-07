@@ -200,6 +200,7 @@ const albumsTableColumns: Columns<SelectAlbum> = [
   },
 ]
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function AdminTable<T extends Record<string, any>>({
   columns,
   data,
@@ -231,7 +232,7 @@ function AdminTable<T extends Record<string, any>>({
       </TableHeader>
       <TableBody>
         {data.map((item, rowIndex) => (
-          <TableRow key={item.id}>
+          <TableRow key={item.id as string}>
             {columns.map((col, colIndex) => (
               <TableCell key={col.key} className={col.className}>
                 {col.cell(item, colIndex, rowIndex)}

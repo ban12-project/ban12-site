@@ -4,7 +4,7 @@ import { useTheme } from 'next-themes'
 
 import { cn } from '#/lib/utils'
 
-interface Props extends React.ButtonHTMLAttributes<React.ElementRef<'div'>> {}
+type Props = React.ButtonHTMLAttributes<React.ComponentRef<'div'>>
 
 const themes = [
   { label: 'light', value: 'light' },

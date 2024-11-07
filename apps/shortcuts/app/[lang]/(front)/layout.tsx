@@ -10,15 +10,13 @@ import { ThemeProvider } from 'next-themes'
 
 import { cn } from '#/lib/utils'
 import { Toaster } from '#/components/ui/sonner'
-import CSSPaintPolyfill from '#/components/css-paint-polyfill'
+// import CSSPaintPolyfill from '#/components/css-paint-polyfill'
 import { WebVitals } from '#/components/web-vitals'
 
-const SentryLoader = dynamic(() => import('#/components/sentry-loader'), {
-  ssr: false,
-})
+const SentryLoader = dynamic(() => import('#/components/sentry-loader'))
 
 type RootLayoutProps = {
-  params: { lang: Locale }
+  params: Promise<{ lang: Locale }>
   children: React.ReactNode
   get: React.ReactNode
   post: React.ReactNode
@@ -26,9 +24,10 @@ type RootLayoutProps = {
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
-export async function generateMetadata({
-  params,
-}: RootLayoutProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: RootLayoutProps,
+): Promise<Metadata> {
+  const params = await props.params
   const messages = await getDictionary(params.lang)
 
   return {
@@ -45,12 +44,11 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
-export default function RootLayout({
-  params,
-  children,
-  get,
-  post,
-}: RootLayoutProps) {
+export default async function RootLayout(props: RootLayoutProps) {
+  const params = await props.params
+
+  const { children, get, post } = props
+
   return (
     <html lang={params.lang} suppressHydrationWarning>
       <body
@@ -76,7 +74,7 @@ export default function RootLayout({
 
         {/* <CSSPaintPolyfill /> */}
 
-        <SentryLoader />
+        {process.env.NODE_ENV !== 'development' && <SentryLoader />}
 
         {process.env.NEXT_PUBLIC_GA_ID && (
           <>

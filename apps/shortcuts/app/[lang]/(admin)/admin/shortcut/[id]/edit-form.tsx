@@ -1,7 +1,7 @@
 'use client'
 
+import { useActionState } from 'react'
 import type { SelectShortcut } from '#/drizzle/schema'
-import { useFormState, useFormStatus } from 'react-dom'
 
 import { updateShortcut } from '#/lib/actions'
 import { Button } from '#/components/ui/button'
@@ -13,7 +13,10 @@ type Props = {
 }
 
 export default function EditForm({ shortcut }: Props) {
-  const [errorMessage, dispatch] = useFormState(updateShortcut, undefined)
+  const [errorMessage, dispatch, pending] = useActionState(
+    updateShortcut,
+    undefined,
+  )
 
   return (
     <form action={dispatch} className="grid gap-4 py-4">
@@ -38,13 +41,7 @@ export default function EditForm({ shortcut }: Props) {
         {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
       </div>
 
-      <SubmitButton />
+      <Button disabled={pending}>Submit</Button>
     </form>
   )
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus()
-
-  return <Button disabled={pending}>Submit</Button>
 }

@@ -25,13 +25,16 @@ export const viewport = {
 
 interface RootLayoutProps {
   children: React.ReactNode
-  params: { lang: Locale }
+  params: Promise<{ lang: Locale }>
 }
 
-export default async function RootLayout({
-  children,
-  params,
-}: RootLayoutProps) {
+export default async function RootLayout(props: RootLayoutProps) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const messages = await getDictionary(params.lang)
 
   return (
@@ -48,7 +51,7 @@ export default async function RootLayout({
             `,
           }}
         />
-        {/* eslint-disable-next-line @next/next/no-before-interactive-script-outside-document */}
+        { }
         <Script
           id="babylonjs-core"
           strategy="beforeInteractive"

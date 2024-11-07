@@ -7,10 +7,11 @@ import AlbumList from '#/components/ui/album-list'
 import ShortcutList from '#/components/ui/shortcut-list'
 
 type CollectionsProps = {
-  params: { id: string; lang: Locale }
+  params: Promise<{ id: string; lang: Locale }>
 }
 
-export default async function Collections({ params }: CollectionsProps) {
+export default async function Collections(props: CollectionsProps) {
+  const params = await props.params;
   const [messages, collection] = await Promise.all([
     getDictionary(params.lang),
     db.query.collection.findFirst({
@@ -45,9 +46,8 @@ export default async function Collections({ params }: CollectionsProps) {
   )
 }
 
-export async function generateMetadata({
-  params,
-}: CollectionsProps): Promise<Metadata> {
+export async function generateMetadata(props: CollectionsProps): Promise<Metadata> {
+  const params = await props.params;
   const collection = await db.query.collection.findFirst({
     where: (collection, { eq }) =>
       eq(collection.id, Number.parseInt(params.id)),

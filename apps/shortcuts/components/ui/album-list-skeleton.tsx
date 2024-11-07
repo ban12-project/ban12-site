@@ -7,7 +7,7 @@ type AlbumListSkeletonProps = {
 export default function AlbumListSkeleton({ num = 2 }: AlbumListSkeletonProps) {
   return (
     <div className="container-full">
-      {[...Array(num)].map((_, index) => (
+      {[...Array<unknown>(num)].map((_, index) => (
         <div className="lg:pb-10" key={index}>
           <div className="pb-1.5">
             <div className="pb-2 pt-5 lg:hidden">

@@ -28,7 +28,7 @@ type ViewProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const View = forwardRef<HTMLElement, ViewProps>(
   ({ children, orbit, ...props }, ref) => {
-    const localRef = useRef<React.ElementRef<'div'>>(null)
+    const localRef = useRef<React.ComponentRef<'div'>>(null)
     useImperativeHandle(ref, () => localRef.current as HTMLElement)
 
     return (

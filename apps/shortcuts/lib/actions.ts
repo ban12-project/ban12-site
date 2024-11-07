@@ -87,7 +87,7 @@ export async function getShortcutByiCloud(
     }
   }
 
-  const data: ShortcutRecord = await res.json()
+  const data = await res.json() as ShortcutRecord
 
   return {
     data,
@@ -176,7 +176,9 @@ export async function postShortcut(prevState: State, formData: FormData) {
     const result = await model.generateContent(prompt)
     const text = result.response.text()
     albumId = Number.parseInt(text)
-  } catch (e) {}
+  } catch (e) {
+    // continue regardless of error
+  }
 
   const result = await db.insert(shortcut).values({
     updatedAt: new Date().toISOString(),
@@ -392,7 +394,7 @@ export async function createCollection(
   }
 
   const { title, image, textColor } = validatedFields.data
-  const path = new URL(image, process.env.S3_DOMAIN!).href
+  const path = new URL(image, process.env.S3_DOMAIN).href
 
   try {
     await db.insert(collection).values({
@@ -432,7 +434,7 @@ export async function updateCollection(
   }
 
   const { id, title, image, textColor } = validatedFields.data
-  const path = new URL(image, process.env.S3_DOMAIN!).href
+  const path = new URL(image, process.env.S3_DOMAIN).href
 
   try {
     await db

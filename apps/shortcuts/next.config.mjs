@@ -11,10 +11,7 @@ const nextConfig = {
       },
     ],
   },
-  transpilePackages: ['@repo/i18n'],
-  experimental: {
-    instrumentationHook: true,
-  },
+  transpilePackages: ['@repo/i18n']
 }
 
 export default withSentryConfig(

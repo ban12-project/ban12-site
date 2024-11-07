@@ -4,7 +4,10 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 export const runtime = 'edge'
 
 export async function POST(request: Request) {
-  const { filename, contentType } = await request.json()
+  const { filename, contentType } = (await request.json()) as {
+    filename: string
+    contentType: string
+  }
 
   try {
     const client = new S3Client({

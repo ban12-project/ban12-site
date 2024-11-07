@@ -1,7 +1,7 @@
 'use client'
 
+import { useActionState } from 'react'
 import type { SelectAlbum } from '#/drizzle/schema'
-import { useFormState, useFormStatus } from 'react-dom'
 
 import { createAlbum, updateAlbum } from '#/lib/actions'
 import { Button } from '#/components/ui/button'
@@ -13,7 +13,7 @@ type Props = {
 }
 
 export default function Form({ fields }: Props) {
-  const [errorMessage, dispatch] = useFormState(
+  const [errorMessage, dispatch, pending] = useActionState(
     fields ? updateAlbum : createAlbum,
     undefined,
   )
@@ -47,13 +47,7 @@ export default function Form({ fields }: Props) {
         {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
       </div>
 
-      <SubmitButton />
+      <Button disabled={pending}>Submit</Button>
     </form>
   )
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus()
-
-  return <Button disabled={pending}>Submit</Button>
 }
