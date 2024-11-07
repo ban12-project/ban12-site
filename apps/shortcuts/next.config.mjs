@@ -11,7 +11,10 @@ const nextConfig = {
       },
     ],
   },
-  transpilePackages: ['@repo/i18n']
+  transpilePackages: ['@repo/i18n'],
+  experimental: {
+    reactCompiler: true,
+  },
 }
 
 export default withSentryConfig(
