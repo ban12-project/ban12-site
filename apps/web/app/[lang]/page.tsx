@@ -3,9 +3,11 @@ import dynamic from 'next/dynamic'
 import { getDictionary, Locale } from '#/i18n'
 
 const View = dynamic(
-  () => import('#/components/view').then((mod) => mod.View),
+  () =>
+    import('#/components/view').then((mod) => ({
+      default: mod.View,
+    })),
   {
-    ssr: false,
     loading: () => (
       <div className="flex h-96 w-full flex-col items-center justify-center">
         <svg
@@ -31,14 +33,16 @@ const View = dynamic(
     ),
   },
 )
-const Voxel = dynamic(
-  () => import('#/components/voxel').then((mod) => mod.Voxel),
-  { ssr: false },
+const Voxel = dynamic(() =>
+  import('#/components/voxel').then((mod) => ({
+    default: mod.Voxel,
+  })),
 )
 
-type Props = { params: { lang: Locale } }
+type Props = { params: Promise<{ lang: Locale }> }
 
-export default async function Home({ params }: Props) {
+export default async function Home(props: Props) {
+  const params = await props.params
   const messages = await getDictionary(params.lang)
 
   return (

@@ -5,10 +5,11 @@ import { getDictionary, type Locale } from '#/i18n'
 import ShortcutPost from '#/components/ui/shortcut-post'
 
 type Props = {
-  params: { lang: Locale }
+  params: Promise<{ lang: Locale }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const messages = await getDictionary(params.lang)
   return {
     title: messages.post.title,
@@ -16,7 +17,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function PostPage({ params }: Props) {
+export default async function PostPage(props: Props) {
+  const params = await props.params;
   const messages = await getDictionary(params.lang)
 
   return (

@@ -6,19 +6,18 @@ import { searchShortcuts } from '#/lib/actions'
 import ShortcutList from '#/components/ui/shortcut-list'
 
 type SearchPageProps = {
-  params: {
+  params: Promise<{
     lang: Locale
-  }
-  searchParams?: {
+  }>
+  searchParams?: Promise<{
     query?: string
     page?: string
-  }
+  }>
 }
 
-export default async function SearchPage({
-  params,
-  searchParams,
-}: SearchPageProps) {
+export default async function SearchPage(props: SearchPageProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const query = searchParams?.query || ''
   if (!query) notFound()
 
@@ -40,10 +39,9 @@ export default async function SearchPage({
   )
 }
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: SearchPageProps): Promise<Metadata> {
+export async function generateMetadata(props: SearchPageProps): Promise<Metadata> {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const query = searchParams?.query || ''
   const messages = await getDictionary(params.lang)
 

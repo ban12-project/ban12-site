@@ -81,7 +81,7 @@ interface GalleryShortcutFields extends BaseFields {
   }
 }
 
-enum RecordType {
+export enum RecordType {
   GalleryShortcut = 'GalleryShortcut',
   SharedShortcut = 'SharedShortcut',
 }
@@ -98,7 +98,7 @@ export type ShortcutRecord = {
       userRecordName: string
       timestamp: number
     }
-    pluginFields: {}
+    pluginFields: object
     recordChangeTag: string
     recordName: string
     recordType: Type

@@ -1,14 +1,17 @@
 'use client'
 
+import { useActionState } from 'react'
 import { Loader2 } from 'lucide-react'
-import { useFormState, useFormStatus } from 'react-dom'
 
 import { authenticate } from '#/lib/actions'
 
 import { Button } from './button'
 
 export default function LoginForm() {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined)
+  const [errorMessage, dispatch, pending] = useActionState(
+    authenticate,
+    undefined,
+  )
 
   return (
     <form action={dispatch} className="space-y-3">
@@ -53,7 +56,16 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <LoginButton />
+        <Button
+          className="mt-4 w-full"
+          aria-disabled={pending}
+          disabled={pending}
+        >
+          Log in
+          {pending && (
+            <Loader2 className="ml-auto h-5 w-5 animate-spin text-gray-50" />
+          )}
+        </Button>
         <div
           className="flex h-8 items-end space-x-1"
           aria-live="polite"
@@ -65,18 +77,5 @@ export default function LoginForm() {
         </div>
       </div>
     </form>
-  )
-}
-
-function LoginButton() {
-  const { pending } = useFormStatus()
-
-  return (
-    <Button className="mt-4 w-full" aria-disabled={pending} disabled={pending}>
-      Log in
-      {pending && (
-        <Loader2 className="ml-auto h-5 w-5 animate-spin text-gray-50" />
-      )}
-    </Button>
   )
 }

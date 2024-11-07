@@ -7,6 +7,5 @@ export const createGetDictionary = <T>(
   defaultLocale: keyof Dictionaries<T>,
 ) => {
   return (locale: keyof Dictionaries<T>) =>
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- locale may be out of range
     dictionaries[locale]?.() ?? dictionaries[defaultLocale]()
 }

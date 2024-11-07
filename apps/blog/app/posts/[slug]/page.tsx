@@ -9,7 +9,8 @@ import { getAllPosts, getPostBySlug } from '../../../lib/api'
 import { CMS_NAME } from '../../../lib/constants'
 import markdownToHtml from '../../../lib/markdownToHtml'
 
-export default async function Post({ params }: Params) {
+export default async function Post(props: Params) {
+  const params = await props.params;
   const post = getPostBySlug(params.slug)
 
   if (!post) {
@@ -37,12 +38,13 @@ export default async function Post({ params }: Params) {
 }
 
 type Params = {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
-export function generateMetadata({ params }: Params): Metadata {
+export async function generateMetadata(props: Params): Promise<Metadata> {
+  const params = await props.params;
   const post = getPostBySlug(params.slug)
 
   if (!post) {
@@ -59,7 +61,7 @@ export function generateMetadata({ params }: Params): Metadata {
   }
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   const posts = getAllPosts()
 
   return posts.map((post) => ({

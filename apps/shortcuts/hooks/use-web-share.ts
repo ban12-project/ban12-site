@@ -27,7 +27,9 @@ export default function useWebShare({ fallbackCopy = true }: Props = {}) {
 
     try {
       await navigator.share(mergedData)
-    } catch (error) {}
+    } catch (error) {
+      // continue regardless of error
+    }
   }
 
   return {

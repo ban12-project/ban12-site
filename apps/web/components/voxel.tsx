@@ -48,7 +48,7 @@ function voxelizeModel(importedScene: THREE.Group<THREE.Object3DEventMap>) {
   boundingBox = new THREE.Box3().setFromObject(importedScene)
   boundingBox.min.y += 0.5 * params.gridSize // for egg grid to look better
 
-  let modelVoxels: Voxel[] = []
+  const modelVoxels: Voxel[] = []
 
   for (let i = boundingBox.min.x; i < boundingBox.max.x; i += params.gridSize) {
     for (
@@ -65,7 +65,7 @@ function voxelizeModel(importedScene: THREE.Group<THREE.Object3DEventMap>) {
           const mesh = importedMeshes[meshCnt]
 
           const color = new THREE.Color()
-          // @ts-ignore
+          // @ts-expect-error private method
           const { h, s, l } = mesh.material.color.getHSL(color)
           color.setHSL(h, s, l, THREE.SRGBColorSpace)
           const position = new THREE.Vector3(i, j, k)

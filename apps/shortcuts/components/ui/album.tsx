@@ -18,11 +18,11 @@ type AlbumsProps = {
   currentPage: number
 }
 
-let PADDING_LEFT: number,
-  PADDING_RIGHT: number,
-  GAP_SIZE = 12
+let PADDING_LEFT: number, PADDING_RIGHT: number
 
-const outerElementType = forwardRef<React.ElementRef<'div'>>(
+const GAP_SIZE = 12
+
+const outerElementType = forwardRef<React.ComponentRef<'div'>>(
   function Outer(props, ref) {
     return (
       <div
@@ -35,7 +35,7 @@ const outerElementType = forwardRef<React.ElementRef<'div'>>(
 )
 
 const innerElementType = forwardRef<
-  React.ElementRef<'div'>,
+  React.ComponentRef<'div'>,
   { style: React.CSSProperties }
 >(function Inner({ style, ...rest }, ref) {
   return (
@@ -85,7 +85,7 @@ export default function Albums({
   pageSize,
   currentPage,
 }: AlbumsProps) {
-  const anchorRef = useRef<React.ElementRef<'div'>>(null)
+  const anchorRef = useRef<React.ComponentRef<'div'>>(null)
   const update = () => {
     if (!anchorRef.current) return
     const { paddingLeft, paddingRight } = window.getComputedStyle(

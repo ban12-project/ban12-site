@@ -6,7 +6,9 @@ export default function useClipboard() {
   const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
-    } catch (error) {}
+    } catch (error) {
+      // continue regardless of error
+    }
   }
 
   const read = async () => {
@@ -14,7 +16,9 @@ export default function useClipboard() {
       const text = await navigator.clipboard.readText()
       setClipText(text)
       return text
-    } catch (error) {}
+    } catch (error) {
+      // continue regardless of error
+    }
   }
 
   return {

@@ -3,11 +3,12 @@ import { db } from '#/drizzle/db'
 
 import Form from '../form'
 
-export default async function EditAlbumPage({
-  params,
-}: {
-  params: { id: string }
-}) {
+export default async function EditAlbumPage(
+  props: {
+    params: Promise<{ id: string }>
+  }
+) {
+  const params = await props.params;
   const album = await db.query.album.findFirst({
     where: (album, { eq }) => eq(album.id, Number.parseInt(params.id)),
   })

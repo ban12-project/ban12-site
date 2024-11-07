@@ -12,7 +12,7 @@ import CollectionsSkeleton from '#/components/ui/collections-skeleton'
 import ColorSchemeToggle from '#/components/ui/color-scheme-toggle'
 
 type HomePageProps = {
-  params: { lang: Locale }
+  params: Promise<{ lang: Locale }>
 }
 
 const preload = () => {
@@ -22,7 +22,8 @@ const preload = () => {
   void fetchAlbums()
 }
 
-export default async function Home({ params }: HomePageProps) {
+export default async function Home(props: HomePageProps) {
+  const params = await props.params;
   // starting load home page data
   preload()
 
@@ -58,9 +59,8 @@ export default async function Home({ params }: HomePageProps) {
   )
 }
 
-export async function generateMetadata({
-  params,
-}: HomePageProps): Promise<Metadata> {
+export async function generateMetadata(props: HomePageProps): Promise<Metadata> {
+  const params = await props.params;
   const messages = await getDictionary(params.lang)
 
   return {

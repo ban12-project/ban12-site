@@ -9,9 +9,12 @@ import ShortcutAdd, {
   type ShortcutAddProps,
 } from '#/components/ui/shortcut-add'
 
-export default async function ShortcutPage({
-  params,
-}: Omit<ShortcutAddProps, 'messages'>) {
+type Props = Omit<ShortcutAddProps, 'messages' | 'params'> & {
+  params: Promise<ShortcutAddProps['params']>
+}
+
+export default async function ShortcutPage(props: Props) {
+  const params = await props.params
   preload(params.id)
 
   const messages = await getDictionary(params.lang)
@@ -29,9 +32,8 @@ export default async function ShortcutPage({
   )
 }
 
-export async function generateMetadata({
-  params,
-}: Omit<ShortcutAddProps, 'messages'>): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params
   const shortcut = await fetchShortcutByID(params.id)
 
   if (!shortcut) notFound()

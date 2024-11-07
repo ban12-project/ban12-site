@@ -9,7 +9,7 @@
     "@ban12/tailwindcss-safe-area": "^0.2.3",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "catalog:",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "catalog:",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "catalog:"
   }

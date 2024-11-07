@@ -1,7 +1,7 @@
 'use client'
 
+import { useActionState } from 'react'
 import type { SelectCollection } from '#/drizzle/schema'
-import { useFormState, useFormStatus } from 'react-dom'
 import { toast } from 'sonner'
 
 import { createCollection, updateCollection } from '#/lib/actions'
@@ -16,7 +16,7 @@ type Props = {
 export default function Form({ fields }: Props) {
   const isCreating = !fields?.id
 
-  const [errorMessage, dispatch] = useFormState(
+  const [errorMessage, dispatch, pending] = useActionState(
     !isCreating ? updateCollection : createCollection,
     undefined,
   )
@@ -45,7 +45,7 @@ export default function Form({ fields }: Props) {
       throw new Error('Failed to get pre-signed URL.')
     }
 
-    const { url } = await response.json()
+    const { url } = await response.json() as { url: string }
 
     const uploadResponse = await fetch(url, {
       method: 'PUT',
@@ -57,13 +57,13 @@ export default function Form({ fields }: Props) {
 
     if (!uploadResponse.ok) {
       toast('Upload failed.')
-      throw new Error('S3 Upload Error: ' + uploadResponse)
+      throw new Error('S3 Upload Error: ' + uploadResponse.status)
     }
 
     const { pathname } = new URL(url)
     formData.set('image', pathname)
 
-    await dispatch(formData)
+    dispatch(formData)
   }
 
   return (
@@ -114,13 +114,7 @@ export default function Form({ fields }: Props) {
         {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
       </div>
 
-      <SubmitButton />
+      <Button disabled={pending}>Submit</Button>
     </form>
   )
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus()
-
-  return <Button disabled={pending}>Submit</Button>
 }

@@ -5,12 +5,13 @@ import { fetchShortcutByID } from '#/lib/actions'
 import EditForm from './edit-form'
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
   const shortcut = await fetchShortcutByID(params.id)
 
   if (!shortcut) notFound()

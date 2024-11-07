@@ -3,9 +3,9 @@ import { Link } from '@repo/i18n/client'
 
 import { fetchCollections } from '#/lib/actions'
 
-type CollectionsProps = {}
+// type CollectionsProps = {}
 
-export default async function Collections({}: CollectionsProps) {
+export default async function Collections(/* {}: CollectionsProps */) {
   const collections = await fetchCollections()
 
   return (
