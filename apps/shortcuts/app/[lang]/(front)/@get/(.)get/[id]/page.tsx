@@ -9,7 +9,7 @@ import ShortcutAdd, {
   type ShortcutAddProps,
 } from '#/components/ui/shortcut-add'
 
-type Props = Omit<ShortcutAddProps, 'messages' | 'params'> & {
+type Props = {
   params: Promise<ShortcutAddProps['params']>
 }
 

@@ -9,7 +9,7 @@ import ShortcutAdd, {
   type ShortcutAddProps,
 } from '#/components/ui/shortcut-add'
 
-type Props = Omit<ShortcutAddProps, 'messages' | 'params'> & {
+type Props = {
   params: Promise<ShortcutAddProps['params']>
 }
 
@@ -21,7 +21,7 @@ export default async function ShortcutPage(props: Props) {
 
   return (
     <>
-      <ShortcutAdd messages={messages} params={params} />
+      <ShortcutAdd messages={messages} params={params} fromNormalRoute />
 
       <div className="container-full">
         <Link href="/" className="text-blue-500 active:text-blue-500/80">
