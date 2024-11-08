@@ -106,7 +106,7 @@ export default function SearchBar({
         />
         {query && (
           <CircleX
-            className="animate-fadeIn scale-75"
+            className="animate-fadeIn scale-75 opacity-60"
             onClick={() => {
               setQuery('')
               safeBack()
