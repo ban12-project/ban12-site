@@ -12,7 +12,7 @@ import { Button } from './button'
 
 type RawDrawerProps = React.ComponentProps<typeof Drawer.Root>
 
-type PageDrawerProps = RawDrawerProps &
+export type PageDrawerProps = RawDrawerProps &
   React.InputHTMLAttributes<HTMLDivElement> & {
     header?: React.ReactNode
     children: React.ReactNode
