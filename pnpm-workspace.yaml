@@ -19,8 +19,8 @@ catalogs:
     "@types/react-dom": "^18.2.25"
 
   react19:
-    "react": "19.0.0-rc-02c0e824-20241028"
-    "react-dom": "19.0.0-rc-02c0e824-20241028"
+    "react": "19.0.0-rc-66855b96-20241106"
+    "react-dom": "19.0.0-rc-66855b96-20241106"
     "@types/react": "npm:types-react@rc"
     "@types/react-dom": "npm:types-react-dom@rc"
 
@@ -31,10 +31,10 @@ catalogs:
     "eslint-config-next": "^14.2.13"
 
   next15:
-    "next": "^15.0.2"
-    "@next/third-parties": "^15.0.2"
-    "@next/bundle-analyzer": "^15.0.2"
-    "eslint-config-next": "^15.0.2"
+    "next": "^15.0.3"
+    "@next/third-parties": "^15.0.3"
+    "@next/bundle-analyzer": "^15.0.3"
+    "eslint-config-next": "^15.0.3"
 
   eslint8:
     "eslint": "^8.57.0"
