@@ -33,8 +33,11 @@ export async function generateMetadata(
   return {
     title: {
       default: messages.title,
-      template: `%s - ${process.env.SITE_NAME}`,
+      template: `%s - ${messages.title} by ${process.env.SITE_NAME}`,
     },
+    openGraph: {
+      images: `https://ban12.com/api/og?title=${messages.title}`,
+    }
   }
 }
 
