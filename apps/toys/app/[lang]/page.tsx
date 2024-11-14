@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { getDictionary, type Locale } from '#/i18n'
 
 type Props = {
@@ -6,7 +7,7 @@ type Props = {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params
   const messages = await getDictionary(params.lang)
 
   return {
@@ -16,5 +17,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default function Home() {
+  redirect('/7-zip')
+
   return <h1>home</h1>
 }

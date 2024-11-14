@@ -1,7 +1,6 @@
 import '#/app/globals.css'
 
 import { Metadata, Viewport } from 'next'
-import Script from 'next/script'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
 // import Lenis from '@repo/ui/lenis'
@@ -31,7 +30,7 @@ export async function generateMetadata({
     },
     openGraph: {
       images: 'https://ban12.com/api/og?title=Toys',
-    }
+    },
   }
 }
 
@@ -56,24 +55,6 @@ export default async function RootLayout(props: RootLayoutProps) {
 
   return (
     <html suppressHydrationWarning lang={params.lang}>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                if (localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1120')
-                }
-              } catch (_) {}
-            `,
-          }}
-        />
-        <Script
-          id="babylonjs-core"
-          strategy="beforeInteractive"
-          src="https://cdn.babylonjs.com/babylon.js"
-        />
-      </head>
       <body className="bg-slate-50 text-gray-800/80 dark:bg-slate-900 dark:text-gray-200/80">
         <ThemeProvider
           attribute="class"
