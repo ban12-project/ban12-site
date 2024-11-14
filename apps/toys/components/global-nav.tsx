@@ -174,13 +174,10 @@ export default function GLobalNav({ messages, lang }: Props) {
                 <Link href="/qr-code">QR Code</Link>
               </li>
               <li>
-                <Link href="/cpu">CPU</Link>
+                <Link href="/hash">HASH 256</Link>
               </li>
               <li>
-                <Link href="/gpu">GPU</Link>
-              </li>
-              <li>
-                <Link href="/soc">SOC</Link>
+                <Link href="/7-zip">7-zip</Link>
               </li>
               <NavigationMenu.Link asChild>
                 <li className="space-x-6">

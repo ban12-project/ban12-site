@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Script from 'next/script'
 import { getDictionary, Locale } from '#/i18n'
 
 import { QRCodeForm } from '#/components/qrcode-form'
@@ -10,7 +11,7 @@ type Props = {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params
   const messages = await getDictionary(params.lang)
 
   return {
@@ -20,12 +21,18 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function QRCodePage(props: Props) {
-  const params = await props.params;
+  const params = await props.params
   const messages = await getDictionary(params.lang)
 
   return (
-    <section className="h-screen w-screen flex justify-center align-middle">
+    <section className="flex h-screen w-screen justify-center align-middle">
       <QRCodeForm />
+
+      <Script
+        id="babylonjs-core"
+        strategy="beforeInteractive"
+        src="https://cdn.babylonjs.com/babylon.js"
+      />
     </section>
   )
 }
