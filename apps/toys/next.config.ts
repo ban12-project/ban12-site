@@ -18,7 +18,28 @@ const nextConfig: NextConfig = {
 
     return config
   },
-  transpilePackages: ['@repo/i18n'],
+  transpilePackages: ['@repo/i18n', '@repo/ui'],
+  experimental: {
+    reactCompiler: true,
+  },
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'cross-origin-opener-policy',
+            value: 'same-origin',
+          },
+          {
+            key: 'cross-origin-embedder-policy',
+            value: 'require-corp',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 export default nextConfig

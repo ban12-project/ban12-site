@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { getDictionary, Locale } from '#/i18n'
 
-import { QRCodeForm } from '#/components/ui/qrcode-form'
+import { QRCodeForm } from '#/components/qrcode-form'
 
 type Props = {
   params: Promise<{

@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { getDictionary, type Locale } from '#/i18n'
 
-import FileExplorer from '#/components/ui/file-explorer'
+import FileExplorer from '#/components/file-explorer'
 
 type Props = {
   params: Promise<{ lang: Locale }>

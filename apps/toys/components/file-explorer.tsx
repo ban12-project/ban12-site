@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import type { Messages } from '#/i18n'
 
 import { useResponsive } from '#/hooks/use-responsive'
-import List from '#/components/ui/virtual-list'
+import List from '#/components/virtual-list'
 
 import FileCard from './file-card'
 import FileForm from './file-form'

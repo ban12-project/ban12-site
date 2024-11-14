@@ -1,22 +1,41 @@
 import '#/app/globals.css'
 
+import { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
+// import Lenis from '@repo/ui/lenis'
 import { getDictionary, i18n, type Locale } from '#/i18n'
 import { ThemeProvider } from 'next-themes'
 
-import Header from '#/components/ui/header'
-import LenisMount from '#/components/lenis'
+import Header from '#/components/header'
 
-export const metadata = {
-  title: {
-    default: 'Ban12',
-    template: '%s - Ban12',
-  },
+export async function generateMetadata({
+  params,
+}: RootLayoutProps): Promise<Metadata> {
+  const { lang } = await params
+  const messages = await getDictionary(lang)
+
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+    alternates: {
+      canonical: '/',
+      languages: {
+        'zh-CN': '/zh-CN',
+        en: '/en',
+      },
+    },
+    title: {
+      default: messages.home.title,
+      template: `%s - Toys by Ban12`,
+    },
+    openGraph: {
+      images: 'https://ban12.com/api/og?title=Toys',
+    }
+  }
 }
 
-export const viewport = {
+export const viewport: Viewport = {
   themeColor: '#f8fafc',
   width: 'device-width',
   initialScale: 1,
@@ -29,16 +48,14 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout(props: RootLayoutProps) {
-  const params = await props.params;
+  const params = await props.params
 
-  const {
-    children
-  } = props;
+  const { children } = props
 
   const messages = await getDictionary(params.lang)
 
   return (
-    <html suppressHydrationWarning lang={params.lang} className="dark">
+    <html suppressHydrationWarning lang={params.lang}>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -51,7 +68,6 @@ export default async function RootLayout(props: RootLayoutProps) {
             `,
           }}
         />
-        { }
         <Script
           id="babylonjs-core"
           strategy="beforeInteractive"
@@ -66,13 +82,13 @@ export default async function RootLayout(props: RootLayoutProps) {
           disableTransitionOnChange
         >
           <LocaleProvider locale={params.lang} i18n={i18n}>
-            <LenisMount>
-              <Header messages={messages} lang={params.lang} />
+            <Header messages={messages} lang={params.lang} />
 
-              {children}
-            </LenisMount>
+            {children}
           </LocaleProvider>
         </ThemeProvider>
+
+        {/* <Lenis root gsap scrollTrigger /> */}
 
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />

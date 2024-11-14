@@ -2,8 +2,8 @@
 
 import {
   ComponentPropsWithoutRef,
+  ComponentRef,
   createContext,
-  ElementRef,
   forwardRef,
 } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -15,7 +15,7 @@ export const ListContext = createContext<
   itemSize: 0,
 })
 
-const outerElementType = forwardRef<ElementRef<'div'>>(
+const outerElementType = forwardRef<ComponentRef<'div'>>(
   function Outer(props, ref) {
     return <div ref={ref} {...props} data-lenis-prevent></div>
   },
