@@ -31,13 +31,20 @@ export async function generateMetadata(
   const messages = await getDictionary(params.lang)
 
   return {
+    alternates: {
+      canonical: '/',
+      languages: {
+        'zh-CN': '/zh-CN',
+        en: '/en',
+      },
+    },
     title: {
       default: messages.title,
       template: `%s - ${messages.title} by ${process.env.SITE_NAME}`,
     },
     openGraph: {
       images: `https://ban12.com/api/og?title=${messages.title}`,
-    }
+    },
   }
 }
 

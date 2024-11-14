@@ -1,21 +1,21 @@
 'use client'
 
-import { ElementRef, forwardRef, useState } from 'react'
+import { ComponentRef, forwardRef, useState } from 'react'
 import { LinkProps } from 'next/link'
 import { CaretDownIcon } from '@radix-ui/react-icons'
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
+import { Link as _Link } from '@repo/i18n/client'
 
 import { cn } from '#/lib/utils'
-import LocaleSwitcher from '#/components/ui/locale-switcher'
-import { ThemeToggle } from '#/components/ui/theme-toggle'
-import { Link as _Link } from '@repo/i18n/client'
+import LocaleSwitcher from '#/components/locale-switcher'
+import { ThemeToggle } from '#/components/theme-toggle'
 
 import type { Props } from './header'
 import MenuIcon from './menu-icon'
 
 const Link = forwardRef<
-  ElementRef<'a'>,
-  React.AnchorHTMLAttributes<ElementRef<'a'>> & LinkProps
+  ComponentRef<'a'>,
+  React.AnchorHTMLAttributes<ComponentRef<'a'>> & LinkProps
 >(function Link({ children, ...props }, forwardedRef) {
   return (
     <NavigationMenu.Link asChild>
@@ -27,14 +27,14 @@ const Link = forwardRef<
 })
 
 const ListItem = forwardRef<
-  ElementRef<'a'>,
-  React.AnchorHTMLAttributes<ElementRef<'a'>> & LinkProps
+  ComponentRef<'a'>,
+  React.AnchorHTMLAttributes<ComponentRef<'a'>> & LinkProps
 >(function ListItem({ className, children, title, ...props }, forwardedRef) {
   return (
     <li>
       <Link
         className={cn(
-          'hover:bg-mauve3 block select-none rounded-[6px] p-3 leading-none no-underline outline-none transition-colors focus:shadow-[0_0_0_2px] focus:shadow-orange-500',
+          'hover:bg-mauve3 block select-none rounded-[6px] p-3 leading-none no-underline outline-none transition-colors focus:shadow-[0_0_0_2px] focus:shadow-rose-500',
           className,
         )}
         {...props}
@@ -64,40 +64,37 @@ export default function GLobalNav({ messages, lang }: Props) {
     >
       <NavigationMenu.List className="hidden md:flex">
         {/* <NavigationMenu.Item className="h-[var(--layout-header-height)] py-1 md:block">
-          <NavigationMenu.Trigger className="group flex h-full select-none items-center justify-between gap-[2px] rounded-[4px] px-3 font-medium leading-none text-orange-500 outline-none hover:bg-orange-50 focus:shadow-[0_0_0_2px] focus:shadow-orange-500">
+          <NavigationMenu.Trigger className="group flex h-full select-none items-center justify-between gap-[2px] rounded-[4px] px-3 font-medium leading-none text-rose-500 outline-none hover:bg-rose-50 focus:shadow-[0_0_0_2px] focus:shadow-rose-500">
             Charts
             <CaretDownIcon
-              className="duration-[250ms] relative top-[1px] text-orange-400 transition-transform ease-in group-data-[state=open]:-rotate-180"
+              className="relative top-[1px] text-rose-400 transition-transform duration-[250ms] ease-in group-data-[state=open]:-rotate-180"
               aria-hidden
             />
           </NavigationMenu.Trigger>
-          <NavigationMenu.Content className="absolute left-0 top-0 w-full data-[motion=from-end]:animate-enterFromRight data-[motion=from-start]:animate-enterFromLeft data-[motion=to-end]:animate-exitToRight data-[motion=to-start]:animate-exitToLeft sm:w-auto">
+          <NavigationMenu.Content className="data-[motion=from-end]:animate-enterFromRight data-[motion=from-start]:animate-enterFromLeft data-[motion=to-end]:animate-exitToRight data-[motion=to-start]:animate-exitToLeft absolute left-0 top-0 w-full sm:w-auto">
             <ul className="grid gap-x-2.5 p-[22px] sm:w-[500px] sm:grid-cols-[0.75fr_1fr]">
               <li className="row-span-3 grid">
-                <NavigationMenu.Link asChild>
-                  <a
-                    className="flex h-full w-full select-none
-                      flex-col justify-end rounded-[6px] bg-gradient-to-b from-red-500 to-amber-500 p-[25px] no-underline outline-none focus:shadow-[0_0_0_2px] focus:shadow-orange-500"
-                    href="/"
+                <NavigationMenu.Link
+                  className="flex h-full w-full select-none flex-col justify-end rounded-[6px] bg-gradient-to-b from-red-500 to-amber-500 p-[25px] no-underline outline-none focus:shadow-[0_0_0_2px] focus:shadow-rose-500"
+                  href="/"
+                >
+                  <svg
+                    aria-hidden
+                    width="38"
+                    height="38"
+                    viewBox="0 0 25 25"
+                    fill="white"
                   >
-                    <svg
-                      aria-hidden
-                      width="38"
-                      height="38"
-                      viewBox="0 0 25 25"
-                      fill="white"
-                    >
-                      <path d="M12 25C7.58173 25 4 21.4183 4 17C4 12.5817 7.58173 9 12 9V25Z"></path>
-                      <path d="M12 0H4V8H12V0Z"></path>
-                      <path d="M17 8C19.2091 8 21 6.20914 21 4C21 1.79086 19.2091 0 17 0C14.7909 0 13 1.79086 13 4C13 6.20914 14.7909 8 17 8Z"></path>
-                    </svg>
-                    <div className="mb-[7px] mt-4 text-[18px] font-medium leading-[1.2] text-white">
-                      Radix Primitives
-                    </div>
-                    <p className="text-mauve4 text-[14px] leading-[1.3]">
-                      Unstyled, accessible components for React.
-                    </p>
-                  </a>
+                    <path d="M12 25C7.58173 25 4 21.4183 4 17C4 12.5817 7.58173 9 12 9V25Z"></path>
+                    <path d="M12 0H4V8H12V0Z"></path>
+                    <path d="M17 8C19.2091 8 21 6.20914 21 4C21 1.79086 19.2091 0 17 0C14.7909 0 13 1.79086 13 4C13 6.20914 14.7909 8 17 8Z"></path>
+                  </svg>
+                  <div className="mb-[7px] mt-4 text-[18px] font-medium leading-[1.2] text-white">
+                    Radix Primitives
+                  </div>
+                  <p className="text-mauve4 text-[14px] leading-[1.3]">
+                    Unstyled, accessible components for React.
+                  </p>
                 </NavigationMenu.Link>
               </li>
 
@@ -115,10 +112,10 @@ export default function GLobalNav({ messages, lang }: Props) {
         </NavigationMenu.Item>
 
         <NavigationMenu.Item className="h-[var(--layout-header-height)] py-1 md:block">
-          <NavigationMenu.Trigger className="group flex h-full select-none items-center justify-between gap-[2px] rounded-[4px] px-3 font-medium leading-none text-orange-500 outline-none hover:bg-orange-50 focus:shadow-[0_0_0_2px] focus:shadow-orange-500">
+          <NavigationMenu.Trigger className="group flex h-full select-none items-center justify-between gap-[2px] rounded-[4px] px-3 font-medium leading-none text-rose-500 outline-none hover:bg-rose-50 focus:shadow-[0_0_0_2px] focus:shadow-rose-500">
             Ranking
             <CaretDownIcon
-              className="duration-[250ms] relative top-[1px] text-orange-400 transition-transform ease-in group-data-[state=open]:-rotate-180"
+              className="relative top-[1px] text-rose-400 transition-transform duration-[250ms] ease-in group-data-[state=open]:-rotate-180"
               aria-hidden
             />
           </NavigationMenu.Trigger>
@@ -139,7 +136,7 @@ export default function GLobalNav({ messages, lang }: Props) {
 
         <NavigationMenu.Item className="h-[var(--layout-header-height)] py-1 md:block">
           <Link
-            className="flex h-full select-none items-center rounded-[4px] px-3 font-medium leading-none text-orange-500 no-underline outline-none hover:bg-orange-50 focus:shadow-[0_0_0_2px] focus:shadow-orange-500"
+            className="flex h-full select-none items-center rounded-[4px] px-3 font-medium leading-none text-rose-500 no-underline outline-none hover:bg-rose-50 focus:shadow-[0_0_0_2px] focus:shadow-rose-500"
             href="/hash"
           >
             hash
@@ -148,10 +145,10 @@ export default function GLobalNav({ messages, lang }: Props) {
 
         <NavigationMenu.Item className="h-[var(--layout-header-height)] py-1 md:block">
           <Link
-            className="flex h-full select-none items-center rounded-[4px] px-3 font-medium leading-none text-orange-500 no-underline outline-none hover:bg-orange-50 focus:shadow-[0_0_0_2px] focus:shadow-orange-500"
-            href="/auth"
+            className="flex h-full select-none items-center rounded-[4px] px-3 font-medium leading-none text-rose-500 no-underline outline-none hover:bg-rose-50 focus:shadow-[0_0_0_2px] focus:shadow-rose-500"
+            href="/7-zip"
           >
-            auth
+            7-zip
           </Link>
         </NavigationMenu.Item>
 
@@ -201,7 +198,7 @@ export default function GLobalNav({ messages, lang }: Props) {
       </NavigationMenu.Item>
 
       <div className="top perspective-[2000px] fixed left-0 z-[2] flex w-full justify-center md:absolute md:top-full">
-        <NavigationMenu.Viewport className="data-[state=closed]:animate-scaleOut data-[state=open]:animate-scaleIn relative h-[var(--radix-navigation-menu-viewport-height)] w-full origin-[top_center] overflow-hidden bg-white shadow-[0_10px_38px_-10px] shadow-orange-100 backdrop-blur-[20px] backdrop-saturate-[180%] transition-[width,_height] duration-300 supports-[backdrop-filter:blur(0)]:bg-opacity-80 sm:w-[var(--radix-navigation-menu-viewport-width)] md:mt-2.5 md:rounded-[6px]" />
+        <NavigationMenu.Viewport className="data-[state=closed]:animate-scaleOut data-[state=open]:animate-scaleIn relative h-[var(--radix-navigation-menu-viewport-height)] w-full origin-[top_center] overflow-hidden bg-white shadow-[0_10px_38px_-10px] shadow-rose-100 backdrop-blur-[20px] backdrop-saturate-[180%] transition-[width,_height] duration-300 supports-[backdrop-filter:blur(0)]:bg-opacity-80 sm:w-[var(--radix-navigation-menu-viewport-width)] md:mt-2.5 md:rounded-[6px]" />
       </div>
     </NavigationMenu.Root>
   )

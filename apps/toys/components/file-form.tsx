@@ -9,7 +9,7 @@ interface FileFormProps {
 export default function Form({ append }: FileFormProps) {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const onSubmit: ReactEventHandler = async (e) => {
+  const onSubmit: ReactEventHandler = (e) => {
     e.preventDefault()
     const files = inputRef.current?.files
     if (!files) return
