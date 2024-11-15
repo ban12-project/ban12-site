@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 interface JS7z {
   /** https://emscripten.org/docs/api_reference/Filesystem-API.html */
@@ -47,7 +48,7 @@ declare global {
 type Out = { filename: string; blob: Blob }
 
 /** @see https://www.7-zip.org/ */
-const supportedFormats = {
+export const supportedFormats = {
   packingAndUnpacking: ['7z', 'XZ', 'BZIP2', 'GZIP', 'TAR', 'ZIP', 'WIM'],
   onlyUnpacking: [
     'APFS',
@@ -83,7 +84,9 @@ const supportedFormats = {
     'XAR',
     'Z',
   ],
-}
+} as const
+
+type Format = (typeof supportedFormats.packingAndUnpacking)[number]
 
 export function useSevenZip() {
   const [pending, setPending] = useState(false)
@@ -116,7 +119,7 @@ export function useSevenZip() {
   }, [initJS7z])
 
   const compress = useCallback(
-    async (files: File[]) => {
+    async (files: File[], format?: Format) => {
       if (!js7z) return
 
       // Create the input folder
@@ -128,6 +131,8 @@ export function useSevenZip() {
         js7z.FS.writeFile('/in/' + file.name, new Uint8Array(arrayBuffer))
       }
 
+      const filename = `archive.${format?.toLowerCase() || 'zip'}`
+
       const promise = new Promise<Out>((resolve, reject) => {
         window.addEventListener('onExit', (e) => {
           const exitCode = e.detail
@@ -135,9 +140,9 @@ export function useSevenZip() {
           if (exitCode !== 0)
             return reject(new Error(`7zip exit code: ${exitCode}`))
 
-          const buffer = js7z.FS.readFile('/out/archive.zip')
+          const buffer = js7z.FS.readFile(`/out/${filename}`)
           const data: Out = {
-            filename: 'archive.zip',
+            filename,
             blob: new Blob([buffer], { type: 'application/octet-stream' }),
           }
           outputFilesRef.current = [data]
@@ -147,7 +152,7 @@ export function useSevenZip() {
         })
       })
 
-      js7z.callMain(['a', '/out/archive.zip', '/in/*'])
+      js7z.callMain(['a', `/out/${filename}`, '/in/*'])
 
       return promise
     },
@@ -204,7 +209,7 @@ export function useSevenZip() {
     initJS7z().catch(console.error)
   }
 
-  const resolve = async (files: File[]) => {
+  const resolve = async (files: File[], format?: Format) => {
     if (!js7z) {
       inputFilesRef.current = files
       return
@@ -224,7 +229,7 @@ export function useSevenZip() {
     if (isExtract) {
       await extract(files)
     } else {
-      await compress(files)
+      await compress(files, format)
     }
     inputFilesRef.current.length = 0
 
@@ -236,6 +241,9 @@ export function useSevenZip() {
 
     js7z.callMain(['b'])
   }, [js7z])
+
+  useTotalToast()
+  useLogPrint()
 
   return { pending, onLoad, outputFilesRef, compress, benchmark, resolve }
 }
@@ -285,4 +293,74 @@ export function useExtractProgressFromStdout() {
   }, [onAbort, onExit, onPrint])
 
   return progress
+}
+
+function useLogPrint() {
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') return
+
+    const onPrint = (e: { detail: string }) => {
+      console.log(e.detail)
+    }
+
+    window.addEventListener('print', onPrint)
+
+    return () => {
+      window.removeEventListener('print', onPrint)
+    }
+  }, [])
+}
+
+export function useTotalToast() {
+  const info = useRef({
+    in: { number: 0, size: 0 },
+    out: { number: 0, size: 0 },
+  })
+
+  useEffect(() => {
+    const total = (e: { detail: string }) => {
+      // 2 files, 1609920 bytes (1573 KiB)
+      // 1 file, 91237 bytes (90 KiB)
+      const inMatch = e.detail.match(/(\d+) files?, \d+ bytes \((\d+) KiB\)/)
+      if (inMatch) {
+        const inNumber = parseInt(inMatch[1], 10)
+        const inKiB = parseInt(inMatch[2], 10)
+        info.current.in = { number: inNumber, size: inKiB }
+      }
+
+      // Files: 2
+      // Size:       165356
+      // Archive size: 888101 bytes (868 KiB)
+      const outMatch = e.detail.match(
+        /Files: (\d+)|Size:\s+(\d+)|Archive size: \d+ bytes \((\d+) KiB\)/,
+      )
+      if (outMatch) {
+        const outNumber =
+          parseInt(outMatch[1], 10) || info.current.out.number || 1
+        const outKiB = outMatch[2]
+          ? Math.round(parseInt(outMatch[2], 10) / 1024)
+          : parseInt(outMatch[3], 10)
+        info.current.out = { number: outNumber, size: outKiB }
+      }
+    }
+
+    const showToast = () => {
+      toast('task completed', {
+        description: `In: ${info.current.in.number} files, ${info.current.in.size} KiB, Out: ${info.current.out.number} files, ${info.current.out.size} KiB`,
+        duration: Infinity,
+        action: {
+          label: 'Undo',
+          onClick: () => console.log('Undo'),
+        },
+      })
+    }
+
+    window.addEventListener('print', total)
+    window.addEventListener('onExit', showToast)
+
+    return () => {
+      window.removeEventListener('print', total)
+      window.removeEventListener('onExit', showToast)
+    }
+  })
 }
