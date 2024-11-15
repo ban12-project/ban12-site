@@ -7,6 +7,7 @@ import { LocaleProvider } from '@repo/i18n/client'
 import { getDictionary, i18n, type Locale } from '#/i18n'
 import { ThemeProvider } from 'next-themes'
 
+import { Toaster } from '#/components/ui/sonner'
 import Header from '#/components/header'
 
 export async function generateMetadata({
@@ -68,6 +69,8 @@ export default async function RootLayout(props: RootLayoutProps) {
             {children}
           </LocaleProvider>
         </ThemeProvider>
+
+        <Toaster />
 
         {/* <Lenis root gsap scrollTrigger /> */}
 
