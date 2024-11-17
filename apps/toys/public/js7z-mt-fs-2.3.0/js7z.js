@@ -2,6 +2,7 @@
 var JS7z = (() => {
   var _scriptName = typeof document != 'undefined' ? document.currentScript?.src : undefined;
   if (typeof __filename != 'undefined') _scriptName ||= __filename;
+  if (typeof importScripts == "function") _scriptName = '/js7z-mt-fs-2.3.0/js7z.js';
   return (
 function(moduleArg = {}) {
   var moduleRtn;

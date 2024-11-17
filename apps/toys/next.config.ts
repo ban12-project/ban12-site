@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -22,7 +23,6 @@ const nextConfig: NextConfig = {
   experimental: {
     reactCompiler: true,
   },
-  // eslint-disable-next-line @typescript-eslint/require-await
   async headers() {
     return [
       {

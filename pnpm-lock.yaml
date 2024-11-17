@@ -466,6 +466,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
+      '@types/emscripten':
+        specifier: ^1.39.13
+        version: 1.39.13
       '@types/lodash':
         specifier: ^4.17.13
         version: 4.17.13
@@ -2778,6 +2781,9 @@ packages:
 
   '@types/draco3d@1.4.10':
     resolution: {integrity: sha512-AX22jp8Y7wwaBgAixaSvkoG4M/+PlAcm3Qs4OW8yT9DM4xUpWKeFhLueTAyZF39pviAdcDdeJoACapiAceqNcw==}
+
+  '@types/emscripten@1.39.13':
+    resolution: {integrity: sha512-cFq+fO/isvhvmuP/+Sl4K4jtU6E23DoivtbO4r50e3odaxAiVdbfSYRDdJ4gCdxx+3aRjhphS5ZMwIH4hFy/Cw==}
 
   '@types/eslint-scope@3.7.7':
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
@@ -8717,6 +8723,8 @@ snapshots:
       '@types/ms': 0.7.34
 
   '@types/draco3d@1.4.10': {}
+
+  '@types/emscripten@1.39.13': {}
 
   '@types/eslint-scope@3.7.7':
     dependencies:
