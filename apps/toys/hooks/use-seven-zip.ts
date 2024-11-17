@@ -1,51 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
-interface JS7z {
-  /** https://emscripten.org/docs/api_reference/Filesystem-API.html */
-  FS: {
-    mkdir: (path: string) => void
-    writeFile: (path: string, data: string | ArrayBufferView) => void
-    readdir: (path: string) => string[]
-    readFile: (path: string, options?: { encoding: 'binary' }) => Uint8Array
-  }
-
-  print: (text: string) => void
-  printErr: (text: string) => void
-  onAbort: (reason: string) => void
-  onExit: (exitCode: number) => void
-  /**
-   * Command Line Version User's Guide https://web.mit.edu/outland/arch/i386_rhel4/build/p7zip-current/DOCS/MANUAL/
-   */
-  callMain: (
-    params: [
-      Command: 'a' | 'b' | 'd' | 'e' | 'l' | 't' | 'u' | 'x',
-      ...args: string[],
-    ],
-  ) => void
-}
-
-declare global {
-  interface Window {
-    JS7z: ({
-      print,
-      printErr,
-      onAbort,
-      onExit,
-    }?: Partial<
-      Pick<JS7z, 'print' | 'printErr' | 'onAbort' | 'onExit'>
-    >) => Promise<JS7z>
-  }
-
-  interface GlobalEventHandlersEventMap {
-    print: CustomEvent<FlatArray<Parameters<JS7z['print']>, 1>>
-    printErr: CustomEvent<FlatArray<Parameters<JS7z['printErr']>, 1>>
-    onAbort: CustomEvent<FlatArray<Parameters<JS7z['onAbort']>, 1>>
-    onExit: CustomEvent<FlatArray<Parameters<JS7z['onExit']>, 1>>
-  }
-}
-
-type Out = { filename: string; blob: Blob }
+import {
+  MainToWorkerMessage,
+  Out,
+  OutType,
+  WorkerToMainMessage,
+} from '#/lib/7-zip-types'
+import { IN_BROWSER } from '#/lib/utils'
 
 /** @see https://www.7-zip.org/ */
 export const supportedFormats = {
@@ -86,136 +48,42 @@ export const supportedFormats = {
   ],
 } as const
 
-type Format = (typeof supportedFormats.packingAndUnpacking)[number]
+export type Format = (typeof supportedFormats.packingAndUnpacking)[number]
+
+let worker: Worker | null = null
+
+function createWorker(): Worker {
+  // @ts-expect-error - only used in browser
+  if (!IN_BROWSER) return null
+  worker ||= new Worker(new URL('#/lib/7-zip-worker.ts', import.meta.url))
+  return worker
+}
 
 export function useSevenZip() {
   const [pending, setPending] = useState(false)
-  const [js7z, setJS7z] = useState<JS7z | null>(null)
-  const inputFilesRef = useRef<File[]>([])
   const outputFilesRef = useRef<Out[]>([])
+  const workerRef = useRef<Worker>(createWorker())
 
-  const initJS7z = useCallback(async () => {
-    setPending(true)
-
-    const js7z = await window.JS7z({
-      print: createCustomEvent('print'),
-      printErr: createCustomEvent('printErr'),
-      onAbort: createCustomEvent('onAbort'),
-      onExit: createCustomEvent('onExit'),
-    })
-
-    setJS7z(js7z)
-    if (inputFilesRef.current.length !== 0) await resolve(inputFilesRef.current)
-
+  const reset = useCallback(() => {
+    workerRef.current.terminate()
+    worker = null
+    workerRef.current = createWorker()
     setPending(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  /**
-   * https://github.com/GMH-Code/JS7z?tab=readme-ov-file#technical-info-multi-start-safety-in-emscripten-projects
-   */
-  const reset = useCallback(() => {
-    initJS7z().catch(console.error)
-  }, [initJS7z])
-
-  const compress = useCallback(
-    async (files: File[], format?: Format) => {
-      if (!js7z) return
-
-      // Create the input folder
-      js7z.FS.mkdir('/in')
-
-      // Write each file into the input folder
-      for (const file of files) {
-        const arrayBuffer = await file.arrayBuffer()
-        js7z.FS.writeFile('/in/' + file.name, new Uint8Array(arrayBuffer))
-      }
-
-      const filename = `archive.${format?.toLowerCase() || 'zip'}`
-
-      const promise = new Promise<Out>((resolve, reject) => {
-        window.addEventListener('onExit', (e) => {
-          const exitCode = e.detail
-          // Compression unsuccessful
-          if (exitCode !== 0)
-            return reject(new Error(`7zip exit code: ${exitCode}`))
-
-          const buffer = js7z.FS.readFile(`/out/${filename}`)
-          const data: Out = {
-            filename,
-            blob: new Blob([buffer], { type: 'application/octet-stream' }),
-          }
-          outputFilesRef.current = [data]
-          reset()
-
-          resolve(data)
-        })
-      })
-
-      js7z.callMain(['a', `/out/${filename}`, '/in/*'])
-
-      return promise
-    },
-    [js7z, reset],
-  )
-
-  const extract = useCallback(
-    async (files: File[]) => {
-      if (!js7z) return
-
-      // Create the input folder
-      js7z.FS.mkdir('/in')
-
-      // Write each file into the input folder
-      for (const file of files) {
-        const arrayBuffer = await file.arrayBuffer()
-        js7z.FS.writeFile('/in/' + file.name, new Uint8Array(arrayBuffer))
-      }
-
-      const promise = new Promise<Out[]>((resolve, reject) => {
-        window.addEventListener('onExit', (e) => {
-          const exitCode = e.detail
-          // Compression unsuccessful
-          if (exitCode !== 0)
-            return reject(new Error(`7zip exit code: ${exitCode}`))
-
-          const out: Out[] = []
-          const files = js7z.FS.readdir('/out')
-          for (const file of files) {
-            // Skip the current and parent directory entries
-            if (file !== '.' && file !== '..') {
-              const buffer = js7z.FS.readFile('/out/' + file)
-              out.push({
-                filename: file,
-                blob: new Blob([buffer], { type: 'application/octet-stream' }),
-              })
-            }
-          }
-          outputFilesRef.current = out
-          reset()
-
-          resolve(out)
-        })
-      })
-
-      js7z.callMain(['e', '/in/*', '-o/out'])
-
-      return promise
-    },
-    [js7z, reset],
-  )
-
-  const onLoad = () => {
-    initJS7z().catch(console.error)
-  }
-
-  const resolve = async (files: File[], format?: Format) => {
-    if (!js7z) {
-      inputFilesRef.current = files
-      return
-    }
-
+  const resolve = (files: File[], format: Format) => {
+    if (pending) return
     setPending(true)
+
+    workerRef.current.addEventListener(
+      'message',
+      ({ data }: MessageEvent<WorkerToMainMessage>) => {
+        if (data.type !== OutType.File) return
+
+        outputFilesRef.current = data.payload
+        reset()
+      },
+    )
 
     const isExtract =
       files.length === 1 &&
@@ -226,47 +94,36 @@ export function useSevenZip() {
         files[0].name.toUpperCase().endsWith(`.${format.toUpperCase()}`),
       )
 
-    if (isExtract) {
-      await extract(files)
-    } else {
-      await compress(files, format)
-    }
-    inputFilesRef.current.length = 0
-
-    setPending(false)
+    sendMessageToWorker({
+      call: isExtract
+        ? ['e', '/in/*', '-o/out']
+        : ['a', `/out/archive.${format.toLowerCase()}`, '/in/*'],
+      payload: files,
+    })
   }
+
+  const sendMessageToWorker = useCallback((data: MainToWorkerMessage) => {
+    workerRef.current.postMessage(data)
+  }, [])
 
   const benchmark = useCallback(() => {
-    if (!js7z) return
+    sendMessageToWorker({ call: ['b'] })
+  }, [sendMessageToWorker])
 
-    js7z.callMain(['b'])
-  }, [js7z])
+  useTotalToast(workerRef.current)
+  useLogPrint(workerRef.current)
+  const progress = useExtractProgressFromStdout(workerRef.current)
 
-  useTotalToast()
-  useLogPrint()
-
-  return { pending, onLoad, outputFilesRef, compress, benchmark, resolve }
+  return { pending, outputFilesRef, benchmark, resolve, progress }
 }
 
-function createCustomEvent(name: string) {
-  return function (
-    detail: FlatArray<
-      Parameters<
-        JS7z['print'] | JS7z['printErr'] | JS7z['onAbort'] | JS7z['onExit']
-      >,
-      1
-    >,
-  ) {
-    const event = new CustomEvent(name, { detail })
-    window.dispatchEvent(event)
-  }
-}
-
-export function useExtractProgressFromStdout() {
+function useExtractProgressFromStdout(worker: Worker) {
   const [progress, setProgress] = useState(0)
 
-  const onPrint = useCallback((e: { detail: string }) => {
-    const progressMatch = e.detail.match(/(\d+)%/)
+  const onPrint = useCallback(({ data }: MessageEvent<WorkerToMainMessage>) => {
+    if (data.type !== OutType.Print) return
+
+    const progressMatch = data.payload.match(/(\d+)%/)
     if (progressMatch) {
       const progress = parseInt(progressMatch[1], 10)
       if (!isNaN(progress) && progress >= 0 && progress <= 100) {
@@ -275,78 +132,88 @@ export function useExtractProgressFromStdout() {
     }
   }, [])
 
-  const onAbort = useCallback(() => setProgress(0), [])
-  const onExit = useCallback((e: { detail: number }) => {
-    setProgress(e.detail !== 0 ? 0 : 100)
+  const onAbort = useCallback(({ data }: MessageEvent<WorkerToMainMessage>) => {
+    if (data.type !== OutType.onAbort) return
+    setProgress(0)
+  }, [])
+
+  const onExit = useCallback(({ data }: MessageEvent<WorkerToMainMessage>) => {
+    if (data.type !== OutType.onExit) return
+    setProgress(data.payload !== 0 ? 0 : 100)
   }, [])
 
   useEffect(() => {
-    window.addEventListener('print', onPrint)
-    window.addEventListener('onAbort', onAbort)
-    window.addEventListener('onExit', onExit)
+    worker.addEventListener('message', onPrint)
+    worker.addEventListener('message', onAbort)
+    worker.addEventListener('message', onExit)
 
     return () => {
-      window.removeEventListener('print', onPrint)
-      window.removeEventListener('onAbort', onAbort)
-      window.removeEventListener('onExit', onExit)
+      worker.removeEventListener('message', onPrint)
+      worker.removeEventListener('message', onAbort)
+      worker.removeEventListener('message', onExit)
     }
-  }, [onAbort, onExit, onPrint])
+  }, [onAbort, onExit, onPrint, worker])
 
   return progress
 }
 
-function useLogPrint() {
+function useLogPrint(worker: Worker) {
   useEffect(() => {
     if (process.env.NODE_ENV !== 'development') return
 
-    const onPrint = (e: { detail: string }) => {
-      console.log(e.detail)
+    const onPrint = ({ data }: MessageEvent<WorkerToMainMessage>) => {
+      if (data.type !== OutType.Print) return
+      console.log(data.payload)
     }
 
-    window.addEventListener('print', onPrint)
+    worker.addEventListener('message', onPrint)
 
     return () => {
-      window.removeEventListener('print', onPrint)
+      worker.removeEventListener('message', onPrint)
     }
-  }, [])
+  }, [worker])
 }
 
-export function useTotalToast() {
+export function useTotalToast(worker: Worker) {
   const info = useRef({
-    in: { number: 0, size: 0 },
-    out: { number: 0, size: 0 },
+    in: { number: 0, size: '' },
+    out: { number: 0, size: '' },
   })
 
   useEffect(() => {
-    const total = (e: { detail: string }) => {
+    const total = ({ data }: MessageEvent<WorkerToMainMessage>) => {
+      if (data.type !== OutType.Print) return
+      const text = data.payload
+
       // 2 files, 1609920 bytes (1573 KiB)
       // 1 file, 91237 bytes (90 KiB)
-      const inMatch = e.detail.match(/(\d+) files?, \d+ bytes \((\d+) KiB\)/)
+      const inMatch = text.match(/(\d+) files?, \d+ bytes \((\d+ [A-Z]iB)\)/)
       if (inMatch) {
-        const inNumber = parseInt(inMatch[1], 10)
-        const inKiB = parseInt(inMatch[2], 10)
-        info.current.in = { number: inNumber, size: inKiB }
+        const number = parseInt(inMatch[1], 10)
+        const size = inMatch[2]
+        info.current.in = { number, size }
       }
 
       // Files: 2
       // Size:       165356
       // Archive size: 888101 bytes (868 KiB)
-      const outMatch = e.detail.match(
-        /Files: (\d+)|Size:\s+(\d+)|Archive size: \d+ bytes \((\d+) KiB\)/,
+      const outMatch = text.match(
+        /Files: (\d+)|Size:\s+(\d+)|Archive size: \d+ bytes \((\d+ [A-Z]iB)\)/,
       )
       if (outMatch) {
-        const outNumber =
-          parseInt(outMatch[1], 10) || info.current.out.number || 1
-        const outKiB = outMatch[2]
-          ? Math.round(parseInt(outMatch[2], 10) / 1024)
-          : parseInt(outMatch[3], 10)
-        info.current.out = { number: outNumber, size: outKiB }
+        const number = parseInt(outMatch[1], 10) || info.current.out.number || 1
+        const size = outMatch[2]
+          ? parseInt(outMatch[2], 10) + ' bytes'
+          : outMatch[3]
+        info.current.out = { number, size }
       }
     }
 
-    const showToast = () => {
+    const showToast = ({ data }: MessageEvent<WorkerToMainMessage>) => {
+      if (data.type !== OutType.onExit) return
+
       toast('task completed', {
-        description: `In: ${info.current.in.number} files, ${info.current.in.size} KiB, Out: ${info.current.out.number} files, ${info.current.out.size} KiB`,
+        description: `In: ${info.current.in.number} files, ${info.current.in.size}, Out: ${info.current.out.number} files, ${info.current.out.size}`,
         duration: Infinity,
         action: {
           label: 'Undo',
@@ -355,12 +222,12 @@ export function useTotalToast() {
       })
     }
 
-    window.addEventListener('print', total)
-    window.addEventListener('onExit', showToast)
+    worker.addEventListener('message', total)
+    worker.addEventListener('message', showToast)
 
     return () => {
-      window.removeEventListener('print', total)
-      window.removeEventListener('onExit', showToast)
+      worker.removeEventListener('message', total)
+      worker.removeEventListener('message', showToast)
     }
-  })
+  }, [worker])
 }

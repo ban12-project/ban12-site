@@ -1,7 +1,6 @@
 'use client'
 
-import { ChangeEventHandler, ReactEventHandler, useRef, useState } from 'react'
-import Script from 'next/script'
+import { ChangeEventHandler, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDrop } from 'ahooks'
@@ -12,11 +11,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 
 import { useSaveFile } from '#/hooks/use-save-file'
-import {
-  supportedFormats,
-  useExtractProgressFromStdout,
-  useSevenZip,
-} from '#/hooks/use-seven-zip'
+import { supportedFormats, useSevenZip } from '#/hooks/use-seven-zip'
 import { Button } from '#/components/ui/button'
 import {
   Form,
@@ -49,8 +44,7 @@ export default function SevenZip() {
   const formRef = useRef<HTMLFormElement>(null)
   // const q = gsap.utils.selector(formRef)
 
-  const { pending, onLoad, outputFilesRef, resolve } = useSevenZip()
-  const progress = useExtractProgressFromStdout()
+  const { pending, outputFilesRef, resolve, progress } = useSevenZip()
 
   // @ts-expect-error - supported in fact, may be type missing
   useDrop(() => window, {
@@ -73,7 +67,7 @@ export default function SevenZip() {
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const files = e.target.files
     if (!files) return
-    void resolve(Array.from(files), format)
+    resolve(Array.from(files), format)
   }
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
@@ -125,57 +119,51 @@ export default function SevenZip() {
   // }, [])
 
   return (
-    <>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          ref={formRef}
-          className="flex h-[calc(100vh-var(--layout-header-height))] items-center justify-center"
-        >
-          <input
-            className="sr-only"
-            type="file"
-            multiple
-            ref={inputRef}
-            onChange={onChange}
-          />
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        ref={formRef}
+        className="flex h-[calc(100vh-var(--layout-header-height))] items-center justify-center"
+      >
+        <input
+          className="sr-only"
+          type="file"
+          multiple
+          ref={inputRef}
+          onChange={onChange}
+        />
 
-          <FormField
-            control={form.control}
-            name="format"
-            render={({ field }) => (
-              <FormItem>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a format to packing" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {supportedFormats.packingAndUnpacking.map((format) => (
-                      <SelectItem key={format} value={format}>
-                        {format}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={form.control}
+          name="format"
+          render={({ field }) => (
+            <FormItem>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a format to packing" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {supportedFormats.packingAndUnpacking.map((format) => (
+                    <SelectItem key={format} value={format}>
+                      {format}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
 
-          <Button disabled={pending}>
-            {pending && <Loader2 className="animate-spin" />}
-            {outputFilesRef.current.length !== 0
-              ? 'Save'
-              : 'Select files to continue'}{' '}
-            progress: {progress}
-          </Button>
-        </form>
-      </Form>
-      <Script src="/js7z-mt-fs-2.3.0/js7z.js" onLoad={onLoad} />
-    </>
+        <Button disabled={pending}>
+          {pending && <Loader2 className="animate-spin" />}
+          {outputFilesRef.current.length !== 0
+            ? 'Save'
+            : 'Select files to continue'}{' '}
+          progress: {progress}
+        </Button>
+      </form>
+    </Form>
   )
 }

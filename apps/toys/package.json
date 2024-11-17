@@ -51,6 +51,7 @@
     "@repo/eslint-config": "workspace:^",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/emscripten": "^1.39.13",
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.9.0",
     "@types/react": "npm:types-react@19.0.0-rc.1",
