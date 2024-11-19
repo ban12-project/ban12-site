@@ -8,7 +8,7 @@ import {
   useCursor,
   useGLTF,
 } from '@react-three/drei'
-import { useFrame, type PrimitiveProps } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 export const Blob = ({ route = '/', ...props }) => {
@@ -85,14 +85,14 @@ export const Logo = ({ route = '/blob', ...props }) => {
   )
 }
 
-export function Duck(props: Omit<PrimitiveProps, 'object'>) {
+export function Duck(props: Omit<React.ComponentProps<'primitive'>, 'object'>) {
   const { scene } = useGLTF('/duck.glb')
 
   useFrame((state, delta) => (scene.rotation.y += delta))
 
   return <primitive object={scene} {...props} />
 }
-export function Dog(props: Omit<PrimitiveProps, 'object'>) {
+export function Dog(props: Omit<React.ComponentProps<'primitive'>, 'object'>) {
   const { scene } = useGLTF('/Orange.glb')
 
   return <primitive object={scene} {...props} />

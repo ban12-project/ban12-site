@@ -21,7 +21,7 @@ export default function R3fEntry() {
         height: '100vh',
         pointerEvents: 'none',
       }}
-      eventSource={ref as React.MutableRefObject<HTMLElement>}
+      eventSource={ref as React.RefObject<HTMLElement>}
       eventPrefix="client"
     />
   )
