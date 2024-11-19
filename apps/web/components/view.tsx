@@ -35,7 +35,7 @@ const View = forwardRef<HTMLElement, ViewProps>(
       <>
         <div ref={localRef} {...props} />
         <Three>
-          <ViewImpl track={localRef as React.MutableRefObject<HTMLElement>}>
+          <ViewImpl track={localRef as React.RefObject<HTMLElement>}>
             {children}
             {orbit && <OrbitControls />}
           </ViewImpl>
