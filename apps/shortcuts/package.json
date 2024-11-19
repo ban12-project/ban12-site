@@ -10,12 +10,12 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.676.0",
-    "@aws-sdk/s3-request-presigner": "^3.676.0",
+    "@aws-sdk/client-s3": "^3.693.0",
+    "@aws-sdk/s3-request-presigner": "^3.693.0",
     "@ban12/tailwindcss-safe-area": "^0.2.3",
     "@google/generative-ai": "^0.21.0",
     "@hookform/resolvers": "^3.9.1",
-    "@neondatabase/serverless": "^0.10.2",
+    "@neondatabase/serverless": "^0.10.3",
     "@next/third-parties": "catalog:next15",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-label": "^2.1.0",
@@ -23,12 +23,12 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.1",
     "@repo/i18n": "workspace:^",
-    "@sentry/nextjs": "^8.35.0",
+    "@sentry/nextjs": "^8.38.0",
     "ahooks": "^3.8.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "drizzle-orm": "^0.36.0",
-    "intl-messageformat": "^10.7.6",
+    "drizzle-orm": "^0.36.3",
+    "intl-messageformat": "^10.7.7",
     "lucide-react": "catalog:",
     "next": "catalog:next15",
     "next-auth": "5.0.0-beta.25",
@@ -37,7 +37,7 @@
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
     "react-hook-form": "catalog:",
-    "react-resizable-panels": "^2.1.6",
+    "react-resizable-panels": "^2.1.7",
     "react-virtualized-auto-sizer": "^1.0.24",
     "react-window": "^1.8.10",
     "react-window-infinite-loader": "^1.0.9",
@@ -45,7 +45,7 @@
     "sonner": "^1.7.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.1",
-    "zod": "^3.23.5"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "catalog:next15",
@@ -60,11 +60,11 @@
     "autoprefixer": "^10.4.20",
     "babel-plugin-react-compiler": "catalog:",
     "bufferutil": "^4.0.8",
-    "drizzle-kit": "^0.27.2",
+    "drizzle-kit": "^0.28.1",
     "eslint": "catalog:eslint9",
     "postcss": "catalog:",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss": "^3.4.14",
+    "tailwindcss": "^3.4.15",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   }

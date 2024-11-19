@@ -56,6 +56,7 @@ export default async function Home(props: Props) {
         <nav className="uppercase [&>a]:ml-2">
           <a href="https://shortcuts.ban12.com">shortcuts</a>
           <a href="https://blog.ban12.com">blog</a>
+          <a href="https://toys.ban12.com">toys</a>
         </nav>
       </div>
     </main>
