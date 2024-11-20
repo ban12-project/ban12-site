@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { Link } from '@repo/i18n/client'
 import { getDictionary, type Locale } from '#/i18n'
-import { Share2 } from 'lucide-react'
+import { Plus } from 'lucide-react'
 
 import { fetchAlbums, fetchCollections } from '#/lib/actions'
 import AlbumList from '#/components/ui/album-list'
@@ -50,7 +50,7 @@ export default async function Home(props: HomePageProps) {
           scroll={false}
           aria-label={messages.post.description}
         >
-          <Share2 />
+          <Plus />
         </Link>
 
         <ColorSchemeToggle className="ml-auto" />
