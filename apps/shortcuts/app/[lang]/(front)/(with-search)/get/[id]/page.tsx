@@ -1,13 +1,13 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Link } from '@repo/i18n/client'
-import { getDictionary } from '#/i18n'
+import { getDictionary } from '#/lib/i18n'
 
 import { fetchShortcutByID } from '#/lib/actions'
 import ShortcutAdd, {
   preload,
   type ShortcutAddProps,
-} from '#/components/ui/shortcut-add'
+} from '#/components/shortcut-add'
 
 type Props = {
   params: Promise<ShortcutAddProps['params']>

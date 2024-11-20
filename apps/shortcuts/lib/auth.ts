@@ -3,7 +3,7 @@ import Credentials from 'next-auth/providers/credentials'
 import { pathToRegexp } from 'path-to-regexp'
 import { z } from 'zod'
 
-import { db } from './drizzle/db'
+import { db } from '../drizzle/db'
 import { i18n } from './i18n'
 
 async function getUser(email: string) {
@@ -18,8 +18,8 @@ async function getUser(email: string) {
   }
 }
 
-// /admin => /(en|zh-CN)/admin
-const adminRoutes = ['/admin'].map(
+// /dashboard => /(en|zh-CN)/dashboard
+const dashboardRoutes = ['/dashboard'].map(
   (path) => `/(${Object.keys(i18n.locales).join('|')})${path}/(.*)?`,
 )
 const loginRoute = `/(${Object.keys(i18n.locales).join('|')})/login`
@@ -31,15 +31,15 @@ const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
-      const isOnAdmin = adminRoutes.some((path) =>
+      const isDashboard = dashboardRoutes.some((path) =>
         pathToRegexp(path).exec(nextUrl.pathname),
       )
       const isOnLogin = pathToRegexp(loginRoute).exec(nextUrl.pathname)
-      if (isOnAdmin) {
+      if (isDashboard) {
         if (isLoggedIn) return true
         return false // Redirect unauthenticated users to login page
       } else if (isLoggedIn && isOnLogin) {
-        return Response.redirect(new URL('/admin', nextUrl))
+        return Response.redirect(new URL('/dashboard', nextUrl))
       }
       return true
     },

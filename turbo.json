@@ -20,7 +20,6 @@
         "DIRECT_URL",
         "NEXT_RUNTIME",
         "ANALYZE",
-        "SITE_NAME",
         "GOOGLE_GEMINI_KEY",
         "GOOGLE_GEMINI_MODEL",
         "AUTH_SECRET",

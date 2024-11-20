@@ -1,10 +1,10 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { db } from '#/drizzle/db'
-import { getDictionary, type Locale } from '#/i18n'
+import { getDictionary, type Locale } from '#/lib/i18n'
 
-import AlbumList from '#/components/ui/album-list'
-import ShortcutList from '#/components/ui/shortcut-list'
+import AlbumList from '#/components/album-list'
+import ShortcutList from '#/components/shortcut-list'
 
 type CollectionsProps = {
   params: Promise<{ id: string; lang: Locale }>

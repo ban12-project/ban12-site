@@ -4,7 +4,7 @@ import { Share } from 'lucide-react'
 
 import useWebShare from '#/hooks/use-web-share'
 
-import { Button } from './button'
+import { Button } from './ui/button'
 
 export default function ShareButton() {
   const { share } = useWebShare()

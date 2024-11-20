@@ -1,9 +1,9 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { db } from '#/drizzle/db'
-import type { Locale } from '#/i18n'
+import type { Locale } from '#/lib/i18n'
 
-import ShortcutList from '#/components/ui/shortcut-list'
+import ShortcutList from '#/components/shortcut-list'
 
 type ListPageProps = {
   params: Promise<{ id: string; lang: Locale }>

@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import { Inter } from 'next/font/google'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
-import { getDictionary, i18n, type Locale } from '#/i18n'
+import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import { ThemeProvider } from 'next-themes'
 
 import { cn } from '#/lib/utils'
@@ -40,7 +40,7 @@ export async function generateMetadata(
     },
     title: {
       default: messages.title,
-      template: `%s - ${messages.title} by ${process.env.SITE_NAME}`,
+      template: `%s - ${messages.title} by ${process.env.NEXT_PUBLIC_SITE_NAME}`,
     },
     openGraph: {
       images: `https://ban12.com/api/og?title=${messages.title}`,

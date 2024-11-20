@@ -1,13 +1,13 @@
 import { Suspense } from 'react'
-import { getDictionary } from '#/i18n'
+import { getDictionary } from '#/lib/i18n'
 import { Loader } from 'lucide-react'
 
-import PageDrawer from '#/components/ui/page-drawer'
-import ShareButton from '#/components/ui/share-button'
+import PageDrawer from '#/components/page-drawer'
+import ShareButton from '#/components/share-button'
 import ShortcutAdd, {
   preload,
   type ShortcutAddProps,
-} from '#/components/ui/shortcut-add'
+} from '#/components/shortcut-add'
 
 type Props = {
   params: Promise<ShortcutAddProps['params']>

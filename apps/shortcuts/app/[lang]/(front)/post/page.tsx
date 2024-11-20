@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { Link } from '@repo/i18n/client'
-import { getDictionary, type Locale } from '#/i18n'
+import { getDictionary, type Locale } from '#/lib/i18n'
 
-import ShortcutPost from '#/components/ui/shortcut-post'
+import ShortcutPost from '#/components/shortcut-post'
 
 type Props = {
   params: Promise<{ lang: Locale }>
