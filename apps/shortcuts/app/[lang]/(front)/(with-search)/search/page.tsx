@@ -1,9 +1,9 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getDictionary, type Locale } from '#/i18n'
+import { getDictionary, type Locale } from '#/lib/i18n'
 
 import { searchShortcuts } from '#/lib/actions'
-import ShortcutList from '#/components/ui/shortcut-list'
+import ShortcutList from '#/components/shortcut-list'
 
 type SearchPageProps = {
   params: Promise<{

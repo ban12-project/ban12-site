@@ -3,7 +3,7 @@
 import React, { useActionState, useEffect, useRef } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocale } from '@repo/i18n/client'
-import type { Messages } from '#/i18n'
+import type { Messages } from '#/lib/i18n'
 import { Loader2 } from 'lucide-react'
 import { createPortal, useFormStatus } from 'react-dom'
 import { useForm, useFormContext } from 'react-hook-form'
@@ -22,8 +22,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from './form'
-import { Input } from './input'
+} from './ui/form'
+import { Input } from './ui/input'
 import { PAGE_DRAWER_HEADER_ID } from './page-drawer'
 import {
   Select,
@@ -31,9 +31,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './select'
-import { Switch } from './switch'
-import { Textarea } from './textarea'
+} from './ui/select'
+import { Switch } from './ui/switch'
+import { Textarea } from './ui/textarea'
 
 interface ShortcutPostProps {
   messages: Messages

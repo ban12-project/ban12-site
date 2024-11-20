@@ -8,8 +8,8 @@ export default function useWebShare({ fallbackCopy = true }: Props = {}) {
   const isSupportWebShare = 'share' in navigator
 
   const defaultData = {
-    title: process.env.SITE_NAME,
-    text: process.env.SITE_NAME,
+    title: process.env.NEXT_PUBLIC_SITE_NAME,
+    text: process.env.NEXT_PUBLIC_SITE_NAME,
     url: window.location.href,
   }
 

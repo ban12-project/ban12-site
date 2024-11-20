@@ -2,13 +2,13 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import type { Messages } from '#/i18n'
+import type { Messages } from '#/lib/i18n'
 import { Drawer } from 'vaul'
 
 import { cn } from '#/lib/utils'
 import { useResponsive } from '#/hooks/use-responsive'
 
-import { Button } from './button'
+import { Button } from './ui/button'
 
 type RawDrawerProps = React.ComponentProps<typeof Drawer.Root>
 

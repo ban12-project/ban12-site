@@ -1,6 +1,6 @@
-import { getDictionary, type Locale } from '#/i18n'
+import { getDictionary, type Locale } from '#/lib/i18n'
 
-import ShortcutPost from '#/components/ui/shortcut-post'
+import ShortcutPost from '#/components/shortcut-post'
 
 import Drawer from './drawer'
 

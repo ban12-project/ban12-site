@@ -10,7 +10,7 @@ import { fetchShortcutByAlbum } from '#/lib/actions'
 import { useResponsive } from '#/hooks/use-responsive'
 
 import ShortcutCard from './shortcut-card'
-import { Skeleton } from './skeleton'
+import { Skeleton } from './ui/skeleton'
 
 type AlbumsProps = {
   shortcuts: SelectShortcut[]

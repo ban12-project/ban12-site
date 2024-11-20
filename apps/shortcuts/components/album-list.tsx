@@ -1,5 +1,5 @@
 import { Link } from '@repo/i18n/client'
-import type { Messages } from '#/i18n'
+import type { Messages } from '#/lib/i18n'
 
 import { fetchAlbums } from '#/lib/actions'
 

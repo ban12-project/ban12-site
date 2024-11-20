@@ -6,7 +6,7 @@ import { cache } from 'react'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import { signIn } from '#/auth'
+import { signIn } from '#/lib/auth'
 import { db } from '#/drizzle/db'
 import { album, collection, shortcut } from '#/drizzle/schema'
 import { eq, sql } from 'drizzle-orm'
@@ -357,8 +357,8 @@ export async function updateShortcut(
     return 'Failed to insert data.'
   }
 
-  revalidatePath('/admin')
-  redirect('/admin')
+  revalidatePath('/dashboard')
+  redirect('/dashboard')
 }
 
 export async function deleteShortcut(formData: FormData) {
@@ -370,8 +370,8 @@ export async function deleteShortcut(formData: FormData) {
 
   await db.delete(shortcut).where(eq(shortcut.uuid, id))
 
-  revalidatePath('/admin')
-  redirect('/admin')
+  revalidatePath('/dashboard')
+  redirect('/dashboard')
 }
 
 const collectionSchema = z.object({
@@ -407,8 +407,8 @@ export async function createCollection(
     return 'Failed to insert data.'
   }
 
-  revalidatePath('/admin')
-  redirect('/admin')
+  revalidatePath('/dashboard')
+  redirect('/dashboard')
 }
 
 export async function updateCollection(
@@ -450,8 +450,8 @@ export async function updateCollection(
     return 'Failed to update data.'
   }
 
-  revalidatePath('/admin')
-  redirect('/admin')
+  revalidatePath('/dashboard')
+  redirect('/dashboard')
 }
 
 export async function deleteCollection(formData: FormData) {
@@ -463,8 +463,8 @@ export async function deleteCollection(formData: FormData) {
 
   await db.delete(collection).where(eq(collection.id, Number.parseInt(id)))
 
-  revalidatePath('/admin')
-  redirect('/admin')
+  revalidatePath('/dashboard')
+  redirect('/dashboard')
 }
 
 const albumSheetSchema = z.object({
@@ -503,8 +503,8 @@ export async function createAlbum(
     return 'Failed to insert data.'
   }
 
-  revalidatePath('/admin')
-  redirect('/admin')
+  revalidatePath('/dashboard')
+  redirect('/dashboard')
 }
 
 export async function updateAlbum(
@@ -545,8 +545,8 @@ export async function updateAlbum(
     return 'Failed to update data.'
   }
 
-  revalidatePath('/admin')
-  redirect('/admin')
+  revalidatePath('/dashboard')
+  redirect('/dashboard')
 }
 
 export async function deleteAlbum(formData: FormData) {
@@ -558,8 +558,8 @@ export async function deleteAlbum(formData: FormData) {
 
   await db.delete(album).where(eq(album.id, Number.parseInt(id)))
 
-  revalidatePath('/admin')
-  redirect('/admin')
+  revalidatePath('/dashboard')
+  redirect('/dashboard')
 }
 
 export const getShortcuts = cache(async () => {

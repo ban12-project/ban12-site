@@ -1,15 +1,15 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { Link } from '@repo/i18n/client'
-import { getDictionary, type Locale } from '#/i18n'
 import { Plus } from 'lucide-react'
 
 import { fetchAlbums, fetchCollections } from '#/lib/actions'
-import AlbumList from '#/components/ui/album-list'
-import AlbumListSkeleton from '#/components/ui/album-list-skeleton'
-import Collections from '#/components/ui/collections'
-import CollectionsSkeleton from '#/components/ui/collections-skeleton'
-import ColorSchemeToggle from '#/components/ui/color-scheme-toggle'
+import { getDictionary, type Locale } from '#/lib/i18n'
+import AlbumList from '#/components/album-list'
+import AlbumListSkeleton from '#/components/album-list-skeleton'
+import Collections from '#/components/collections'
+import CollectionsSkeleton from '#/components/collections-skeleton'
+import ColorSchemeToggle from '#/components/color-scheme-toggle'
 
 type HomePageProps = {
   params: Promise<{ lang: Locale }>
@@ -23,7 +23,7 @@ const preload = () => {
 }
 
 export default async function Home(props: HomePageProps) {
-  const params = await props.params;
+  const params = await props.params
   // starting load home page data
   preload()
 
@@ -59,8 +59,10 @@ export default async function Home(props: HomePageProps) {
   )
 }
 
-export async function generateMetadata(props: HomePageProps): Promise<Metadata> {
-  const params = await props.params;
+export async function generateMetadata(
+  props: HomePageProps,
+): Promise<Metadata> {
+  const params = await props.params
   const messages = await getDictionary(params.lang)
 
   return {

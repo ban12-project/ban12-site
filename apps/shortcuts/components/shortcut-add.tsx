@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation'
-import type { Locale, Messages } from '#/i18n'
+import type { Locale, Messages } from '#/lib/i18n'
 import { Plus, Share } from 'lucide-react'
 
 import { fetchShortcutByID } from '#/lib/actions'
 import { cn } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
-import ShortcutCard from '#/components/ui/shortcut-card'
+import ShortcutCard from '#/components/shortcut-card'
 
 export type ShortcutAddProps = {
   params: { id: string; lang: Locale }

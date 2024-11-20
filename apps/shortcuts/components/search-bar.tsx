@@ -5,7 +5,7 @@ import {
   useSelectedLayoutSegment,
 } from 'next/navigation'
 import { useLocale } from '@repo/i18n/client'
-import type { Messages } from '#/i18n'
+import type { Messages } from '#/lib/i18n'
 import { useDebounceFn } from 'ahooks'
 import { CircleX, Search } from 'lucide-react'
 

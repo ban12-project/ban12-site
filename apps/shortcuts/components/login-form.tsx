@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react'
 
 import { authenticate } from '#/lib/actions'
 
-import { Button } from './button'
+import { Button } from './ui/button'
 
 export default function LoginForm() {
   const [errorMessage, dispatch, pending] = useActionState(

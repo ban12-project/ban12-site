@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import type { Messages } from '#/i18n'
 import { useClickAway } from 'ahooks'
 
+import type { Messages } from '#/lib/i18n'
 import { cn } from '#/lib/utils'
-import SearchBar from '#/components/ui/search-bar'
+import SearchBar from '#/components/search-bar'
 
 type HeaderProps = {
   messages: Messages
