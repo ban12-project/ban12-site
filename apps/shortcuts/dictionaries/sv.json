@@ -1,0 +1,39 @@
+{
+  "common": {
+    "cancel": "Avbryt",
+    "search": "Sök",
+    "done": "Klar",
+    "next": "Nästa",
+    "optional": "Valfritt",
+    "loading": "Laddar",
+    "go-home": "Gå hem"
+  },
+  "theme": {
+    "light": "Ljus",
+    "dark": "Mörk",
+    "system": "System"
+  },
+  "title": "Genvägsgalleri",
+  "description": "En genväg ger ett snabbt sätt att få saker gjorda med dina appar, med bara ett tryck eller genom att fråga Siri.",
+  "see-all": "Se alla",
+  "about": "Om denna genväg",
+  "set-up-shortcut": "Ställ in genväg",
+  "icloud-link": "iCloud-länk",
+  "share-through-icloud": "Dela en genväg via iCloud",
+  "share-on-iphone-or-ipad": "Dela genvägar på iPhone eller iPad",
+  "share-on-mac": "Dela genvägar på Mac",
+  "details": {
+    "SHARE_SHEET": "Visa i delningsblad",
+    "APPLE_WATCH": "Visa på Apple Watch",
+    "MENU_BAR_ON_MAC": "Fäst i menyraden",
+    "RECEIVES_SCREEN": "Ta emot vad som visas på skärmen",
+    "QUICK_ACTIONS_ON_MAC": "Använd som snabbåtgärd"
+  },
+  "form-name": "Ny genväg",
+  "form-description": "Berätta lite om denna genväg",
+  "form-language": "Språk som används för genvägar",
+  "post": {
+    "title": "Publicera genväg",
+    "description": "Dela din genväg med världen"
+  }
+}

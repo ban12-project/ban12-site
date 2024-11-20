@@ -1,0 +1,39 @@
+{
+  "common": {
+    "cancel": "إلغاء",
+    "search": "بحث",
+    "done": "تم",
+    "next": "التالي",
+    "optional": "اختياري",
+    "loading": "جارٍ التحميل",
+    "go-home": "اذهب إلى الصفحة الرئيسية"
+  },
+  "theme": {
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "نظام"
+  },
+  "title": "معرض الاختصارات",
+  "description": "تقدم الاختصارات وسيلة سريعة لإنجاز الأمور باستخدام تطبيقاتك، بنقرة واحدة أو عن طريق سؤال سيري.",
+  "see-all": "عرض الكل",
+  "about": "حول هذا الاختصار",
+  "set-up-shortcut": "إعداد الاختصار",
+  "icloud-link": "رابط iCloud",
+  "share-through-icloud": "مشاركة اختصار عبر iCloud",
+  "share-on-iphone-or-ipad": "مشاركة الاختصارات على iPhone أو iPad",
+  "share-on-mac": "مشاركة الاختصارات على Mac",
+  "details": {
+    "SHARE_SHEET": "عرض في ورقة المشاركة",
+    "APPLE_WATCH": "عرض على Apple Watch",
+    "MENU_BAR_ON_MAC": "تثبيت في شريط القوائم",
+    "RECEIVES_SCREEN": "استقبال ما هو على الشاشة",
+    "QUICK_ACTIONS_ON_MAC": "استخدام كإجراء سريع"
+  },
+  "form-name": "اختصار جديد",
+  "form-description": "أخبرنا قليلاً عن هذا الاختصار",
+  "form-language": "اللغة المستخدمة للاختصارات",
+  "post": {
+    "title": "نشر الاختصار",
+    "description": "شارك اختصارك مع العالم"
+  }
+}

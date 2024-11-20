@@ -1,0 +1,39 @@
+{
+  "common": {
+    "cancel": "キャンセル",
+    "search": "検索",
+    "done": "完了",
+    "next": "次へ",
+    "optional": "オプション",
+    "loading": "読み込み中",
+    "go-home": "ホームに戻る"
+  },
+  "theme": {
+    "light": "ライト",
+    "dark": "ダーク",
+    "system": "システム"
+  },
+  "title": "ショートカットギャラリー",
+  "description": "ショートカットは、アプリでの作業を迅速に行うための簡単な方法を提供します。タップするか、Siriに頼むだけで実行できます。",
+  "see-all": "すべて見る",
+  "about": "このショートカットについて",
+  "set-up-shortcut": "ショートカットを設定",
+  "icloud-link": "iCloudリンク",
+  "share-through-icloud": "iCloudを通じてショートカットを共有",
+  "share-on-iphone-or-ipad": "iPhoneまたはiPadでショートカットを共有",
+  "share-on-mac": "Macでショートカットを共有",
+  "details": {
+    "SHARE_SHEET": "共有シートに表示",
+    "APPLE_WATCH": "Apple Watchに表示",
+    "MENU_BAR_ON_MAC": "メニューバーにピン留め",
+    "RECEIVES_SCREEN": "画面上の内容を受信",
+    "QUICK_ACTIONS_ON_MAC": "クイックアクションとして使用"
+  },
+  "form-name": "新しいショートカット",
+  "form-description": "このショートカットについて少し教えてください",
+  "form-language": "ショートカットに使用する言語",
+  "post": {
+    "title": "ショートカットを投稿",
+    "description": "あなたのショートカットを世界と共有"
+  }
+}
