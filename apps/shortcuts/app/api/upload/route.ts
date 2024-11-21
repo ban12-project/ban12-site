@@ -1,9 +1,21 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
+import { auth } from '#/lib/auth'
+
 export const runtime = 'edge'
 
 export async function POST(request: Request) {
+  const session = await auth()
+
+  if (!session) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  if (request.body === null) {
+    return new Response('Request body is empty', { status: 400 })
+  }
+
   const { filename, contentType } = (await request.json()) as {
     filename: string
     contentType: string
@@ -32,6 +44,6 @@ export async function POST(request: Request) {
 
     return Response.json({ url })
   } catch (error) {
-    return Response.json({ error })
+    return Response.json({ error }, { status: 500 })
   }
 }
