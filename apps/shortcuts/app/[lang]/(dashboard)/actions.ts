@@ -5,281 +5,30 @@ import 'server-only'
 import { cache } from 'react'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { GoogleGenerativeAI } from '@google/generative-ai'
-import { signIn } from '#/lib/auth'
 import { db } from '#/drizzle/db'
 import { album, collection, shortcut } from '#/drizzle/schema'
-import { eq, sql } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { AuthError } from 'next-auth'
 import { z } from 'zod'
 
-import type { ShortcutRecord } from './shortcut'
+import { signIn } from '#/lib/auth'
 
-const icloudSchema = z.object({
-  icloud: z
-    .string()
-    .url()
-    .startsWith(
-      'https://www.icloud.com/shortcuts/',
-      'must be start with https://www.icloud.com/shortcuts/',
-    )
-    .regex(/\/[0-9a-f]{32}\/?$/, 'iCloud url is broken'),
+const authFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
 })
 
-// This is temporary until @types/react-dom is updated
-export type State = {
-  errors?: {
-    icloud?: string[]
-    name?: string[]
-    description?: string[]
-    icon?: string[]
-    backgroundColor?: string[]
-    details?: string[]
-    language?: string[]
-  }
-  message?: string | null
-}
-
-export async function getShortcutByiCloud(
-  prevState: State,
-  formData: FormData,
-) {
-  const validatedFields = icloudSchema.safeParse({
-    icloud: formData.get('icloud'),
-  })
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Failed to validate form data.',
-    }
-  }
-
-  const uuid = new URL(validatedFields.data.icloud).pathname.split('/').pop()
-
-  if (!uuid) {
-    return {
-      message: 'Failed to get uuid.',
-    }
-  }
-
-  const {
-    rows: [{ exists }],
-  } = await db.execute<{ exists: boolean }>(sql`
-    SELECT EXISTS (
-      SELECT 1 FROM ${shortcut} WHERE ${shortcut.uuid} = ${uuid}
-    ) AS exists
-  `)
-
-  if (exists) {
-    return {
-      message: 'Shortcut already exists.',
-    }
-  }
-
-  const res = await fetch(
-    `https://www.icloud.com/shortcuts/api/records/${uuid}`,
-  )
-
-  if (!res.ok) {
-    return {
-      message: 'Failed to fetch data.',
-    }
-  }
-
-  const data = await res.json() as ShortcutRecord
-
-  return {
-    data,
-  }
-}
-
-const shortcutSchema = z.object({
-  name: z.string(),
-  description: z.string().optional(),
-  icon: z
-    .string()
-    .nullable()
-    .transform((val) => (val === null ? '' : val)),
-  backgroundColor: z.string(),
-  details: z
-    .array(
-      z.enum([
-        'SHARE_SHEET',
-        'APPLE_WATCH',
-        'MENU_BAR_ON_MAC',
-        'QUICK_ACTIONS_ON_MAC',
-        'RECEIVES_SCREEN',
-      ]),
-    )
-    .transform((val) => val.join(','))
-    .nullable(),
-  language: z.enum(['zh-CN', 'en']),
-})
-const formSchema = z.intersection(icloudSchema, shortcutSchema)
-
-export async function postShortcut(prevState: State, formData: FormData) {
-  if (formData.get('name') === null)
-    return getShortcutByiCloud(prevState, formData)
-
-  const validatedFields = formSchema.safeParse({
-    icloud: formData.get('icloud'),
-    name: formData.get('name'),
-    description: formData.get('description'),
-    icon: formData.get('icon'),
-    backgroundColor: formData.get('backgroundColor'),
-    details: formData.getAll('details'),
-    language: formData.get('language'),
-  })
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Failed to validate form data',
-    }
-  }
-
-  const {
-    icloud,
-    name,
-    description,
-    icon,
-    backgroundColor,
-    details,
-    language,
-  } = validatedFields.data
-  const uuid = new URL(icloud).pathname.split('/').pop()
-
-  if (!uuid) {
-    return {
-      message: 'Failed to get uuid',
-    }
-  }
-
-  let albumId: number = NaN
+export async function login(prevState: string | undefined, formData: FormData) {
   try {
-    if (!process.env.GOOGLE_GEMINI_KEY || !process.env.GOOGLE_GEMINI_MODEL)
-      throw new Error('Google Gemini API key or model not set')
-
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_KEY)
-    const model = genAI.getGenerativeModel({
-      model: process.env.GOOGLE_GEMINI_MODEL,
-    })
-    const albums = await getAlbums()
-    const prompt = `Which of the following options describes "${name}, ${description}" Answer with numbers:
-        Options:
-        ${albums
-          .map((item) => `${item.id}: ${item.title} ${item.description}`)
-          .join('\n')}
-        The answer is:
-      `
-    const result = await model.generateContent(prompt)
-    const text = result.response.text()
-    albumId = Number.parseInt(text)
-  } catch (e) {
-    // continue regardless of error
-  }
-
-  const result = await db.insert(shortcut).values({
-    updatedAt: new Date().toISOString(),
-    uuid,
-    icloud,
-    name,
-    description,
-    icon,
-    backgroundColor,
-    details,
-    language,
-    collectionId: null,
-    albumId: albumId || null,
-  })
-
-  if (!result) {
-    return {
-      message: 'Failed to insert data.',
-    }
-  }
-
-  revalidatePath('/')
-  redirect('/')
-}
-
-export const fetchAlbums = cache(async (pageSize?: number) => {
-  const albums = await db.query.album.findMany({
-    with: {
-      // use pageSize to limit the number of records returned, if not provided, return all records
-      shortcuts: pageSize
-        ? {
-            limit: pageSize,
-            orderBy: (shortcuts, { desc }) => desc(shortcuts.updatedAt),
-          }
-        : true,
-    },
-  })
-
-  return albums
-})
-
-export const fetchShortcutByAlbum = cache(
-  async (albumId: number, pageSize: number, currentPage: number) => {
-    const shortcuts = await db.query.shortcut.findMany({
-      where: (shortcut, { eq }) => eq(shortcut.albumId, albumId),
-      limit: pageSize,
-      offset: (currentPage - 1) * pageSize,
-      orderBy: (shortcuts, { desc }) => desc(shortcuts.updatedAt),
+    const validatedData = authFormSchema.parse({
+      email: formData.get('email'),
+      password: formData.get('password'),
     })
 
-    return shortcuts
-  },
-)
-
-export const fetchCollections = cache(async () => {
-  const collections = await db.query.collection.findMany()
-
-  return collections
-})
-
-export const fetchShortcutByID = cache(async (uuid: string) => {
-  const shortcut = await db.query.shortcut.findFirst({
-    where: (shortcut, { eq }) => eq(shortcut.uuid, uuid),
-  })
-
-  return shortcut
-})
-
-const searchSchema = z.object({
-  query: z.string().min(1).max(64),
-})
-
-export async function searchShortcuts(query: string) {
-  const validatedFields = searchSchema.safeParse({
-    query,
-  })
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Failed to validate form data.',
-    }
-  }
-
-  const shortcuts = await db.query.shortcut.findMany({
-    where: (shortcut, { or, ilike }) =>
-      or(
-        ilike(shortcut.name, `%${validatedFields.data.query}%`),
-        ilike(shortcut.description, `%${validatedFields.data.query}%`),
-      ),
-  })
-
-  return shortcuts
-}
-
-export async function authenticate(
-  prevState: string | undefined,
-  formData: FormData,
-) {
-  try {
-    await signIn('credentials', formData)
+    await signIn('credentials', {
+      email: validatedData.email,
+      password: validatedData.password,
+    })
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -294,7 +43,36 @@ export async function authenticate(
 }
 
 const updateSchema = z.intersection(
-  formSchema,
+  z.object({
+    icloud: z
+      .string()
+      .url()
+      .startsWith(
+        'https://www.icloud.com/shortcuts/',
+        'must be start with https://www.icloud.com/shortcuts/',
+      )
+      .regex(/\/[0-9a-f]{32}\/?$/, 'iCloud url is broken'),
+    name: z.string(),
+    description: z.string().optional(),
+    icon: z
+      .string()
+      .nullable()
+      .transform((val) => (val === null ? '' : val)),
+    backgroundColor: z.string(),
+    details: z
+      .array(
+        z.enum([
+          'SHARE_SHEET',
+          'APPLE_WATCH',
+          'MENU_BAR_ON_MAC',
+          'QUICK_ACTIONS_ON_MAC',
+          'RECEIVES_SCREEN',
+        ]),
+      )
+      .transform((val) => val.join(','))
+      .nullable(),
+    language: z.enum(['zh-CN', 'en']),
+  }),
   z.object({
     uuid: z.string(),
     albumId: z.string().nullable(),

@@ -4,10 +4,11 @@ import { useActionState } from 'react'
 import type { SelectCollection } from '#/drizzle/schema'
 import { toast } from 'sonner'
 
-import { createCollection, updateCollection } from '#/lib/actions'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
+
+import { createCollection, updateCollection } from '../../actions'
 
 type Props = {
   fields?: Partial<SelectCollection>
@@ -45,7 +46,7 @@ export default function Form({ fields }: Props) {
       throw new Error('Failed to get pre-signed URL.')
     }
 
-    const { url } = await response.json() as { url: string }
+    const { url } = (await response.json()) as { url: string }
 
     const uploadResponse = await fetch(url, {
       method: 'PUT',

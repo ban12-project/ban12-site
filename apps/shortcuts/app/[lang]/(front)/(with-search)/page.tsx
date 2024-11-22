@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import { Link } from '@repo/i18n/client'
 import { Plus } from 'lucide-react'
 
-import { fetchAlbums, fetchCollections } from '#/lib/actions'
+import { fetchAlbums, fetchCollections } from '#/app/[lang]/(front)/actions'
 import { getDictionary, type Locale } from '#/lib/i18n'
 import AlbumList from '#/components/album-list'
 import AlbumListSkeleton from '#/components/album-list-skeleton'

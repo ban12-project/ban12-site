@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getDictionary, type Locale } from '#/lib/i18n'
 
-import { searchShortcuts } from '#/lib/actions'
+import { searchShortcuts } from '#/app/[lang]/(front)/actions'
 import ShortcutList from '#/components/shortcut-list'
 
 type SearchPageProps = {

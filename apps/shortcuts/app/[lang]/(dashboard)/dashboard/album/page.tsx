@@ -1,9 +1,10 @@
 import { Link } from '@repo/i18n/client'
 import type { SelectAlbum } from '#/drizzle/schema'
 
-import { deleteAlbum, getAlbums } from '#/lib/actions'
 import { Button } from '#/components/ui/button'
 import { Columns, DashboardTable } from '#/components/dashboard-table'
+
+import { deleteAlbum, getAlbums } from '../../actions'
 
 const albumsTableColumns: Columns<SelectAlbum> = [
   {
