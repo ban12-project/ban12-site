@@ -6,7 +6,7 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 
-import { fetchShortcutByAlbum } from '#/lib/actions'
+import { fetchShortcutByAlbum } from '#/app/[lang]/(front)/actions'
 import { useResponsive } from '#/hooks/use-responsive'
 
 import ShortcutCard from './shortcut-card'

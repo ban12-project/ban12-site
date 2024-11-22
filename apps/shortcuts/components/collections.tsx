@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { Link } from '@repo/i18n/client'
 
-import { fetchCollections } from '#/lib/actions'
+import { fetchCollections } from '#/app/[lang]/(front)/actions'
 
 // type CollectionsProps = {}
 

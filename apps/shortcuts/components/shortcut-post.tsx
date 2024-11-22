@@ -9,7 +9,7 @@ import { createPortal, useFormStatus } from 'react-dom'
 import { useForm, useFormContext } from 'react-hook-form'
 import * as z from 'zod'
 
-import { postShortcut } from '#/lib/actions'
+import { postShortcut } from '#/app/[lang]/(front)/actions'
 import { RecordType } from '#/lib/shortcut'
 import { IN_BROWSER } from '#/lib/utils'
 import { Button } from '#/components/ui/button'

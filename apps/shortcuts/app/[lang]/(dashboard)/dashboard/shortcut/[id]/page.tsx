@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { fetchShortcutByID } from '#/lib/actions'
+import { fetchShortcutByID } from '#/app/[lang]/(front)/actions'
 
 import EditForm from './edit-form'
 

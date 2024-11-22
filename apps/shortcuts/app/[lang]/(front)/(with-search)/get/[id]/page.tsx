@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { Link } from '@repo/i18n/client'
 import { getDictionary } from '#/lib/i18n'
 
-import { fetchShortcutByID } from '#/lib/actions'
+import { fetchShortcutByID } from '#/app/[lang]/(front)/actions'
 import ShortcutAdd, {
   preload,
   type ShortcutAddProps,

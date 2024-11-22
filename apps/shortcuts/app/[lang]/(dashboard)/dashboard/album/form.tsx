@@ -3,10 +3,11 @@
 import { useActionState } from 'react'
 import type { SelectAlbum } from '#/drizzle/schema'
 
-import { createAlbum, updateAlbum } from '#/lib/actions'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
+
+import { createAlbum, updateAlbum } from '../../actions'
 
 type Props = {
   fields?: Partial<SelectAlbum>

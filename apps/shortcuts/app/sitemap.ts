@@ -1,7 +1,11 @@
 import type { MetadataRoute } from 'next'
-import { i18n } from '#/lib/i18n'
 
-import { getAlbums, getCollections, getShortcuts } from '#/lib/actions'
+import { i18n } from '#/lib/i18n'
+import {
+  getAlbums,
+  getCollections,
+  getShortcuts,
+} from '#/app/[lang]/(dashboard)/actions'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'edge'

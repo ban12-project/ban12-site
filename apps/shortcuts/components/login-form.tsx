@@ -3,15 +3,12 @@
 import { useActionState } from 'react'
 import { Loader2 } from 'lucide-react'
 
-import { authenticate } from '#/lib/actions'
+import { login } from '#/app/[lang]/(dashboard)/actions'
 
 import { Button } from './ui/button'
 
 export default function LoginForm() {
-  const [errorMessage, dispatch, pending] = useActionState(
-    authenticate,
-    undefined,
-  )
+  const [errorMessage, dispatch, pending] = useActionState(login, undefined)
 
   return (
     <form action={dispatch} className="space-y-3">

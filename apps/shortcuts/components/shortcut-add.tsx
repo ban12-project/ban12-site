@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Locale, Messages } from '#/lib/i18n'
 import { Plus, Share } from 'lucide-react'
 
-import { fetchShortcutByID } from '#/lib/actions'
+import { fetchShortcutByID } from '#/app/[lang]/(front)/actions'
 import { cn } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 import ShortcutCard from '#/components/shortcut-card'
