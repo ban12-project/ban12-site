@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState } from 'react'
-import type { SelectShortcut } from '#/drizzle/schema'
+import type { SelectShortcut } from '#/lib/db/schema'
 
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'

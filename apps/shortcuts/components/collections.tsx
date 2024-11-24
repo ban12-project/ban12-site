@@ -1,12 +1,12 @@
 import Image from 'next/image'
 import { Link } from '@repo/i18n/client'
 
-import { fetchCollections } from '#/app/[lang]/(front)/actions'
+import { getCollections } from '#/lib/db/queries'
 
 // type CollectionsProps = {}
 
 export default async function Collections(/* {}: CollectionsProps */) {
-  const collections = await fetchCollections()
+  const collections = await getCollections()
 
   return (
     <section className="hidden-scrollbar px-safe-max-4 flex snap-x snap-mandatory gap-x-3 overflow-x-auto overscroll-x-contain lg:gap-x-5 lg:px-0 lg:pb-10">

@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { db } from '#/drizzle/db'
-import type { Locale } from '#/lib/i18n'
 
+import { getAlbumById, getAlbumByIdWithShortcuts } from '#/lib/db/queries'
+import type { Locale } from '#/lib/i18n'
 import ShortcutList from '#/components/shortcut-list'
 
 type ListPageProps = {
@@ -10,13 +10,8 @@ type ListPageProps = {
 }
 
 export default async function ListPage(props: ListPageProps) {
-  const params = await props.params;
-  const album = await db.query.album.findFirst({
-    where: (album, { eq }) => eq(album.id, Number.parseInt(params.id)),
-    with: {
-      shortcuts: true,
-    },
-  })
+  const params = await props.params
+  const album = await getAlbumByIdWithShortcuts(Number.parseInt(params.id))
 
   if (!album) notFound()
 
@@ -28,11 +23,11 @@ export default async function ListPage(props: ListPageProps) {
   )
 }
 
-export async function generateMetadata(props: ListPageProps): Promise<Metadata> {
-  const params = await props.params;
-  const album = await db.query.album.findFirst({
-    where: (album, { eq }) => eq(album.id, Number.parseInt(params.id)),
-  })
+export async function generateMetadata(
+  props: ListPageProps,
+): Promise<Metadata> {
+  const params = await props.params
+  const album = await getAlbumById(Number.parseInt(params.id))
 
   if (!album) notFound()
 

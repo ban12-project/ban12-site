@@ -3,20 +3,8 @@ import Credentials from 'next-auth/providers/credentials'
 import { pathToRegexp } from 'path-to-regexp'
 import { z } from 'zod'
 
-import { db } from '../drizzle/db'
+import { db, getUser } from './db/queries'
 import { i18n } from './i18n'
-
-async function getUser(email: string) {
-  try {
-    const user = await db.query.users.findFirst({
-      where: (user, { eq }) => eq(user.email, email),
-    })
-    return user
-  } catch (error) {
-    console.error('Failed to fetch user:', error)
-    throw new Error('Failed to fetch user.')
-  }
-}
 
 // /dashboard => /(en|zh-CN)/dashboard
 const dashboardRoutes = ['/dashboard'].map(

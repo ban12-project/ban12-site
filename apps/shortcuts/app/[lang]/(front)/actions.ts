@@ -1,19 +1,19 @@
 'use server'
 
-import 'server-only'
-
 import { cache } from 'react'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import { db } from '#/drizzle/db'
-import { shortcut } from '#/drizzle/schema'
-import { sql } from 'drizzle-orm'
 import { z } from 'zod'
 
+import {
+  getAlbums,
+  getShortcutByAlbumId,
+  getShortcutByUuid,
+  saveShortcut,
+  searchShortcutsByQuery,
+} from '#/lib/db/queries'
 import type { ShortcutRecord } from '#/lib/shortcut'
-
-import { getAlbums } from '../(dashboard)/actions'
 
 const icloudSchema = z.object({
   icloud: z
@@ -63,17 +63,16 @@ export async function getShortcutByiCloud(
     }
   }
 
-  const {
-    rows: [{ exists }],
-  } = await db.execute<{ exists: boolean }>(sql`
-    SELECT EXISTS (
-      SELECT 1 FROM ${shortcut} WHERE ${shortcut.uuid} = ${uuid}
-    ) AS exists
-  `)
-
-  if (exists) {
+  try {
+    const shortcut = await getShortcutByUuid(uuid)
+    if (shortcut) {
+      return {
+        message: 'Shortcut already exists.',
+      }
+    }
+  } catch {
     return {
-      message: 'Shortcut already exists.',
+      message: 'Failed to query shortcut.',
     }
   }
 
@@ -83,7 +82,7 @@ export async function getShortcutByiCloud(
 
   if (!res.ok) {
     return {
-      message: 'Failed to fetch data.',
+      message: 'Failed to get shortcut from iCloud.',
     }
   }
 
@@ -178,25 +177,25 @@ export async function postShortcut(prevState: State, formData: FormData) {
     albumId = Number.parseInt(text)
   } catch (e) {
     // continue regardless of error
+    albumId = 1
   }
 
-  const result = await db.insert(shortcut).values({
-    updatedAt: new Date().toISOString(),
-    uuid,
-    icloud,
-    name,
-    description,
-    icon,
-    backgroundColor,
-    details,
-    language,
-    collectionId: null,
-    albumId: albumId || null,
-  })
-
-  if (!result) {
+  try {
+    await saveShortcut({
+      uuid,
+      icloud,
+      name,
+      description,
+      icon,
+      backgroundColor,
+      details,
+      language,
+      collectionId: null,
+      albumId,
+    })
+  } catch {
     return {
-      message: 'Failed to insert data.',
+      message: 'Failed to save shortcut.',
     }
   }
 
@@ -204,48 +203,22 @@ export async function postShortcut(prevState: State, formData: FormData) {
   redirect('/')
 }
 
-export const fetchAlbums = cache(async (pageSize?: number) => {
-  const albums = await db.query.album.findMany({
-    with: {
-      // use pageSize to limit the number of records returned, if not provided, return all records
-      shortcuts: pageSize
-        ? {
-            limit: pageSize,
-            orderBy: (shortcuts, { desc }) => desc(shortcuts.updatedAt),
-          }
-        : true,
-    },
-  })
-
-  return albums
-})
-
-export const fetchShortcutByAlbum = cache(
+export const fetchShortcutsByAlbumID = cache(
   async (albumId: number, pageSize: number, currentPage: number) => {
-    const shortcuts = await db.query.shortcut.findMany({
-      where: (shortcut, { eq }) => eq(shortcut.albumId, albumId),
-      limit: pageSize,
-      offset: (currentPage - 1) * pageSize,
-      orderBy: (shortcuts, { desc }) => desc(shortcuts.updatedAt),
-    })
+    try {
+      const shortcuts = await getShortcutByAlbumId(
+        albumId,
+        pageSize,
+        currentPage,
+      )
 
-    return shortcuts
+      return shortcuts
+    } catch (error) {
+      console.error('Failed to get shortcuts from database')
+      throw error
+    }
   },
 )
-
-export const fetchCollections = cache(async () => {
-  const collections = await db.query.collection.findMany()
-
-  return collections
-})
-
-export const fetchShortcutByID = cache(async (uuid: string) => {
-  const shortcut = await db.query.shortcut.findFirst({
-    where: (shortcut, { eq }) => eq(shortcut.uuid, uuid),
-  })
-
-  return shortcut
-})
 
 const searchSchema = z.object({
   query: z.string().min(1).max(64),
@@ -263,13 +236,13 @@ export async function searchShortcuts(query: string) {
     }
   }
 
-  const shortcuts = await db.query.shortcut.findMany({
-    where: (shortcut, { or, ilike }) =>
-      or(
-        ilike(shortcut.name, `%${validatedFields.data.query}%`),
-        ilike(shortcut.description, `%${validatedFields.data.query}%`),
-      ),
-  })
+  try {
+    const shortcuts = await searchShortcutsByQuery(validatedFields.data.query)
 
-  return shortcuts
+    return shortcuts
+  } catch {
+    return {
+      message: 'Failed to search shortcuts.',
+    }
+  }
 }

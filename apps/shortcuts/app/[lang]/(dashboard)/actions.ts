@@ -1,17 +1,21 @@
 'use server'
 
-import 'server-only'
-
-import { cache } from 'react'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { db } from '#/drizzle/db'
-import { album, collection, shortcut } from '#/drizzle/schema'
-import { eq } from 'drizzle-orm'
 import { AuthError } from 'next-auth'
 import { z } from 'zod'
 
 import { signIn } from '#/lib/auth'
+import {
+  deleteAlbumById,
+  deleteCollectionById,
+  deleteShortcutByUuid,
+  saveAlbum,
+  saveCollection,
+  updateAlbumById,
+  updateCollectionById,
+  updateShortcutByUuid,
+} from '#/lib/db/queries'
 
 const authFormSchema = z.object({
   email: z.string().email(),
@@ -115,22 +119,18 @@ export async function updateShortcut(
   } = validatedFields.data
 
   try {
-    await db
-      .update(shortcut)
-      .set({
-        updatedAt: new Date().toISOString(),
-        uuid,
-        icloud,
-        name,
-        description,
-        icon,
-        backgroundColor,
-        details,
-        language,
-        collectionId: collectionId ? Number.parseInt(collectionId) : null,
-        albumId: albumId ? Number.parseInt(albumId) : null,
-      })
-      .where(eq(shortcut.uuid, uuid))
+    await updateShortcutByUuid({
+      uuid,
+      icloud,
+      name,
+      description,
+      icon,
+      backgroundColor,
+      details,
+      language,
+      collectionId: collectionId ? Number.parseInt(collectionId) : null,
+      albumId: albumId ? Number.parseInt(albumId) : null,
+    })
   } catch {
     return 'Failed to insert data.'
   }
@@ -146,7 +146,11 @@ export async function deleteShortcut(formData: FormData) {
     return 'Parameters missing'
   }
 
-  await db.delete(shortcut).where(eq(shortcut.uuid, id))
+  try {
+    await deleteShortcutByUuid(id)
+  } catch {
+    return 'Failed to delete data.'
+  }
 
   revalidatePath('/dashboard')
   redirect('/dashboard')
@@ -175,8 +179,7 @@ export async function createCollection(
   const path = new URL(image, process.env.S3_DOMAIN).href
 
   try {
-    await db.insert(collection).values({
-      updatedAt: new Date().toISOString(),
+    await saveCollection({
       title,
       image: path,
       textColor,
@@ -215,15 +218,12 @@ export async function updateCollection(
   const path = new URL(image, process.env.S3_DOMAIN).href
 
   try {
-    await db
-      .update(collection)
-      .set({
-        updatedAt: new Date().toISOString(),
-        title,
-        image: path,
-        textColor,
-      })
-      .where(eq(collection.id, Number.parseInt(id)))
+    await updateCollectionById({
+      id: Number.parseInt(id),
+      title,
+      image: path,
+      textColor,
+    })
   } catch {
     return 'Failed to update data.'
   }
@@ -239,7 +239,11 @@ export async function deleteCollection(formData: FormData) {
     return 'Parameters missing'
   }
 
-  await db.delete(collection).where(eq(collection.id, Number.parseInt(id)))
+  try {
+    await deleteCollectionById(Number.parseInt(id))
+  } catch {
+    return 'Failed to delete data.'
+  }
 
   revalidatePath('/dashboard')
   redirect('/dashboard')
@@ -271,8 +275,7 @@ export async function createAlbum(
   const { title, description, collectionId } = validatedFields.data
 
   try {
-    await db.insert(album).values({
-      updatedAt: new Date().toISOString(),
+    await saveAlbum({
       title,
       description,
       collectionId: collectionId ? Number.parseInt(collectionId) : null,
@@ -310,15 +313,12 @@ export async function updateAlbum(
   const { id, title, description, collectionId } = validatedFields.data
 
   try {
-    await db
-      .update(album)
-      .set({
-        updatedAt: new Date().toISOString(),
-        title,
-        description,
-        collectionId: collectionId ? Number.parseInt(collectionId) : null,
-      })
-      .where(eq(album.id, Number.parseInt(id)))
+    await updateAlbumById({
+      id: Number.parseInt(id),
+      title,
+      description,
+      collectionId: collectionId ? Number.parseInt(collectionId) : null,
+    })
   } catch {
     return 'Failed to update data.'
   }
@@ -334,26 +334,12 @@ export async function deleteAlbum(formData: FormData) {
     return 'Parameters missing'
   }
 
-  await db.delete(album).where(eq(album.id, Number.parseInt(id)))
+  try {
+    await deleteAlbumById(Number.parseInt(id))
+  } catch {
+    return 'Failed to delete data.'
+  }
 
   revalidatePath('/dashboard')
   redirect('/dashboard')
 }
-
-export const getShortcuts = cache(async () => {
-  const shortcuts = await db.query.shortcut.findMany()
-
-  return shortcuts
-})
-
-export const getCollections = cache(async () => {
-  const collections = await db.query.collection.findMany()
-
-  return collections
-})
-
-export const getAlbums = cache(async () => {
-  const albums = await db.query.album.findMany()
-
-  return albums
-})

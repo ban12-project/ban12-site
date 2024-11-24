@@ -1,4 +1,4 @@
-import type { SelectShortcut } from '#/drizzle/schema'
+import type { SelectShortcut } from '#/lib/db/schema'
 
 import ShortcutCard from './shortcut-card'
 

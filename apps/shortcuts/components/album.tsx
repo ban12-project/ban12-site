@@ -1,12 +1,12 @@
 'use client'
 
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
-import type { SelectShortcut } from '#/drizzle/schema'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 
-import { fetchShortcutByAlbum } from '#/app/[lang]/(front)/actions'
+import { fetchShortcutsByAlbumID } from '#/app/[lang]/(front)/actions'
+import type { SelectShortcut } from '#/lib/db/schema'
 import { useResponsive } from '#/hooks/use-responsive'
 
 import ShortcutCard from './shortcut-card'
@@ -123,7 +123,7 @@ export default function Albums({
   const itemCount = hasNextPage ? items.length + 1 : items.length
 
   const loadMoreItems = async (startIndex: number, stopIndex: number) => {
-    const newItems = await fetchShortcutByAlbum(
+    const newItems = await fetchShortcutsByAlbumID(
       items[0].albumId!,
       pageSize,
       Math.floor(startIndex / pageSize) + 1,

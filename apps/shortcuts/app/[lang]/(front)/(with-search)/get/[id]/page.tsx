@@ -1,9 +1,9 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Link } from '@repo/i18n/client'
-import { getDictionary } from '#/lib/i18n'
 
-import { fetchShortcutByID } from '#/app/[lang]/(front)/actions'
+import { getShortcutByUuid } from '#/lib/db/queries'
+import { getDictionary } from '#/lib/i18n'
 import ShortcutAdd, {
   preload,
   type ShortcutAddProps,
@@ -34,7 +34,7 @@ export default async function ShortcutPage(props: Props) {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
-  const shortcut = await fetchShortcutByID(params.id)
+  const shortcut = await getShortcutByUuid(params.id)
 
   if (!shortcut) notFound()
 

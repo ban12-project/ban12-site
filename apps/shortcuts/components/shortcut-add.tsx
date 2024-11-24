@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation'
-import type { Locale, Messages } from '#/lib/i18n'
 import { Plus, Share } from 'lucide-react'
 
-import { fetchShortcutByID } from '#/app/[lang]/(front)/actions'
+import { getShortcutByUuid } from '#/lib/db/queries'
+import type { Locale, Messages } from '#/lib/i18n'
 import { cn } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 import ShortcutCard from '#/components/shortcut-card'
@@ -15,7 +15,7 @@ export type ShortcutAddProps = {
 }
 
 export const preload = (id: string) => {
-  void fetchShortcutByID(id)
+  void getShortcutByUuid(id)
 }
 
 export default async function ShortcutAdd({
@@ -23,7 +23,7 @@ export default async function ShortcutAdd({
   messages,
   fromNormalRoute,
 }: ShortcutAddProps) {
-  const shortcut = await fetchShortcutByID(params.id)
+  const shortcut = await getShortcutByUuid(params.id)
 
   if (!shortcut) notFound()
 

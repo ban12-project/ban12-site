@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import { Link } from '@repo/i18n/client'
 import { Plus } from 'lucide-react'
 
-import { fetchAlbums, fetchCollections } from '#/app/[lang]/(front)/actions'
+import { getAlbumsWithShortcuts, getCollections } from '#/lib/db/queries'
 import { getDictionary, type Locale } from '#/lib/i18n'
 import AlbumList from '#/components/album-list'
 import AlbumListSkeleton from '#/components/album-list-skeleton'
@@ -18,8 +18,8 @@ type HomePageProps = {
 const preload = () => {
   // void evaluates the given expression and returns undefined
   // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/void
-  void fetchCollections()
-  void fetchAlbums()
+  void getCollections()
+  void getAlbumsWithShortcuts()
 }
 
 export default async function Home(props: HomePageProps) {

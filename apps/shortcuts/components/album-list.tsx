@@ -1,19 +1,19 @@
 import { Link } from '@repo/i18n/client'
-import type { Messages } from '#/lib/i18n'
 
-import { fetchAlbums } from '#/app/[lang]/(front)/actions'
+import { getAlbumsWithShortcuts } from '#/lib/db/queries'
+import type { Messages } from '#/lib/i18n'
 
 import Album from './album'
 
 type AlbumListProps = {
   messages: Messages
-  albums?: Awaited<ReturnType<typeof fetchAlbums>>
+  albums?: Awaited<ReturnType<typeof getAlbumsWithShortcuts>>
 }
 
 const pageSize = 10
 
 export default async function AlbumList({ messages, albums }: AlbumListProps) {
-  albums ||= await fetchAlbums(pageSize)
+  albums ||= await getAlbumsWithShortcuts(pageSize)
 
   return (
     <ul className="[&>li+li_.custom-border]:border-t [@media_only_screen_and_(min-resolution:192dpi){&>li+li_.custom-border}]:border-t-[.5px]">

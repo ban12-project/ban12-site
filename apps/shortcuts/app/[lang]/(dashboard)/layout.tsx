@@ -1,8 +1,10 @@
 import '#/app/globals.css'
 
 import { LocaleProvider } from '@repo/i18n/client'
-import { i18n, type Locale } from '#/lib/i18n'
+import { SessionProvider } from 'next-auth/react'
 
+import { auth } from '#/lib/auth'
+import { i18n, type Locale } from '#/lib/i18n'
 import { Toaster } from '#/components/ui/sonner'
 
 type RootLayoutProps = {
@@ -15,11 +17,13 @@ export default async function Layout(props: RootLayoutProps) {
 
   const { children } = props
 
+  const session = await auth()
+
   return (
     <html lang={params.lang}>
       <body>
         <LocaleProvider locale={params.lang} i18n={i18n}>
-          {children}
+          <SessionProvider session={session}>{children}</SessionProvider>
         </LocaleProvider>
 
         <Toaster />
