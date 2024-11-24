@@ -62,13 +62,13 @@ export default async function ShortcutAdd({
           </ul> */}
 
           <Button
-            className="h-12 w-full rounded-lg py-3 text-base"
+            className="h-12 w-full rounded-lg py-3 text-base [&_svg]:size-3"
             variant="primary"
             asChild
           >
             <a href={shortcut.icloud} rel="noopener noreferrer">
               <span className="mr-3 h-4 w-4 rounded-lg bg-white p-0.5">
-                <Plus className="h-3 w-3 text-blue-500" strokeWidth={4} />
+                <Plus className="text-blue-500" strokeWidth={4} />
               </span>
               {messages['set-up-shortcut']}
             </a>
