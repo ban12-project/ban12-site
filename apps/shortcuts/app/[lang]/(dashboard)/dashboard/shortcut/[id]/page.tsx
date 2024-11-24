@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { fetchShortcutByID } from '#/app/[lang]/(front)/actions'
+import { getShortcutByUuid } from '#/lib/db/queries'
 
 import EditForm from './edit-form'
 
@@ -11,8 +11,8 @@ type Props = {
 }
 
 export default async function Page(props: Props) {
-  const params = await props.params;
-  const shortcut = await fetchShortcutByID(params.id)
+  const params = await props.params
+  const shortcut = await getShortcutByUuid(params.id)
 
   if (!shortcut) notFound()
 

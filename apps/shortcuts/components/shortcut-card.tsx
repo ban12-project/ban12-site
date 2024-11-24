@@ -1,7 +1,7 @@
 import React from 'react'
 import { LinkProps } from 'next/link'
 import { Link } from '@repo/i18n/client'
-import type { SelectShortcut } from '#/drizzle/schema'
+import type { SelectShortcut } from '#/lib/db/schema'
 import { Layers2, Plus } from 'lucide-react'
 
 import { cn, negativeToHexColor } from '#/lib/utils'

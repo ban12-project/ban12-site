@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState } from 'react'
-import type { SelectCollection } from '#/drizzle/schema'
+import type { SelectCollection } from '#/lib/db/schema'
 import { toast } from 'sonner'
 
 import { Button } from '#/components/ui/button'

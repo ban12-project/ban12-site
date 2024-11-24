@@ -1,10 +1,11 @@
 import { Link } from '@repo/i18n/client'
-import type { SelectShortcut } from '#/drizzle/schema'
 
+import { getShortcuts } from '#/lib/db/queries'
+import type { SelectShortcut } from '#/lib/db/schema'
 import { Button } from '#/components/ui/button'
 import { Columns, DashboardTable } from '#/components/dashboard-table'
 
-import { deleteShortcut, getShortcuts } from '../../actions'
+import { deleteShortcut } from '../../actions'
 
 const shortcutsTableColumns: Columns<SelectShortcut> = [
   {

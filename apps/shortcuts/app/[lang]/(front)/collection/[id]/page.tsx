@@ -1,8 +1,11 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { db } from '#/drizzle/db'
-import { getDictionary, type Locale } from '#/lib/i18n'
 
+import {
+  getCollectionById,
+  getCollectionByIdWithAlbumsAndShortcuts,
+} from '#/lib/db/queries'
+import { getDictionary, type Locale } from '#/lib/i18n'
 import AlbumList from '#/components/album-list'
 import ShortcutList from '#/components/shortcut-list'
 
@@ -11,21 +14,10 @@ type CollectionsProps = {
 }
 
 export default async function Collections(props: CollectionsProps) {
-  const params = await props.params;
+  const params = await props.params
   const [messages, collection] = await Promise.all([
     getDictionary(params.lang),
-    db.query.collection.findFirst({
-      where: (collection, { eq }) =>
-        eq(collection.id, Number.parseInt(params.id)),
-      with: {
-        albums: {
-          with: {
-            shortcuts: true,
-          },
-        },
-        shortcuts: true,
-      },
-    }),
+    getCollectionByIdWithAlbumsAndShortcuts(Number.parseInt(params.id)),
   ])
 
   if (!collection) notFound()
@@ -46,12 +38,11 @@ export default async function Collections(props: CollectionsProps) {
   )
 }
 
-export async function generateMetadata(props: CollectionsProps): Promise<Metadata> {
-  const params = await props.params;
-  const collection = await db.query.collection.findFirst({
-    where: (collection, { eq }) =>
-      eq(collection.id, Number.parseInt(params.id)),
-  })
+export async function generateMetadata(
+  props: CollectionsProps,
+): Promise<Metadata> {
+  const params = await props.params
+  const collection = await getCollectionById(Number.parseInt(params.id))
 
   if (!collection) notFound()
 
