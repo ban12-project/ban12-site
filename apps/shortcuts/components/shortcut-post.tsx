@@ -1,19 +1,25 @@
 'use client'
 
-import React, { useActionState, useEffect, useRef } from 'react'
+import React, {
+  ReactEventHandler,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocale } from '@repo/i18n/client'
-import type { Messages } from '#/lib/i18n'
 import { Loader2 } from 'lucide-react'
-import { createPortal, useFormStatus } from 'react-dom'
+import { createPortal } from 'react-dom'
 import { useForm, useFormContext } from 'react-hook-form'
 import * as z from 'zod'
 
-import { postShortcut } from '#/app/[lang]/(front)/actions'
+import type { Messages } from '#/lib/i18n'
 import { RecordType } from '#/lib/shortcut'
-import { IN_BROWSER } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
+import { postShortcut } from '#/app/[lang]/(front)/actions'
 
+import { PAGE_DRAWER_HEADER_ID } from './page-drawer'
 import {
   Form,
   FormControl,
@@ -24,7 +30,6 @@ import {
   FormMessage,
 } from './ui/form'
 import { Input } from './ui/input'
-import { PAGE_DRAWER_HEADER_ID } from './page-drawer'
 import {
   Select,
   SelectContent,
@@ -93,24 +98,27 @@ const details = [
 ] as const
 
 const SubmitButton = function SubmitButton({
+  isPending,
   messages,
 }: {
+  isPending: boolean
   messages: Messages
 }) {
-  const { pending } = useFormStatus()
+  const [container, setContainer] = useState<Element | null>(null)
   const { formState, getValues } = useFormContext<FormSchemaType>()
   const innerButtonRef = useRef<React.ComponentRef<'button'>>(null)
 
-  const container = IN_BROWSER
-    ? document.querySelector(`#${PAGE_DRAWER_HEADER_ID}`)
-    : null
+  useEffect(() => {
+    const container = document.querySelector(`#${PAGE_DRAWER_HEADER_ID}`)
+    setContainer(container)
+  }, [])
 
   const innerButton = (
     <button
       ref={innerButtonRef}
       type="submit"
       className="sr-only"
-      aria-disabled={pending}
+      aria-disabled={isPending}
     >
       Submit
     </button>
@@ -126,10 +134,10 @@ const SubmitButton = function SubmitButton({
         <Button
           variant="ios"
           size="auto"
-          disabled={pending}
+          disabled={isPending}
           onClick={() => innerButtonRef.current?.click()}
         >
-          {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isDone ? messages.common.done : messages.common.next}
         </Button>,
         container,
@@ -157,33 +165,30 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
     },
   })
 
-  const [state, dispatch] = useActionState(postShortcut, initialState)
+  const [state, dispatch, isPending] = useActionState(
+    postShortcut,
+    initialState,
+  )
   const otherFieldsVisibility =
     !!state.data && !form.formState.dirtyFields.icloud
 
-  // there need client-side validation but
-  // like this handle server actions progressive enhancement will be disabled
-  // progressive enhancement: https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#behavior
-  // react-hook-form related issue: https://github.com/react-hook-form/react-hook-form/issues/10391
-  const handleAction = async (formData: FormData) => {
+  const onSubmit: ReactEventHandler<HTMLFormElement> = async (e) => {
+    // https://developer.mozilla.org/docs/Web/API/SubmitEvent/submitter
+    // If the submitter is null(like e.currentTarget.requestSubmit), do nothing
+    if ((e.nativeEvent as SubmitEvent).submitter === null) return
+
+    e.preventDefault()
+
+    // e.currentTarget is null after await, so we need save it to a variable
+    const currentTarget = e.currentTarget
+
     // undefined means triggers validation on all fields.
     const isValid = await form.trigger(
       otherFieldsVisibility ? undefined : 'icloud',
     )
     if (!isValid) return
 
-    if (otherFieldsVisibility) {
-      formData.append(
-        'backgroundColor',
-        state.data.fields.icon_color.value.toString(),
-      )
-
-      if (state.data.recordType === RecordType.SharedShortcut) {
-        formData.append('icon', state.data.fields.icon.value.downloadURL)
-      }
-    }
-
-    dispatch(formData)
+    currentTarget?.requestSubmit()
   }
 
   useEffect(() => {
@@ -215,7 +220,8 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
   return (
     <Form {...form}>
       <form
-        action={handleAction}
+        action={dispatch}
+        onSubmit={onSubmit}
         className="p-safe-max-4 flex-1 space-y-8 overflow-y-auto"
       >
         <FormField
@@ -367,7 +373,26 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
           />
         )}
 
-        <SubmitButton messages={messages} />
+        {otherFieldsVisibility && [
+          <input
+            key="backgroundColor"
+            hidden
+            name="backgroundColor"
+            readOnly
+            value={state.data.fields.icon_color.value.toString()}
+          />,
+          state.data.recordType === RecordType.SharedShortcut && (
+            <input
+              key="icon"
+              hidden
+              name="icon"
+              readOnly
+              value={state.data.fields.icon.value.downloadURL}
+            />
+          ),
+        ]}
+
+        <SubmitButton isPending={isPending} messages={messages} />
       </form>
     </Form>
   )
