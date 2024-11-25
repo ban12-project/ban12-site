@@ -1,16 +1,13 @@
 import 'server-only'
 
 import { cache } from 'react'
-import { Pool } from '@neondatabase/serverless'
 import { eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/neon-serverless'
 
 import * as schema from './schema'
 import { album, collection, shortcut } from './schema'
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL! })
-
-export const db = drizzle(pool, { schema })
+export const db = drizzle(process.env.DATABASE_URL!, { schema })
 
 export async function getUser(email: string) {
   try {

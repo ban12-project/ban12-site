@@ -1,5 +1,7 @@
+import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import NextAuth, { type NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
+import Passkey from 'next-auth/providers/passkey'
 import { pathToRegexp } from 'path-to-regexp'
 import { z } from 'zod'
 
@@ -13,6 +15,7 @@ const dashboardRoutes = ['/dashboard'].map(
 const loginRoute = `/(${Object.keys(i18n.locales).join('|')})/login`
 
 const authConfig = {
+  adapter: DrizzleAdapter(db),
   pages: {
     signIn: '/login',
   },
@@ -52,7 +55,9 @@ const authConfig = {
         return null
       },
     }),
+    Passkey,
   ],
+  experimental: { enableWebAuthn: true },
 } satisfies NextAuthConfig
 
 export const {
