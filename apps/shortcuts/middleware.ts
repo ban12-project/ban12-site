@@ -1,11 +1,12 @@
 import { type NextMiddleware } from 'next/server'
+import NextAuth from 'next-auth'
 
-import { auth } from './lib/auth'
+import { authConfig } from './lib/auth.config'
 import { middleware as i18nMiddleware } from './lib/i18n'
 
 export function middleware(...args: Parameters<NextMiddleware>) {
   // @ts-expect-error - `auth` is next-auth middleware
-  return i18nMiddleware(...args, auth)
+  return i18nMiddleware(...args, NextAuth(authConfig).auth)
 }
 
 export const config = {
