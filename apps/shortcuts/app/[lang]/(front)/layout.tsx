@@ -5,9 +5,9 @@ import dynamic from 'next/dynamic'
 import { Inter } from 'next/font/google'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
-import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import { ThemeProvider } from 'next-themes'
 
+import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import { cn } from '#/lib/utils'
 import { Toaster } from '#/components/ui/sonner'
 // import CSSPaintPolyfill from '#/components/css-paint-polyfill'
@@ -33,10 +33,9 @@ export async function generateMetadata(
   return {
     alternates: {
       canonical: '/',
-      languages: {
-        'zh-CN': '/zh-CN',
-        en: '/en',
-      },
+      languages: Object.fromEntries(
+        Object.keys(i18n.locales).map((lang) => [lang, `/${lang}`]),
+      ),
     },
     title: {
       default: messages.title,
