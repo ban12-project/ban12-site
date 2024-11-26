@@ -1,8 +1,6 @@
 import sharedConfig from '@repo/tailwind-config'
 import type { Config } from 'tailwindcss'
 import plugin from 'tailwindcss/plugin'
-import tailwindcssAnimate from 'tailwindcss-animate'
-import tailwindcssSafeArea from '@ban12/tailwindcss-safe-area'
 
 const config: Config = {
   content: [
@@ -192,9 +190,8 @@ const config: Config = {
     hoverOnlyWhenSupported: true,
   },
   plugins: [
-    tailwindcssAnimate,
-    tailwindcssSafeArea,
-    // eslint-disable-next-line @typescript-eslint/unbound-method
+    require('tailwindcss-animate'),
+    require('@ban12/tailwindcss-safe-area'),
     plugin(({ matchUtilities, addBase, addComponents }) => {
       matchUtilities({
         perspective: (value) => ({
