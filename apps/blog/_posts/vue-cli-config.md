@@ -188,4 +188,4 @@ module.exports = {
 
 have a nice day!
 
-![473](/assets/blog/vue-cli-config/IMG_7911.jpeg)
+![473](https://assets.ban12.com/blog/vue-cli-config/IMG_7911.jpeg)
