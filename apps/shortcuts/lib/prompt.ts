@@ -33,27 +33,34 @@ export async function answerAlbumId(
 }
 
 export async function answerTranslate(input: string): Promise<LocalizedString> {
-  if (!input) throw new Error('Input is empty')
-  if (!process.env.GOOGLE_GEMINI_KEY || !process.env.GOOGLE_GEMINI_MODEL)
-    throw new Error('Google Gemini API key or model not set')
+  try {
+    if (!input) throw new Error('Input is empty')
+    if (!process.env.GOOGLE_GEMINI_KEY || !process.env.GOOGLE_GEMINI_MODEL)
+      throw new Error('Google Gemini API key or model not set')
 
-  const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_KEY)
-  const model = genAI.getGenerativeModel({
-    model: process.env.GOOGLE_GEMINI_MODEL,
-  })
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_KEY)
+    const model = genAI.getGenerativeModel({
+      model: process.env.GOOGLE_GEMINI_MODEL,
+    })
 
-  const prompt = `
-      Objective: Automatically detect the language of user input and translate it into several other languages.
-      Languages: ${LocalizedHelper.locales.join(', ')}
-
-      Example:
-      input: Cancel
-      output: { "zh-CN": "取消", "en": "cancel", "ja": "キャンセル", "sv": "Avbryt", "ar": "إلغاء" }
-
-      input: ${input}
-      output:
-    `
-  const result = await model.generateContent(prompt)
-  const text = result.response.text()
-  return JSON.parse(text.replace(/```json|\n|```/g, ''))
+    const prompt = `
+        Objective: Automatically detect the language of user input and translate it into several other languages.
+        Languages: ${LocalizedHelper.locales.join(', ')}
+  
+        Example:
+        input: Cancel
+        output: { "zh-CN": "取消", "en": "cancel", "ja": "キャンセル", "sv": "Avbryt", "ar": "إلغاء" }
+  
+        input: ${input}
+        output:
+      `
+    const result = await model.generateContent(prompt)
+    const text = result.response.text()
+    return JSON.parse(text.replace(/```json|\n|```/g, ''))
+  } catch {
+    return LocalizedHelper.locales.reduce(
+      (result, locale) => ({ ...result, [locale]: input }),
+      {} as LocalizedString,
+    )
+  }
 }
