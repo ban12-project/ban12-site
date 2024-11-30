@@ -19,11 +19,11 @@ export const preload = (id: string) => {
 }
 
 export default async function ShortcutAdd({
-  params,
+  params: { id, lang },
   messages,
   fromNormalRoute,
 }: ShortcutAddProps) {
-  const shortcut = await getShortcutByUuid(params.id)
+  const shortcut = await getShortcutByUuid(id)
 
   if (!shortcut) notFound()
 
@@ -31,9 +31,9 @@ export default async function ShortcutAdd({
     <>
       <div className={cn(fromNormalRoute && 'lg:hidden')}>
         <section className="p-safe-max-4 flex-1 space-y-4 overflow-auto text-center">
-          <h3 className="text-3xl font-bold">{shortcut.name}</h3>
+          <h3 className="text-3xl font-bold">{shortcut.name[lang]}</h3>
 
-          {shortcut.description?.split('\n').map((item, index) => (
+          {shortcut.description[lang].split('\n').map((item, index) => (
             <p key={index} className="text-lg text-zinc-500/90">
               {item}
             </p>
@@ -43,6 +43,7 @@ export default async function ShortcutAdd({
             className="pointer-events-none inline-block h-32 w-44 text-left"
             href={shortcut.icloud}
             item={shortcut}
+            lang={lang}
           />
         </section>
 
@@ -87,10 +88,13 @@ export default async function ShortcutAdd({
             className="pointer-events-none inline-block h-32 w-44 text-left"
             href={shortcut.icloud}
             item={shortcut}
+            lang={lang}
           />
 
           <div className="space-y-4">
-            <h1 className="text-xl font-semibold leading-6">{shortcut.name}</h1>
+            <h1 className="text-xl font-semibold leading-6">
+              {shortcut.name[lang]}
+            </h1>
 
             <Button
               className="rounded-lg py-1 text-sm"
@@ -108,7 +112,9 @@ export default async function ShortcutAdd({
         <div className="flex">
           <div className="flex-1 space-y-2">
             <h5 className="font-semibold">Description</h5>
-            <p className="text-zinc-500/90">{shortcut.description || '-'}</p>
+            <p className="text-zinc-500/90">
+              {shortcut.description[lang] || '-'}
+            </p>
           </div>
 
           {/* <div className="flex-1 space-y-2">

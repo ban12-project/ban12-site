@@ -38,10 +38,10 @@ export default async function Home(props: HomePageProps) {
           </h1>
         </div>
         <Suspense fallback={<CollectionsSkeleton />}>
-          <Collections />
+          <Collections lang={params.lang} />
         </Suspense>
         <Suspense fallback={<AlbumListSkeleton />}>
-          <AlbumList messages={messages} />
+          <AlbumList lang={params.lang} messages={messages} />
         </Suspense>
       </main>
       <footer className="container-full pb-safe-max-4 flex lg:pb-5">

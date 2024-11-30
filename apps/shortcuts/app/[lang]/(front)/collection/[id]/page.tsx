@@ -13,11 +13,11 @@ type CollectionsProps = {
   params: Promise<{ id: string; lang: Locale }>
 }
 
-export default async function Collections(props: CollectionsProps) {
-  const params = await props.params
+export default async function Collections({ params }: CollectionsProps) {
+  const { id, lang } = await params
   const [messages, collection] = await Promise.all([
-    getDictionary(params.lang),
-    getCollectionByIdWithAlbumsAndShortcuts(Number.parseInt(params.id)),
+    getDictionary(lang),
+    getCollectionByIdWithAlbumsAndShortcuts(Number.parseInt(id)),
   ])
 
   if (!collection) notFound()
@@ -26,28 +26,28 @@ export default async function Collections(props: CollectionsProps) {
     <main>
       <div className="container-full pt-safe-max-4 pb-5">
         <h1 className="overflow-hidden text-ellipsis whitespace-nowrap text-3xl font-bold">
-          {collection.title}
+          {collection.title[lang]}
         </h1>
       </div>
-      <AlbumList albums={collection.albums} messages={messages} />
+      <AlbumList lang={lang} albums={collection.albums} messages={messages} />
 
       <div className="container-full">
-        <ShortcutList shortcuts={collection.shortcuts} />
+        <ShortcutList lang={lang} shortcuts={collection.shortcuts} />
       </div>
     </main>
   )
 }
 
-export async function generateMetadata(
-  props: CollectionsProps,
-): Promise<Metadata> {
-  const params = await props.params
-  const collection = await getCollectionById(Number.parseInt(params.id))
+export async function generateMetadata({
+  params,
+}: CollectionsProps): Promise<Metadata> {
+  const { id, lang } = await params
+  const collection = await getCollectionById(Number.parseInt(id))
 
   if (!collection) notFound()
 
   return {
-    title: collection.title,
-    description: collection.title,
+    title: collection.title[lang],
+    description: collection.title[lang],
   }
 }

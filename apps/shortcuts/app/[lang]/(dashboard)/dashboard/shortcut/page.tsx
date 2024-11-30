@@ -2,10 +2,13 @@ import { Link } from '@repo/i18n/client'
 
 import { getShortcuts } from '#/lib/db/queries'
 import type { SelectShortcut } from '#/lib/db/schema'
+import { LocalizedHelper, negativeToHexColor } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 import { Columns, DashboardTable } from '#/components/dashboard-table'
 
 import { deleteShortcut } from '../../actions'
+
+const localizedHelper = new LocalizedHelper()
 
 const shortcutsTableColumns: Columns<SelectShortcut> = [
   {
@@ -32,22 +35,40 @@ const shortcutsTableColumns: Columns<SelectShortcut> = [
   {
     key: 'name',
     header: 'name',
-    cell: (shortcut) => shortcut.name,
+    cell: (shortcut) =>
+      localizedHelper.render('', shortcut.name, (key, value) => (
+        <p>{`${key}: ${value}`}</p>
+      )),
   },
   {
     key: 'description',
     header: 'description',
-    cell: (shortcut) => shortcut.description,
+    cell: (shortcut) =>
+      localizedHelper.render('', shortcut.description, (key, value) => (
+        <p>{`${key}: ${value}`}</p>
+      )),
   },
-  {
+  /* {
     key: 'icon',
     header: 'icon',
     cell: (shortcut) => shortcut.icon,
-  },
+  }, */
   {
     key: 'backgroundColor',
     header: 'backgroundColor',
-    cell: (shortcut) => shortcut.backgroundColor,
+    cell: (shortcut) => (
+      <span
+        className="inline-block size-5 rounded-full bg-[var(--background-color,#ef4444)]"
+        style={
+          {
+            '--background-color': shortcut.backgroundColor
+              ? negativeToHexColor(shortcut.backgroundColor)
+              : '',
+          } as React.CSSProperties
+        }
+        title={shortcut.backgroundColor || ''}
+      ></span>
+    ),
   },
   {
     key: 'details',

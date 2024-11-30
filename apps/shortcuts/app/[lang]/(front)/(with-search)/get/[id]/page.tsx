@@ -32,17 +32,17 @@ export default async function ShortcutPage(props: Props) {
   )
 }
 
-export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params
-  const shortcut = await getShortcutByUuid(params.id)
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id, lang } = await params
+  const shortcut = await getShortcutByUuid(id)
 
   if (!shortcut) notFound()
 
   return {
-    title: shortcut.name,
-    description: shortcut.description,
+    title: shortcut.name[lang],
+    description: shortcut.description[lang],
     openGraph: {
-      images: `https://ban12.com/api/og?title=${shortcut.name}`,
+      images: `https://ban12.com/api/og?title=${shortcut.name[lang]}`,
     },
   }
 }

@@ -16,6 +16,7 @@ import * as z from 'zod'
 
 import type { Messages } from '#/lib/i18n'
 import { RecordType } from '#/lib/shortcut'
+import { LocalizedHelper } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 import { postShortcut } from '#/app/[lang]/(front)/actions'
 
@@ -360,8 +361,11 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="zh-CN">zh-CN</SelectItem>
-                    <SelectItem value="en">en</SelectItem>
+                    {LocalizedHelper.locales.map((locale) => (
+                      <SelectItem key={locale} value={locale}>
+                        {locale}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormDescription className="px-3">

@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/neon-serverless'
 
 import * as schema from './schema'
-import { album, collection, shortcut } from './schema'
+import { album, collection, shortcut, type LocalizedString } from './schema'
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL! })
 
@@ -40,8 +40,8 @@ export async function saveShortcut({
 }: {
   uuid: string
   icloud: string
-  name: string
-  description?: string
+  name: LocalizedString
+  description: LocalizedString
   icon: string
   backgroundColor: string
   details: string | null
@@ -83,8 +83,8 @@ export async function updateShortcutByUuid({
 }: {
   uuid: string
   icloud: string
-  name: string
-  description?: string
+  name: LocalizedString
+  description?: LocalizedString
   icon: string
   backgroundColor: string
   details: string | null
@@ -185,7 +185,7 @@ export async function saveCollection({
   image,
   textColor,
 }: {
-  title: string
+  title: LocalizedString
   image: string
   textColor: string
 }) {
@@ -209,7 +209,7 @@ export async function updateCollectionById({
   textColor,
 }: {
   id: number
-  title: string
+  title: LocalizedString
   image: string
   textColor: string
 }) {
@@ -287,8 +287,8 @@ export async function saveAlbum({
   description,
   collectionId,
 }: {
-  title: string
-  description: string
+  title: LocalizedString
+  description: LocalizedString
   collectionId: number | null
 }) {
   try {
@@ -311,8 +311,8 @@ export async function updateAlbumById({
   collectionId,
 }: {
   id: number
-  title: string
-  description: string
+  title: LocalizedString
+  description: LocalizedString
   collectionId: number | null
 }) {
   try {

@@ -3,6 +3,7 @@ import {
   boolean,
   foreignKey,
   integer,
+  jsonb,
   pgTable,
   primaryKey,
   serial,
@@ -13,6 +14,8 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core'
 import type { AdapterAccountType } from 'next-auth/adapters'
+
+import type { Locale } from '#/lib/i18n'
 
 export const users = pgTable('user', {
   id: text('id')
@@ -95,6 +98,8 @@ export const authenticator = pgTable(
   ],
 )
 
+export type LocalizedString = { [key in Locale]: string }
+
 export const shortcut = pgTable(
   'shortcut',
   {
@@ -107,8 +112,8 @@ export const shortcut = pgTable(
     }).notNull(),
     uuid: uuid('uuid').primaryKey().notNull(),
     icloud: text('icloud').notNull(),
-    name: text('name').notNull(),
-    description: text('description'),
+    name: jsonb('name').notNull().$type<LocalizedString>(),
+    description: jsonb('description').notNull().$type<LocalizedString>(),
     icon: text('icon'),
     backgroundColor: text('backgroundColor'),
     details: text('details'),
@@ -134,8 +139,8 @@ export const album = pgTable('album', {
     .defaultNow()
     .notNull(),
   updatedAt: timestamp('updatedAt', { precision: 3, mode: 'string' }).notNull(),
-  title: text('title').notNull(),
-  description: text('description').notNull(),
+  title: jsonb('title').notNull().$type<LocalizedString>(),
+  description: jsonb('description').notNull().$type<LocalizedString>(),
   collectionId: integer('collectionId').references(() => collection.id, {
     onDelete: 'set null',
     onUpdate: 'cascade',
@@ -148,7 +153,7 @@ export const collection = pgTable('collection', {
     .defaultNow()
     .notNull(),
   updatedAt: timestamp('updatedAt', { precision: 3, mode: 'string' }).notNull(),
-  title: text('title').notNull(),
+  title: jsonb('title').notNull().$type<LocalizedString>(),
   image: text('image').notNull(),
   textColor: text('textColor').default(''),
 })

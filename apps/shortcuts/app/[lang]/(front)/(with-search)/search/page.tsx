@@ -29,7 +29,7 @@ export default async function SearchPage(props: SearchPageProps) {
   return (
     <main className="container-full pt-safe-max-4">
       {Array.isArray(result) ? (
-        <ShortcutList shortcuts={result} />
+        <ShortcutList lang={params.lang} shortcuts={result} />
       ) : (
         <p className="flex h-96 flex-col items-center justify-center text-zinc-500/90">
           {result.message}

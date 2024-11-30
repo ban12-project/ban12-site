@@ -1,11 +1,14 @@
 import { Link } from '@repo/i18n/client'
-import type { SelectAlbum } from '#/lib/db/schema'
 
+import { getAlbums } from '#/lib/db/queries'
+import type { SelectAlbum } from '#/lib/db/schema'
+import { LocalizedHelper } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 import { Columns, DashboardTable } from '#/components/dashboard-table'
 
 import { deleteAlbum } from '../../actions'
-import { getAlbums } from '#/lib/db/queries'
+
+const localizedHelper = new LocalizedHelper()
 
 const albumsTableColumns: Columns<SelectAlbum> = [
   {
@@ -17,12 +20,18 @@ const albumsTableColumns: Columns<SelectAlbum> = [
   {
     key: 'title',
     header: 'title',
-    cell: (album) => album.title,
+    cell: (album) =>
+      localizedHelper.render('', album.title, (key, value) => (
+        <p>{`${key}: ${value}`}</p>
+      )),
   },
   {
     key: 'description',
     header: 'description',
-    cell: (album) => album.description,
+    cell: (album) =>
+      localizedHelper.render('', album.description, (key, value) => (
+        <p>{`${key}: ${value}`}</p>
+      )),
   },
   {
     key: 'collectionId',

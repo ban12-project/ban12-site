@@ -1,33 +1,40 @@
 'use client'
 
 import { useActionState } from 'react'
-import type { SelectCollection } from '#/lib/db/schema'
 import { toast } from 'sonner'
 
+import type { LocalizedString, SelectCollection } from '#/lib/db/schema'
+import { LocalizedHelper } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
 
 import { createCollection, updateCollection } from '../../actions'
 
+const localizedHelper = new LocalizedHelper()
+
 type Props = {
-  fields?: Partial<SelectCollection>
+  fields?:
+    | Partial<SelectCollection>
+    | (Pick<SelectCollection, 'image' | 'textColor'> & {
+        title: string
+        id?: undefined
+      })
 }
 
-export default function Form({ fields }: Props) {
-  const isCreating = !fields?.id
-
-  const [errorMessage, dispatch, pending] = useActionState(
-    !isCreating ? updateCollection : createCollection,
-    undefined,
-  )
-  fields = fields || {
+export default function Form({
+  fields = {
     title: '',
     image: '',
     textColor: '',
-  }
+  },
+}: Props) {
+  const isCreating = !fields.id
 
-  const handleAction = async (formData: FormData) => {
+  const handleAction = async (
+    prevState: string | undefined,
+    formData: FormData,
+  ) => {
     const file = formData.get('image') as File
 
     const response = await fetch(
@@ -64,25 +71,52 @@ export default function Form({ fields }: Props) {
     const { pathname } = new URL(url)
     formData.set('image', pathname)
 
-    dispatch(formData)
+    if (!isCreating) {
+      const title = localizedHelper.resolveFormData(formData, 'title')
+      formData.append('title', JSON.stringify(title))
+    }
+
+    return isCreating
+      ? createCollection(prevState, formData)
+      : updateCollection(prevState, formData)
   }
 
+  const [errorMessage, dispatch, pending] = useActionState(
+    handleAction,
+    undefined,
+  )
+
   return (
-    <form action={handleAction} className="grid gap-4 py-4">
+    <form action={dispatch} className="grid gap-4 py-4">
       {!isCreating && (
         <Input defaultValue={fields.id} className="hidden" name="id" />
       )}
 
-      <div className="grid grid-cols-4 items-center gap-4" key="title">
-        <Label htmlFor="name" className="text-right">
-          title
-        </Label>
-        <Input
-          defaultValue={fields.title}
-          className="col-span-3"
-          name="title"
-        />
-      </div>
+      {isCreating ? (
+        <div className="grid grid-cols-4 items-center gap-4" key="title">
+          <Label htmlFor="name" className="text-right">
+            title
+          </Label>
+          <Input
+            defaultValue={fields.title as string}
+            className="col-span-3"
+            name="title"
+          />
+        </div>
+      ) : (
+        localizedHelper.render(
+          'title',
+          fields.title as LocalizedString,
+          (key, value, name) => (
+            <div className="grid grid-cols-4 items-center gap-4" key="title">
+              <Label htmlFor="name" className="text-right">
+                title
+              </Label>
+              <Input defaultValue={value} className="col-span-3" name={name} />
+            </div>
+          ),
+        )
+      )}
 
       <div className="grid grid-cols-4 items-center gap-4" key="image">
         <Label htmlFor="name" className="text-right">
