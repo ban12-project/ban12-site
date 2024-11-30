@@ -9,30 +9,30 @@ type ListPageProps = {
   params: Promise<{ id: string; lang: Locale }>
 }
 
-export default async function ListPage(props: ListPageProps) {
-  const params = await props.params
-  const album = await getAlbumByIdWithShortcuts(Number.parseInt(params.id))
+export default async function ListPage({ params }: ListPageProps) {
+  const { id, lang } = await params
+  const album = await getAlbumByIdWithShortcuts(Number.parseInt(id))
 
   if (!album) notFound()
 
   return (
     <main className="container-full pt-safe-max-4">
-      <h2 className="text-3xl font-bold">{album.title}</h2>
-      <ShortcutList shortcuts={album.shortcuts} />
+      <h2 className="text-3xl font-bold">{album.title[lang]}</h2>
+      <ShortcutList lang={lang} shortcuts={album.shortcuts} />
     </main>
   )
 }
 
-export async function generateMetadata(
-  props: ListPageProps,
-): Promise<Metadata> {
-  const params = await props.params
-  const album = await getAlbumById(Number.parseInt(params.id))
+export async function generateMetadata({
+  params,
+}: ListPageProps): Promise<Metadata> {
+  const { id, lang } = await params
+  const album = await getAlbumById(Number.parseInt(id))
 
   if (!album) notFound()
 
   return {
-    title: album.title,
-    description: album.description,
+    title: album.title[lang],
+    description: album.description[lang],
   }
 }

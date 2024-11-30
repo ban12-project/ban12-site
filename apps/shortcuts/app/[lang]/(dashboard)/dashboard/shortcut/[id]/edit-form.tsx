@@ -1,8 +1,9 @@
 'use client'
 
 import { useActionState } from 'react'
-import type { SelectShortcut } from '#/lib/db/schema'
 
+import type { LocalizedString, SelectShortcut } from '#/lib/db/schema'
+import { LocalizedHelper } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
@@ -12,26 +13,39 @@ type Props = {
   shortcut: SelectShortcut
 }
 
+const localizedHelper = new LocalizedHelper()
+
 export default function EditForm({ shortcut }: Props) {
   const [errorMessage, dispatch, pending] = useActionState(
-    updateShortcut,
+    (prevState: string | undefined, formData: FormData) => {
+      const name = localizedHelper.resolveFormData(formData, 'name')
+      formData.append('name', JSON.stringify(name))
+      const description = localizedHelper.resolveFormData(
+        formData,
+        'description',
+      )
+      formData.append('description', JSON.stringify(description))
+
+      return updateShortcut(prevState, formData)
+    },
     undefined,
   )
 
   return (
     <form action={dispatch} className="grid gap-4 py-4">
-      {Object.entries(shortcut).map(([key, value]) => (
-        <div className="grid grid-cols-4 items-center gap-4" key={key}>
-          <Label htmlFor="name" className="text-right">
-            {key}
-          </Label>
-          <Input
-            defaultValue={value?.toString()}
-            className="col-span-3"
-            name={key}
-          />
-        </div>
-      ))}
+      {Object.entries(shortcut).map(([key, value]) =>
+        ['name', 'description'].includes(key) ? (
+          localizedHelper.render(
+            key,
+            value as LocalizedString,
+            (key, value, name) => (
+              <FormItem key={name} name={name} value={value} />
+            ),
+          )
+        ) : (
+          <FormItem key={key} name={key} value={value as string} />
+        ),
+      )}
 
       <div
         className="flex h-8 items-end space-x-1"
@@ -43,5 +57,20 @@ export default function EditForm({ shortcut }: Props) {
 
       <Button disabled={pending}>Submit</Button>
     </form>
+  )
+}
+
+function FormItem({ name, value }: { name: string; value: string | number }) {
+  return (
+    <div className="grid grid-cols-4 items-center gap-4" key={name}>
+      <Label htmlFor="name" className="text-right">
+        {name}
+      </Label>
+      <Input
+        defaultValue={value?.toString()}
+        className="col-span-3"
+        name={name}
+      />
+    </div>
   )
 }

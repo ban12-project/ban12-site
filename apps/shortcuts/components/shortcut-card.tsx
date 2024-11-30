@@ -1,20 +1,23 @@
 import React from 'react'
 import { LinkProps } from 'next/link'
 import { Link } from '@repo/i18n/client'
-import type { SelectShortcut } from '#/lib/db/schema'
 import { Layers2, Plus } from 'lucide-react'
 
+import type { SelectShortcut } from '#/lib/db/schema'
+import { Locale } from '#/lib/i18n'
 import { cn, negativeToHexColor } from '#/lib/utils'
 
 interface ShortcutCardProps
   extends Partial<LinkProps>,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps> {
   item: SelectShortcut
+  lang: Locale
 }
 
 export default function ShortcutCard({
   item,
   className,
+  lang,
   ...props
 }: ShortcutCardProps) {
   return (
@@ -36,7 +39,7 @@ export default function ShortcutCard({
       {...props}
     >
       <h3 className="absolute bottom-3 left-3 right-3 max-h-12 overflow-hidden text-lg font-semibold leading-6">
-        {item.name}
+        {item.name[lang]}
       </h3>
 
       <Layers2 className="absolute left-3 top-3 origin-top-left scale-125" />

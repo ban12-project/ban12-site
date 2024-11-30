@@ -2,10 +2,13 @@ import { Link } from '@repo/i18n/client'
 
 import { getCollections } from '#/lib/db/queries'
 import type { SelectCollection } from '#/lib/db/schema'
+import { LocalizedHelper } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 import { Columns, DashboardTable } from '#/components/dashboard-table'
 
 import { deleteCollection } from '../../actions'
+
+const localizedHelper = new LocalizedHelper()
 
 const collectionsTableColumns: Columns<SelectCollection> = [
   {
@@ -17,7 +20,10 @@ const collectionsTableColumns: Columns<SelectCollection> = [
   {
     key: 'title',
     header: 'title',
-    cell: (collection) => collection.title,
+    cell: (collection) =>
+      localizedHelper.render('', collection.title, (key, value) => (
+        <p>{`${key}: ${value}`}</p>
+      )),
   },
   {
     key: 'image',

@@ -2,10 +2,13 @@ import Image from 'next/image'
 import { Link } from '@repo/i18n/client'
 
 import { getCollections } from '#/lib/db/queries'
+import { Locale } from '#/lib/i18n'
 
-// type CollectionsProps = {}
+type CollectionsProps = {
+  lang: Locale
+}
 
-export default async function Collections(/* {}: CollectionsProps */) {
+export default async function Collections({ lang }: CollectionsProps) {
   const collections = await getCollections()
 
   return (
@@ -16,12 +19,7 @@ export default async function Collections(/* {}: CollectionsProps */) {
           key={item.id}
         >
           <Link
-            className="relative block overflow-hidden rounded-2xl transition-all
-            [box-shadow:2px_4px_12px_#00000014]
-            [transform:translateX(var(--container-inset,0))]
-            md:hover:[box-shadow:2px_4px_16px_#00000029]
-            md:hover:[transform:translateX(var(--container-inset,0))_scale3d(1.01,1.01,1.01)]
-            "
+            className="relative block overflow-hidden rounded-2xl transition-all [box-shadow:2px_4px_12px_#00000014] [transform:translateX(var(--container-inset,0))] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:translateX(var(--container-inset,0))_scale3d(1.01,1.01,1.01)]"
             href={`/collection/${item.id}`}
           >
             <div
@@ -29,13 +27,13 @@ export default async function Collections(/* {}: CollectionsProps */) {
               style={{ '--text-color': item.textColor } as React.CSSProperties}
             >
               <h2 className="text-2xl font-bold" aria-hidden>
-                {item.title}
+                {item.title[lang]}
               </h2>
             </div>
             <Image
               className="aspect-[4/5] w-full object-cover transition-all"
               src={item.image}
-              alt={item.title}
+              alt={item.title[lang]}
               width={400}
               height={500}
               priority={index === 0}

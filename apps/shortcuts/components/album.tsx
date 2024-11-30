@@ -1,13 +1,15 @@
 'use client'
 
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import { useLocale } from '@repo/i18n/client'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 
-import { fetchShortcutsByAlbumID } from '#/app/[lang]/(front)/actions'
 import type { SelectShortcut } from '#/lib/db/schema'
+import { Locale } from '#/lib/i18n'
 import { useResponsive } from '#/hooks/use-responsive'
+import { fetchShortcutsByAlbumID } from '#/app/[lang]/(front)/actions'
 
 import ShortcutCard from './shortcut-card'
 import { Skeleton } from './ui/skeleton'
@@ -62,23 +64,28 @@ const Column = ({
   children,
 }: ListChildComponentProps<SelectShortcut[]> & {
   children?: React.ReactNode
-}) => (
-  <div
-    className="pb-5"
-    style={{
-      ...style,
-      left: `${Number.parseFloat(style.left as string) + PADDING_LEFT}px`,
-      width: `${Number.parseFloat(style.width as string) - GAP_SIZE}px`,
-    }}
-  >
-    {children || (
-      <ShortcutCard
-        className="block h-full [box-shadow:2px_4px_12px_#00000014] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)]"
-        item={data[index]}
-      />
-    )}
-  </div>
-)
+}) => {
+  const lang = useLocale().locale as Locale
+
+  return (
+    <div
+      className="pb-5"
+      style={{
+        ...style,
+        left: `${Number.parseFloat(style.left as string) + PADDING_LEFT}px`,
+        width: `${Number.parseFloat(style.width as string) - GAP_SIZE}px`,
+      }}
+    >
+      {children || (
+        <ShortcutCard
+          className="block h-full [box-shadow:2px_4px_12px_#00000014] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)]"
+          item={data[index]}
+          lang={lang}
+        />
+      )}
+    </div>
+  )
+}
 
 export default function Albums({
   shortcuts,

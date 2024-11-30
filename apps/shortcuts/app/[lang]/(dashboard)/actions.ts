@@ -16,6 +16,8 @@ import {
   updateCollectionById,
   updateShortcutByUuid,
 } from '#/lib/db/queries'
+import { answerTranslate } from '#/lib/prompt'
+import { LocalizedHelper } from '#/lib/utils'
 
 const authFormSchema = z.object({
   email: z.string().email(),
@@ -46,7 +48,7 @@ export async function login(prevState: string | undefined, formData: FormData) {
   }
 }
 
-const updateSchema = z.intersection(
+const shortcutSchema = z.intersection(
   z.object({
     icloud: z
       .string()
@@ -56,8 +58,8 @@ const updateSchema = z.intersection(
         'must be start with https://www.icloud.com/shortcuts/',
       )
       .regex(/\/[0-9a-f]{32}\/?$/, 'iCloud url is broken'),
-    name: z.string(),
-    description: z.string().optional(),
+    name: LocalizedHelper.schema,
+    description: LocalizedHelper.schema,
     icon: z
       .string()
       .nullable()
@@ -88,7 +90,7 @@ export async function updateShortcut(
   prevState: string | undefined,
   formData: FormData,
 ) {
-  const validatedFields = updateSchema.safeParse({
+  const validatedFields = shortcutSchema.safeParse({
     uuid: formData.get('uuid'),
     albumId: formData.get('albumId'),
     collectionId: formData.get('collectionId'),
@@ -156,7 +158,7 @@ export async function deleteShortcut(formData: FormData) {
   redirect('/dashboard')
 }
 
-const collectionSchema = z.object({
+const collectionCreateSchema = z.object({
   title: z.string().min(1),
   image: z.string().min(1),
   textColor: z.string().min(4),
@@ -165,7 +167,7 @@ export async function createCollection(
   prevState: string | undefined,
   formData: FormData,
 ) {
-  const validatedFields = collectionSchema.safeParse({
+  const validatedFields = collectionCreateSchema.safeParse({
     title: formData.get('title'),
     image: formData.get('image'),
     textColor: formData.get('textColor'),
@@ -177,10 +179,11 @@ export async function createCollection(
 
   const { title, image, textColor } = validatedFields.data
   const path = new URL(image, process.env.S3_DOMAIN).href
+  const translatedTitle = await answerTranslate(title)
 
   try {
     await saveCollection({
-      title,
+      title: translatedTitle,
       image: path,
       textColor,
     })
@@ -188,8 +191,8 @@ export async function createCollection(
     return 'Failed to insert data.'
   }
 
-  revalidatePath('/dashboard')
-  redirect('/dashboard')
+  revalidatePath('/dashboard/collection')
+  redirect('/dashboard/collection')
 }
 
 export async function updateCollection(
@@ -198,8 +201,9 @@ export async function updateCollection(
 ) {
   const validatedFields = z
     .intersection(
-      collectionSchema,
+      collectionCreateSchema.omit({ title: true }),
       z.object({
+        title: LocalizedHelper.schema,
         id: z.string().min(0),
       }),
     )
@@ -228,8 +232,8 @@ export async function updateCollection(
     return 'Failed to update data.'
   }
 
-  revalidatePath('/dashboard')
-  redirect('/dashboard')
+  revalidatePath('/dashboard/collection')
+  redirect('/dashboard/collection')
 }
 
 export async function deleteCollection(formData: FormData) {
@@ -245,11 +249,11 @@ export async function deleteCollection(formData: FormData) {
     return 'Failed to delete data.'
   }
 
-  revalidatePath('/dashboard')
-  redirect('/dashboard')
+  revalidatePath('/dashboard/collection')
+  redirect('/dashboard/collection')
 }
 
-const albumSheetSchema = z.object({
+const albumAddSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
   collectionId: z
@@ -262,7 +266,7 @@ export async function createAlbum(
   prevState: string | undefined,
   formData: FormData,
 ) {
-  const validatedFields = albumSheetSchema.safeParse({
+  const validatedFields = albumAddSchema.safeParse({
     title: formData.get('title'),
     description: formData.get('description'),
     collectionId: formData.get('collectionId'),
@@ -273,19 +277,23 @@ export async function createAlbum(
   }
 
   const { title, description, collectionId } = validatedFields.data
+  const [translatedTitle, translatedDescription] = await Promise.all([
+    answerTranslate(title as string),
+    answerTranslate(description as string),
+  ])
 
   try {
     await saveAlbum({
-      title,
-      description,
+      title: translatedTitle,
+      description: translatedDescription,
       collectionId: collectionId ? Number.parseInt(collectionId) : null,
     })
   } catch {
     return 'Failed to insert data.'
   }
 
-  revalidatePath('/dashboard')
-  redirect('/dashboard')
+  revalidatePath('/dashboard/album')
+  redirect('/dashboard/album')
 }
 
 export async function updateAlbum(
@@ -294,8 +302,10 @@ export async function updateAlbum(
 ) {
   const validatedFields = z
     .intersection(
-      albumSheetSchema,
+      albumAddSchema.omit({ title: true, description: true }),
       z.object({
+        title: LocalizedHelper.schema,
+        description: LocalizedHelper.schema,
         id: z.string().min(0),
       }),
     )
@@ -323,8 +333,8 @@ export async function updateAlbum(
     return 'Failed to update data.'
   }
 
-  revalidatePath('/dashboard')
-  redirect('/dashboard')
+  revalidatePath('/dashboard/album')
+  redirect('/dashboard/album')
 }
 
 export async function deleteAlbum(formData: FormData) {
@@ -340,6 +350,6 @@ export async function deleteAlbum(formData: FormData) {
     return 'Failed to delete data.'
   }
 
-  revalidatePath('/dashboard')
-  redirect('/dashboard')
+  revalidatePath('/dashboard/album')
+  redirect('/dashboard/album')
 }

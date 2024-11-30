@@ -3,7 +3,6 @@
 import { cache } from 'react'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import { z } from 'zod'
 
 import {
@@ -13,6 +12,7 @@ import {
   saveShortcut,
   searchShortcutsByQuery,
 } from '#/lib/db/queries'
+import { answerAlbumId, answerTranslate } from '#/lib/prompt'
 import type { ShortcutRecord } from '#/lib/shortcut'
 
 const icloudSchema = z.object({
@@ -95,7 +95,7 @@ export async function getShortcutByiCloud(
 
 const shortcutSchema = z.object({
   name: z.string(),
-  description: z.string().optional(),
+  description: z.string(),
   icon: z
     .string()
     .nullable()
@@ -155,37 +155,25 @@ export async function postShortcut(prevState: State, formData: FormData) {
     }
   }
 
-  let albumId: number = NaN
-  try {
-    if (!process.env.GOOGLE_GEMINI_KEY || !process.env.GOOGLE_GEMINI_MODEL)
-      throw new Error('Google Gemini API key or model not set')
+  const albums = await getAlbums()
 
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_KEY)
-    const model = genAI.getGenerativeModel({
-      model: process.env.GOOGLE_GEMINI_MODEL,
-    })
-    const albums = await getAlbums()
-    const prompt = `Which of the following options describes "${name}, ${description}" Answer with numbers:
-        Options:
-        ${albums
-          .map((item) => `${item.id}: ${item.title} ${item.description}`)
-          .join('\n')}
-        The answer is:
-      `
-    const result = await model.generateContent(prompt)
-    const text = result.response.text()
-    albumId = Number.parseInt(text)
-  } catch (e) {
-    // continue regardless of error
-    albumId = 1
-  }
+  const [albumId, translatedName, translatedDescription] = await Promise.all([
+    answerAlbumId(
+      `"${name}, ${description}"`,
+      albums
+        .map((item) => `${item.id}: ${item.title} ${item.description}`)
+        .join('\n'),
+    ),
+    answerTranslate(name),
+    answerTranslate(description),
+  ])
 
   try {
     await saveShortcut({
       uuid,
       icloud,
-      name,
-      description,
+      name: translatedName,
+      description: translatedDescription,
       icon,
       backgroundColor,
       details,
