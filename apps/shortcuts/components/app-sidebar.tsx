@@ -10,6 +10,7 @@ import {
   Map,
   PieChart,
   Send,
+  Settings,
 } from 'lucide-react'
 import { User } from 'next-auth'
 
@@ -44,6 +45,11 @@ const data = {
       url: '/dashboard/collection',
       icon: BookOpen,
     },
+    {
+      title: 'IndexNow',
+      url: '/dashboard/index-now',
+      icon: Settings,
+    }
   ],
   navSecondary: [
     {

@@ -29,7 +29,9 @@
         "S3_BUCKET_REGION",
         "S3_BUCKET_ENDPOINT",
         "S3_BUCKET_ACCESS_KEY_ID",
-        "S3_BUCKET_SECRET_ACCESS_KEY"
+        "S3_BUCKET_SECRET_ACCESS_KEY",
+        "INDEX_NOW_API_KEY",
+        "INDEX_NOW_HOST_URL"
       ],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
