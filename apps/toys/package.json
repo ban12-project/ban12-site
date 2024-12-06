@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -27,9 +27,8 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:^",
-    "@simplewebauthn/server": "^11.0.0",
     "ahooks": "^3.8.1",
-    "class-variance-authority": "^0.7.0",
+    "class-variance-authority": "catalog:",
     "clsx": "^2.1.1",
     "gsap": "^3.12.5",
     "intl-messageformat": "catalog:",
@@ -55,7 +54,7 @@
     "@types/emscripten": "^1.39.13",
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.9.0",
-    "@types/react": "ncatalog:react19",
+    "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "@types/react-window": "^1.8.8",
     "@types/wicg-file-system-access": "^2023.10.5",

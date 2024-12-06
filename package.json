@@ -55,11 +55,5 @@
       "@ianvs/prettier-plugin-sort-imports",
       "prettier-plugin-tailwindcss"
     ]
-  },
-  "pnpm": {
-    "overrides": {
-      "@types/react": "catalog:react19",
-      "@types/react-dom": "catalog:react19"
-    }
   }
 }
