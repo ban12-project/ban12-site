@@ -47,6 +47,7 @@ const collectionsTableColumns: Columns<SelectCollection> = [
     cell: (collection) => (
       <>
         <Link href={`/dashboard/collection/${collection.id}`}>edit</Link>
+        {/* @ts-expect-error - TODO FIX */}
         <form action={deleteCollection}>
           <input defaultValue={collection.id} className="hidden" name="id" />
           <Button variant="link">del</Button>

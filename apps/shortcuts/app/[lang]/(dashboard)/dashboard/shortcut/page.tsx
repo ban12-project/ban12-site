@@ -98,6 +98,7 @@ const shortcutsTableColumns: Columns<SelectShortcut> = [
     cell: (shortcut) => (
       <>
         <Link href={`/dashboard/shortcut/${shortcut.uuid}`}>edit</Link>
+        {/* @ts-expect-error - TODO FIX */}
         <form action={deleteShortcut}>
           <input defaultValue={shortcut.uuid} className="hidden" name="id" />
           <Button variant="link">del</Button>

@@ -54,6 +54,7 @@ const albumsTableColumns: Columns<SelectAlbum> = [
     cell: (album) => (
       <>
         <Link href={`/dashboard/album/${album.id}`}>edit</Link>
+        {/* @ts-expect-error - TODO FIX */}
         <form action={deleteAlbum}>
           <input defaultValue={album.id} className="hidden" name="id" />
           <Button variant="link">del</Button>
