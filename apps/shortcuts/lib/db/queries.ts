@@ -2,7 +2,7 @@ import 'server-only'
 
 import { cache } from 'react'
 import { Pool } from '@neondatabase/serverless'
-import { eq } from 'drizzle-orm'
+import { eq, or, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/neon-serverless'
 
 import * as schema from './schema'
@@ -165,13 +165,15 @@ export const getShortcutByAlbumId = cache(
 
 export async function searchShortcutsByQuery(query: string) {
   try {
-    const shortcuts = await db.query.shortcut.findMany({
-      where: (shortcut, { or, ilike }) =>
+    const shortcuts = await db
+      .select()
+      .from(shortcut)
+      .where(
         or(
-          ilike(shortcut.name, `%${query}%`),
-          ilike(shortcut.description, `%${query}%`),
+          sql`${shortcut.name}::text ILIKE ${`%${query}%`}`,
+          sql`${shortcut.description}::text ILIKE ${`%${query}%`}`,
         ),
-    })
+      )
     return shortcuts
   } catch (error) {
     console.error('Failed to get shortcut from database')
