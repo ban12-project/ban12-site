@@ -119,7 +119,7 @@ export default function SearchBar({
         style={{ '--width': width + 'px' } as React.CSSProperties}
       >
         <button
-          className="ml-3 h-full whitespace-nowrap text-blue-500 transition-opacity hover:no-underline active:text-blue-500/80 active:opacity-50"
+          className="ms-3 h-full whitespace-nowrap text-blue-500 transition-opacity hover:no-underline active:text-blue-500/80 active:opacity-50"
           type="button"
           ref={buttonRef}
           onClick={onCancelButtonClick}

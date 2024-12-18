@@ -9,6 +9,7 @@ import InfiniteLoader from 'react-window-infinite-loader'
 import type { SelectShortcut } from '#/lib/db/schema'
 import { Locale } from '#/lib/i18n'
 import { useResponsive } from '#/hooks/use-responsive'
+import useRootDirection from '#/hooks/use-root-direction'
 import { fetchShortcutsByAlbumID } from '#/app/[lang]/(front)/actions'
 
 import ShortcutCard from './shortcut-card'
@@ -20,7 +21,7 @@ type AlbumsProps = {
   currentPage: number
 }
 
-let PADDING_LEFT: number, PADDING_RIGHT: number
+let PADDING_START: number, PADDING_END: number
 
 const GAP_SIZE = 12
 
@@ -47,8 +48,8 @@ const innerElementType = forwardRef<
         ...style,
         width: `${
           Number.parseFloat(style.width as string) +
-          PADDING_LEFT +
-          PADDING_RIGHT -
+          PADDING_START +
+          PADDING_END -
           GAP_SIZE
         }px`,
       }}
@@ -72,7 +73,8 @@ const Column = ({
       className="pb-5"
       style={{
         ...style,
-        left: `${Number.parseFloat(style.left as string) + PADDING_LEFT}px`,
+        left: `${Number.parseFloat(style.left as string) + PADDING_START}px`,
+        right: `${Number.parseFloat(style.right as string) + PADDING_END}px`,
         width: `${Number.parseFloat(style.width as string) - GAP_SIZE}px`,
       }}
     >
@@ -93,13 +95,15 @@ export default function Albums({
   currentPage,
 }: AlbumsProps) {
   const anchorRef = useRef<React.ComponentRef<'div'>>(null)
+  const direction = useRootDirection()
+
   const update = () => {
     if (!anchorRef.current) return
     const { paddingLeft, paddingRight } = window.getComputedStyle(
       anchorRef.current,
     )
-    PADDING_LEFT = Number.parseFloat(paddingLeft)
-    PADDING_RIGHT = Number.parseFloat(paddingRight)
+    PADDING_START = Number.parseFloat(paddingLeft)
+    PADDING_END = Number.parseFloat(paddingRight)
   }
 
   useEffect(update, [anchorRef])
@@ -156,7 +160,7 @@ export default function Albums({
             {({ onItemsRendered, ref }) => (
               <FixedSizeList
                 itemSize={
-                  (width - PADDING_LEFT - PADDING_RIGHT) / columnNumber +
+                  (width - PADDING_START - PADDING_END) / columnNumber +
                   GAP_SIZE / columnNumber
                 }
                 width={width}
@@ -168,6 +172,7 @@ export default function Albums({
                 layout="horizontal"
                 onItemsRendered={onItemsRendered}
                 ref={ref}
+                direction={direction}
               >
                 {(props) => (
                   <Column {...props}>

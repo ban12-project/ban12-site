@@ -53,7 +53,7 @@ export default async function Home(props: HomePageProps) {
           <Plus />
         </Link>
 
-        <ColorSchemeToggle className="ml-auto" />
+        <ColorSchemeToggle className="ms-auto" />
       </footer>
     </>
   )

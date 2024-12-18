@@ -2,11 +2,12 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import type { Messages } from '#/lib/i18n'
 import { Drawer } from 'vaul'
 
+import type { Messages } from '#/lib/i18n'
 import { cn } from '#/lib/utils'
 import { useResponsive } from '#/hooks/use-responsive'
+import useRootDirection from '#/hooks/use-root-direction'
 
 import { Button } from './ui/button'
 
@@ -32,6 +33,9 @@ export default function PageDrawer({
   const [open, setOpen] = useState(true)
 
   const breakpoints = useResponsive()
+  const direction = useRootDirection((dir) =>
+    dir === 'ltr' ? 'right' : 'left',
+  )
 
   const onAnimationEnd: RawDrawerProps['onAnimationEnd'] = (open) => {
     if (!open) router.back()
@@ -42,14 +46,14 @@ export default function PageDrawer({
       open={open}
       onOpenChange={setOpen}
       onAnimationEnd={onAnimationEnd}
-      direction={breakpoints.lg ? 'right' : 'bottom'}
+      direction={breakpoints.lg ? direction : 'bottom'}
       {...rest}
     >
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-50 bg-black/40" />
         <Drawer.Content
           className={cn(
-            'fixed bottom-0 left-0 right-0 z-50 flex h-[96%] flex-col rounded-t-[10px] bg-white outline-none lg:left-auto lg:h-full lg:w-[460px] lg:rounded-none dark:bg-black',
+            'fixed bottom-0 left-0 right-0 z-50 flex h-[96%] flex-col rounded-t-[10px] bg-white outline-none lg:start-auto lg:h-full lg:w-[460px] lg:rounded-none dark:bg-black',
             className,
           )}
         >

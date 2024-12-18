@@ -31,7 +31,7 @@ export default async function AlbumList({ messages, albums, lang }: AlbumListPro
               </h2>
               <Link
                 href={`/album/${item.id}`}
-                className="ml-auto whitespace-nowrap text-blue-500 active:text-blue-500/80 lg:hidden"
+                className="ms-auto whitespace-nowrap text-blue-500 active:text-blue-500/80 lg:hidden"
               >
                 {messages['see-all']}
               </Link>

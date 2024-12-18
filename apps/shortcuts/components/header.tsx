@@ -63,7 +63,7 @@ export function Header({ messages }: HeaderProps) {
         <SearchBar
           messages={messages.common}
           setSticky={setSticky}
-          className="ml-auto md:max-w-sm"
+          className="ms-auto md:max-w-sm"
         />
       </header>
     </>

@@ -15,7 +15,7 @@ export default function ShortcutList({ shortcuts, lang }: ShortcutListProps) {
             className="w-[calc((100%-0.75rem)/2)]"
             item={item}
           />
-          <p className="ml-3 h-full overflow-hidden text-ellipsis leading-[25.6px] text-zinc-500/90">
+          <p className="ms-3 h-full overflow-hidden text-ellipsis leading-[25.6px] text-zinc-500/90">
             {item.description[lang]}
           </p>
         </li>

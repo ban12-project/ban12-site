@@ -13,7 +13,7 @@ export default function ShareButton() {
     <Button
       variant="ios"
       size="auto"
-      className="text-blue-500 active:text-blue-500/80"
+      className="text-blue-500 active:text-blue-500/80 [&_svg]:size-6"
       onClick={() => share()}
     >
       <Share />
