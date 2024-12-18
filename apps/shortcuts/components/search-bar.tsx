@@ -5,10 +5,10 @@ import {
   useSelectedLayoutSegment,
 } from 'next/navigation'
 import { useLocale } from '@repo/i18n/client'
-import type { Messages } from '#/lib/i18n'
 import { useDebounceFn } from 'ahooks'
 import { CircleX, Search } from 'lucide-react'
 
+import type { Messages } from '#/lib/i18n'
 import { cn } from '#/lib/utils'
 
 interface SearchBarProps
@@ -27,8 +27,10 @@ export default function SearchBar({
 
   useEffect(() => {
     if (!buttonRef.current) return
-    const { marginLeft } = window.getComputedStyle(buttonRef.current)
-    setWidth(buttonRef.current.offsetWidth + Number.parseFloat(marginLeft))
+    const { marginInlineStart } = window.getComputedStyle(buttonRef.current)
+    setWidth(
+      buttonRef.current.offsetWidth + Number.parseFloat(marginInlineStart),
+    )
   }, [buttonRef])
 
   const searchParams = useSearchParams()
