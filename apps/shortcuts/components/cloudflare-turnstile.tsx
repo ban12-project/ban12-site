@@ -35,7 +35,7 @@ export default memo(function CloudflareTurnstile({
     const callbacks = [
       () => {
         if (!process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY) return
-        // if (widgetId.current) window.turnstile.remove(widgetId.current)
+        if (widgetId.current) window.turnstile.remove(widgetId.current)
 
         widgetId.current = window.turnstile.render(`#${containerId}`, {
           sitekey: process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY,
