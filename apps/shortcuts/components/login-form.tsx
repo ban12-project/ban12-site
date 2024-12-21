@@ -7,6 +7,7 @@ import { signIn } from 'next-auth/webauthn'
 
 import { login } from '#/app/[lang]/(dashboard)/actions'
 
+import CloudflareTurnstile from './cloudflare-turnstile'
 import { Button } from './ui/button'
 
 export default function LoginForm() {
@@ -31,52 +32,49 @@ export default function LoginForm() {
 
   return (
     <div className="space-y-3 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-      <form action={dispatch}>
-        <h1 className="mb-3 text-2xl">Please log in to continue.</h1>
-        <div className="w-full">
-          <div>
-            <label
-              className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <div className="relative">
-              <input
-                className="peer block w-full rounded-md border border-gray-200 px-5 py-[9px] text-sm outline-2 placeholder:text-gray-500"
-                id="email"
-                type="email"
-                name="email"
-                placeholder="Enter your email address"
-                required
-              />
-            </div>
-          </div>
-          <div className="mt-4">
-            <label
-              className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <div className="relative">
-              <input
-                className="peer block w-full rounded-md border border-gray-200 px-5 py-[9px] text-sm outline-2 placeholder:text-gray-500"
-                id="password"
-                type="password"
-                name="password"
-                placeholder="Enter password"
-                required
-                minLength={6}
-              />
-            </div>
+      <form action={dispatch} className="space-y-4">
+        <h1 className="text-2xl">Please log in to continue.</h1>
+        <div>
+          <label
+            className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <div className="relative">
+            <input
+              className="peer block w-full rounded-md border border-gray-200 px-5 py-[9px] text-sm outline-2 placeholder:text-gray-500"
+              id="email"
+              type="email"
+              name="email"
+              placeholder="Enter your email address"
+              required
+            />
           </div>
         </div>
-        <Button
-          className="mt-4 w-full"
-          aria-disabled={pending}
-          disabled={pending}
-        >
+        <div>
+          <label
+            className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+            htmlFor="password"
+          >
+            Password
+          </label>
+          <div className="relative">
+            <input
+              className="peer block w-full rounded-md border border-gray-200 px-5 py-[9px] text-sm outline-2 placeholder:text-gray-500"
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              required
+              minLength={6}
+            />
+          </div>
+        </div>
+
+        <CloudflareTurnstile containerId="credentials" />
+
+        <Button className="w-full" aria-disabled={pending} disabled={pending}>
           Log in
           {pending && (
             <Loader2 className="ml-auto h-5 w-5 animate-spin text-gray-50" />
@@ -93,51 +91,52 @@ export default function LoginForm() {
         </div>
       </form>
 
-      <form onSubmit={onSubmit}>
-        <div className="w-full">
-          {status === 'authenticated' && (
-            <div>
-              <label
-                className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-                htmlFor="name"
-              >
-                Name
-              </label>
-              <div className="relative">
-                <input
-                  className="peer block w-full rounded-md border border-gray-200 px-5 py-[9px] text-sm outline-2 placeholder:text-gray-500"
-                  id="name"
-                  type="name"
-                  name="name"
-                  placeholder="Enter your name"
-                  required
-                  autoComplete="name webauthn"
-                />
-              </div>
-            </div>
-          )}
+      <form onSubmit={onSubmit} className="space-y-4">
+        {status === 'authenticated' && (
           <div>
             <label
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-              htmlFor="email"
+              htmlFor="name"
             >
-              Email
+              Name
             </label>
             <div className="relative">
               <input
                 className="peer block w-full rounded-md border border-gray-200 px-5 py-[9px] text-sm outline-2 placeholder:text-gray-500"
-                id="email-passkey"
-                type="email"
-                name="email"
-                placeholder="Enter your email address"
+                id="name"
+                type="name"
+                name="name"
+                placeholder="Enter your name"
                 required
-                autoComplete="email webauthn"
+                autoComplete="name webauthn"
               />
             </div>
           </div>
+        )}
+        <div>
+          <label
+            className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <div className="relative">
+            <input
+              className="peer block w-full rounded-md border border-gray-200 px-5 py-[9px] text-sm outline-2 placeholder:text-gray-500"
+              id="email-passkey"
+              type="email"
+              name="email"
+              placeholder="Enter your email address"
+              required
+              autoComplete="email webauthn"
+            />
+          </div>
         </div>
+
+        <CloudflareTurnstile containerId="passkey" />
+
         <Button
-          className="mt-4 w-full"
+          className="w-full"
           aria-disabled={status === 'loading'}
           disabled={status === 'loading'}
         >

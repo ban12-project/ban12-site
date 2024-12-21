@@ -7,6 +7,10 @@ import { z } from 'zod'
 
 import { signIn } from '#/lib/auth'
 import {
+  cfTurnstileResponseSchema,
+  cfTurnstileVerify,
+} from '#/lib/cloudflare-turnstile'
+import {
   deleteAlbumById,
   deleteCollectionById,
   deleteShortcutByUuid,
@@ -19,21 +23,34 @@ import {
 import { answerTranslate } from '#/lib/prompt'
 import { LocalizedHelper } from '#/lib/utils'
 
-const authFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-})
+const authFormSchema = z
+  .object({
+    email: z.string().email(),
+    password: z.string().min(6),
+  })
+  .merge(cfTurnstileResponseSchema)
 
 export async function login(prevState: string | undefined, formData: FormData) {
   try {
-    const validatedData = authFormSchema.parse({
+    const validatedFields = authFormSchema.safeParse({
       email: formData.get('email'),
       password: formData.get('password'),
+      response: formData.get('cf-turnstile-response'),
     })
 
+    if (!validatedFields.success) {
+      return 'Failed to validate form data'
+    }
+
+    const { email, password, response } = validatedFields.data
+
+    const result = await cfTurnstileVerify(response)
+    if (!result.success)
+      return result['error-codes'].join(', ').replace(/-/g, ' ')
+
     await signIn('credentials', {
-      email: validatedData.email,
-      password: validatedData.password,
+      email,
+      password,
     })
   } catch (error) {
     if (error instanceof AuthError) {
@@ -48,8 +65,8 @@ export async function login(prevState: string | undefined, formData: FormData) {
   }
 }
 
-const shortcutSchema = z.intersection(
-  z.object({
+const shortcutSchema = z
+  .object({
     icloud: z
       .string()
       .url()
@@ -78,13 +95,14 @@ const shortcutSchema = z.intersection(
       .transform((val) => val.join(','))
       .nullable(),
     language: z.enum(['zh-CN', 'en']),
-  }),
-  z.object({
-    uuid: z.string(),
-    albumId: z.string().nullable(),
-    collectionId: z.string().nullable(),
-  }),
-)
+  })
+  .merge(
+    z.object({
+      uuid: z.string(),
+      albumId: z.string().nullable(),
+      collectionId: z.string().nullable(),
+    }),
+  )
 
 export async function updateShortcut(
   prevState: string | undefined,

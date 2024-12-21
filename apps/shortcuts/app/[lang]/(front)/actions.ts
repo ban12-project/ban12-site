@@ -6,6 +6,10 @@ import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
 import {
+  cfTurnstileResponseSchema,
+  cfTurnstileVerify,
+} from '#/lib/cloudflare-turnstile'
+import {
   getAlbums,
   getShortcutByAlbumId,
   getShortcutByUuid,
@@ -115,7 +119,9 @@ const shortcutSchema = z.object({
     .nullable(),
   language: z.enum(['zh-CN', 'en']),
 })
-const formSchema = z.intersection(icloudSchema, shortcutSchema)
+const formSchema = icloudSchema
+  .merge(shortcutSchema)
+  .merge(cfTurnstileResponseSchema)
 
 export async function postShortcut(prevState: State, formData: FormData) {
   if (formData.get('name') === null)
@@ -129,6 +135,7 @@ export async function postShortcut(prevState: State, formData: FormData) {
     backgroundColor: formData.get('backgroundColor'),
     details: formData.getAll('details'),
     language: formData.get('language'),
+    response: formData.get('cf-turnstile-response'),
   })
 
   if (!validatedFields.success) {
@@ -146,9 +153,16 @@ export async function postShortcut(prevState: State, formData: FormData) {
     backgroundColor,
     details,
     language,
+    response,
   } = validatedFields.data
-  const uuid = new URL(icloud).pathname.split('/').pop()
 
+  const result = await cfTurnstileVerify(response)
+  if (!result.success)
+    return {
+      message: result['error-codes'].join(', ').replace(/-/g, ' '),
+    }
+
+  const uuid = new URL(icloud).pathname.split('/').pop()
   if (!uuid) {
     return {
       message: 'Failed to get uuid',
