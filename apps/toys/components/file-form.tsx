@@ -72,7 +72,7 @@ export default function Form({ append }: FileFormProps) {
       <label
         htmlFor="file"
         data-drag-over={dragOver}
-        className="text-grayA10 flex h-full w-full cursor-pointer items-center justify-center rounded-lg border-4 border-dotted border-blue-400 p-2  hover:border-orange-500 data-[drag-over=true]:border-orange-500"
+        className="text-grayA10 flex h-full w-full cursor-pointer items-center justify-center rounded-lg border-4 border-dotted border-blue-400 p-2 hover:border-orange-500 data-[drag-over=true]:border-orange-500"
       >
         Drag one or multi files to this page ...
       </label>

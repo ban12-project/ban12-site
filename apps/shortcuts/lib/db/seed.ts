@@ -42,7 +42,7 @@ async function main() {
   //     ALTER TABLE "shortcut" ALTER COLUMN "description" SET NOT NULL;
   //   END $$;
   //   `)
-  
+
   // await migrateAlbum()
   // await migrateShortcut()
   // await migrateCollection()
@@ -82,7 +82,10 @@ async function migrateAlbum() {
 
     console.log(JSON.stringify(data))
 
-    await db.update(album).set({ title: data.title, description: data.description }).where(eq(album.id, id))
+    await db
+      .update(album)
+      .set({ title: data.title, description: data.description })
+      .where(eq(album.id, id))
   }
 }
 
@@ -147,7 +150,10 @@ async function migrateCollection() {
 
     console.log(JSON.stringify(data))
 
-    await db.update(collection).set({ title: data.title }).where(eq(collection.id, id))
+    await db
+      .update(collection)
+      .set({ title: data.title })
+      .where(eq(collection.id, id))
   }
 }
 

@@ -13,9 +13,12 @@ type AlbumListProps = {
 
 const pageSize = 10
 
-export default async function AlbumList({ messages, albums, lang }: AlbumListProps) {
+export default async function AlbumList({
+  messages,
+  albums,
+  lang,
+}: AlbumListProps) {
   albums ||= await getAlbumsWithShortcuts(pageSize)
-
 
   return (
     <ul className="[&>li+li_.custom-border]:border-t [@media_only_screen_and_(min-resolution:192dpi){&>li+li_.custom-border}]:border-t-[.5px]">

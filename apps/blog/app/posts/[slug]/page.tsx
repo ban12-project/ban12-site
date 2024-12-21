@@ -10,7 +10,7 @@ import { CMS_NAME } from '../../../lib/constants'
 import markdownToHtml from '../../../lib/markdownToHtml'
 
 export default async function Post(props: Params) {
-  const params = await props.params;
+  const params = await props.params
   const post = getPostBySlug(params.slug)
 
   if (!post) {
@@ -44,7 +44,7 @@ type Params = {
 }
 
 export async function generateMetadata(props: Params): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params
   const post = getPostBySlug(params.slug)
 
   if (!post) {

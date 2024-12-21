@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
-import { getDictionary } from '#/lib/i18n'
 import { Loader } from 'lucide-react'
 
+import { getDictionary } from '#/lib/i18n'
 import PageDrawer from '#/components/page-drawer'
 import ShareButton from '#/components/share-button'
 import ShortcutAdd, {

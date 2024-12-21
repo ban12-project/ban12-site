@@ -59,7 +59,11 @@ export default async function RootLayout(props: RootLayoutProps) {
   const { children, get, post } = props
 
   return (
-    <html lang={params.lang} dir={params.lang === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning>
+    <html
+      lang={params.lang}
+      dir={params.lang === 'ar' ? 'rtl' : 'ltr'}
+      suppressHydrationWarning
+    >
       <body
         className={cn(
           'bg-white font-sans text-black antialiased dark:bg-black dark:text-white',

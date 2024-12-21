@@ -49,7 +49,7 @@ const data = {
       title: 'IndexNow',
       url: '/dashboard/index-now',
       icon: Settings,
-    }
+    },
   ],
   navSecondary: [
     {

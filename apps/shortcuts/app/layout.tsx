@@ -7,8 +7,8 @@ type Props = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
   openGraph: {
-    images: 'https://ban12.com/api/og'
-  }
+    images: 'https://ban12.com/api/og',
+  },
 }
 
 // Since we have a `not-found.tsx` page on the root, a layout file

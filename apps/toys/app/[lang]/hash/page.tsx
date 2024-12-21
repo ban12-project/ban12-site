@@ -8,7 +8,7 @@ type Props = {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params
   const messages = await getDictionary(params.lang)
 
   return {
@@ -18,7 +18,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function HashPage(props: Props) {
-  const params = await props.params;
+  const params = await props.params
   const messages = await getDictionary(params.lang)
 
   return <FileExplorer messages={messages} />

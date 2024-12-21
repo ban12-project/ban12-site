@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Link } from '@repo/i18n/client'
-import { getDictionary, type Locale } from '#/lib/i18n'
 
+import { getDictionary, type Locale } from '#/lib/i18n'
 import ShortcutPost from '#/components/shortcut-post'
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params
   const messages = await getDictionary(params.lang)
   return {
     title: messages.post.title,
@@ -18,7 +18,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function PostPage(props: Props) {
-  const params = await props.params;
+  const params = await props.params
   const messages = await getDictionary(params.lang)
 
   return (

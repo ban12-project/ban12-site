@@ -1,5 +1,5 @@
-import { createMiddleware } from './middleware'
 import { createGetDictionary } from './get-dictionary'
+import { createMiddleware } from './middleware'
 
 export type Dictionaries<T = string> = Record<string, () => T>
 
