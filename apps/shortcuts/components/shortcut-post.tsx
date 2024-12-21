@@ -20,6 +20,7 @@ import { LocalizedHelper } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 import { postShortcut } from '#/app/[lang]/(front)/actions'
 
+import CloudflareTurnstile from './cloudflare-turnstile'
 import { PAGE_DRAWER_HEADER_ID } from './page-drawer'
 import {
   Form,
@@ -75,7 +76,7 @@ const shortcutSchema = z.object({
   language: z.enum(['zh-CN', 'en']),
 })
 
-const formSchema = z.intersection(icloudSchema, shortcutSchema)
+const formSchema = icloudSchema.merge(shortcutSchema)
 
 export type FormSchemaType = z.infer<typeof formSchema>
 
@@ -395,6 +396,8 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
             />
           ),
         ]}
+
+        <CloudflareTurnstile />
 
         <SubmitButton isPending={isPending} messages={messages} />
       </form>

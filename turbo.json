@@ -31,7 +31,8 @@
         "S3_BUCKET_ACCESS_KEY_ID",
         "S3_BUCKET_SECRET_ACCESS_KEY",
         "INDEX_NOW_API_KEY",
-        "INDEX_NOW_HOST_URL"
+        "INDEX_NOW_HOST_URL",
+        "CLOUDFLARE_TURNSTILE_SECRET_KEY"
       ],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
