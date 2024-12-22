@@ -72,7 +72,7 @@ export default function LoginForm() {
           </div>
         </div>
 
-        <CloudflareTurnstile containerId="credentials" />
+        <CloudflareTurnstile />
 
         <Button className="w-full" aria-disabled={pending} disabled={pending}>
           Log in
@@ -132,8 +132,6 @@ export default function LoginForm() {
             />
           </div>
         </div>
-
-        <CloudflareTurnstile containerId="passkey" />
 
         <Button
           className="w-full"
