@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactEventHandler, useActionState } from 'react'
+import { ReactEventHandler, useActionState, useTransition } from 'react'
 import { Loader2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { signIn } from 'next-auth/webauthn'
@@ -13,21 +13,29 @@ import { Button } from './ui/button'
 export default function LoginForm() {
   const [errorMessage, dispatch, pending] = useActionState(login, undefined)
   const { status } = useSession()
+  const [isPending, startTransition] = useTransition()
 
   const onSubmit: ReactEventHandler = (e) => {
     e.preventDefault()
 
     const formData = new FormData(e.target as HTMLFormElement)
-    const name = formData.get('name')
+    // const name = formData.get('name')
     const email = formData.get('email')
 
-    if (status === 'authenticated') {
-      void signIn('passkey', { action: 'register', name, email })
-    }
+    startTransition(async () => {
+      // if (status === 'authenticated') {
+      //   void signIn('passkey', { action: 'register', name, email })
+      // }
 
-    if (status === 'unauthenticated') {
-      void signIn('passkey', { email })
-    }
+      // if (status === 'unauthenticated') {
+      //   void signIn('passkey', { email })
+      // }
+      try {
+        await signIn('passkey', { email })
+      } catch (error) {
+        console.error(error)
+      }
+    })
   }
 
   return (
@@ -135,14 +143,17 @@ export default function LoginForm() {
 
         <Button
           className="w-full"
-          aria-disabled={status === 'loading'}
-          disabled={status === 'loading'}
+          aria-disabled={status === 'loading' || isPending}
+          disabled={status === 'loading' || isPending}
         >
           {status === 'authenticated'
             ? 'Register new Passkey'
             : status === 'unauthenticated'
               ? 'Sign in with Passkey'
               : 'Loading...'}
+          {isPending && (
+            <Loader2 className="ml-auto h-5 w-5 animate-spin text-gray-50" />
+          )}
         </Button>
       </form>
     </div>
