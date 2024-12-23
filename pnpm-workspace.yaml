@@ -10,11 +10,12 @@ catalog:
   "typescript": "^5.7.2"
   "intl-messageformat": "^10.7.7"
   "next-themes": "^0.4.4"
-  "react-hook-form": "^7.53.2"
-  "lucide-react": "^0.456.0"
+  "react-hook-form": "^7.54.2"
+  "lucide-react": "^0.469.0"
   "gsap": "^3.12.5"
   "babel-plugin-react-compiler": "19.0.0-beta-df7b47d-20241124"
   "class-variance-authority": "0.7.1"
+  "zod": "3.24.1"
 
 catalogs:
   # Can be referenced through "catalog:react18"
@@ -25,11 +26,11 @@ catalogs:
     "@types/react-dom": "^19"
 
   next15:
-    "next": "^15.1.1"
-    "@next/third-parties": "^15.1.1"
-    "@next/bundle-analyzer": "^15.1.1"
-    "eslint-config-next": "^15.1.1"
-    "@next/eslint-plugin-next": "^15.1.1"
+    "next": "^15.1.2"
+    "@next/third-parties": "^15.1.2"
+    "@next/bundle-analyzer": "^15.1.2"
+    "eslint-config-next": "^15.1.2"
+    "@next/eslint-plugin-next": "^15.1.2"
   
   eslint9:
     "eslint": "^9.17.0"
