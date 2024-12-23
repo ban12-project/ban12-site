@@ -30,22 +30,19 @@ async function deployToVercel(url) {
         return
       }
 
-      console.log(`Deploying ${appPath} to Vercel...`)
-      const { stdout, stderr } = await execPromise(
-        `
-        vercel pull --yes --environment=production --token=${process.env.VERCEL_TOKEN} &&
-        vercel build --prod --token=${process.env.VERCEL_TOKEN} &&
-        vercel deploy --prebuilt --prod --token=${process.env.VERCEL_TOKEN}
-      `,
-        {
-          cwd: appPath,
-        },
+      console.log(`Deploying ${path} to Vercel...`)
+      await execPromise(
+        `vercel pull --yes --environment=production --token=${process.env.VERCEL_TOKEN}`,
+        { cwd: appPath },
       )
-      if (stderr) {
-        console.error('Error:', stderr)
-        return
-      }
-      console.log(stdout)
+      await execPromise(
+        `vercel build --prod --token=${process.env.VERCEL_TOKEN}`,
+        { cwd: appPath },
+      )
+      await execPromise(
+        `vercel deploy --prebuilt --prod --token= --token=${process.env.VERCEL_TOKEN}`,
+        { cwd: appPath },
+      )
     }
   } catch (error) {
     console.error(error)
