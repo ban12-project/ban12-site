@@ -21,6 +21,8 @@ export async function GET(request: NextRequest) {
     'Cache-Control',
     'public, immutable, no-transform, max-age=31536000',
   )
+  response.headers.set('Access-Control-Allow-Origin', '*')
+  response.headers.set('Cross-Origin-Resource-Policy', 'cross-origin')
 
   return response
 }
