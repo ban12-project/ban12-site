@@ -35,10 +35,6 @@ export const metadata: Metadata = {
         type: 'image/png',
       },
     ],
-    other: {
-      rel: 'apple-touch-icon-precomposed',
-      url: new URL('/api/og?w=180&h=180&bg=transparent', HOME_OG_IMAGE_URL),
-    },
   },
 }
 

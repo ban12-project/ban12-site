@@ -29,10 +29,6 @@ export const metadata: Metadata = {
         type: 'image/png',
       },
     ],
-    other: {
-      rel: 'apple-touch-icon-precomposed',
-      url: 'https://ban12.com/api/og?w=180&h=180&bg=transparent',
-    },
   },
 }
 
