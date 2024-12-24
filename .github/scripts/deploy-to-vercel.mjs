@@ -1,5 +1,4 @@
 import { exec } from 'node:child_process'
-import { statSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
@@ -7,28 +6,20 @@ import { promisify } from 'node:util'
 const execPromise = promisify(exec)
 
 async function deployToVercel(url) {
+  const rootPath = join(fileURLToPath(url))
+
+  const { stdout } = await execPromise('git log -1 --pretty=%B')
+
+  const paths = stdout
+    .trim()
+    .split(/\n/)
+    .find((i) => i.startsWith('[release]:'))
+    .split(/\s/)
+    .slice(1)
+
   try {
-    const rootPath = join(fileURLToPath(url))
-
-    const { stdout, stderr } = await execPromise('git log -1 --pretty=%B')
-    if (stderr) {
-      console.error('Error:', stderr)
-      return
-    }
-
-    const paths = stdout
-      .trim()
-      .split(/\n/)
-      .find((i) => i.startsWith('[release]:'))
-      .split(/\s/)
-      .slice(1)
-
     for (const path of paths) {
       const appPath = join(rootPath, path)
-      if (!statSync(appPath).isDirectory()) {
-        console.error(`Error: ${path} is not a directory`)
-        return
-      }
 
       console.log(`Deploying ${path} to Vercel...`)
       await execPromise(
@@ -45,7 +36,7 @@ async function deployToVercel(url) {
       )
     }
   } catch (error) {
-    console.error(error)
+    if (error.code !== 'ENOENT') throw error
   }
 }
 

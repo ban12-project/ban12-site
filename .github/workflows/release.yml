@@ -7,21 +7,13 @@ on:
 
 jobs:
   Deploy-Production:
+    if: contains(github.event.head_commit.message, '[release]:')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Check if commit message contains [release]
-        id: get_commit_message
-        run: |
-          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-          if ! echo "$COMMIT_MESSAGE" | grep -q '\[release\]:'; then
-            echo "No [release] section found in commit message."
-            exit 0
-          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
