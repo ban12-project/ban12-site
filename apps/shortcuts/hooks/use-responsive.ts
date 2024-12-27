@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
+/** https://tailwindcss.com/docs/screens */
 interface Breakpoints {
   /** (min-width: 640px) This will only center text on screens 640px and wider, not on small screens */
   sm: boolean

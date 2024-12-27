@@ -118,8 +118,9 @@ export default function Albums({
   const breakpoints = useResponsive()
 
   const columnNumber = useMemo(() => {
-    if (breakpoints['2xl']) return 8
-    if (breakpoints.lg) return 6
+    if (breakpoints['2xl']) return 7
+    if (breakpoints.xl) return 6
+    if (breakpoints.lg) return 5
     if (breakpoints.md) return 4
     return 2
   }, [breakpoints])
