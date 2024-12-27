@@ -18,6 +18,7 @@
     "@react-three/drei": "^9.117.0",
     "@react-three/fiber": "9.0.0-rc.1",
     "@repo/i18n": "workspace:*",
+    "@repo/ui": "workspace:*",
     "glsl-random": "^0.0.5",
     "gsap": "^3.12.5",
     "next": "catalog:next15",

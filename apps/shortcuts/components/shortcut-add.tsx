@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import SuperEllipseSVG from '@repo/ui/super-ellipse-svg'
 import { Plus, Share } from 'lucide-react'
 
 import { getShortcutByUuid } from '#/lib/db/queries'
@@ -7,7 +8,7 @@ import { cn } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 import ShortcutCard from '#/components/shortcut-card'
 
-export type ShortcutAddProps = {
+export interface ShortcutAddProps extends React.ComponentProps<'div'> {
   params: { id: string; lang: Locale }
   messages: Messages
   /** tag from normal route or not because this component may be used in interceptor route */
@@ -22,6 +23,7 @@ export default async function ShortcutAdd({
   params: { id, lang },
   messages,
   fromNormalRoute,
+  ...props
 }: ShortcutAddProps) {
   const shortcut = await getShortcutByUuid(id)
 
@@ -29,7 +31,15 @@ export default async function ShortcutAdd({
 
   return (
     <>
-      <div className={cn(fromNormalRoute && 'lg:hidden')}>
+      <SuperEllipseSVG width={176} height={128} n={8} id="clip-path" />
+      <div
+        {...props}
+        className={cn(
+          props.className,
+          fromNormalRoute && 'lg:hidden',
+          'flex flex-col',
+        )}
+      >
         <section className="p-safe-max-4 flex-1 space-y-4 overflow-auto text-center">
           <h3 className="text-3xl font-bold">{shortcut.name[lang]}</h3>
 
@@ -40,7 +50,7 @@ export default async function ShortcutAdd({
           ))}
 
           <ShortcutCard
-            className="pointer-events-none inline-block h-32 w-44 text-left"
+            className="pointer-events-none inline-block h-32 w-44 text-left [clip-path:url(#clip-path)]"
             href={shortcut.icloud}
             item={shortcut}
             lang={lang}
@@ -85,7 +95,7 @@ export default async function ShortcutAdd({
       >
         <div className="flex items-center gap-4">
           <ShortcutCard
-            className="pointer-events-none inline-block h-32 w-44 text-left"
+            className="pointer-events-none inline-block h-32 w-44 text-left [clip-path:url(#clip-path)]"
             href={shortcut.icloud}
             item={shortcut}
             lang={lang}

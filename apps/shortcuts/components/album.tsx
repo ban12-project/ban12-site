@@ -2,6 +2,7 @@
 
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale } from '@repo/i18n/client'
+import SuperEllipseSVG from '@repo/ui/super-ellipse-svg'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
@@ -24,6 +25,7 @@ type AlbumsProps = {
 let PADDING_START: number, PADDING_END: number
 
 const GAP_SIZE = 12
+const CLIP_PATH_ID = 'CLIP_PATH_ID'
 
 const outerElementType = forwardRef<React.ComponentRef<'div'>>(
   function Outer(props, ref) {
@@ -80,7 +82,7 @@ const Column = ({
     >
       {children || (
         <ShortcutCard
-          className="block h-full [box-shadow:2px_4px_12px_#00000014] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)]"
+          className="block h-full [box-shadow:2px_4px_12px_#00000014] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)] [clip-path:url(#album)]"
           item={data[index]}
           lang={lang}
         />
@@ -158,32 +160,42 @@ export default function Albums({
             loadMoreItems={loadMoreItems}
             threshold={2}
           >
-            {({ onItemsRendered, ref }) => (
-              <FixedSizeList
-                itemSize={
-                  (width - PADDING_START - PADDING_END) / columnNumber +
-                  GAP_SIZE / columnNumber
-                }
-                width={width}
-                height={height}
-                itemCount={itemCount}
-                itemData={items}
-                outerElementType={outerElementType}
-                innerElementType={innerElementType}
-                layout="horizontal"
-                onItemsRendered={onItemsRendered}
-                ref={ref}
-                direction={direction}
-              >
-                {(props) => (
-                  <Column {...props}>
-                    {isItemLoaded(props.index) ? null : (
-                      <Skeleton className="h-full w-full rounded-3xl" />
+            {({ onItemsRendered, ref }) => {
+              const itemSize =
+                (width - PADDING_START - PADDING_END) / columnNumber +
+                GAP_SIZE / columnNumber
+              return (
+                <>
+                  <SuperEllipseSVG
+                    width={itemSize - GAP_SIZE}
+                    height={height - 20} // <Column /> pb-5 = 20
+                    n={10}
+                    id="album"
+                  />
+                  <FixedSizeList
+                    itemSize={itemSize}
+                    width={width}
+                    height={height}
+                    itemCount={itemCount}
+                    itemData={items}
+                    outerElementType={outerElementType}
+                    innerElementType={innerElementType}
+                    layout="horizontal"
+                    onItemsRendered={onItemsRendered}
+                    ref={ref}
+                    direction={direction}
+                  >
+                    {(props) => (
+                      <Column {...props}>
+                        {isItemLoaded(props.index) ? null : (
+                          <Skeleton className="h-full w-full rounded-3xl" />
+                        )}
+                      </Column>
                     )}
-                  </Column>
-                )}
-              </FixedSizeList>
-            )}
+                  </FixedSizeList>
+                </>
+              )
+            }}
           </InfiniteLoader>
         )}
       </AutoSizer>

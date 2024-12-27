@@ -1,10 +1,12 @@
 import { ImageResponse } from 'next/og'
+import { generateBase64 } from '@repo/ui/super-ellipse-svg'
 
 type Props = {
   title?: string
   width?: number
   height?: number
   backgroundColor?: string
+  textColor: string[]
 }
 
 function scale(value: number, n1: number, n2: number, n3: number, n4: number) {
@@ -14,31 +16,43 @@ function scale(value: number, n1: number, n2: number, n3: number, n4: number) {
 }
 
 export default async function Image(props: Props) {
-  const { title, backgroundColor = 'white', width = 1200, height = 630 } = props
+  const {
+    title,
+    backgroundColor = 'white',
+    width = 1200,
+    height = 630,
+    textColor,
+  } = props
 
   const interBold = fetch(
     new URL('../fonts/Inter-Bold.ttf', import.meta.url),
   ).then((res) => res.arrayBuffer())
 
-  const borderWidth = scale(height, 48, 630, 2, 6)
-  const borderRadius = scale(height, 48, 630, 4, 24)
-  const size = scale(height, 48, 630, 30, 160)
+  const size = scale(height, 48, 630, 48, 160)
+  const fontSize = scale(height, 48, 630, 30, 36)
 
   return new ImageResponse(
     (
       <div
-        tw={`flex h-full w-full flex-col items-center justify-center bg-${backgroundColor || 'white'}`}
+        tw="flex h-full w-full flex-col items-center justify-center"
+        style={{
+          backgroundColor,
+          color: textColor[1] || 'black',
+        }}
       >
         <div
-          tw="flex flex-none items-center justify-center border border-orange-500"
+          tw="flex flex-none items-center justify-center bg-orange-500"
           style={{
+            fontSize: `${fontSize}px`,
             width: `${size}px`,
             height: `${size}px`,
-            borderWidth: `${borderWidth}px`,
-            borderRadius: `${borderRadius}px`,
-            transform: 'rotate(36deg)',
+            maskImage: `url(${generateBase64({ width: size, height: size, n: 4 })})`,
+            maskSize: '100% 100%',
+            color: textColor[0] || 'white',
           }}
-        ></div>
+        >
+          {size === 48 ? process.env.SITE_NAME!.charAt(0) : process.env.SITE_NAME}
+        </div>
         {title && <p tw="mt-12 text-6xl font-bold">{title}</p>}
       </div>
     ),

@@ -29,7 +29,7 @@ export default async function ShortcutPage(props: Props) {
           </div>
         }
       >
-        <ShortcutAdd messages={messages} params={params} />
+        <ShortcutAdd className="flex-1" messages={messages} params={params} />
       </Suspense>
     </PageDrawer>
   )

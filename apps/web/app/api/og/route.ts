@@ -10,12 +10,14 @@ export async function GET(request: NextRequest) {
   const width = Number(searchParams.get('w')) || undefined // ignore number 0
   const height = Number(searchParams.get('h')) || undefined
   const backgroundColor = searchParams.get('bg') || undefined
+  const textColor = searchParams.getAll('txt')
 
   const response = await OpengraphImage({
     title,
     width,
     height,
     backgroundColor,
+    textColor,
   })
   response.headers.set(
     'Cache-Control',

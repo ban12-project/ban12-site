@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@ban12/tailwindcss-safe-area':
+      specifier: ^0.2.4
+      version: 0.2.4
     '@types/node':
       specifier: ^22.10.2
       version: 22.10.1
@@ -203,8 +206,8 @@ importers:
         specifier: ^3.717.0
         version: 3.717.0
       '@ban12/tailwindcss-safe-area':
-        specifier: ^0.2.3
-        version: 0.2.3(tailwindcss@3.4.15(ts-node@10.9.2(@types/node@22.10.1)(typescript@5.7.2)))
+        specifier: 'catalog:'
+        version: 0.2.4(tailwindcss@3.4.15(ts-node@10.9.2(@types/node@22.10.1)(typescript@5.7.2)))
       '@google/generative-ai':
         specifier: ^0.21.0
         version: 0.21.0
@@ -250,6 +253,9 @@ importers:
       '@repo/i18n':
         specifier: workspace:^
         version: link:../../packages/i18n
+      '@repo/ui':
+        specifier: workspace:^
+        version: link:../../packages/ui
       '@sentry/nextjs':
         specifier: ^8.47.0
         version: 8.47.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.1.2(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@19.0.0-beta-df7b47d-20241124)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(webpack@5.96.1(esbuild@0.19.12))
@@ -384,8 +390,8 @@ importers:
   apps/toys:
     dependencies:
       '@ban12/tailwindcss-safe-area':
-        specifier: ^0.2.3
-        version: 0.2.3(tailwindcss@3.4.15(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.7.2)))
+        specifier: 'catalog:'
+        version: 0.2.4(tailwindcss@3.4.15(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.7.2)))
       '@darkroom.engineering/tempus':
         specifier: ^0.0.46
         version: 0.0.46
@@ -549,6 +555,9 @@ importers:
       '@repo/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       glsl-random:
         specifier: ^0.0.5
         version: 0.0.5
@@ -1081,6 +1090,11 @@ packages:
 
   '@ban12/tailwindcss-safe-area@0.2.3':
     resolution: {integrity: sha512-faC/Jrw7WRw4INSrEeYft5DYjl8C6nD6Z9XHNWyoMMxAhzvHUsKO0DI45G689I3w16+FRfPfrxryNGrpt0oqHQ==}
+    peerDependencies:
+      tailwindcss: '>=3.2.0'
+
+  '@ban12/tailwindcss-safe-area@0.2.4':
+    resolution: {integrity: sha512-J3styTHng9j8Kua9e/vHlK07XNDul8ZHnx5UdndSx1R8Oqywvpy4RdVoUZUQ/+Ln25sSPnnMVcqH/tpFuj53DQ==}
     peerDependencies:
       tailwindcss: '>=3.2.0'
 
@@ -7249,7 +7263,11 @@ snapshots:
     dependencies:
       tailwindcss: 3.4.15(ts-node@10.9.2(@types/node@22.10.1)(typescript@5.7.2))
 
-  '@ban12/tailwindcss-safe-area@0.2.3(tailwindcss@3.4.15(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.7.2)))':
+  '@ban12/tailwindcss-safe-area@0.2.4(tailwindcss@3.4.15(ts-node@10.9.2(@types/node@22.10.1)(typescript@5.7.2)))':
+    dependencies:
+      tailwindcss: 3.4.15(ts-node@10.9.2(@types/node@22.10.1)(typescript@5.7.2))
+
+  '@ban12/tailwindcss-safe-area@0.2.4(tailwindcss@3.4.15(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.7.2)))':
     dependencies:
       tailwindcss: 3.4.15(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.7.2))
 

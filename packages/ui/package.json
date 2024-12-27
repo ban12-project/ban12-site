@@ -11,7 +11,8 @@
   "exports": {
     "./styles.css": "./dist/index.css",
     "./card": "./src/card.tsx",
-    "./lenis": "./src/lenis.tsx"
+    "./lenis": "./src/lenis.tsx",
+    "./super-ellipse-svg": "./src/super-ellipse-svg.tsx"
   },
   "license": "MIT",
   "scripts": {
