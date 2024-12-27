@@ -28,8 +28,8 @@ export default async function Image(props: Props) {
     new URL('../fonts/Inter-Bold.ttf', import.meta.url),
   ).then((res) => res.arrayBuffer())
 
-  const size = scale(height, 48, 630, 48, 160)
-  const fontSize = scale(height, 48, 630, 30, 36)
+  const size = scale(height, 48, 630, 48, title ? 160 : 630)
+  const fontSize = scale(height, 48, 630, 26, title ? 36 : 100)
 
   return new ImageResponse(
     (
@@ -51,7 +51,9 @@ export default async function Image(props: Props) {
             color: textColor[0] || 'white',
           }}
         >
-          {size === 48 ? process.env.SITE_NAME!.charAt(0) : process.env.SITE_NAME}
+          {size <= 64
+            ? process.env.SITE_NAME!.charAt(0)
+            : process.env.SITE_NAME}
         </div>
         {title && <p tw="mt-12 text-6xl font-bold">{title}</p>}
       </div>
