@@ -3,7 +3,7 @@ import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev'
 import bundleAnalyzer from '@next/bundle-analyzer'
 
 if (process.env.NODE_ENV === 'development') {
-  await setupDevPlatform()
+  setupDevPlatform()
 }
 
 const nextConfig: NextConfig = {

@@ -8,6 +8,8 @@ import { Columns, DashboardTable } from '#/components/dashboard-table'
 
 import { deleteShortcut } from '../../actions'
 
+export const runtime = 'edge'
+
 const localizedHelper = new LocalizedHelper()
 
 const shortcutsTableColumns: Columns<SelectShortcut> = [

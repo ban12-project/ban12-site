@@ -32,6 +32,7 @@
     "tunnel-rat": "^0.1.2"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "catalog:",
     "@next/bundle-analyzer": "catalog:",
     "@repo/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
