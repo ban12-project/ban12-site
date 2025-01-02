@@ -5,9 +5,11 @@ import { getDictionary, Locale } from '#/i18n'
 export const runtime = 'edge'
 
 const View = dynamic(
-  () => import('#/components/view').then((mod) => mod.View),
+  () =>
+    import('#/components/view').then((mod) => ({
+      default: mod.View,
+    })),
   {
-    ssr: false,
     loading: () => (
       <div className="flex h-96 w-full flex-col items-center justify-center">
         <svg
@@ -33,14 +35,16 @@ const View = dynamic(
     ),
   },
 )
-const Voxel = dynamic(
-  () => import('#/components/voxel').then((mod) => mod.Voxel),
-  { ssr: false },
+const Voxel = dynamic(() =>
+  import('#/components/voxel').then((mod) => ({
+    default: mod.Voxel,
+  })),
 )
 
-type Props = { params: { lang: Locale } }
+type Props = { params: Promise<{ lang: Locale }> }
 
-export default async function Home({ params }: Props) {
+export default async function Home(props: Props) {
+  const params = await props.params
   const messages = await getDictionary(params.lang)
 
   return (
@@ -54,6 +58,7 @@ export default async function Home({ params }: Props) {
         <nav className="uppercase [&>a]:ml-2">
           <a href="https://shortcuts.ban12.com">shortcuts</a>
           <a href="https://blog.ban12.com">blog</a>
+          <a href="https://toys.ban12.com">toys</a>
         </nav>
       </div>
     </main>

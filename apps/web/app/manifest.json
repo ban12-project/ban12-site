@@ -9,9 +9,9 @@
   "theme_color": "white",
   "icons": [
     {
-      "src": "/favicon.ico",
+      "src": "/api/og?w=256&h=256&bg=transparent",
       "sizes": "any",
-      "type": "image/x-icon"
+      "type": "image/png"
     }
   ],
   "related_applications": [

@@ -1,13 +1,13 @@
 ---
 title: 'Redis'
 excerpt: 'Redis 缓存管理、持久化存储、哨兵与高可用、集群'
-coverImage: '/assets/blog/redis-interview/redis-logo.svg'
+coverImage: 'https://assets.ban12.com/blog/redis-interview/redis-logo.svg'
 date: '2024-03-20T04:16:53.929Z'
 author:
   name: Coda
   picture: 'https://avatars.githubusercontent.com/u/23135654?v=4'
 ogImage:
-  url: '/assets/blog/redis-interview/redis-logo.svg'
+  url: 'https://assets.ban12.com/blog/redis-interview/redis-logo.svg'
 ---
 
 # Redis 缓存管理

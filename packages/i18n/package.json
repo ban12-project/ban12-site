@@ -1,27 +1,31 @@
 {
   "name": "@repo/i18n",
   "version": "0.0.0",
+  "type": "module",
   "private": true,
   "exports": {
     "./client": "./client.ts",
     "./server": "./server.ts"
   },
+  "scripts": {
+    "lint": "eslint ."
+  },
   "peerDependencies": {
-    "next": "catalog:next14",
-    "react": "catalog:react18"
+    "next": "catalog:next15",
+    "react": "catalog:react19"
   },
   "dependencies": {
-    "@formatjs/intl-localematcher": "^0.5.4",
-    "negotiator": "^0.6.3",
+    "@formatjs/intl-localematcher": "^0.5.5",
+    "negotiator": "^1.0.0",
     "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/negotiator": "^0.6.3",
-    "@types/node": "^20.12.12",
-    "@types/react": "catalog:react18",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.4.5"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:react19",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
   }
 }

@@ -1,32 +1,25 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { db } from '#/drizzle/db'
-import { getDictionary, type Locale } from '#/i18n'
 
-import AlbumList from '#/components/ui/album-list'
-import ShortcutList from '#/components/ui/shortcut-list'
+import {
+  getCollectionById,
+  getCollectionByIdWithAlbumsAndShortcuts,
+} from '#/lib/db/queries'
+import { getDictionary, type Locale } from '#/lib/i18n'
+import AlbumList from '#/components/album-list'
+import ShortcutList from '#/components/shortcut-list'
 
 type CollectionsProps = {
-  params: { id: string; lang: Locale }
+  params: Promise<{ id: string; lang: Locale }>
 }
 
 export const runtime = 'edge'
 
 export default async function Collections({ params }: CollectionsProps) {
+  const { id, lang } = await params
   const [messages, collection] = await Promise.all([
-    getDictionary(params.lang),
-    db.query.collection.findFirst({
-      where: (collection, { eq }) =>
-        eq(collection.id, Number.parseInt(params.id)),
-      with: {
-        albums: {
-          with: {
-            shortcuts: true,
-          },
-        },
-        shortcuts: true,
-      },
-    }),
+    getDictionary(lang),
+    getCollectionByIdWithAlbumsAndShortcuts(Number.parseInt(id)),
   ])
 
   if (!collection) notFound()
@@ -35,13 +28,13 @@ export default async function Collections({ params }: CollectionsProps) {
     <main>
       <div className="container-full pt-safe-max-4 pb-5">
         <h1 className="overflow-hidden text-ellipsis whitespace-nowrap text-3xl font-bold">
-          {collection.title}
+          {collection.title[lang]}
         </h1>
       </div>
-      <AlbumList albums={collection.albums} messages={messages} />
+      <AlbumList lang={lang} albums={collection.albums} messages={messages} />
 
       <div className="container-full">
-        <ShortcutList shortcuts={collection.shortcuts} />
+        <ShortcutList lang={lang} shortcuts={collection.shortcuts} />
       </div>
     </main>
   )
@@ -50,15 +43,13 @@ export default async function Collections({ params }: CollectionsProps) {
 export async function generateMetadata({
   params,
 }: CollectionsProps): Promise<Metadata> {
-  const collection = await db.query.collection.findFirst({
-    where: (collection, { eq }) =>
-      eq(collection.id, Number.parseInt(params.id)),
-  })
+  const { id, lang } = await params
+  const collection = await getCollectionById(Number.parseInt(id))
 
   if (!collection) notFound()
 
   return {
-    title: collection.title,
-    description: collection.title,
+    title: collection.title[lang],
+    description: collection.title[lang],
   }
 }

@@ -1,13 +1,13 @@
 ---
 title: '自动化部署 Next.js'
 excerpt: '使用 Github Actions 构建 Next.js 项目，并上传至你自己的 VPS'
-coverImage: '/assets/blog/self-hosted-nextjs-with-github-actions/actions-hero.svg'
+coverImage: 'https://assets.ban12.com/blog/self-hosted-nextjs-with-github-actions/actions-hero.svg'
 date: '2024-06-05T01:39:53.723Z'
 author:
   name: Coda
   picture: 'https://avatars.githubusercontent.com/u/23135654?v=4'
 ogImage:
-  url: '/assets/blog/self-hosted-nextjs-with-github-actions/actions-hero.svg'
+  url: 'https://assets.ban12.com/blog/self-hosted-nextjs-with-github-actions/actions-hero.svg'
 ---
 
 # 目标 🎯

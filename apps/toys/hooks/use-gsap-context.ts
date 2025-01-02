@@ -22,7 +22,7 @@ export function useGsapContext<T = HTMLElement>(
 ) {
   // create a ref for the root level element (for scoping)
   const wrapperRef = useRef<T | null>(null)
-  const cleanup = useRef<void | (() => void)>()
+  const cleanup = useRef<void | (() => void)>(undefined)
 
   useIsomorphicLayoutEffect(() => {
     // create our context. This function is invoked immediately and all GSAP animations and ScrollTriggers created during the execution of this function get recorded so we can revert() them later (cleanup)

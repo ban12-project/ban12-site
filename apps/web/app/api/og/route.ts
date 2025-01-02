@@ -6,13 +6,25 @@ export const runtime = 'edge'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const title = searchParams.get('title')
+  const title = searchParams.get('title') || undefined
+  const width = Number(searchParams.get('w')) || undefined // ignore number 0
+  const height = Number(searchParams.get('h')) || undefined
+  const backgroundColor = searchParams.get('bg') || undefined
+  const textColor = searchParams.getAll('txt')
 
-  const response = await OpengraphImage({ title })
+  const response = await OpengraphImage({
+    title,
+    width,
+    height,
+    backgroundColor,
+    textColor,
+  })
   response.headers.set(
     'Cache-Control',
     'public, immutable, no-transform, max-age=31536000',
   )
+  response.headers.set('Access-Control-Allow-Origin', '*')
+  response.headers.set('Cross-Origin-Resource-Policy', 'cross-origin')
 
   return response
 }

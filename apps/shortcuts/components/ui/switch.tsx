@@ -43,7 +43,7 @@ export interface SwitchProps
     VariantProps<typeof switchThumbVariants> {}
 
 const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitives.Root>,
+  React.ComponentRef<typeof SwitchPrimitives.Root>,
   SwitchProps
 >(({ className, variant, ...props }, ref) => (
   <SwitchPrimitives.Root

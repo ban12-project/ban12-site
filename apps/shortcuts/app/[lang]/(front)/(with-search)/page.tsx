@@ -1,18 +1,18 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { Link } from '@repo/i18n/client'
-import { getDictionary, type Locale } from '#/i18n'
-import { Share2 } from 'lucide-react'
+import { Plus } from 'lucide-react'
 
-import { fetchAlbums, fetchCollections } from '#/lib/actions'
-import AlbumList from '#/components/ui/album-list'
-import AlbumListSkeleton from '#/components/ui/album-list-skeleton'
-import Collections from '#/components/ui/collections'
-import CollectionsSkeleton from '#/components/ui/collections-skeleton'
-import ColorSchemeToggle from '#/components/ui/color-scheme-toggle'
+import { getAlbumsWithShortcuts, getCollections } from '#/lib/db/queries'
+import { getDictionary, type Locale } from '#/lib/i18n'
+import AlbumList from '#/components/album-list'
+import AlbumListSkeleton from '#/components/album-list-skeleton'
+import Collections from '#/components/collections'
+import CollectionsSkeleton from '#/components/collections-skeleton'
+import ColorSchemeToggle from '#/components/color-scheme-toggle'
 
 type HomePageProps = {
-  params: { lang: Locale }
+  params: Promise<{ lang: Locale }>
 }
 
 export const runtime = 'edge'
@@ -20,11 +20,12 @@ export const runtime = 'edge'
 const preload = () => {
   // void evaluates the given expression and returns undefined
   // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/void
-  void fetchCollections()
-  void fetchAlbums()
+  void getCollections()
+  void getAlbumsWithShortcuts()
 }
 
-export default async function Home({ params }: HomePageProps) {
+export default async function Home(props: HomePageProps) {
+  const params = await props.params
   // starting load home page data
   preload()
 
@@ -39,10 +40,10 @@ export default async function Home({ params }: HomePageProps) {
           </h1>
         </div>
         <Suspense fallback={<CollectionsSkeleton />}>
-          <Collections />
+          <Collections lang={params.lang} />
         </Suspense>
         <Suspense fallback={<AlbumListSkeleton />}>
-          <AlbumList messages={messages} />
+          <AlbumList lang={params.lang} messages={messages} />
         </Suspense>
       </main>
       <footer className="container-full pb-safe-max-4 flex lg:pb-5">
@@ -51,18 +52,19 @@ export default async function Home({ params }: HomePageProps) {
           scroll={false}
           aria-label={messages.post.description}
         >
-          <Share2 />
+          <Plus />
         </Link>
 
-        <ColorSchemeToggle className="ml-auto" />
+        <ColorSchemeToggle className="ms-auto" />
       </footer>
     </>
   )
 }
 
-export async function generateMetadata({
-  params,
-}: HomePageProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: HomePageProps,
+): Promise<Metadata> {
+  const params = await props.params
   const messages = await getDictionary(params.lang)
 
   return {

@@ -1,5 +1,3 @@
-import { toast } from 'sonner'
-
 import useClipboard from './use-clipboard'
 
 type Props = {
@@ -10,8 +8,8 @@ export default function useWebShare({ fallbackCopy = true }: Props = {}) {
   const isSupportWebShare = 'share' in navigator
 
   const defaultData = {
-    title: process.env.SITE_NAME,
-    text: process.env.SITE_NAME,
+    title: process.env.NEXT_PUBLIC_SITE_NAME,
+    text: process.env.NEXT_PUBLIC_SITE_NAME,
     url: window.location.href,
   }
 
@@ -29,9 +27,8 @@ export default function useWebShare({ fallbackCopy = true }: Props = {}) {
 
     try {
       await navigator.share(mergedData)
-      toast('Shared successfully', { icon: '👍' })
     } catch (error) {
-      toast(error as string, { icon: '❌' })
+      // continue regardless of error
     }
   }
 

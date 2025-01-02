@@ -7,11 +7,11 @@ export default function CSSPaintPolyfill() {
 
   return (
     <>
-      {/* eslint-disable-next-line @next/next/no-before-interactive-script-outside-document */}
       <Script
         src="https://unpkg.com/css-paint-polyfill"
         onLoad={() => {
-          // @ts-ignore
+          // @ts-expect-error - CSS Painting API polyfill
+           
           CSS.paintWorklet.addModule('/smooth-corners.js')
         }}
       />

@@ -1,5 +1,9 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { z } from 'zod'
+
+import type { LocalizedString } from './db/schema'
+import type { Locale } from './i18n'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -38,4 +42,59 @@ export function negativeToHexColor(color: string) {
 
   // 返回 ARGB 颜色值
   return `#${hexValue}`
+}
+
+export class LocalizedHelper<T extends Locale[]> {
+  static locales: Locale[] = ['en', 'zh-CN', 'ja', 'sv', 'ar']
+  separator: string = '.'
+  static schema = z
+    .string()
+    .transform<{ [key in Locale]: string }>((val) => JSON.parse(val))
+    .pipe(
+      z.object(
+        Object.fromEntries(
+          LocalizedHelper.locales.map((locale) => [locale, z.string()]),
+        ) as { [key in Locale]: z.ZodString },
+      ),
+    )
+
+  constructor(locales?: T, separator?: string) {
+    if (locales) LocalizedHelper.locales = locales
+    if (separator) this.separator = separator
+  }
+
+  protected generateKey(...args: string[]) {
+    return args.join(this.separator)
+  }
+
+  render(
+    parentKey: string,
+    data: LocalizedString,
+    render: (
+      key: keyof LocalizedString,
+      value: LocalizedString[keyof LocalizedString],
+      name: string,
+      separator: string,
+    ) => React.ReactNode,
+  ): React.ReactNode {
+    return Object.entries(data).map(([key, value]) =>
+      render(
+        key as keyof LocalizedString,
+        value,
+        this.generateKey(parentKey, key),
+        this.separator,
+      ),
+    )
+  }
+
+  resolveFormData(formData: FormData, key: string, clear = true) {
+    const data = Object.fromEntries(
+      LocalizedHelper.locales.map((locale) => {
+        const value = formData.get(this.generateKey(key, locale))
+        if (clear) formData.delete(this.generateKey(key, locale))
+        return [locale, value]
+      }),
+    )
+    return data
+  }
 }

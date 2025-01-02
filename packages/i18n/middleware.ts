@@ -5,7 +5,7 @@ import Negotiator from 'negotiator'
 
 import type { I18nConfig } from './server'
 
-export function createMiddleware(i18n: I18nConfig): NextMiddleware {
+export function createMiddleware(i18n: I18nConfig) {
   function getLocale(request: NextRequest): string {
     // Negotiator expects plain object so we need to transform headers
     const negotiatorHeaders: Record<string, string> = {}
@@ -23,7 +23,10 @@ export function createMiddleware(i18n: I18nConfig): NextMiddleware {
     return locale
   }
 
-  return function middleware(request: NextRequest) {
+  return function middleware(
+    ...args: [...Parameters<NextMiddleware>, nextMiddleware?: NextMiddleware]
+  ) {
+    const [request, event, nextMiddleware] = args
     const { pathname, search } = request.nextUrl
 
     // // `/_next/` and `/api/` are ignored by the watcher, but we need to ignore files in `public` manually.
@@ -60,5 +63,8 @@ export function createMiddleware(i18n: I18nConfig): NextMiddleware {
         ),
       )
     }
+
+    if (typeof nextMiddleware === 'function')
+      return nextMiddleware(request, event)
   }
 }

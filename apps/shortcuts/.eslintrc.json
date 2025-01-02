@@ -1,7 +1,0 @@
-{
-  "extends": [
-    "@repo/eslint-config/next.js",
-    "plugin:eslint-plugin-next-on-pages/recommended"
-  ],
-  "plugins": ["eslint-plugin-next-on-pages"]
-}

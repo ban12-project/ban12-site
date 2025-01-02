@@ -1,22 +1,62 @@
 import '#/app/globals.css'
 
-import Script from 'next/script'
+import { Metadata, Viewport } from 'next'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
+// import Lenis from '@repo/ui/lenis'
 import { getDictionary, i18n, type Locale } from '#/i18n'
 import { ThemeProvider } from 'next-themes'
 
-import Header from '#/components/ui/header'
-import LenisMount from '#/components/lenis'
+import { Toaster } from '#/components/ui/sonner'
+import Header from '#/components/header'
 
-export const metadata = {
-  title: {
-    default: 'Ban12',
-    template: '%s - Ban12',
-  },
+export async function generateMetadata({
+  params,
+}: RootLayoutProps): Promise<Metadata> {
+  const { lang } = await params
+  const messages = await getDictionary(lang)
+
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+    alternates: {
+      canonical: '/',
+      languages: {
+        'zh-CN': '/zh-CN',
+        en: '/en',
+      },
+    },
+    title: {
+      default: messages.home.title,
+      template: `%s - Toys by Ban12`,
+    },
+    openGraph: {
+      images: 'https://ban12.com/api/og?title=Toys',
+    },
+    icons: {
+      icon: {
+        url: 'https://ban12.com/api/og?w=48&h=48&bg=transparent',
+        type: 'image/png',
+      },
+      shortcut: {
+        url: 'https://ban12.com/api/og?w=192&h=192&bg=transparent',
+        type: 'image/png',
+      },
+      apple: [
+        {
+          url: 'https://ban12.com/api/og?w=64&h=64&bg=transparent',
+          type: 'image/png',
+        },
+        {
+          url: 'https://ban12.com/api/og?w=180&h=180&bg=transparent',
+          sizes: '180x180',
+          type: 'image/png',
+        },
+      ],
+    },
+  }
 }
 
-export const viewport = {
+export const viewport: Viewport = {
   themeColor: '#f8fafc',
   width: 'device-width',
   initialScale: 1,
@@ -25,36 +65,18 @@ export const viewport = {
 
 interface RootLayoutProps {
   children: React.ReactNode
-  params: { lang: Locale }
+  params: Promise<{ lang: Locale }>
 }
 
-export default async function RootLayout({
-  children,
-  params,
-}: RootLayoutProps) {
+export default async function RootLayout(props: RootLayoutProps) {
+  const params = await props.params
+
+  const { children } = props
+
   const messages = await getDictionary(params.lang)
 
   return (
-    <html suppressHydrationWarning lang={params.lang} className="dark">
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                if (localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B1120')
-                }
-              } catch (_) {}
-            `,
-          }}
-        />
-        {/* eslint-disable-next-line @next/next/no-before-interactive-script-outside-document */}
-        <Script
-          id="babylonjs-core"
-          strategy="beforeInteractive"
-          src="https://cdn.babylonjs.com/babylon.js"
-        />
-      </head>
+    <html suppressHydrationWarning lang={params.lang}>
       <body className="bg-slate-50 text-gray-800/80 dark:bg-slate-900 dark:text-gray-200/80">
         <ThemeProvider
           attribute="class"
@@ -63,13 +85,15 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <LocaleProvider locale={params.lang} i18n={i18n}>
-            <LenisMount>
-              <Header messages={messages} lang={params.lang} />
+            <Header messages={messages} lang={params.lang} />
 
-              {children}
-            </LenisMount>
+            {children}
           </LocaleProvider>
         </ThemeProvider>
+
+        <Toaster />
+
+        {/* <Lenis root gsap scrollTrigger /> */}
 
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />

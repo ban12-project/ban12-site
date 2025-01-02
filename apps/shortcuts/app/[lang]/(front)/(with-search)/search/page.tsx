@@ -1,26 +1,25 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getDictionary, type Locale } from '#/i18n'
 
-import { searchShortcuts } from '#/lib/actions'
-import ShortcutList from '#/components/ui/shortcut-list'
+import { getDictionary, type Locale } from '#/lib/i18n'
+import ShortcutList from '#/components/shortcut-list'
+import { searchShortcuts } from '#/app/[lang]/(front)/actions'
 
 type SearchPageProps = {
-  params: {
+  params: Promise<{
     lang: Locale
-  }
-  searchParams?: {
+  }>
+  searchParams?: Promise<{
     query?: string
     page?: string
-  }
+  }>
 }
 
 export const runtime = 'edge'
 
-export default async function SearchPage({
-  params,
-  searchParams,
-}: SearchPageProps) {
+export default async function SearchPage(props: SearchPageProps) {
+  const searchParams = await props.searchParams
+  const params = await props.params
   const query = searchParams?.query || ''
   if (!query) notFound()
 
@@ -32,7 +31,7 @@ export default async function SearchPage({
   return (
     <main className="container-full pt-safe-max-4">
       {Array.isArray(result) ? (
-        <ShortcutList shortcuts={result} />
+        <ShortcutList lang={params.lang} shortcuts={result} />
       ) : (
         <p className="flex h-96 flex-col items-center justify-center text-zinc-500/90">
           {result.message}
@@ -42,10 +41,11 @@ export default async function SearchPage({
   )
 }
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: SearchPageProps): Promise<Metadata> {
+export async function generateMetadata(
+  props: SearchPageProps,
+): Promise<Metadata> {
+  const searchParams = await props.searchParams
+  const params = await props.params
   const query = searchParams?.query || ''
   const messages = await getDictionary(params.lang)
 

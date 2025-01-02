@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
-import { i18n } from '#/i18n'
 
-import { getAlbums, getCollections, getShortcuts } from '#/lib/actions'
+import { getAlbums, getCollections, getShortcuts } from '#/lib/db/queries'
+import { i18n } from '#/lib/i18n'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'edge'
@@ -16,7 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       languages: Object.fromEntries(
         locales.map((locale) => [
           locale,
-          `${process.env.NEXT_PUBLIC_HOST_URL}/${locale}`,
+          `${process.env.NEXT_PUBLIC_HOST_URL}/${locale}${route}`,
         ]),
       ),
     },
@@ -74,7 +74,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       await Promise.all([shortcutsPromise, collectionsPromise, albumsPromise])
     ).flat()
   } catch (error) {
-    throw JSON.stringify(error, null, 2)
+    throw error as Error
   }
 
   return [...routesMap, ...fetchedRoutes]
