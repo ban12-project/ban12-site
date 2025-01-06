@@ -7,6 +7,7 @@ type Props = {
   height?: number
   backgroundColor?: string
   textColor: string[]
+  sizeFit?: string
 }
 
 function scale(value: number, n1: number, n2: number, n3: number, n4: number) {
@@ -15,13 +16,16 @@ function scale(value: number, n1: number, n2: number, n3: number, n4: number) {
   return Math.max(Math.min(scaled, n4), n3)
 }
 
+const PRIMARY_COLOR = 'rgb(249 115 22)'
+
 export default async function Image(props: Props) {
   const {
     title,
-    backgroundColor = 'white',
+    backgroundColor = props.sizeFit === 'cover' ? PRIMARY_COLOR : 'white',
     width = 1200,
     height = 630,
     textColor,
+    sizeFit,
   } = props
 
   const interBold = fetch(
@@ -41,13 +45,18 @@ export default async function Image(props: Props) {
         }}
       >
         <div
-          tw="flex flex-none items-center justify-center bg-orange-500"
+          tw="flex flex-none items-center justify-center"
           style={{
             fontSize: `${fontSize}px`,
             width: `${size}px`,
             height: `${size}px`,
-            maskImage: `url(${generateBase64({ width: size, height: size, n: 4 })})`,
-            maskSize: '100% 100%',
+            ...(sizeFit === 'cover'
+              ? {}
+              : {
+                  backgroundColor: PRIMARY_COLOR,
+                  maskImage: `url(${generateBase64({ width: size, height: size })})`,
+                  maskSize: '100% 100%',
+                }),
             color: textColor[0] || 'white',
           }}
         >

@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
   const height = Number(searchParams.get('h')) || undefined
   const backgroundColor = searchParams.get('bg') || undefined
   const textColor = searchParams.getAll('txt')
+  const sizeFit = searchParams.get('size-fit') || undefined
 
   const response = await OpengraphImage({
     title,
@@ -18,6 +19,7 @@ export async function GET(request: NextRequest) {
     height,
     backgroundColor,
     textColor,
+    sizeFit,
   })
   response.headers.set(
     'Cache-Control',
