@@ -31,7 +31,7 @@ async function deployToVercel(url) {
         { cwd: appPath },
       )
       await execPromise(
-        `vercel deploy --prebuilt --prod --token= --token=${process.env.VERCEL_TOKEN}`,
+        `vercel deploy --prebuilt --prod --token=${process.env.VERCEL_TOKEN}`,
         { cwd: appPath },
       )
     }
