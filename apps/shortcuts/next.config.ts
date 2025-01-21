@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 's3.ban12.com',
+        hostname: 'assets.ban12.com',
       },
     ],
   },
