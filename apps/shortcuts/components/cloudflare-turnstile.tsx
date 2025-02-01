@@ -1,5 +1,9 @@
+// document https://developers.cloudflare.com/turnstile/
+
 import { memo, useEffect, useRef } from 'react'
 import Script from 'next/script'
+
+import { cn } from '#/lib/utils'
 
 declare global {
   type WidgetId = string
@@ -22,12 +26,14 @@ declare global {
   }
 }
 
-type Props = {
+type Props = React.HTMLAttributes<React.ComponentRef<'div'>> & {
   containerId?: string
 }
 
 export default memo(function CloudflareTurnstile({
   containerId = 'cf-turnstile-widget',
+  className,
+  ...props
 }: Props) {
   const widgetId = useRef<string>(undefined)
 
@@ -66,7 +72,7 @@ export default memo(function CloudflareTurnstile({
         async
         defer
       />
-      <div id={containerId} className="checkbox" />
+      <div {...props} id={containerId} className={cn('min-h-[71px]', className)} />
     </>
   )
 })

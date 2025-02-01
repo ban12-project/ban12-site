@@ -397,7 +397,7 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
           ),
         ]}
 
-        <CloudflareTurnstile />
+        <CloudflareTurnstile data-size="flexible" />
 
         <SubmitButton isPending={isPending} messages={messages} />
       </form>
