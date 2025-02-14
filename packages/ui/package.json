@@ -26,7 +26,7 @@
     "@gsap/react": "^2.1.1",
     "gsap": "catalog:",
     "lenis": "^1.1.5",
-    "react": "catalog:react19"
+    "react": "catalog:"
   },
   "devDependencies": {
     "@darkroom.engineering/tempus": "^0.0.46",
@@ -35,7 +35,7 @@
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "catalog:",
-    "@types/react": "catalog:react19",
+    "@types/react": "catalog:",
     "autoprefixer": "^10.4.18",
     "gsap": "catalog:",
     "lenis": "^1.1.5",

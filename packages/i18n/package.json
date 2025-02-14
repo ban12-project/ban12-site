@@ -11,8 +11,8 @@
     "lint": "eslint ."
   },
   "peerDependencies": {
-    "next": "catalog:next15",
-    "react": "catalog:react19"
+    "next": "catalog:",
+    "react": "catalog:"
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.5.5",
@@ -24,7 +24,7 @@
     "@repo/typescript-config": "workspace:*",
     "@types/negotiator": "^0.6.3",
     "@types/node": "catalog:",
-    "@types/react": "catalog:react19",
+    "@types/react": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }
