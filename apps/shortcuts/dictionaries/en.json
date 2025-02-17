@@ -14,6 +14,7 @@
     "system": "System"
   },
   "title": "Shortcut Gallery",
+  "title-default": "iOS, macOS, and watchOS Automation, One Tap to Done!",
   "description": "A shortcut provides a quick way to get things done with your apps, with just a tap or by asking Siri.",
   "see-all": "See All",
   "about": "About This Shortcut",

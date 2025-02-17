@@ -1,5 +1,4 @@
 import { Suspense } from 'react'
-import { Metadata } from 'next'
 import { Link } from '@repo/i18n/client'
 import { Plus } from 'lucide-react'
 
@@ -57,16 +56,4 @@ export default async function Home(props: HomePageProps) {
       </footer>
     </>
   )
-}
-
-export async function generateMetadata(
-  props: HomePageProps,
-): Promise<Metadata> {
-  const params = await props.params
-  const messages = await getDictionary(params.lang)
-
-  return {
-    title: messages.title,
-    description: messages.description,
-  }
 }

@@ -38,9 +38,10 @@ export async function generateMetadata(
       ),
     },
     title: {
-      default: messages.title,
+      default: `${messages['title-default']} - ${messages.title}`,
       template: `%s - ${messages.title} by ${process.env.NEXT_PUBLIC_SITE_NAME}`,
     },
+    description: messages.description,
     openGraph: {
       images: `https://ban12.com/api/og?title=${messages.title}`,
     },

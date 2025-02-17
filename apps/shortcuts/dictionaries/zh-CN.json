@@ -14,6 +14,7 @@
     "system": "跟随系统"
   },
   "title": "快捷指令中心",
+  "title-default": "iOS、macOS 和 watchOS 自动化，一键搞定！",
   "description": "快捷指令可让你使用 App 快速完成任务，只需轻点一下或询问 Siri 即可。",
   "see-all": "查看全部",
   "about": "关于此快捷指令",

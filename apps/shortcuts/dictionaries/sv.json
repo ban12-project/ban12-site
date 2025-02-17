@@ -14,6 +14,7 @@
     "system": "System"
   },
   "title": "Genvägsgalleri",
+  "title-default": "iOS-, macOS- och watchOS-automatisering, klart med ett tryck!",
   "description": "En genväg ger ett snabbt sätt att få saker gjorda med dina appar, med bara ett tryck eller genom att fråga Siri.",
   "see-all": "Se alla",
   "about": "Om denna genväg",
