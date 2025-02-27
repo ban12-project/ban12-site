@@ -1,7 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
-import { useUpdateEffect } from 'ahooks'
+import { useEffect, useRef } from 'react'
 
 interface Icon extends React.SVGAttributes<SVGElement> {
   open?: boolean
@@ -12,8 +11,15 @@ export default function MenuIcon({ open = false, ...props }: Icon) {
   const openTop = useRef<SVGAnimateElement>(null)
   const closeBottom = useRef<SVGAnimateElement>(null)
   const closeTop = useRef<SVGAnimateElement>(null)
+  const isInitialRender = useRef(true)
 
-  useUpdateEffect(() => {
+  useEffect(() => {
+    // skips running the effect for the first time.
+    if (isInitialRender.current) {
+      isInitialRender.current = false
+      return
+    }
+
     if (open) {
       openBottom.current?.beginElement()
       openTop.current?.beginElement()

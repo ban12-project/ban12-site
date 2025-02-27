@@ -5,7 +5,7 @@ import {
   useSelectedLayoutSegment,
 } from 'next/navigation'
 import { useLocale } from '@repo/i18n/client'
-import { useDebounceFn } from 'ahooks'
+import { useDebounceCallback } from 'usehooks-ts'
 import { CircleX, Search } from 'lucide-react'
 
 import type { Messages } from '#/lib/i18n'
@@ -42,7 +42,7 @@ export default function SearchBar({
   const childrenSegment = useSelectedLayoutSegment('children')
   const isOnSearch = childrenSegment === 'search'
 
-  const { run } = useDebounceFn(
+  const debounced = useDebounceCallback(
     () => {
       const params = new URLSearchParams(searchParams)
       if (query) {
@@ -56,14 +56,14 @@ export default function SearchBar({
         router.replace(`/${locale}/search?${params.toString()}`)
       }
     },
-    { wait: 300 },
+    300,
   )
 
   const onSubmit: React.FormEventHandler<React.ComponentRef<'form'>> = (
     event,
   ) => {
     event.preventDefault()
-    run()
+    debounced()
   }
 
   const onInput: React.FormEventHandler<React.ComponentRef<'input'>> = (
@@ -71,7 +71,7 @@ export default function SearchBar({
   ) => {
     const query = event.currentTarget.value
     setQuery(query)
-    run()
+    debounced()
   }
 
   const onCancelButtonClick = () => {
