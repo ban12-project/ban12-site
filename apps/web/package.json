@@ -14,18 +14,18 @@
     "*.{js,jsx,ts,tsx}": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "@gsap/react": "^2.1.1",
-    "@react-three/drei": "^9.117.0",
-    "@react-three/fiber": "9.0.0-rc.1",
+    "@gsap/react": "catalog:",
+    "@react-three/drei": "^10.0.3",
+    "@react-three/fiber": "9.0.4",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
     "glsl-random": "^0.0.5",
-    "gsap": "^3.12.5",
+    "gsap": "catalog:",
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "three": "^0.170.0",
-    "three-stdlib": "^2.34.0",
+    "three": "^0.173.0",
+    "three-stdlib": "^2.35.14",
     "tunnel-rat": "^0.1.2"
   },
   "devDependencies": {
@@ -37,7 +37,7 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@types/three": "^0.170.0",
+    "@types/three": "^0.173.0",
     "eslint": "catalog:",
     "file-loader": "^6.2.0",
     "glslify": "^7.1.1",

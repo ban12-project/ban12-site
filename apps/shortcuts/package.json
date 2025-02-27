@@ -34,7 +34,6 @@
     "@sentry/nextjs": "^8.49.0",
     "@simplewebauthn/browser": "^9.0.1",
     "@simplewebauthn/server": "^9.0.3",
-    "ahooks": "^3.8.4",
     "class-variance-authority": "catalog:",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
@@ -55,6 +54,7 @@
     "server-only": "^0.0.1",
     "sonner": "^1.7.1",
     "tailwindcss-animate": "^1.0.7",
+    "usehooks-ts": "catalog:",
     "vaul": "^1.1.2",
     "zod": "catalog:"
   },

@@ -1,9 +1,8 @@
 'use client'
 
-import { ChangeEventHandler, useRef, useState } from 'react'
-import { useGSAP } from '@gsap/react'
+import { type ChangeEventHandler, useEffect, useRef, useState } from 'react'
+// import { useGSAP } from '@gsap/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useDrop } from 'ahooks'
 import gsap from 'gsap'
 import { Flip } from 'gsap/Flip'
 import { Loader2 } from 'lucide-react'
@@ -16,11 +15,11 @@ import { Button } from '#/components/ui/button'
 import {
   Form,
   FormControl,
-  FormDescription,
+  // FormDescription,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage,
+  // FormLabel,
+  // FormMessage,
 } from '#/components/ui/form'
 import {
   Select,
@@ -46,14 +45,55 @@ export default function SevenZip() {
 
   const { pending, outputFilesRef, resolve, progress } = useSevenZip()
 
-  // @ts-expect-error - supported in fact, may be type missing
-  useDrop(() => window, {
-    onFiles: (files) => resolve(files, format),
-    onDragEnter: () => setIsHovering(true),
-    onDragLeave: () => setIsHovering(false),
-  })
+  useEffect(() => {
+    const onDrop = (e: DragEvent) => {
+      // Prevent default behavior (Prevent file from being opened)
+      e.preventDefault()
 
-  const { isSupportShowSaveFilePicker, saveFile } = useSaveFile()
+      if (!e.dataTransfer) return
+
+      if (e.dataTransfer.items) {
+        // Use DataTransferItemList interface to access the file(s)
+        for (let i = 0; i < e.dataTransfer.items.length; i++) {
+          // If dropped items aren't files, reject them
+          if (e.dataTransfer.items[i].kind === 'file') {
+            const file = e.dataTransfer.items[i].getAsFile()
+            if (!file) return
+            resolve([file], format)
+          }
+        }
+      } else {
+        // Use DataTransfer interface to access the file(s)
+        resolve(Array.from(e.dataTransfer.files), format)
+      }
+      setIsHovering(false)
+    }
+
+    const onDragOver = (e: DragEvent) => {
+      // Prevent default behavior (Prevent file from being opened)
+      e.preventDefault()
+      setIsHovering(true)
+    }
+
+    const onCancel = () => {
+      setIsHovering(false)
+    }
+
+    window.addEventListener('drop', onDrop)
+    window.addEventListener('dragover', onDragOver)
+    window.addEventListener('dragend', onCancel)
+    window.addEventListener('dragleave', onCancel)
+
+    return () => {
+      window.removeEventListener('drop', onDrop)
+      window.removeEventListener('dragover', onDragOver)
+      window.removeEventListener('dragend', onCancel)
+      window.removeEventListener('dragleave', onCancel)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resolve])
+
+  const { saveFile } = useSaveFile()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -70,7 +110,7 @@ export default function SevenZip() {
     resolve(Array.from(files), format)
   }
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (/* data: z.infer<typeof FormSchema> */) => {
     if (outputFilesRef.current.length === 0) {
       return inputRef.current?.click()
     }
@@ -124,6 +164,7 @@ export default function SevenZip() {
         onSubmit={form.handleSubmit(onSubmit)}
         ref={formRef}
         className="flex h-[calc(100vh-var(--layout-header-height))] items-center justify-center"
+        data-drag-over={isHovering}
       >
         <input
           className="sr-only"

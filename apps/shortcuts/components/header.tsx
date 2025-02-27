@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useClickAway } from 'ahooks'
+import { useOnClickOutside } from 'usehooks-ts'
 
 import type { Messages } from '#/lib/i18n'
 import { cn } from '#/lib/utils'
@@ -34,12 +34,13 @@ export function Header({ messages }: HeaderProps) {
     return () => observer.disconnect()
   }, [])
 
-  useClickAway(
+  useOnClickOutside(
+    // @ts-expect-error - https://github.com/juliencrn/usehooks-ts/issues/663
+    ref,
     () => {
       if (!sticky) return
       ;(document.activeElement as HTMLElement).blur()
     },
-    ref,
     'touchstart',
   )
 
