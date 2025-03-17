@@ -65,6 +65,13 @@ export default async function RootLayout(props: Props) {
 
   return (
     <html lang={params.lang}>
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6617787138475471"
+          crossOrigin="anonymous"
+        ></script>
+      </head>
       <body className={`${inter.className} bg-gray-50 dark:bg-gray-900`}>
         <LocaleProvider locale={params.lang} i18n={i18n}>
           {children}
