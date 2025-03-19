@@ -168,7 +168,7 @@ function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null)
   const [voxels, setVoxels] = useState<Voxel[]>([])
   const dummy = useMemo(() => new THREE.Object3D(), [])
-  const tl = useMemo(() => gsap.timeline(), [])
+  const tl = useRef<ReturnType<typeof gsap.timeline> | null>(null)
 
   const randomCoordinate = () => {
     let v = Math.random() - 0.5
@@ -208,10 +208,12 @@ function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
   useGSAP(() => {
     if (!instancedMeshRef.current) return
 
+    tl.current = gsap.timeline()
+
     for (let i = 0; i < voxels.length; i++) {
       const duration = 0.5 + 0.5 * Math.pow(Math.random(), 6)
 
-      tl.to(
+      tl.current.to(
         voxels[i].color,
         {
           delay: 0.7 * Math.random() * duration,
@@ -227,7 +229,7 @@ function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
         0,
       )
 
-      tl.to(
+      tl.current.to(
         voxels[i].position,
         {
           delay: 0.2 * Math.random(),
@@ -247,7 +249,7 @@ function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
     }
 
     // increase the model rotation during transition
-    tl.to(
+    tl.current.to(
       instancedMeshRef.current.rotation,
       {
         duration: 1.2,
@@ -258,7 +260,7 @@ function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
     )
 
     // show the right number of voxels
-    tl.to(
+    tl.current.to(
       instancedMeshRef.current,
       {
         duration: 0.4,
@@ -268,7 +270,7 @@ function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
     )
 
     // update the instanced mesh accordingly to voxels data
-    tl.eventCallback('onUpdate', () => {
+    tl.current.eventCallback('onUpdate', () => {
       instancedMeshRef.current!.instanceMatrix.needsUpdate = true
       instancedMeshRef.current!.instanceColor!.needsUpdate = true
     })
@@ -281,7 +283,7 @@ function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
       castShadow
       receiveShadow
       onPointerMissed={() => {
-        tl.reversed(!tl.reversed())
+        tl.current?.reversed(!tl.current?.reversed())
       }}
     >
       {/* @ts-expect-error -- https://docs.pmnd.rs/react-three-fiber/tutorials/typescript#extend-usage */}
