@@ -1,0 +1,259 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.gangchelin": {
+      "name": "gangchelin",
+      "schema": "",
+      "columns": {
+        "comment": {
+          "name": "comment",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "typeid": {
+          "name": "typeid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "play": {
+          "name": "play",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pic": {
+          "name": "pic",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "subtitle": {
+          "name": "subtitle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "copyright": {
+          "name": "copyright",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "review": {
+          "name": "review",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "author": {
+          "name": "author",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mid": {
+          "name": "mid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "length": {
+          "name": "length",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "video_review": {
+          "name": "video_review",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "aid": {
+          "name": "aid",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bvid": {
+          "name": "bvid",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hide_click": {
+          "name": "hide_click",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_pay": {
+          "name": "is_pay",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_union_video": {
+          "name": "is_union_video",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_steins_gate": {
+          "name": "is_steins_gate",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_live_playback": {
+          "name": "is_live_playback",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_lesson_video": {
+          "name": "is_lesson_video",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_lesson_finished": {
+          "name": "is_lesson_finished",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lesson_update_info": {
+          "name": "lesson_update_info",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "jump_url": {
+          "name": "jump_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "meta": {
+          "name": "meta",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_avoided": {
+          "name": "is_avoided",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "season_id": {
+          "name": "season_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "attribute": {
+          "name": "attribute",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_charging_arc": {
+          "name": "is_charging_arc",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "elec_arc_type": {
+          "name": "elec_arc_type",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vt": {
+          "name": "vt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enable_vt": {
+          "name": "enable_vt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vt_display": {
+          "name": "vt_display",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "playback_position": {
+          "name": "playback_position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_self_view": {
+          "name": "is_self_view",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "gangchelin_aid_bvid_pk": {
+          "name": "gangchelin_aid_bvid_pk",
+          "columns": [
+            "aid",
+            "bvid"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {}
+  }
+}
