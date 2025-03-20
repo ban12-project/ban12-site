@@ -1,0 +1,1 @@
+ALTER TABLE "gangchelin" ALTER COLUMN "meta" DROP NOT NULL;
