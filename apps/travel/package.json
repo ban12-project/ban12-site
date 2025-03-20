@@ -1,0 +1,52 @@
+{
+  "name": "travel",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "npx tsx lib/db/migrate.ts",
+    "db:studio": "drizzle-kit studio",
+    "db:push": "drizzle-kit push",
+    "db:pull": "drizzle-kit pull",
+    "db:check": "drizzle-kit check",
+    "db:up": "drizzle-kit up",
+    "build:worker": "opennextjs-cloudflare build && wrangler d1 execute NEXT_TAG_CACHE_D1 --remote --file .open-next/cloudflare/cache-assets-manifest.sql",
+    "preview:worker": "opennextjs-cloudflare preview",
+    "preview": "pnpm build:worker && pnpm preview:worker",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+  },
+  "dependencies": {
+    "@auth/drizzle-adapter": "^1.8.0",
+    "@gsap/react": "catalog:",
+    "@repo/i18n": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.40.0",
+    "gsap": "catalog:",
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "next-auth": "5.0.0-beta.25",
+    "next-themes": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "catalog:",
+    "@opennextjs/cloudflare": "1.0.0-beta.3",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "babel-plugin-react-compiler": "catalog:",
+    "drizzle-kit": "^0.30.5",
+    "eslint": "catalog:",
+    "postcss": "catalog:",
+    "typescript": "catalog:",
+    "wrangler": "^4.13.1"
+  }
+}
