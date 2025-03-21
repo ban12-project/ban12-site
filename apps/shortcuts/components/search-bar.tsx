@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   useRouter,
   useSearchParams,
   useSelectedLayoutSegment,
 } from 'next/navigation'
 import { useLocale } from '@repo/i18n/client'
-import { useDebounceCallback } from 'usehooks-ts'
 import { CircleX, Search } from 'lucide-react'
+import { useDebounceCallback } from 'usehooks-ts'
 
 import type { Messages } from '#/lib/i18n'
 import { cn } from '#/lib/utils'
@@ -34,6 +34,7 @@ export default function SearchBar({
   }, [buttonRef])
 
   const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
   const router = useRouter()
   const { locale } = useLocale()
   const [query, setQuery] = useState(
@@ -42,9 +43,9 @@ export default function SearchBar({
   const childrenSegment = useSelectedLayoutSegment('children')
   const isOnSearch = childrenSegment === 'search'
 
-  const debounced = useDebounceCallback(
-    () => {
-      const params = new URLSearchParams(searchParams)
+  const handleQueryChange = useCallback(
+    (query: string) => {
+      console.log(query)
       if (query) {
         params.set('query', query)
       } else {
@@ -56,14 +57,17 @@ export default function SearchBar({
         router.replace(`/${locale}/search?${params.toString()}`)
       }
     },
-    300,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isOnSearch],
   )
+
+  const debounced = useDebounceCallback(handleQueryChange, 300)
 
   const onSubmit: React.FormEventHandler<React.ComponentRef<'form'>> = (
     event,
   ) => {
     event.preventDefault()
-    debounced()
+    debounced(query)
   }
 
   const onInput: React.FormEventHandler<React.ComponentRef<'input'>> = (
@@ -71,7 +75,7 @@ export default function SearchBar({
   ) => {
     const query = event.currentTarget.value
     setQuery(query)
-    debounced()
+    debounced(query)
   }
 
   const onCancelButtonClick = () => {
