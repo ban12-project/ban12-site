@@ -34,6 +34,7 @@
     "@sentry/nextjs": "^8.49.0",
     "@simplewebauthn/browser": "^9.0.1",
     "@simplewebauthn/server": "^9.0.3",
+    "@vercel/kv": "^3.0.0",
     "class-variance-authority": "catalog:",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
