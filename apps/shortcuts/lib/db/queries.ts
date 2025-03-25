@@ -2,15 +2,31 @@ import 'server-only'
 
 import { cache } from 'react'
 import { Pool } from '@neondatabase/serverless'
+import { kv } from '@vercel/kv'
 import { eq, or, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/neon-serverless'
 
 import * as schema from './schema'
-import { album, collection, shortcut, type LocalizedString } from './schema'
+import {
+  album,
+  collection,
+  shortcut,
+  type LocalizedString,
+  type SelectShortcut,
+} from './schema'
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL! })
 
 export const db = drizzle(pool, { schema })
+
+const CACHE_TTL = {
+  SHORTCUT: 3600, // 1小时
+  SHORTCUTS_BY_ALBUM: 1800, // 30分钟
+  ALBUMS: 3600, // 1小时
+  COLLECTIONS: 3600, // 1小时
+  ALBUMS_WITH_SHORTCUTS: 1800, // 30分钟
+  SEARCH: 900, // 15分钟
+}
 
 export async function getUser(email: string) {
   try {
@@ -63,6 +79,11 @@ export async function saveShortcut({
       collectionId,
       albumId,
     })
+
+    await kv.del(`shortcut:uuid:${uuid}`)
+    if (albumId) {
+      await kv.del(`shortcuts:album:${albumId}:*`)
+    }
   } catch (error) {
     console.error('Failed to save shortcut in database')
     throw error
@@ -109,6 +130,11 @@ export async function updateShortcutByUuid({
         albumId,
       })
       .where(eq(shortcut.uuid, uuid))
+
+    await kv.del(`shortcut:uuid:${uuid}`)
+    if (albumId) {
+      await kv.del(`shortcuts:album:${albumId}:*`)
+    }
   } catch (error) {
     console.error('Failed to update shortcut in database')
     throw error
@@ -118,6 +144,8 @@ export async function updateShortcutByUuid({
 export async function deleteShortcutByUuid(uuid: string) {
   try {
     await db.delete(shortcut).where(eq(shortcut.uuid, uuid))
+
+    await kv.del(`shortcut:uuid:${uuid}`)
   } catch (error) {
     console.error('Failed to delete shortcut in database')
     throw error
@@ -135,10 +163,20 @@ export const getShortcuts = cache(async () => {
 })
 
 export const getShortcutByUuid = cache(async (uuid: string) => {
+  const cacheKey = `shortcut:uuid:${uuid}`
+
   try {
+    const cachedShortcut = await kv.get<SelectShortcut>(cacheKey)
+    if (cachedShortcut) return cachedShortcut
+
     const shortcut = await db.query.shortcut.findFirst({
       where: (shortcut, { eq }) => eq(shortcut.uuid, uuid),
     })
+
+    if (shortcut) {
+      await kv.set(cacheKey, shortcut, { ex: CACHE_TTL.SHORTCUT })
+    }
+
     return shortcut
   } catch (error) {
     console.error('Failed to get shortcut from database')
@@ -148,13 +186,25 @@ export const getShortcutByUuid = cache(async (uuid: string) => {
 
 export const getShortcutByAlbumId = cache(
   async (albumId: number, pageSize: number, currentPage: number) => {
+    const cacheKey = `shortcuts:album:${albumId}:page:${currentPage}:size:${pageSize}`
+
     try {
+      const cachedShortcuts = await kv.get<SelectShortcut[]>(cacheKey)
+      if (cachedShortcuts) {
+        return cachedShortcuts
+      }
+
       const shortcuts = await db.query.shortcut.findMany({
         where: (shortcut, { eq }) => eq(shortcut.albumId, albumId),
         limit: pageSize,
         offset: (currentPage - 1) * pageSize,
         orderBy: (shortcuts, { desc }) => desc(shortcuts.updatedAt),
       })
+
+      if (shortcuts.length > 0) {
+        await kv.set(cacheKey, shortcuts, { ex: CACHE_TTL.SHORTCUTS_BY_ALBUM })
+      }
+
       return shortcuts
     } catch (error) {
       console.error('Failed to get shortcut from database')
@@ -164,7 +214,14 @@ export const getShortcutByAlbumId = cache(
 )
 
 export async function searchShortcutsByQuery(query: string) {
+  const cacheKey = `search:${query}`
+
   try {
+    const cachedResults = await kv.get<SelectShortcut[]>(cacheKey)
+    if (cachedResults) {
+      return cachedResults
+    }
+
     const shortcuts = await db
       .select()
       .from(shortcut)
@@ -174,6 +231,11 @@ export async function searchShortcutsByQuery(query: string) {
           sql`${shortcut.description}::text ILIKE ${`%${query}%`}`,
         ),
       )
+
+    if (shortcuts.length > 0) {
+      await kv.set(cacheKey, shortcuts, { ex: CACHE_TTL.SEARCH })
+    }
+
     return shortcuts
   } catch (error) {
     console.error('Failed to get shortcut from database')
