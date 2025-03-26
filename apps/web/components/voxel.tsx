@@ -3,10 +3,21 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import { OrbitControls, PerspectiveCamera, useGLTF } from '@react-three/drei'
-import { extend, useFrame, useThree } from '@react-three/fiber'
+import {
+  extend,
+  useFrame,
+  useThree,
+  type ThreeElement,
+} from '@react-three/fiber'
 import gsap from 'gsap'
 import * as THREE from 'three'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
+
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    roundedBoxGeometry: ThreeElement<typeof RoundedBoxGeometry>
+  }
+}
 
 extend({ RoundedBoxGeometry })
 
@@ -286,7 +297,6 @@ function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
         tl.current?.reversed(!tl.current?.reversed())
       }}
     >
-      {/* @ts-expect-error -- https://docs.pmnd.rs/react-three-fiber/tutorials/typescript#extend-usage */}
       <roundedBoxGeometry
         args={[
           params.boxSize,
