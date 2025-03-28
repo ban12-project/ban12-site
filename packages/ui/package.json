@@ -22,15 +22,10 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@darkroom.engineering/tempus": "^0.0.46",
-    "@gsap/react": "catalog:",
     "gsap": "catalog:",
-    "lenis": "^1.1.21",
     "react": "catalog:"
   },
   "devDependencies": {
-    "@darkroom.engineering/tempus": "^0.0.46",
-    "@gsap/react": "catalog:",
     "@repo/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
@@ -38,9 +33,12 @@
     "@types/react": "catalog:",
     "autoprefixer": "^10.4.18",
     "gsap": "catalog:",
-    "lenis": "^1.1.21",
     "postcss": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
+  },
+  "dependencies": {
+    "lenis": "^1.2.3",
+    "tempus": "1.0.0-dev.10"
   }
 }
