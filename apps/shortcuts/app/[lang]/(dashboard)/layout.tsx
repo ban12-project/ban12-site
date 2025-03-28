@@ -1,11 +1,11 @@
 import '#/app/globals.css'
 
 import { LocaleProvider } from '@repo/i18n/client'
+import { Toaster } from '@repo/ui/components/sonner'
 import { SessionProvider } from 'next-auth/react'
 
 import { auth } from '#/lib/auth'
 import { i18n, type Locale } from '#/lib/i18n'
-import { Toaster } from '#/components/ui/sonner'
 
 type RootLayoutProps = {
   params: Promise<{ lang: Locale }>

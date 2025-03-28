@@ -3,11 +3,11 @@ import '#/app/globals.css'
 import { Metadata, Viewport } from 'next'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
+import { Toaster } from '@repo/ui/components/sonner'
 // import Lenis from '@repo/ui/lenis'
 import { getDictionary, i18n, type Locale } from '#/i18n'
 import { ThemeProvider } from 'next-themes'
 
-import { Toaster } from '#/components/ui/sonner'
 import Header from '#/components/header'
 
 export async function generateMetadata({
@@ -85,7 +85,7 @@ export default async function RootLayout(props: RootLayoutProps) {
           disableTransitionOnChange
         >
           <LocaleProvider locale={params.lang} i18n={i18n}>
-            <Header messages={messages} lang={params.lang} />
+            <Header />
 
             {children}
           </LocaleProvider>

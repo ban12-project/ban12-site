@@ -2,10 +2,7 @@
 
 import Link from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-
-import { Button } from '#/components/ui/button'
+import { Button } from '@repo/ui/components/button'
 import {
   Form,
   FormControl,
@@ -14,14 +11,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '#/components/ui/form'
+} from '@repo/ui/components/form'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '#/components/ui/select'
+} from '@repo/ui/components/select'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 const FormSchema = z.object({
   email: z

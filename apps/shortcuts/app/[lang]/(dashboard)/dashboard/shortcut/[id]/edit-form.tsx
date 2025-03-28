@@ -1,12 +1,12 @@
 'use client'
 
 import { useActionState } from 'react'
+import { Button } from '@repo/ui/components/button'
+import { Input } from '@repo/ui/components/input'
+import { Label } from '@repo/ui/components/label'
 
 import type { LocalizedString, SelectShortcut } from '#/lib/db/schema'
 import { LocalizedHelper } from '#/lib/utils'
-import { Button } from '#/components/ui/button'
-import { Input } from '#/components/ui/input'
-import { Label } from '#/components/ui/label'
 import { updateShortcut } from '#/app/[lang]/(dashboard)/actions'
 
 type Props = {

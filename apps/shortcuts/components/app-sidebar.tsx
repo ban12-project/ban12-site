@@ -2,6 +2,15 @@
 
 import * as React from 'react'
 import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@repo/ui/components/sidebar'
+import {
   BookOpen,
   Bot,
   Frame,
@@ -14,15 +23,6 @@ import {
 } from 'lucide-react'
 import { User } from 'next-auth'
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from '#/components/ui/sidebar'
 import { NavMain } from '#/components/nav-main'
 import { NavProjects } from '#/components/nav-projects'
 import { NavSecondary } from '#/components/nav-secondary'

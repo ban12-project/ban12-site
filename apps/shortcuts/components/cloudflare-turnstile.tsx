@@ -2,8 +2,7 @@
 
 import { memo, useEffect, useRef } from 'react'
 import Script from 'next/script'
-
-import { cn } from '#/lib/utils'
+import { cn } from '@repo/ui/lib/utils'
 
 declare global {
   type WidgetId = string
@@ -72,7 +71,11 @@ export default memo(function CloudflareTurnstile({
         async
         defer
       />
-      <div {...props} id={containerId} className={cn('min-h-[71px]', className)} />
+      <div
+        {...props}
+        id={containerId}
+        className={cn('min-h-[71px]', className)}
+      />
     </>
   )
 })

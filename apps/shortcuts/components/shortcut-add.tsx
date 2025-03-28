@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation'
+import { Button } from '@repo/ui/components/button'
+import { cn } from '@repo/ui/lib/utils'
 import SuperEllipseSVG from '@repo/ui/super-ellipse-svg'
 import { Plus, Share } from 'lucide-react'
 
 import { getShortcutByUuid } from '#/lib/db/queries'
 import type { Locale, Messages } from '#/lib/i18n'
-import { cn } from '#/lib/utils'
-import { Button } from '#/components/ui/button'
 import ShortcutCard from '#/components/shortcut-card'
 
 export interface ShortcutAddProps extends React.ComponentProps<'div'> {

@@ -1,7 +1,8 @@
-import { CheckIcon, CopyIcon } from '@radix-ui/react-icons'
+import { cn } from '@repo/ui/lib/utils'
+import { Check, Copy } from 'lucide-react'
 import { ListChildComponentProps } from 'react-window'
 
-import { cn, formatSize } from '#/lib/utils'
+import { formatSize } from '#/lib/utils'
 import { useCopyToClipboard } from '#/hooks/use-copy-to-clipboard'
 
 import { FileItem } from './file-explorer'
@@ -68,7 +69,7 @@ export default function FileCard({ index, style, data }: FileCardProps) {
             <code>{item.sha256}</code>
           </span>
           <button className="p-2" onClick={() => onCopy(item.sha256)}>
-            {isCopied ? <CheckIcon /> : <CopyIcon />}
+            {isCopied ? <Check /> : <Copy />}
           </button>
         </dd>
       </div>

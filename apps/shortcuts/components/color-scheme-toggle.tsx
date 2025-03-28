@@ -1,8 +1,7 @@
 'use client'
 
+import { cn } from '@repo/ui/lib/utils'
 import { useTheme } from 'next-themes'
-
-import { cn } from '#/lib/utils'
 
 type Props = React.ButtonHTMLAttributes<React.ComponentRef<'div'>>
 

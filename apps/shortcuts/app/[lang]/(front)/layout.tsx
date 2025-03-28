@@ -5,11 +5,11 @@ import dynamic from 'next/dynamic'
 import { Inter } from 'next/font/google'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
+import { Toaster } from '@repo/ui/components/sonner'
+import { cn } from '@repo/ui/lib/utils'
 import { ThemeProvider } from 'next-themes'
 
 import { getDictionary, i18n, type Locale } from '#/lib/i18n'
-import { cn } from '#/lib/utils'
-import { Toaster } from '#/components/ui/sonner'
 // import CSSPaintPolyfill from '#/components/css-paint-polyfill'
 import { WebVitals } from '#/components/web-vitals'
 

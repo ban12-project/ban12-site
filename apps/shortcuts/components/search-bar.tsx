@@ -5,11 +5,11 @@ import {
   useSelectedLayoutSegment,
 } from 'next/navigation'
 import { useLocale } from '@repo/i18n/client'
+import { cn } from '@repo/ui/lib/utils'
 import { CircleX, Search } from 'lucide-react'
 import { useDebounceCallback } from 'usehooks-ts'
 
 import type { Messages } from '#/lib/i18n'
-import { cn } from '#/lib/utils'
 
 interface SearchBarProps
   extends React.ButtonHTMLAttributes<React.ComponentRef<'form'>> {

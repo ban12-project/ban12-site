@@ -1,20 +1,12 @@
 'use client'
 
 import {
-  Folder,
-  MoreHorizontal,
-  Share,
-  Trash2,
-  type LucideIcon,
-} from 'lucide-react'
-
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '#/components/ui/dropdown-menu'
+} from '@repo/ui/components/dropdown-menu'
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -23,7 +15,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '#/components/ui/sidebar'
+} from '@repo/ui/components/sidebar'
+import {
+  Folder,
+  MoreHorizontal,
+  Share,
+  Trash2,
+  type LucideIcon,
+} from 'lucide-react'
 
 export function NavProjects({
   projects,

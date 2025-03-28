@@ -1,13 +1,12 @@
 import * as React from 'react'
-import { type LucideIcon } from 'lucide-react'
-
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '#/components/ui/sidebar'
+} from '@repo/ui/components/sidebar'
+import { type LucideIcon } from 'lucide-react'
 
 export function NavSecondary({
   items,

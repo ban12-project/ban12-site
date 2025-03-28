@@ -1,13 +1,7 @@
-import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
 import { z } from 'zod'
 
 import type { LocalizedString } from './db/schema'
 import type { Locale } from './i18n'
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
 
 /**
  * @param size bytes

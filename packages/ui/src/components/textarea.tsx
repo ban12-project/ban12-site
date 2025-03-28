@@ -1,7 +1,6 @@
 import * as React from 'react'
+import { cn } from '@repo/ui/lib/utils'
 import { cva, VariantProps } from 'class-variance-authority'
-
-import { cn } from '#/lib/utils'
 
 const textareaVariants = cva('flex min-h-[80px] w-full rounded-md px-3 py-2', {
   variants: {

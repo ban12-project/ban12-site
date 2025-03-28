@@ -9,19 +9,7 @@ import React, {
 } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocale } from '@repo/i18n/client'
-import { Loader2 } from 'lucide-react'
-import { createPortal } from 'react-dom'
-import { useForm, useFormContext } from 'react-hook-form'
-import * as z from 'zod'
-
-import type { Messages } from '#/lib/i18n'
-import { RecordType } from '#/lib/shortcut'
-import { LocalizedHelper } from '#/lib/utils'
-import { Button } from '#/components/ui/button'
-import { postShortcut } from '#/app/[lang]/(front)/actions'
-
-import CloudflareTurnstile from './cloudflare-turnstile'
-import { PAGE_DRAWER_HEADER_ID } from './page-drawer'
+import { Button } from '@repo/ui/components/button'
 import {
   Form,
   FormControl,
@@ -30,17 +18,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from './ui/form'
-import { Input } from './ui/input'
+} from '@repo/ui/components/form'
+import { Input } from '@repo/ui/components/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select'
-import { Switch } from './ui/switch'
-import { Textarea } from './ui/textarea'
+} from '@repo/ui/components/select'
+import { Switch } from '@repo/ui/components/switch'
+import { Textarea } from '@repo/ui/components/textarea'
+import { Loader2 } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { useForm, useFormContext } from 'react-hook-form'
+import * as z from 'zod'
+
+import type { Messages } from '#/lib/i18n'
+import { RecordType } from '#/lib/shortcut'
+import { LocalizedHelper } from '#/lib/utils'
+import { postShortcut } from '#/app/[lang]/(front)/actions'
+
+import CloudflareTurnstile from './cloudflare-turnstile'
+import { PAGE_DRAWER_HEADER_ID } from './page-drawer'
 
 interface ShortcutPostProps {
   messages: Messages

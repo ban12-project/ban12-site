@@ -1,10 +1,8 @@
 import { useEffect } from 'react'
-import * as ToggleGroup from '@radix-ui/react-toggle-group'
-import * as Tooltip from '@radix-ui/react-tooltip'
+import { ToggleGroup, ToggleGroupItem } from '@repo/ui/components/toggle-group'
+import { cn } from '@repo/ui/lib/utils'
 import type { Messages } from '#/i18n'
 import { useTheme } from 'next-themes'
-
-import { cn } from '#/lib/utils'
 
 type Props = { className?: string; messages: Messages }
 
@@ -30,37 +28,22 @@ export function ThemeToggle({ className, messages }: Props) {
   }, [resolvedTheme])
 
   return (
-    <ToggleGroup.Root
+    <ToggleGroup
       className={cn('space-x-6', className)}
       type="single"
       value={theme}
       onValueChange={setTheme}
     >
-      <Tooltip.Provider>
-        {themes.map((value) => {
-          const Icon = Icons[value]
+      {themes.map((value) => {
+        const Icon = Icons[value]
 
-          return (
-            <Tooltip.Root key={value}>
-              <Tooltip.Trigger asChild>
-                <ToggleGroup.Item value={value}>
-                  <Icon selected={theme === value} className="h-6 w-6" />
-                </ToggleGroup.Item>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content
-                  className="data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade select-none rounded-[4px] bg-white px-[15px] py-2.5 leading-none shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] will-change-[transform,opacity]"
-                  sideOffset={6}
-                >
-                  {messages.theme[value as keyof Messages['theme']]}
-                  <Tooltip.Arrow className="fill-white" />
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-          )
-        })}
-      </Tooltip.Provider>
-    </ToggleGroup.Root>
+        return (
+          <ToggleGroupItem key={value} value={value}>
+            <Icon selected={theme === value} className="h-6 w-6" />
+          </ToggleGroupItem>
+        )
+      })}
+    </ToggleGroup>
   )
 }
 

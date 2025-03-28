@@ -1,6 +1,7 @@
 'use client'
 
 import { ReactEventHandler, useActionState, useTransition } from 'react'
+import { Button } from '@repo/ui/components/button'
 import { Loader2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { signIn } from 'next-auth/webauthn'
@@ -8,7 +9,6 @@ import { signIn } from 'next-auth/webauthn'
 import { login } from '#/app/[lang]/(dashboard)/actions'
 
 import CloudflareTurnstile from './cloudflare-turnstile'
-import { Button } from './ui/button'
 
 export default function LoginForm() {
   const [errorMessage, dispatch, pending] = useActionState(login, undefined)

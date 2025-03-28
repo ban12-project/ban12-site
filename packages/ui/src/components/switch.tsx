@@ -2,9 +2,8 @@
 
 import * as React from 'react'
 import * as SwitchPrimitives from '@radix-ui/react-switch'
+import { cn } from '@repo/ui/lib/utils'
 import { cva, VariantProps } from 'class-variance-authority'
-
-import { cn } from '#/lib/utils'
 
 const switchRootVariants = cva(
   'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors disabled:cursor-not-allowed disabled:opacity-50',
