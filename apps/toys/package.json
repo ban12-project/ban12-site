@@ -39,8 +39,8 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:^",
-    "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@tailwindcss/postcss": "catalog:",
     "@types/emscripten": "^1.39.13",
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.9.0",
@@ -52,7 +52,6 @@
     "babel-plugin-react-compiler": "catalog:",
     "eslint": "catalog:",
     "postcss": "^8.4.49",
-    "postcss-import": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }

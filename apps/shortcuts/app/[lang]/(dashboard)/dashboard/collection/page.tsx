@@ -36,7 +36,7 @@ const collectionsTableColumns: Columns<SelectCollection> = [
     header: 'textColor',
     cell: (collection) => (
       <span
-        className="block h-6 w-6 rounded-full bg-[var(--color,#fff)] shadow"
+        className="block h-6 w-6 rounded-full bg-[var(--color,#fff)] shadow-sm"
         style={{ '--color': collection.textColor } as React.CSSProperties}
       ></span>
     ),

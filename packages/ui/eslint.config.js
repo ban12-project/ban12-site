@@ -1,4 +1,8 @@
-import { config } from '@repo/eslint-config/react-internal'
+/** @type {import('postcss-load-config').Config} */
+const config = {
+  plugins: {
+    '@tailwindcss/postcss': {},
+  },
+}
 
-/** @type {import("eslint").Linter.Config} */
 export default config
