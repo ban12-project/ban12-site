@@ -47,7 +47,7 @@ export default function ShortcutCard({
 
       <button
         type="button"
-        className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-white bg-opacity-30"
+        className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-white/30"
       >
         <Plus />
       </button>

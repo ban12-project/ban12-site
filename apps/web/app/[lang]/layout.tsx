@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 
-import './globals.css'
+import '#/app/globals.css'
 
 import { LocaleProvider } from '@repo/i18n/client'
 import type { Locale } from '#/i18n'

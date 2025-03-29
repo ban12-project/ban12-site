@@ -27,7 +27,7 @@ export default async function Collections({ lang }: CollectionsProps) {
       <section className="hidden-scrollbar px-safe-max-4 flex snap-x snap-mandatory gap-x-3 overflow-x-auto overscroll-x-contain lg:gap-x-5 lg:px-0 lg:pb-10">
         {collections.map((item, index) => (
           <div
-            className="box-content w-full flex-shrink-0 snap-center pb-10 pt-2.5 md:w-[400px] lg:snap-start ltr:last:lg:pe-[calc(var(--container-inset,0)*2)] rtl:first:lg:ps-[calc(var(--container-inset,0)*2)]"
+            className="box-content w-full shrink-0 snap-center pb-10 pt-2.5 md:w-[400px] lg:snap-start lg:last:ltr:pe-[calc(var(--container-inset,0)*2)] lg:first:rtl:ps-[calc(var(--container-inset,0)*2)]"
             key={item.id}
           >
             <Link
@@ -45,7 +45,7 @@ export default async function Collections({ lang }: CollectionsProps) {
                 </h2>
               </div>
               <Image
-                className="aspect-[4/5] w-full object-cover transition-all"
+                className="aspect-4/5 w-full object-cover transition-all"
                 src={item.image}
                 alt={item.title[lang]}
                 width={WIDTH}

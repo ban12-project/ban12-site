@@ -33,7 +33,7 @@ export default function FileCard({ index, style, data }: FileCardProps) {
   return (
     <dl
       style={style}
-      className="grid grid-cols-1 gap-5 rounded md:grid-cols-4 md:p-5"
+      className="grid grid-cols-1 gap-5 rounded-sm md:grid-cols-4 md:p-5"
     >
       <div className="flex space-x-1">
         <dt>name:</dt>

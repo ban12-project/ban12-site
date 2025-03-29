@@ -11,7 +11,7 @@ const switchRootVariants = cva(
     variants: {
       variant: {
         default:
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 focus-visible:ring-offset-white data-[state=checked]:bg-slate-900 data-[state=unchecked]:bg-slate-200 dark:focus-visible:ring-slate-300 dark:focus-visible:ring-offset-slate-950 dark:data-[state=checked]:bg-slate-50 dark:data-[state=unchecked]:bg-slate-800',
+          'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 focus-visible:ring-offset-white data-[state=checked]:bg-slate-900 data-[state=unchecked]:bg-slate-200 dark:focus-visible:ring-slate-300 dark:focus-visible:ring-offset-slate-950 dark:data-[state=checked]:bg-slate-50 dark:data-[state=unchecked]:bg-slate-800',
         ios: 'data-[state=checked]:bg-slate-900 data-[state=unchecked]:bg-slate-200 dark:data-[state=checked]:bg-slate-50 dark:data-[state=unchecked]:bg-slate-800',
       },
     },
@@ -41,29 +41,33 @@ export interface SwitchProps
     VariantProps<typeof switchRootVariants>,
     VariantProps<typeof switchThumbVariants> {}
 
-const Switch = React.forwardRef<
-  React.ComponentRef<typeof SwitchPrimitives.Root>,
-  SwitchProps
->(({ className, variant, ...props }, ref) => (
-  <SwitchPrimitives.Root
+const Switch = (
+  {
+    ref,
+    className,
+    variant,
+    ...props
+  }: SwitchProps & {
+    ref: React.RefObject<React.ComponentRef<typeof SwitchPrimitives.Root>>;
+  }
+) => (<SwitchPrimitives.Root
+  className={cn(
+    switchRootVariants({
+      variant,
+      className,
+    }),
+  )}
+  {...props}
+  ref={ref}
+>
+  <SwitchPrimitives.Thumb
     className={cn(
-      switchRootVariants({
+      switchThumbVariants({
         variant,
-        className,
       }),
     )}
-    {...props}
-    ref={ref}
-  >
-    <SwitchPrimitives.Thumb
-      className={cn(
-        switchThumbVariants({
-          variant,
-        }),
-      )}
-    />
-  </SwitchPrimitives.Root>
-))
+  />
+</SwitchPrimitives.Root>)
 Switch.displayName = SwitchPrimitives.Root.displayName
 
 export { Switch }

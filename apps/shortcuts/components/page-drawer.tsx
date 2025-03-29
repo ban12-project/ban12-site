@@ -52,7 +52,7 @@ export default function PageDrawer({
         <Drawer.Overlay className="fixed inset-0 z-50 bg-black/40" />
         <Drawer.Content
           className={cn(
-            'fixed bottom-0 left-0 right-0 z-50 flex h-[96%] flex-col rounded-t-[10px] bg-white outline-none lg:start-auto lg:h-full lg:w-[460px] lg:rounded-none dark:bg-black',
+            'fixed bottom-0 left-0 right-0 z-50 flex h-[96%] flex-col rounded-t-[10px] bg-white outline-hidden lg:start-auto lg:h-full lg:w-[460px] lg:rounded-none dark:bg-black',
             className,
           )}
         >

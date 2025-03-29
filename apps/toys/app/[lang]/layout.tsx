@@ -1,3 +1,4 @@
+import '@repo/ui/globals.css'
 import '#/app/globals.css'
 
 import { Metadata, Viewport } from 'next'

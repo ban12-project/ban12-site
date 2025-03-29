@@ -14,7 +14,6 @@ This projects includes the following packages/apps:
 - `i18n`: minimal i18n routing and translations
 - `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `blog` applications
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/tailwind-config`: `tailwind.config.ts`s used throughout the monorepo
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
