@@ -2,6 +2,7 @@
 
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale } from '@repo/i18n/client'
+import { Skeleton } from '@repo/ui/components/skeleton'
 import SuperEllipseSVG from '@repo/ui/super-ellipse-svg'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
@@ -14,7 +15,6 @@ import useRootDirection from '#/hooks/use-root-direction'
 import { fetchShortcutsByAlbumID } from '#/app/[lang]/(front)/actions'
 
 import ShortcutCard from './shortcut-card'
-import { Skeleton } from './ui/skeleton'
 
 type AlbumsProps = {
   shortcuts: SelectShortcut[]
@@ -82,7 +82,7 @@ const Column = ({
     >
       {children || (
         <ShortcutCard
-          className="block h-full [box-shadow:2px_4px_12px_#00000014] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)] [clip-path:url(#album)]"
+          className="block h-full [box-shadow:2px_4px_12px_#00000014] [clip-path:url(#album)] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)]"
           item={data[index]}
           lang={lang}
         />

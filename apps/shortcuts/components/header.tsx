@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { cn } from '@repo/ui/lib/utils'
 import { useOnClickOutside } from 'usehooks-ts'
 
 import type { Messages } from '#/lib/i18n'
-import { cn } from '#/lib/utils'
 import SearchBar from '#/components/search-bar'
 
 type HeaderProps = {

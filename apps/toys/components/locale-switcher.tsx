@@ -1,9 +1,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useLocale } from '@repo/i18n/client'
+import { cn } from '@repo/ui/lib/utils'
 import type { Locale } from '#/i18n'
-
-import { cn } from '#/lib/utils'
 
 type Props = { lang: Locale }
 

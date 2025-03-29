@@ -1,7 +1,6 @@
 import Image, { ImageProps } from 'next/image'
 import Link from 'next/link'
-
-import { cn } from '#/lib/utils'
+import { cn } from '@repo/ui/lib/utils'
 
 type Props = {
   title: string

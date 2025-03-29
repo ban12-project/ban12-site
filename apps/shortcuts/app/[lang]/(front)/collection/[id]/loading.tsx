@@ -1,4 +1,5 @@
-import { Skeleton } from '#/components/ui/skeleton'
+import { Skeleton } from '@repo/ui/components/skeleton'
+
 import AlbumListSkeleton from '#/components/album-list-skeleton'
 
 export default function Loading() {

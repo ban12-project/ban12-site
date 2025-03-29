@@ -1,9 +1,9 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { cn } from '@repo/ui/lib/utils'
 
 import type { Messages } from '#/lib/i18n'
-import { cn } from '#/lib/utils'
 import { useResponsive } from '#/hooks/use-responsive'
 import PageDrawer, { PageDrawerProps } from '#/components/page-drawer'
 

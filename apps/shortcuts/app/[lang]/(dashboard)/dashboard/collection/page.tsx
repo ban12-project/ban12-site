@@ -1,9 +1,9 @@
 import { Link } from '@repo/i18n/client'
+import { Button } from '@repo/ui/components/button'
 
 import { getCollections } from '#/lib/db/queries'
 import type { SelectCollection } from '#/lib/db/schema'
 import { LocalizedHelper } from '#/lib/utils'
-import { Button } from '#/components/ui/button'
 import { Columns, DashboardTable } from '#/components/dashboard-table'
 
 import { deleteCollection } from '../../actions'

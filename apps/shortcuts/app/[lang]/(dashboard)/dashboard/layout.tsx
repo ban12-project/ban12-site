@@ -1,6 +1,3 @@
-import { User } from 'next-auth'
-
-import { auth, signOut } from '#/lib/auth'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,13 +5,16 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '#/components/ui/breadcrumb'
-import { Separator } from '#/components/ui/separator'
+} from '@repo/ui/components/breadcrumb'
+import { Separator } from '@repo/ui/components/separator'
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from '#/components/ui/sidebar'
+} from '@repo/ui/components/sidebar'
+import { User } from 'next-auth'
+
+import { auth, signOut } from '#/lib/auth'
 import { AppSidebar } from '#/components/app-sidebar'
 
 export default async function DashboardLayout({

@@ -1,9 +1,9 @@
 import { Link } from '@repo/i18n/client'
+import { Button } from '@repo/ui/components/button'
 
 import { getShortcuts } from '#/lib/db/queries'
 import type { SelectShortcut } from '#/lib/db/schema'
 import { LocalizedHelper, negativeToHexColor } from '#/lib/utils'
-import { Button } from '#/components/ui/button'
 import { Columns, DashboardTable } from '#/components/dashboard-table'
 
 import { deleteShortcut } from '../../actions'

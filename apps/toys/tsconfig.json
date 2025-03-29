@@ -2,9 +2,8 @@
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
     "paths": {
-      "#/*": [
-        "./*"
-      ]
+      "#/*": ["./*"],
+      "@repo/ui/*": ["../../packages/ui/src/*"]
     },
     "target": "ES2017"
   },
@@ -15,7 +14,5 @@
     ".next/types/**/*.ts",
     "@types/emscripten"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

@@ -8,6 +8,7 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx}',
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
+    '../../packages/ui/src/components/**/*.{ts,tsx}',
   ],
   darkMode: 'class',
   theme: {

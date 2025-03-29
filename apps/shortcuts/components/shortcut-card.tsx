@@ -1,11 +1,12 @@
 import React from 'react'
 import { LinkProps } from 'next/link'
 import { Link } from '@repo/i18n/client'
+import { cn } from '@repo/ui/lib/utils'
 import { Layers2, Plus } from 'lucide-react'
 
 import type { SelectShortcut } from '#/lib/db/schema'
 import { Locale } from '#/lib/i18n'
-import { cn, negativeToHexColor } from '#/lib/utils'
+import { negativeToHexColor } from '#/lib/utils'
 
 interface ShortcutCardProps
   extends Partial<LinkProps>,

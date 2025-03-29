@@ -1,4 +1,3 @@
-import { cn } from '#/lib/utils'
 import {
   Table,
   TableBody,
@@ -7,7 +6,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '#/components/ui/table'
+} from '@repo/ui/components/table'
+import { cn } from '@repo/ui/lib/utils'
 
 export type Columns<T> = {
   key: (keyof T extends string ? keyof T : never) | 'custom'
