@@ -23,7 +23,6 @@ const outerElementType = forwardRef<ComponentRef<'div'>>(
 
 type Props<T> = {
   data: T
-  // @ts-expect-error - TODO
   children: ComponentPropsWithoutRef<typeof FixedSizeList<T>>['children']
   itemSize: FixedSizeListProps['itemSize']
 }
@@ -46,7 +45,6 @@ export default function VirtualList<T extends unknown[]>({
             itemCount={data.length}
             itemSize={rest.itemSize}
             width="100%"
-            // @ts-expect-error - TODO
             outerElementType={outerElementType}
             itemData={data}
           >

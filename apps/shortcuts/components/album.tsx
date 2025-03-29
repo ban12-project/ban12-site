@@ -178,9 +178,7 @@ export default function Albums({
                     height={height}
                     itemCount={itemCount}
                     itemData={items}
-                    // @ts-expect-error - TODO
                     outerElementType={outerElementType}
-                    // @ts-expect-error - TODO
                     innerElementType={innerElementType}
                     layout="horizontal"
                     onItemsRendered={onItemsRendered}

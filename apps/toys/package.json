@@ -15,7 +15,7 @@
   "dependencies": {
     "@ban12/tailwindcss-safe-area": "catalog:",
     "@gsap/react": "catalog:",
-    "@hookform/resolvers": "^3.9.1",
+    "@hookform/resolvers": "catalog:",
     "@next/third-parties": "catalog:",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
