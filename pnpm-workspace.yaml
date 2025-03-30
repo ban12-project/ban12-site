@@ -5,8 +5,6 @@ packages:
 catalog:
   '@types/node': '^22.13.14'
   'postcss': '^8.5.3'
-  '@tailwindcss/postcss': '^4.0.17'
-  'tailwindcss': '^4.0.17'
   'typescript': '^5.8.2'
   'intl-messageformat': '^10.7.7'
   'next-themes': '^0.4.6'
@@ -16,9 +14,7 @@ catalog:
   'gsap': '^3.12.7'
   '@gsap/react': '^2.1.2'
   'babel-plugin-react-compiler': '19.0.0-beta-e1e972c-20250221'
-  'class-variance-authority': '0.7.1'
   'zod': '3.24.1'
-  '@ban12/tailwindcss-safe-area': '^0.2.4'
   'react': '^19.1.0'
   'react-dom': '^19.1.0'
   '@types/react': '^19.0.12'

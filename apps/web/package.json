@@ -33,7 +33,6 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@serwist/next": "^9.0.10",
-    "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
@@ -45,7 +44,6 @@
     "postcss": "catalog:",
     "raw-loader": "^4.0.2",
     "serwist": "^9.0.10",
-    "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "url-loader": "^4.1.1"
   }

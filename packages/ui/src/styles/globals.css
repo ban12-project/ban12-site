@@ -5,3 +5,5 @@
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
+
+@plugin '@ban12/tailwindcss-safe-area';
