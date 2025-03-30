@@ -1,3 +1,5 @@
+@reference '../globals.css';
+
 .markdown {
   @apply break-words text-lg leading-relaxed;
 }

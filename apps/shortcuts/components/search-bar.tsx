@@ -95,12 +95,12 @@ export default function SearchBar({
 
   return (
     <form className={cn('flex h-9', className)} onSubmit={onSubmit}>
-      <label className="flex h-full w-full items-center rounded-xl bg-gray-400 bg-opacity-20 p-2 transition-[background-color] active:bg-opacity-30 dark:bg-gray-500 dark:bg-opacity-20">
+      <label className="flex h-full w-full items-center rounded-xl bg-gray-400/20 p-2 transition-[background-color] active:bg-black/30 dark:bg-gray-500/20">
         <Search className="scale-75 opacity-60" />
         <input
           type="search"
           placeholder={messages.search}
-          className="mx-1.5 w-full appearance-none border-none bg-transparent outline-none"
+          className="outline-hidden mx-1.5 w-full appearance-none border-none bg-transparent"
           onFocus={() => setSticky(true)}
           enterKeyHint="search"
           name="query"

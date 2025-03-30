@@ -2,7 +2,6 @@ import '#/app/globals.css'
 
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
-import { Inter } from 'next/font/google'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
 import { Toaster } from '@repo/ui/components/sonner'
@@ -21,8 +20,6 @@ type RootLayoutProps = {
   get: React.ReactNode
   post: React.ReactNode
 }
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 export async function generateMetadata(
   props: RootLayoutProps,
@@ -65,12 +62,7 @@ export default async function RootLayout(props: RootLayoutProps) {
       dir={params.lang === 'ar' ? 'rtl' : 'ltr'}
       suppressHydrationWarning
     >
-      <body
-        className={cn(
-          'bg-white font-sans text-black antialiased dark:bg-black dark:text-white',
-          inter.variable,
-        )}
-      >
+      <body className="bg-white font-sans text-black antialiased dark:bg-black dark:text-white">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

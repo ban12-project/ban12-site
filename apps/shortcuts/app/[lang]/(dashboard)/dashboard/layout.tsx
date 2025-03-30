@@ -51,7 +51,7 @@ export default async function DashboardLayout({
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0 md:max-h-[calc(100vh-theme(spacing.4)-theme(spacing.16))]">
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0 md:max-h-[calc(100vh-(--spacing(4))-(--spacing(16)))]">
           {children}
         </div>
       </SidebarInset>

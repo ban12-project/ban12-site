@@ -15,6 +15,7 @@ type CollectionsProps = {
 
 export default async function Collections({ params }: CollectionsProps) {
   const { id, lang } = await params
+  // await new Promise((resolve) => setTimeout(resolve, 100000000))
   const [messages, collection] = await Promise.all([
     getDictionary(lang),
     getCollectionByIdWithAlbumsAndShortcuts(Number.parseInt(id)),
