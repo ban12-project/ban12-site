@@ -68,7 +68,7 @@ catalogs:
       version: 0.4.6
     postcss:
       specifier: ^8.5.3
-      version: 8.5.3
+      version: 8.4.49
     react:
       specifier: ^19.1.0
       version: 19.1.0

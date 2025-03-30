@@ -16,28 +16,20 @@ const inputVariants = cva('flex h-10 w-full rounded-md px-3 py-2', {
 })
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
+  extends React.ComponentProps<'input'>,
     VariantProps<typeof inputVariants> {}
 
-const Input = ({
-  ref,
-  className,
-  variant,
-  type,
-  ...props
-}: InputProps & {
-  ref: React.RefObject<HTMLInputElement>
-}) => {
+const Input = ({ className, variant, type, ...props }: InputProps) => {
   return (
     <input
       type={type}
+      data-slot="input"
       className={cn(
         inputVariants({
           variant,
           className,
         }),
       )}
-      ref={ref}
       {...props}
     />
   )

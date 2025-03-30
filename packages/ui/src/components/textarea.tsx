@@ -16,17 +16,10 @@ const textareaVariants = cva('flex min-h-[80px] w-full rounded-md px-3 py-2', {
 })
 
 export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  extends React.ComponentProps<'textarea'>,
     VariantProps<typeof textareaVariants> {}
 
-const Textarea = ({
-  ref,
-  className,
-  variant,
-  ...props
-}: TextareaProps & {
-  ref: React.RefObject<HTMLTextAreaElement>
-}) => {
+const Textarea = ({ className, variant, ...props }: TextareaProps) => {
   return (
     <textarea
       className={cn(
@@ -35,7 +28,6 @@ const Textarea = ({
           className,
         }),
       )}
-      ref={ref}
       {...props}
     />
   )
