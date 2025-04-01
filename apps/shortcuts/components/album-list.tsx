@@ -21,7 +21,7 @@ export default async function AlbumList({
   albums ||= await getAlbumsWithShortcuts(pageSize)
 
   return (
-    <ul className="[&>li+li_.custom-border]:border-t [@media_only_screen_and_(min-resolution:192dpi){&>li+li_.custom-border}]:border-t-[.5px]">
+    <ul className="[&>li+li_.custom-border]:border-t [@media_only_screen_and_(min-resolution:192dpi)]:[&>li+li_.custom-border]:border-t-[.5px]">
       {albums.map((item) => (
         <li key={item.id} className="lg:pb-10">
           <div className="px-safe-max-4 pb-1.5 lg:mx-[var(--container-inset,0)] lg:px-0">
