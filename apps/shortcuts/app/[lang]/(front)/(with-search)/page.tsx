@@ -1,6 +1,4 @@
 import { Suspense } from 'react'
-import { Link } from '@repo/i18n/client'
-import { Plus } from 'lucide-react'
 
 import { getAlbumsWithShortcuts, getCollections } from '#/lib/db/queries'
 import { getDictionary, type Locale } from '#/lib/i18n'
@@ -9,6 +7,7 @@ import AlbumListSkeleton from '#/components/album-list-skeleton'
 import Collections from '#/components/collections'
 import CollectionsSkeleton from '#/components/collections-skeleton'
 import ColorSchemeToggle from '#/components/color-scheme-toggle'
+import PostButton from '#/components/post-button'
 
 type HomePageProps = {
   params: Promise<{ lang: Locale }>
@@ -43,15 +42,8 @@ export default async function Home(props: HomePageProps) {
           <AlbumList lang={params.lang} messages={messages} />
         </Suspense>
       </main>
+      <PostButton aria-label={messages.post.description} />
       <footer className="container-full pb-safe-max-4 flex lg:pb-5">
-        <Link
-          href="/post"
-          scroll={false}
-          aria-label={messages.post.description}
-        >
-          <Plus />
-        </Link>
-
         <ColorSchemeToggle className="ms-auto" />
       </footer>
     </>

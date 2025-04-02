@@ -59,7 +59,7 @@ catalogs:
       version: 0.4.6
     postcss:
       specifier: ^8.5.3
-      version: 8.4.49
+      version: 8.5.3
     react:
       specifier: ^19.1.0
       version: 19.1.0
@@ -192,6 +192,9 @@ importers:
       '@google/generative-ai':
         specifier: ^0.21.0
         version: 0.21.0
+      '@gsap/react':
+        specifier: 'catalog:'
+        version: 2.1.2(gsap@3.12.7)(react@19.1.0)
       '@hookform/resolvers':
         specifier: 'catalog:'
         version: 3.9.1(react-hook-form@7.54.2(react@19.1.0))
@@ -225,9 +228,15 @@ importers:
       drizzle-orm:
         specifier: ^0.38.2
         version: 0.38.2(@neondatabase/serverless@1.0.0)(@opentelemetry/api@1.9.0)(@types/pg@8.11.11)(@types/react@19.0.12)(react@19.1.0)
+      gsap:
+        specifier: 'catalog:'
+        version: 3.12.7
       intl-messageformat:
         specifier: ^10.7.10
         version: 10.7.10
+      lodash.throttle:
+        specifier: ^4.1.1
+        version: 4.1.1
       lucide-react:
         specifier: 'catalog:'
         version: 0.485.0(react@19.1.0)
@@ -286,6 +295,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
+      '@types/lodash.throttle':
+        specifier: ^4.1.9
+        version: 4.1.9
       '@types/node':
         specifier: 'catalog:'
         version: 22.13.14
@@ -3001,6 +3013,9 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
+  '@types/lodash.throttle@4.1.9':
+    resolution: {integrity: sha512-PCPVfpfueguWZQB7pJQK890F2scYKoDUL3iM522AptHWn7d5NQmeS/LTEHIcLr5PaTzl3dK2Z0xSUHHTHwaL5g==}
+
   '@types/lodash@4.17.13':
     resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
 
@@ -4745,6 +4760,9 @@ packages:
 
   lodash.sortby@4.7.0:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
+
+  lodash.throttle@4.1.1:
+    resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
 
   log-update@6.1.0:
     resolution: {integrity: sha512-9ie8ItPR6tjY5uYJh8K/Zrv/RMZ5VOlOWvtZdEHYSTFKZfIBPQa9tOAEeAWhd+AnIneLJ22w5fjOYtoutpWq5w==}
@@ -9068,6 +9086,10 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
+  '@types/lodash.throttle@4.1.9':
+    dependencies:
+      '@types/lodash': 4.17.13
+
   '@types/lodash@4.17.13': {}
 
   '@types/mdast@4.0.4':
@@ -10940,6 +10962,8 @@ snapshots:
   lodash.merge@4.6.2: {}
 
   lodash.sortby@4.7.0: {}
+
+  lodash.throttle@4.1.1: {}
 
   log-update@6.1.0:
     dependencies:
