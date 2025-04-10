@@ -8,7 +8,7 @@
     "./server": "./server.ts"
   },
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint . --max-warnings 0"
   },
   "peerDependencies": {
     "next": "catalog:",
@@ -25,6 +25,7 @@
     "@types/negotiator": "^0.6.3",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
+    "eslint": "catalog:",
     "typescript": "catalog:"
   }
 }
