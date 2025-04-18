@@ -50,7 +50,7 @@ export function Header({ messages }: HeaderProps) {
       <header
         ref={ref}
         className={cn(
-          'pt-safe-max-4 px-safe-max-4 lg:pt-safe-max-4 group top-0 z-10 overflow-hidden border-b border-transparent bg-transparent pb-4 saturate-[180%] backdrop-blur-[20px] backdrop-filter transition-colors md:sticky',
+          'pt-safe-max-4 px-safe-max-4 lg:pt-safe-max-4 group top-0 z-10 h-[69px] overflow-hidden border-b border-transparent bg-transparent pb-4 saturate-[180%] backdrop-blur-[20px] backdrop-filter transition-colors md:sticky',
           {
             sticky,
             'border-neutral-100/80 bg-zinc-50/80 dark:border-neutral-800/80 dark:bg-zinc-950/80':

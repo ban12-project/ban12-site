@@ -14,7 +14,7 @@ export default async function Layout(props: LayoutProps) {
   const messages = await getDictionary(params.lang)
   return (
     <>
-      {<Header messages={messages} />}
+      <Header messages={messages} />
       {children}
     </>
   )
