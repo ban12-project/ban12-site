@@ -6,7 +6,8 @@
     "next": "Next",
     "optional": "Optional",
     "loading": "Loading",
-    "go-home": "Go Home"
+    "go-home": "Go Home",
+    "no_results": "No search results"
   },
   "theme": {
     "light": "Light",

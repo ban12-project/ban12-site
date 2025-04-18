@@ -1,6 +1,8 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Link } from '@repo/i18n/client'
+import { Loader } from 'lucide-react'
 
 import { getShortcutByUuid } from '#/lib/db/queries'
 import { getDictionary } from '#/lib/i18n'
@@ -21,7 +23,16 @@ export default async function ShortcutPage(props: Props) {
 
   return (
     <>
-      <ShortcutAdd messages={messages} params={params} fromNormalRoute />
+      <Suspense
+        fallback={
+          <div className="flex h-1/2 w-full flex-col items-center justify-center gap-2 text-zinc-500/90">
+            <Loader className="h-6 w-6 animate-spin" />
+            <p>{messages.common.loading}</p>
+          </div>
+        }
+      >
+        <ShortcutAdd messages={messages} params={params} fromNormalRoute />
+      </Suspense>
 
       <div className="container-full">
         <Link href="/" className="text-blue-500 active:text-blue-500/80">
