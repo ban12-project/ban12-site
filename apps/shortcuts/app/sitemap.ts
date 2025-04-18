@@ -4,7 +4,6 @@ import { getAlbums, getCollections, getShortcuts } from '#/lib/db/queries'
 import { i18n } from '#/lib/i18n'
 
 export const dynamic = 'force-dynamic'
-export const runtime = 'edge'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const locales = Object.keys(i18n.locales)
