@@ -51,6 +51,10 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
+export async function generateStaticParams() {
+  return Object.keys(i18n.locales).map((lang) => ({ lang }))
+}
+
 export default async function RootLayout(props: RootLayoutProps) {
   const params = await props.params
 

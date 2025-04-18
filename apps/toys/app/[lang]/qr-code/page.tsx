@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Script from 'next/script'
-import { getDictionary, Locale } from '#/i18n'
 
+import { getDictionary, type Locale } from '#/lib/i18n'
 import { QRCodeForm } from '#/components/qrcode-form'
 
 type Props = {

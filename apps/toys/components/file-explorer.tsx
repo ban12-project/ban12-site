@@ -1,8 +1,8 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import type { Messages } from '#/i18n'
 
+import type { Messages } from '#/lib/i18n'
 import { useResponsive } from '#/hooks/use-responsive'
 import List from '#/components/virtual-list'
 

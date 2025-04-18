@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
-import { getDictionary, Locale } from '#/i18n'
+
+import { getDictionary, type Locale } from '#/lib/i18n'
 
 const View = dynamic(
   () =>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { getDictionary, type Locale } from '#/i18n'
+
+import { getDictionary, type Locale } from '#/lib/i18n'
 
 type Props = {
   params: Promise<{ lang: Locale }>

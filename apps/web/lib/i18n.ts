@@ -19,7 +19,7 @@ export type Locale = keyof (typeof i18n)['locales']
 export type Messages = Awaited<ReturnType<typeof getDictionary>>
 
 export const { middleware, getDictionary } = createI18n(i18n, {
-  en: () => import('./dictionaries/en.json').then((module) => module.default),
+  en: () => import('../dictionaries/en.json').then((module) => module.default),
   'zh-CN': () =>
-    import('./dictionaries/zh-CN.json').then((module) => module.default),
+    import('../dictionaries/zh-CN.json').then((module) => module.default),
 })

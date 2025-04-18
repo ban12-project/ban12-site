@@ -4,9 +4,8 @@ import { Inter } from 'next/font/google'
 import '#/app/globals.css'
 
 import { LocaleProvider } from '@repo/i18n/client'
-import type { Locale } from '#/i18n'
-import { i18n } from '#/i18n'
 
+import { i18n, type Locale } from '#/lib/i18n'
 import R3fEntry from '#/components/r3f-entry'
 
 type Props = Readonly<{
@@ -56,6 +55,10 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: '#FFFFFF',
+}
+
+export async function generateStaticParams() {
+  return Object.keys(i18n.locales).map((lang) => ({ lang }))
 }
 
 export default async function RootLayout(props: Props) {
