@@ -6,7 +6,8 @@
     "next": "Nästa",
     "optional": "Valfritt",
     "loading": "Laddar",
-    "go-home": "Gå hem"
+    "go-home": "Gå hem",
+    "no_results": "Inga sökresultat"
   },
   "theme": {
     "light": "Ljus",
