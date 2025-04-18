@@ -4,10 +4,10 @@ import { Metadata, Viewport } from 'next'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
 import { Toaster } from '@repo/ui/components/sonner'
-// import Lenis from '@repo/ui/lenis'
-import { getDictionary, i18n, type Locale } from '#/i18n'
 import { ThemeProvider } from 'next-themes'
 
+// import Lenis from '@repo/ui/lenis'
+import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import Header from '#/components/header'
 
 export async function generateMetadata({

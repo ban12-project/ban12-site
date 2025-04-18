@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
-import { i18n } from '#/i18n'
+
+import { i18n } from '#/lib/i18n'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'edge'

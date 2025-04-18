@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import { ToggleGroup, ToggleGroupItem } from '@repo/ui/components/toggle-group'
 import { cn } from '@repo/ui/lib/utils'
-import type { Messages } from '#/i18n'
 import { useTheme } from 'next-themes'
+
+import type { Messages } from '#/lib/i18n'
 
 type Props = { className?: string; messages: Messages }
 

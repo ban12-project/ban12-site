@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { cn } from '@repo/ui/lib/utils'
 import { useOnClickOutside } from 'usehooks-ts'
 
@@ -61,11 +61,13 @@ export function Header({ messages }: HeaderProps) {
         )}
         data-sticky={sticky}
       >
-        <SearchBar
-          messages={messages.common}
-          setSticky={setSticky}
-          className="ms-auto md:max-w-sm"
-        />
+        <Suspense>
+          <SearchBar
+            messages={messages.common}
+            setSticky={setSticky}
+            className="ms-auto md:max-w-sm"
+          />
+        </Suspense>
       </header>
     </>
   )

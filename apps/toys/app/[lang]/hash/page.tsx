@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
-import { getDictionary, type Locale } from '#/i18n'
 
+import { getDictionary, type Locale } from '#/lib/i18n'
 import FileExplorer from '#/components/file-explorer'
 
 type Props = {
