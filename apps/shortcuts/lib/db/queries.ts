@@ -5,6 +5,7 @@ import { Pool } from '@neondatabase/serverless'
 import { kv } from '@vercel/kv'
 import { eq, or, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/neon-serverless'
+import { drizzle as pg } from 'drizzle-orm/node-postgres'
 
 import * as schema from './schema'
 import {
@@ -15,9 +16,15 @@ import {
   type SelectShortcut,
 } from './schema'
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL! })
+const connectionString = process.env.DATABASE_URL
+if (!connectionString) throw new Error('Not valid database url')
 
-export const db = drizzle(pool, { schema })
+const pool = new Pool({ connectionString })
+
+export const db =
+  process.env.NODE_ENV === 'development'
+    ? pg(connectionString, { schema })
+    : drizzle(pool, { schema })
 
 const CACHE_TTL = {
   SHORTCUT: 3600, // 1小时
