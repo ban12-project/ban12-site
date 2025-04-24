@@ -14,7 +14,7 @@ export type MainToWorkerMessage = {
   }[MainToWorkerMessage['call'][0]]
 }
 
-export enum OutType {
+export const enum OutType {
   File = 'file',
   Print = 'print',
   printErr = 'printErr',

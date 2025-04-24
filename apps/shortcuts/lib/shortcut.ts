@@ -81,7 +81,7 @@ interface GalleryShortcutFields extends BaseFields {
   }
 }
 
-export enum RecordType {
+export const enum RecordType {
   GalleryShortcut = 'GalleryShortcut',
   SharedShortcut = 'SharedShortcut',
 }
