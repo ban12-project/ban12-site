@@ -2,7 +2,7 @@
 
 import 'lenis/dist/lenis.css'
 
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { ReactLenis, useLenis, type LenisRef } from 'lenis/react'
@@ -36,7 +36,11 @@ function ScrollTriggerConfig() {
   return null
 }
 
-function GSAPIntergration({ scrollTrigger = false }) {
+function GSAPIntergration({
+  scrollTrigger = false,
+}: {
+  scrollTrigger?: boolean
+}) {
   useLayoutEffect(() => {
     gsap.defaults({ ease: 'none' })
 
@@ -55,6 +59,8 @@ export default function Lenis({
   children,
   gsap,
   scrollTrigger,
+  ref,
+  options,
   ...props
 }: Props) {
   const lenisRef = useRef<LenisRef>(null)
@@ -65,10 +71,26 @@ export default function Lenis({
     }
   })
 
+  const mergeRefs = useCallback(
+    (el: LenisRef) => {
+      if (typeof ref === 'function') ref(el)
+      else if (ref != null) ref.current = el
+      lenisRef.current = el
+    },
+    [ref],
+  )
+
   return (
     <>
       {gsap && <GSAPIntergration scrollTrigger={scrollTrigger} />}
-      <ReactLenis {...props} ref={lenisRef}>
+      <ReactLenis
+        {...props}
+        ref={mergeRefs}
+        options={{
+          ...options,
+          autoRaf: false,
+        }}
+      >
         {children}
       </ReactLenis>
     </>
