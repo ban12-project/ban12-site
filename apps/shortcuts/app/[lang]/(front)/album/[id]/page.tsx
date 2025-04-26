@@ -1,9 +1,10 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
+import { unstable_cache } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Skeleton } from '@repo/ui/components/skeleton'
 
-import { getAlbumById, getAlbumByIdWithShortcuts } from '#/lib/db/queries'
+import { getAlbumByIdWithShortcuts, getAlbums } from '#/lib/db/queries'
 import type { Locale } from '#/lib/i18n'
 import ShortcutList from '#/components/shortcut-list'
 
@@ -12,7 +13,18 @@ type ListPageProps = {
 }
 
 const preload = (id: number) => {
-  void getAlbumByIdWithShortcuts(id)
+  void getCachedAlbumByIdWithShortcuts(id)
+}
+
+const getCachedAlbumByIdWithShortcuts = unstable_cache(
+  getAlbumByIdWithShortcuts,
+  ['album', 'shortcut'],
+  { tags: ['album', 'shortcut'] },
+)
+
+export async function generateStaticParams() {
+  const albums = await getAlbums()
+  return albums.map((album) => ({ id: album.id.toString() }))
 }
 
 export default async function ListPage({ params }: ListPageProps) {
@@ -52,7 +64,7 @@ export default async function ListPage({ params }: ListPageProps) {
 }
 
 async function Album({ lang, id }: { lang: Locale; id: number }) {
-  const album = await getAlbumByIdWithShortcuts(id)
+  const album = await getCachedAlbumByIdWithShortcuts(id)
 
   if (!album) notFound()
 
@@ -68,7 +80,7 @@ export async function generateMetadata({
   params,
 }: ListPageProps): Promise<Metadata> {
   const { id, lang } = await params
-  const album = await getAlbumById(Number.parseInt(id))
+  const album = await getCachedAlbumByIdWithShortcuts(Number.parseInt(id))
 
   if (!album) notFound()
 

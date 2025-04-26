@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { AuthError } from 'next-auth'
 import { z } from 'zod'
@@ -156,6 +156,9 @@ export async function updateShortcut(
   }
 
   revalidatePath('/dashboard')
+  revalidateTag('collection')
+  revalidateTag('album')
+  revalidateTag('shortcut')
   redirect('/dashboard')
 }
 
@@ -251,6 +254,7 @@ export async function updateCollection(
   }
 
   revalidatePath('/dashboard/collection')
+  revalidateTag('collection')
   redirect('/dashboard/collection')
 }
 
@@ -352,6 +356,8 @@ export async function updateAlbum(
   }
 
   revalidatePath('/dashboard/album')
+  revalidateTag('album')
+  revalidateTag('collection')
   redirect('/dashboard/album')
 }
 

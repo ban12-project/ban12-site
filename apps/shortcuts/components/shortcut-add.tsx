@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Button } from '@repo/ui/components/button'
 import { cn } from '@repo/ui/lib/utils'
@@ -16,8 +17,14 @@ export interface ShortcutAddProps extends React.ComponentProps<'div'> {
 }
 
 export const preload = (id: string) => {
-  void getShortcutByUuid(id)
+  void getCachedShortcutByUuid(id)
 }
+
+export const getCachedShortcutByUuid = unstable_cache(
+  getShortcutByUuid,
+  ['shortcut'],
+  { tags: ['shortcut'] },
+)
 
 export default async function ShortcutAdd({
   params: { id, lang },
@@ -25,7 +32,7 @@ export default async function ShortcutAdd({
   fromNormalRoute,
   ...props
 }: ShortcutAddProps) {
-  const shortcut = await getShortcutByUuid(id)
+  const shortcut = await getCachedShortcutByUuid(id)
 
   if (!shortcut) notFound()
 

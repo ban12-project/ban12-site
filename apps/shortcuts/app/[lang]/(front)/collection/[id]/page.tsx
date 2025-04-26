@@ -1,11 +1,12 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
+import { unstable_cache } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Skeleton } from '@repo/ui/components/skeleton'
 
 import {
-  getCollectionById,
   getCollectionByIdWithAlbumsAndShortcuts,
+  getCollections,
 } from '#/lib/db/queries'
 import { getDictionary, Messages, type Locale } from '#/lib/i18n'
 import AlbumList from '#/components/album-list'
@@ -17,7 +18,22 @@ type CollectionsProps = {
 }
 
 const preload = (id: number) => {
-  void getCollectionByIdWithAlbumsAndShortcuts(id)
+  void getCachedCollectionByIdWithAlbumsAndShortcuts(id)
+}
+
+const getCachedCollectionByIdWithAlbumsAndShortcuts = unstable_cache(
+  getCollectionByIdWithAlbumsAndShortcuts,
+  ['collection', 'album', 'shortcut'],
+  {
+    tags: ['collection', 'album', 'shortcut'],
+  },
+)
+
+export async function generateStaticParams() {
+  const collections = await getCollections()
+  return collections.map((collection) => ({
+    id: collection.id.toString(),
+  }))
 }
 
 export default async function CollectionsPage({ params }: CollectionsProps) {
@@ -55,7 +71,7 @@ async function Collections({
   messages: Messages
   id: number
 }) {
-  const collection = await getCollectionByIdWithAlbumsAndShortcuts(id)
+  const collection = await getCachedCollectionByIdWithAlbumsAndShortcuts(id)
 
   if (!collection) notFound()
 
@@ -79,7 +95,9 @@ export async function generateMetadata({
   params,
 }: CollectionsProps): Promise<Metadata> {
   const { id, lang } = await params
-  const collection = await getCollectionById(Number.parseInt(id))
+  const collection = await getCachedCollectionByIdWithAlbumsAndShortcuts(
+    Number.parseInt(id),
+  )
 
   if (!collection) notFound()
 
