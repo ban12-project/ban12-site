@@ -1,3 +1,5 @@
+import type { Instrumentation } from 'next'
+
 export async function register() {
   if (process.env.NODE_ENV === 'development') return
 
@@ -29,4 +31,10 @@ export async function register() {
       debug: false,
     })
   }
+}
+
+export const onRequestError: Instrumentation.onRequestError = (...args) => {
+  import('@sentry/nextjs').then((Sentry) => {
+    Sentry.captureRequestError(...args)
+  })
 }
