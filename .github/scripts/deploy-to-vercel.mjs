@@ -27,6 +27,10 @@ async function deployToVercel(url) {
         { cwd: appPath },
       )
       await execPromise(
+        `vercel env pull --environment=production .env --token=${process.env.VERCEL_TOKEN}`,
+        { cwd: appPath },
+      )
+      await execPromise(
         `vercel build --prod --token=${process.env.VERCEL_TOKEN}`,
         { cwd: appPath },
       )
