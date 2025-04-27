@@ -33,7 +33,7 @@ export default async function ListPage({ params }: ListPageProps) {
   preload(NumericId)
 
   return (
-    <main className="container-full pt-safe-max-4">
+    <main className="container-full py-safe-max-4">
       <Suspense
         fallback={
           <div className="container-full pt-safe-max-4">

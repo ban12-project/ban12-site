@@ -201,7 +201,8 @@ export async function postShortcut(prevState: State, formData: FormData) {
     }
   }
 
-  revalidatePath('/')
+  revalidatePath('/[lang]/(front)/(with-search)', 'page')
+  revalidatePath(`/get/${uuid}`)
   redirect('/')
 }
 
