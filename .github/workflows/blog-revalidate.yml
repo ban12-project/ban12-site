@@ -1,0 +1,94 @@
+name: Blog Revalidate
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'apps/blog/_posts/**.mdx'
+      - 'apps/blog/_posts/**.md'
+
+jobs:
+  revalidate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        # Fetches the entire history needed to access commit details
+        with:
+          fetch-depth: 0
+
+      - name: Get all changed markdown files
+        id: changed-markdown-files
+        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c
+        with:
+          files: |
+            apps/blog/_posts/**.mdx
+            apps/blog/_posts/**.md
+
+      - name: List all changed files markdown files
+        if: steps.changed-markdown-files.outputs.any_changed == 'true'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-markdown-files.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+          done
+
+      - name: Call Revalidation API
+        if: steps.changed-markdown-files.outputs.any_changed == 'true'
+        env:
+          # Get the list of changed files from the previous step's output
+          ALL_CHANGED_FILES: ${{ steps.changed-markdown-files.outputs.all_changed_files }}
+          # It's highly recommended to store sensitive tokens as GitHub Secrets
+          REVALIDATE_TOKEN: ${{ secrets.REVALIDATE_TOKEN }} # <-- USE A SECRET!
+          # Define the target API endpoint, potentially as an environment variable or secret if it changes
+          REVALIDATE_URL: 'https://blog.ban12.com/api/revalidate' # <-- Consider if localhost is correct for CI
+        run: |
+          # Initialize an empty JSON array string for paths
+          paths_json="["
+          first=true
+
+          # Loop through each changed file provided by the 'changed-files' action
+          for file in ${ALL_CHANGED_FILES}; do
+            # Extract the filename (e.g., "your-post-slug.mdx")
+            filename=$(basename "$file")
+            # Remove the extension (.mdx or .md) to get the slug (e.g., "your-post-slug")
+            slug="${filename%.*}"
+            # Construct the expected URL path
+            path="/post/$slug"
+
+            # Append the path to the JSON array string, handling commas correctly
+            if [ "$first" = true ]; then
+              paths_json="$paths_json\"$path\""
+              first=false
+            else
+              paths_json="$paths_json,\"$path\""
+            fi
+          done
+          # Close the JSON array string
+          paths_json="$paths_json]"
+
+          # Construct the full JSON payload including the dynamic paths and static tags
+          # Using printf for safer JSON construction, especially if paths could contain special characters
+          json_payload=$(printf '{"paths":%s,"tags":["posts"]}' "$paths_json")
+
+          echo "Revalidating paths: $paths_json"
+          echo "Sending JSON payload: $json_payload"
+
+          # Make the API call using curl
+          curl -X PUT \
+            --url "${REVALIDATE_URL}" \
+            -H "Authorization: ${REVALIDATE_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --fail --show-error --silent \ # Add flags for better error handling in CI
+            --data "$json_payload"
+
+          # Check curl exit code (optional but good practice)
+          if [ $? -ne 0 ]; then
+            echo "::error::Failed to call revalidation API."
+            exit 1
+          else
+            echo "Revalidation API call successful."
+          fi

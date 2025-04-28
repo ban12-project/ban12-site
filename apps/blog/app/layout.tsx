@@ -3,15 +3,21 @@ import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 
 import { CMS_NAME, HOME_OG_IMAGE_URL } from '#/lib/constants'
-import Footer from '#/app/_components/footer'
+import Footer from '#/components/footer'
 
 import './globals.css'
+
+import { cn } from '@repo/ui/lib/utils'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: `Next.js Blog Example with ${CMS_NAME}`,
-  description: `A statically generated blog example using Next.js and ${CMS_NAME}.`,
+  title: {
+    template: `%s | ${CMS_NAME}`,
+    default: CMS_NAME,
+  },
+  description:
+    '一个专注于分享前沿Web技术、开发经验和最佳实践的博客。探索JavaScript、React、Node.js等前端和后端技术，以及网站性能优化、响应式设计等实用知识。',
   openGraph: {
     images: [HOME_OG_IMAGE_URL],
   },
@@ -44,9 +50,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="zh-CN">
-      <body className={inter.className}>
-        <div className="min-h-screen">{children}</div>
+    <html lang="zh-CN" className="system">
+      <body
+        className={cn(
+          inter.className,
+          'max-w-screen min-h-screen overflow-x-hidden',
+        )}
+      >
+        {children}
         <Footer />
         <Analytics />
       </body>
