@@ -1,7 +1,7 @@
 ---
 title: 'Intl.Segmenter'
 excerpt: '使用 Intl.Segmenter 替代 split 方法分割文本'
-date: '2025-04-28T09:23:28.605Z'
+date: '2025-04-28T10:27:31.155Z'
 author:
   name: Coda
   picture: 'https://avatars.githubusercontent.com/u/23135654?v=4'

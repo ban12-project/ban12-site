@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - dev
     paths:
       - 'apps/blog/_posts/**.mdx'
       - 'apps/blog/_posts/**.md'
@@ -57,7 +56,7 @@ jobs:
             # Remove the extension (.mdx or .md) to get the slug (e.g., "your-post-slug")
             slug="${filename%.*}"
             # Construct the expected URL path
-            path="/post/$slug"
+            path="/posts/$slug"
 
             # Append the path to the JSON array string, handling commas correctly
             if [ "$first" = true ]; then
@@ -82,7 +81,7 @@ jobs:
             --url "${REVALIDATE_URL}" \
             -H "Authorization: ${REVALIDATE_TOKEN}" \
             -H "Content-Type: application/json" \
-            --fail --show-error --silent \ # Add flags for better error handling in CI
+            --fail --show-error --silent \
             --data "$json_payload"
 
           # Check curl exit code (optional but good practice)
