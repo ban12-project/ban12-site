@@ -59,6 +59,23 @@ export default async function Post(props: Params) {
           ></article>
         </GridContainer>
       </div>
+
+      <link
+        rel="stylesheet"
+        href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/highlight.js/11.11.1/styles/github.min.css"
+        media="(prefers-color-scheme: light)"
+        integrity="sha512-0aPQyyeZrWj9sCA46UlmWgKOP0mUipLQ6OZXu8l4IcAmD2u31EPEy9VcIMvl7SoAaKe8bLXZhYoMaE/in+gcgA=="
+        crossOrigin="anonymous"
+        referrerPolicy="no-referrer"
+      />
+      <link
+        rel="stylesheet"
+        href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css"
+        media="(prefers-color-scheme: dark)"
+        integrity="sha512-rO+olRTkcf304DQBxSWxln8JXCzTHlKnIdnMUwYvQa9/Jd4cQaNkItIUj6Z4nvW1dqK0SKXLbn9h4KwZTNtAyw=="
+        crossOrigin="anonymous"
+        referrerPolicy="no-referrer"
+      />
     </div>
   )
 }

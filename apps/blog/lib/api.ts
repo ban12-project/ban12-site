@@ -51,7 +51,11 @@ export async function getPostSlugs() {
 export async function getPostBySlug(slug: string, download_url?: string) {
   const realSlug = slug.replace(/\.md$/, '')
   download_url ||= `https://raw.githubusercontent.com/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/main/${process.env.GITHUB_REPO_POSTS_PATH}/${slug}.md`
-  const response = await fetch(download_url)
+  const response = await fetch(download_url, {
+    headers: {
+      Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+    },
+  })
   const fileContents = await response.text()
   const { data, content } = matter(fileContents)
 
