@@ -4,7 +4,7 @@ export async function PUT(request: Request) {
   const providedSecretKey = request.headers.get('Authorization')
   if (
     !providedSecretKey ||
-    providedSecretKey !== process.env.REVALIDATION_TOKEN
+    providedSecretKey !== process.env.REVALIDATE_TOKEN
   ) {
     return new Response('Unauthorized', { status: 401 })
   }

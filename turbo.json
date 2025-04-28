@@ -45,7 +45,7 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "blog#build": {
-      "env": ["REVALIDATION_TOKEN", "GITHUB_*"],
+      "env": ["REVALIDATE_TOKEN", "GITHUB_*"],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
