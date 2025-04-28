@@ -7,7 +7,7 @@ type Props = {
 
 const Avatar = ({ name, picture }: Props) => {
   return (
-    <div className="flex items-center">
+    <div className="inline-flex items-center">
       <Image
         width={420}
         height={420}
