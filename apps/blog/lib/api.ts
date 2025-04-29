@@ -1,3 +1,5 @@
+import fs from 'fs'
+import { join } from 'path'
 import matter from 'gray-matter'
 
 export type Author = {
@@ -29,7 +31,31 @@ interface GithubContentFile {
   download_url: string
 }
 
-export async function getPostSlugs() {
+const postsDirectory = join(process.cwd(), '_posts')
+
+function getPostSlugsInDev() {
+  return fs.readdirSync(postsDirectory)
+}
+
+function getPostBySlugInDev(slug: string) {
+  const realSlug = slug.replace(/\.md$/, '')
+  const fullPath = join(postsDirectory, `${realSlug}.md`)
+  const fileContents = fs.readFileSync(fullPath, 'utf8')
+  const { data, content } = matter(fileContents)
+
+  return { ...data, slug: realSlug, content } as Post
+}
+
+function getAllPostsInDev() {
+  const slugs = getPostSlugsInDev()
+  const posts = slugs
+    .map((slug) => getPostBySlugInDev(slug))
+    // sort posts by date in descending order
+    .sort((post1, post2) => (post1.date > post2.date ? -1 : 1))
+  return posts
+}
+
+async function _getPostSlugs() {
   const response = await fetch(
     `https://api.github.com/repos/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/contents/${process.env.GITHUB_REPO_POSTS_PATH}`,
     {
@@ -48,7 +74,7 @@ export async function getPostSlugs() {
   return data
 }
 
-export async function getPostBySlug(slug: string, download_url?: string) {
+async function _getPostBySlug(slug: string, download_url?: string) {
   const realSlug = slug.replace(/\.md$/, '')
   download_url ||= `https://raw.githubusercontent.com/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/main/${process.env.GITHUB_REPO_POSTS_PATH}/${slug}.md`
   const response = await fetch(download_url, {
@@ -62,10 +88,10 @@ export async function getPostBySlug(slug: string, download_url?: string) {
   return { ...data, slug: realSlug, content } as Post
 }
 
-export async function getAllPosts() {
-  const slugs = await getPostSlugs()
+async function _getAllPosts() {
+  const slugs = await _getPostSlugs()
   const posts = await Promise.all(
-    slugs.map((slug) => getPostBySlug(slug.name, slug.download_url)),
+    slugs.map((slug) => _getPostBySlug(slug.name, slug.download_url)),
   )
     // sort posts by date in descending order
     .then((posts) =>
@@ -73,3 +99,9 @@ export async function getAllPosts() {
     )
   return posts
 }
+
+const isDev = process.env.NODE_ENV === 'development'
+
+export const getPostSlugs = isDev ? getPostSlugsInDev : _getPostSlugs
+export const getPostBySlug = isDev ? getPostBySlugInDev : _getPostBySlug
+export const getAllPosts = isDev ? getAllPostsInDev : _getAllPosts
