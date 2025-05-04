@@ -1,0 +1,16 @@
+name: Report blog link
+description: Standard template for requesting a link exchange
+title: '[BLOG]'
+body:
+  - type: input
+    attributes:
+      label: Your site address
+      description: |
+        You need to submit a blog link that is already connected to https://blog.ban12.com
+      placeholder: https://example.com
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Expected label for your blog link
+      placeholder: Blog label
