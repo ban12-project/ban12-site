@@ -51,6 +51,19 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+          <div className="not-md:border-0 flex flex-1 flex-col gap-10 border-x border-gray-950/5 p-4 md:border-b-0 md:py-10 md:pl-2 dark:border-white/10">
+            <h3 className="font-semibold">My friend</h3>
+            <ul className="grid gap-4 md:mt-4">
+              <li>
+                <Link
+                  href="https://github.com/ban12-project/ban12-site/issues/new?template=report-blog-link.yml"
+                  className="hover:underline"
+                >
+                  Report link
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
       </footer>
     </GridContainer>

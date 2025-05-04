@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  transpilePackages: ['@repo/ui'],
   experimental: {
     viewTransition: true,
   },
