@@ -5,7 +5,7 @@ import {
   WorkerToMainMessage,
 } from './7-zip-types'
 
-importScripts('/js7z-mt-fs-2.3.0/js7z.js')
+importScripts('/js7z-mt-fs-ec-2.4.1/js7z.js')
 
 interface JS7z extends EmscriptenModule {
   /** https://emscripten.org/docs/api_reference/Filesystem-API.html */

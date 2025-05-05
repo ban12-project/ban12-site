@@ -27,3 +27,7 @@ onmessage = async (event: MessageEvent<File>) => {
     time: Date.now() - startTime,
   })
 }
+
+// Add an empty export statement to signal this is an ES module.
+// This satisfies the bundler's requirement without changing runtime behavior.
+export {};
