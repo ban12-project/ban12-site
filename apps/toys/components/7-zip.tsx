@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, type ChangeEventHandler } from 'react'
+import { useRef, type ChangeEventHandler } from 'react'
 // import { useGSAP } from '@gsap/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@repo/ui/components/button'
@@ -26,6 +26,7 @@ import { Loader2 } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 
+import { useDragDrop } from '#/hooks/use-drag-drop'
 import { useSaveFile } from '#/hooks/use-save-file'
 import { supportedFormats, useSevenZip } from '#/hooks/use-seven-zip'
 
@@ -38,60 +39,16 @@ const FormSchema = z.object({
 })
 
 export default function SevenZip() {
-  const [isHovering, setIsHovering] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
   // const q = gsap.utils.selector(formRef)
 
   const { pending, outputFilesRef, resolve, progress } = useSevenZip()
 
-  useEffect(() => {
-    const onDrop = (e: DragEvent) => {
-      // Prevent default behavior (Prevent file from being opened)
-      e.preventDefault()
-
-      if (!e.dataTransfer) return
-
-      if (e.dataTransfer.items) {
-        // Use DataTransferItemList interface to access the file(s)
-        for (let i = 0; i < e.dataTransfer.items.length; i++) {
-          // If dropped items aren't files, reject them
-          if (e.dataTransfer.items[i].kind === 'file') {
-            const file = e.dataTransfer.items[i].getAsFile()
-            if (!file) return
-            resolve([file], format)
-          }
-        }
-      } else {
-        // Use DataTransfer interface to access the file(s)
-        resolve(Array.from(e.dataTransfer.files), format)
-      }
-      setIsHovering(false)
-    }
-
-    const onDragOver = (e: DragEvent) => {
-      // Prevent default behavior (Prevent file from being opened)
-      e.preventDefault()
-      setIsHovering(true)
-    }
-
-    const onCancel = () => {
-      setIsHovering(false)
-    }
-
-    window.addEventListener('drop', onDrop)
-    window.addEventListener('dragover', onDragOver)
-    window.addEventListener('dragend', onCancel)
-    window.addEventListener('dragleave', onCancel)
-
-    return () => {
-      window.removeEventListener('drop', onDrop)
-      window.removeEventListener('dragover', onDragOver)
-      window.removeEventListener('dragend', onCancel)
-      window.removeEventListener('dragleave', onCancel)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resolve])
+  const callback = useRef((files: File[]) => {
+    resolve(files, format)
+  }).current
+  const { isHovering } = useDragDrop(() => window, callback)
 
   const { saveFile } = useSaveFile()
 
