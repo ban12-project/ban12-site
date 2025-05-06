@@ -1,7 +1,6 @@
 var JS7z = (() => {
   var _scriptName = typeof document != 'undefined' ? document.currentScript?.src : undefined;
   if (typeof __filename != 'undefined') _scriptName = _scriptName || __filename;
-  if (typeof importScripts == "function") _scriptName = '/js7z-mt-fs-ec-2.4.1/js7z.js';
   return (
 async function(moduleArg = {}) {
   var moduleRtn;

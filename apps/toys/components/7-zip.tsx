@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, type ChangeEventHandler } from 'react'
+import Script from 'next/script'
 // import { useGSAP } from '@gsap/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@repo/ui/components/button'
@@ -26,6 +27,7 @@ import { Loader2 } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 
+import { SCRIPT_LOADED_EVENT } from '#/lib/7-zip'
 import { useDragDrop } from '#/hooks/use-drag-drop'
 import { useSaveFile } from '#/hooks/use-save-file'
 import { supportedFormats, useSevenZip } from '#/hooks/use-seven-zip'
@@ -162,6 +164,14 @@ export default function SevenZip() {
           progress: {progress}
         </Button>
       </form>
+
+      <Script
+        src="/js7z-mt-fs-ec-2.4.1/js7z.js"
+        onLoad={() => {
+          const event = new CustomEvent(SCRIPT_LOADED_EVENT)
+          window.dispatchEvent(event)
+        }}
+      />
     </Form>
   )
 }
