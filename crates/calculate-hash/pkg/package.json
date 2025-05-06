@@ -11,11 +11,13 @@
   "files": [
     "calculate_hash_bg.wasm",
     "calculate_hash.js",
+    "calculate_hash_bg.js",
     "calculate_hash.d.ts"
   ],
   "main": "calculate_hash.js",
   "types": "calculate_hash.d.ts",
   "sideEffects": [
+    "./calculate_hash.js",
     "./snippets/*"
   ]
 }

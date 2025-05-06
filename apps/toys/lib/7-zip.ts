@@ -14,8 +14,8 @@ export type Call = {
   }[Call['command'][0]]
 }
 
-export const enum OutType {
-  Print = 'print',
+export const enum JS7zEventName {
+  print = 'print',
   printErr = 'printErr',
   onAbort = 'onAbort',
   onExit = 'onExit',
@@ -45,24 +45,27 @@ declare global {
       printErr,
       onAbort,
       onExit,
-    }?: Partial<
-      Pick<JS7z, 'print' | 'printErr' | 'onAbort' | 'onExit'>
-    >) => Promise<JS7z>
+    }?: Partial<Pick<JS7z, JS7zEventName>>) => Promise<JS7z>
   }
 
   interface GlobalEventHandlersEventMap {
-    print: CustomEvent<FlatArray<Parameters<JS7z['print']>, 1>>
-    printErr: CustomEvent<FlatArray<Parameters<JS7z['printErr']>, 1>>
-    onAbort: CustomEvent<FlatArray<Parameters<JS7z['onAbort']>, 1>>
-    onExit: CustomEvent<FlatArray<Parameters<JS7z['onExit']>, 1>>
+    print: CustomEvent<FlatArray<Parameters<JS7z[JS7zEventName.print]>, 1>>
+    printErr: CustomEvent<
+      FlatArray<Parameters<JS7z[JS7zEventName.printErr]>, 1>
+    >
+    onAbort: CustomEvent<FlatArray<Parameters<JS7z[JS7zEventName.onAbort]>, 1>>
+    onExit: CustomEvent<FlatArray<Parameters<JS7z[JS7zEventName.onExit]>, 1>>
   }
 }
 
-function createCustomEvent(name: string) {
+function createCustomEvent(name: JS7zEventName) {
   return function (
     detail: FlatArray<
       Parameters<
-        JS7z['print'] | JS7z['printErr'] | JS7z['onAbort'] | JS7z['onExit']
+        | JS7z[JS7zEventName.print]
+        | JS7z[JS7zEventName.printErr]
+        | JS7z[JS7zEventName.onAbort]
+        | JS7z[JS7zEventName.onExit]
       >,
       1
     >,
@@ -86,10 +89,10 @@ export async function call({ command, payload }: Call) {
   }
 
   const js7z = await window.JS7z({
-    print: createCustomEvent('print'),
-    printErr: createCustomEvent('printErr'),
-    onAbort: createCustomEvent('onAbort'),
-    onExit: createCustomEvent('onExit'),
+    print: createCustomEvent(JS7zEventName.print),
+    printErr: createCustomEvent(JS7zEventName.printErr),
+    onAbort: createCustomEvent(JS7zEventName.onAbort),
+    onExit: createCustomEvent(JS7zEventName.onExit),
   })
 
   if (['a', 'e'].includes(command[0])) {
