@@ -1,5 +1,5 @@
 onmessage = async (event: MessageEvent<File>) => {
-  const { CreateSha256 } = await import('#/pkg')
+  const { CreateSha256 } = await import('@crates/calculate-hash/pkg')
 
   const file = event.data
 
@@ -30,4 +30,4 @@ onmessage = async (event: MessageEvent<File>) => {
 
 // Add an empty export statement to signal this is an ES module.
 // This satisfies the bundler's requirement without changing runtime behavior.
-export {};
+export {}

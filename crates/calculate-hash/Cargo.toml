@@ -1,7 +1,10 @@
 [package]
-name = "calculate_hash"
+name = "calculate-hash"
 version = "0.1.0"
 edition = "2021"
+description = "A Rust library for calculating hash values"
+repository = "https://github.com/ban12-project/ban12-site"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -11,7 +14,3 @@ crate-type = ["cdylib"]
 [dependencies]
 sha2 = "0.10.7"
 wasm-bindgen = "0.2.87"
-
-[profile.release]
-lto = true
-opt-level = 3

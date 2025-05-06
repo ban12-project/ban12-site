@@ -39,3 +39,11 @@ dist/
 # Supabase
 **/supabase/.branches
 **/supabase/.temp
+
+# rust
+/target
+**/*.rs.bk
+#Cargo.lock
+bin/
+#pkg/
+wasm-pack.log
