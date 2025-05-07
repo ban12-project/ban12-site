@@ -296,7 +296,7 @@ function FormComponent({
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         ref={formRef}
-        className="flex h-[calc(100vh-var(--layout-header-height))] items-center justify-center"
+        className="flex min-h-dvh items-center justify-center"
         data-drag-over={isHovering}
       >
         <input

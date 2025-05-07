@@ -22,6 +22,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.8.0",
     "@gsap/react": "catalog:",
+    "@opennextjs/cloudflare": "catalog:",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
     "dotenv": "^16.4.7",
@@ -36,7 +37,6 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "catalog:",
-    "@opennextjs/cloudflare": "1.0.0-beta.3",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "catalog:",
@@ -47,6 +47,6 @@
     "eslint": "catalog:",
     "postcss": "catalog:",
     "typescript": "catalog:",
-    "wrangler": "^4.13.1"
+    "wrangler": "catalog:"
   }
 }

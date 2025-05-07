@@ -114,9 +114,9 @@ export default function FileExplorer({ messages }: FileExplorerProps) {
   const isDesktop = useResponsive((breakpoint) => breakpoint.md)
 
   return (
-    <main className="mx-auto max-w-7xl px-5">
+    <main className="mx-auto flex min-h-dvh max-w-7xl flex-col px-5">
       <FileForm append={append} />
-      <div className="mt-10 h-[calc(100vh-var(--layout-header-height)-100px-40px)] md:h-[50vh]">
+      <div className="mt-10 flex-1">
         <List data={list} itemSize={isDesktop ? 160 : 300}>
           {FileCard}
         </List>

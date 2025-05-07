@@ -44,3 +44,5 @@ catalog:
   'react-window-infinite-loader': '^1.0.10'
   '@types/react-window-infinite-loader': '^1.0.9'
   'server-only': '^0.0.1'
+  '@opennextjs/cloudflare': '^1.0.0'
+  'wrangler': '^4.14.1'
