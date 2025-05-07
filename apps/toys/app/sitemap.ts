@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next'
 import { i18n } from '#/lib/i18n'
 
 export const dynamic = 'force-dynamic'
-export const runtime = 'edge'
+// export const runtime = 'edge'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const locales = Object.keys(i18n.locales)

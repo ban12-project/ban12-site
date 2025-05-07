@@ -3,11 +3,8 @@ on:
   push:
     branches:
       - main
-      - travel
     paths:
       - 'apps/travel/**'
-      - 'packages/**'
-      - 'pnpm-lock.yaml'
   workflow_dispatch:
 
 jobs:
@@ -52,6 +49,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          packageManager: pnpm
           workingDirectory: 'apps/travel'
           preCommands: pnpm build:worker

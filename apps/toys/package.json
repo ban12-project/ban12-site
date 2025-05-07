@@ -5,9 +5,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm build-rust && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build-rust": "wasm-pack build ../../crates/calculate-hash",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
@@ -16,8 +21,10 @@
     "@gsap/react": "catalog:",
     "@hookform/resolvers": "catalog:",
     "@next/third-parties": "catalog:",
+    "@opennextjs/cloudflare": "catalog:",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@uswriting/exiftool": "^1.0.3",
     "gsap": "catalog:",
     "intl-messageformat": "catalog:",
     "lucide-react": "catalog:",
@@ -49,6 +56,7 @@
     "babel-plugin-react-compiler": "catalog:",
     "eslint": "catalog:",
     "postcss": "^8.4.49",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "wrangler": "catalog:"
   }
 }
