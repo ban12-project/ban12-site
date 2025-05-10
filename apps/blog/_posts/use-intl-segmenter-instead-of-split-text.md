@@ -11,6 +11,8 @@ ogImage:
 
 # 使用 `Intl.Segmenter` 进行智能文本分割：告别简单的 `split`
 
+update: [GSAP](https://gsap.com/pricing/)已经面向所有人免费，包括 [SplitText](https://gsap.com/docs/v3/Plugins/SplitText) 插件，更新到 `3.13.0` 及以上就可以使用了，推荐使用成熟的方案它包含了许多边缘情况的处理
+
 在 Web 开发中，我们经常需要将文本分割成更小的单元，例如为了实现逐字动画、文本分析或处理用户输入。传统的 JavaScript `String.prototype.split('')` 方法虽然简单，但它在处理复杂语言（如包含表情符号、组合字符的语言）时会遇到问题，因为它只是简单地按 Unicode 码位分割，而不是按用户感知的字符（字形）分割。
 
 此外，市面上可能存在一些更高级的文本分割库或服务（有时称为 `splitText` 类功能），但它们可能存在以下缺点：
