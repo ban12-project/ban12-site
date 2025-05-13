@@ -27,27 +27,31 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
+    "@gsap/react": "catalog:",
     "@hookform/resolvers": "catalog:",
     "gsap": "catalog:",
     "next-themes": "catalog:",
     "react": "catalog:",
+    "react-dom": "catalog:",
     "react-hook-form": "catalog:",
     "sonner": "catalog:"
   },
   "devDependencies": {
+    "@gsap/react": "catalog:",
     "@hookform/resolvers": "catalog:",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.3",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "eslint": "catalog:",
     "gsap": "catalog:",
     "next-themes": "catalog:",
     "postcss": "catalog:",
     "react-hook-form": "catalog:",
     "sonner": "catalog:",
-    "tailwindcss": "^4.1.3",
+    "tailwindcss": "^4.1.6",
     "typescript": "catalog:"
   },
   "dependencies": {
@@ -70,10 +74,10 @@
     "cmdk": "1.1.1",
     "lenis": "^1.2.3",
     "lucide-react": "^0.487.0",
-    "react-resizable-panels": "^2.1.7",
-    "tailwind-merge": "^3.2.0",
+    "react-resizable-panels": "^3.0.2",
+    "tailwind-merge": "^3.3.0",
     "tempus": "1.0.0-dev.10",
-    "tw-animate-css": "^1.2.5",
+    "tw-animate-css": "^1.2.9",
     "zod": "^3.24.2"
   }
 }

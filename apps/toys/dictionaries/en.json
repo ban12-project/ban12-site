@@ -9,7 +9,20 @@
   "message": "You have {numPhotos, plural, =0{no photos.}=1 {one photo.}other {# photos.}}",
   "home": {
     "title": "The Utility",
-    "description": "The utility on the web"
+    "description": "The utility on the web",
+    "hero": {
+      "heading": "A toolset powered by WebAssembly",
+      "subtitle": "Efficient and fast — can be run in modern web browsers, it is a low-level assembly-like language with a compact binary format that runs with near-native performance"
+    },
+    "intro": {
+      "subtitle": "VS traditional online tools or native applications",
+      "body": "Ditch the snail-paced online tools and permission-hungry local apps, WebAssembly lets powerful code run swiftly right inside your browser. Best of all, your data stays private and processed securely in that browser sandbox, using only the standard permissions you approve, not demanding access to your whole computer.",
+      "highlight": [
+        "powerful code",
+        "run swiftly",
+        "data stays private and processed securely"
+      ]
+    }
   },
   "theme": {
     "light": "Light",
