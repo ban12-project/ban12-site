@@ -30,7 +30,7 @@ function download(data: { blob: Blob; filename: string }[]) {
 ```
 
 在搜索解决办法时还看到过使用 zip.js 把多个文件压缩成一个 zip 包来保存的技巧，现在有了新 API 就不用这么麻烦了。
-这里提一嘴 wasm 包装的 [7-zip 网站](https://toys.ban12.com/7-zip)，支持所有桌面端的 7-zip 功能。目前受限于 RAM FS 只是不能处理超过 2GB 的文件，这个在将来可能会被解决。
+这里提一嘴 wasm 包装的 [7-zip 网站](https://toys.ban12.com/7-zip)，支持所有桌面端的 7-zip 功能。~~目前受限于 RAM FS 只是不能处理超过 2GB 的文件，这个在将来可能会被解决。~~
 
 # 在 chrome/edge 86 可以使用的 File System API
 
