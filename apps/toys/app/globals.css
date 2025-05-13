@@ -152,4 +152,6 @@
       height: 0;
     }
   }
+
+  --webassembly-logo-color: oklab(0.55 0.05 -0.22);
 }

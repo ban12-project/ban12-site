@@ -8,6 +8,7 @@ import { ThemeProvider } from 'next-themes'
 
 // import Lenis from '@repo/ui/lenis'
 import { getDictionary, i18n, type Locale } from '#/lib/i18n'
+import Footer from '#/components/footer'
 
 export async function generateMetadata({
   params,
@@ -88,6 +89,7 @@ export default async function RootLayout(props: RootLayoutProps) {
         >
           <LocaleProvider locale={params.lang} i18n={i18n}>
             {children}
+            <Footer />
           </LocaleProvider>
         </ThemeProvider>
 

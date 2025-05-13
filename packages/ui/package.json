@@ -27,20 +27,24 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
+    "@gsap/react": "catalog:",
     "@hookform/resolvers": "catalog:",
     "gsap": "catalog:",
     "next-themes": "catalog:",
     "react": "catalog:",
+    "react-dom": "catalog:",
     "react-hook-form": "catalog:",
     "sonner": "catalog:"
   },
   "devDependencies": {
+    "@gsap/react": "catalog:",
     "@hookform/resolvers": "catalog:",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.3",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "eslint": "catalog:",
     "gsap": "catalog:",
     "next-themes": "catalog:",
