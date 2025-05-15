@@ -7,15 +7,14 @@ const execPromise = promisify(exec)
 
 async function deployToVercel(url) {
   const rootPath = join(fileURLToPath(url))
+  let paths = []
 
-  const { stdout } = await execPromise('git log -1 --pretty=%B')
-
-  const paths = stdout
-    .trim()
-    .split(/\n/)
-    .find((i) => i.startsWith('[release]:'))
-    .split(/\s/)
-    .slice(1)
+  console.log(process.env.PROJECTS)
+  try {
+    paths = JSON.parse(process.env.PROJECTS)
+  } catch (error) {
+    console.error("Failed to parse PROJECTS as JSON:", error);
+  }
 
   try {
     for (const path of paths) {

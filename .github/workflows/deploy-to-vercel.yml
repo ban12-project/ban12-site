@@ -5,15 +5,59 @@ on:
     branches:
       - main
 
+    paths:
+      - 'apps/blog/**/*'
+      - 'apps/web/**/*'
+      - 'apps/shortcuts/**/*'
+      - '!apps/**/README.md'
+
+  workflow_dispatch:
+
 jobs:
   Deploy-Production:
-    if: contains(github.event.head_commit.message, '[release]:')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Get changed directories
+        id: changed_dirs
+        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c
+        with:
+          dir_names: true
+          dir_names_max_depth: '2'
+          dir_names_exclude_current_dir: true
+
+      - name: List all changed
+        if: steps.changed_dirs.outputs.any_changed == 'true'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed_dirs.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+          done
+
+      - name: 'Set paths to env'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed_dirs.outputs.all_changed_files }}
+        run: |
+          paths_json="["
+          first=true
+
+          for file in ${ALL_CHANGED_FILES}; do
+            if [ "$first" = true ]; then
+              paths_json="$paths_json\"$file\""
+              first=false
+            else
+              paths_json="$paths_json,\"$file\""
+            fi
+          done
+
+          paths_json="$paths_json]"
+
+          echo "PROJECTS=${paths_json}" >> $GITHUB_ENV
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
