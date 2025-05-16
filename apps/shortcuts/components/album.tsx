@@ -1,20 +1,26 @@
 'use client'
 
-import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { useLocale } from '@repo/i18n/client'
 import { Skeleton } from '@repo/ui/components/skeleton'
-import SuperEllipseSVG from '@repo/ui/super-ellipse-svg'
+import { useResponsive } from '@repo/ui/hooks/use-responsive'
+import { cn } from '@repo/ui/lib/utils'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
+import { useIsomorphicLayoutEffect } from 'usehooks-ts'
 
 import type { SelectShortcut } from '#/lib/db/schema'
 import { Locale } from '#/lib/i18n'
-import { useResponsive } from '#/hooks/use-responsive'
 import useRootDirection from '#/hooks/use-root-direction'
 import { fetchShortcutsByAlbumID } from '#/app/[lang]/(front)/actions'
 
 import ShortcutCard from './shortcut-card'
+
+const SuperEllipseSVG = dynamic(() => import('@repo/ui/super-ellipse-svg'), {
+  ssr: false,
+})
 
 type AlbumsProps = {
   shortcuts: SelectShortcut[]
@@ -22,22 +28,24 @@ type AlbumsProps = {
   currentPage: number
 }
 
-let PADDING_START: number, PADDING_END: number
+let PADDING_START: number = 0,
+  PADDING_END: number = 0
 
 const GAP_SIZE = 12
 const CLIP_PATH_ID = 'CLIP_PATH_ID'
 
-const outerElementType = forwardRef<React.ComponentRef<'div'>>(
-  function Outer(props, ref) {
-    return (
-      <div
-        ref={ref}
-        {...props}
-        className="hidden-scrollbar overscroll-x-contain"
-      ></div>
-    )
-  },
-)
+const outerElementType = forwardRef<
+  React.ComponentRef<'div'>,
+  { className: string }
+>(function Outer(props, ref) {
+  return (
+    <div
+      ref={ref}
+      {...props}
+      className={cn('hidden-scrollbar overscroll-x-contain', props.className)}
+    ></div>
+  )
+})
 
 const innerElementType = forwardRef<
   React.ComponentRef<'div'>,
@@ -55,6 +63,7 @@ const innerElementType = forwardRef<
           GAP_SIZE
         }px`,
       }}
+      className="album-list__inner"
       {...rest}
     ></div>
   )
@@ -99,33 +108,32 @@ export default function Albums({
   const anchorRef = useRef<React.ComponentRef<'div'>>(null)
   const direction = useRootDirection()
 
-  const update = () => {
-    if (!anchorRef.current) return
-    const { paddingLeft, paddingRight } = window.getComputedStyle(
-      anchorRef.current,
-    )
-    PADDING_START = Number.parseFloat(paddingLeft)
-    PADDING_END = Number.parseFloat(paddingRight)
-  }
+  useIsomorphicLayoutEffect(() => {
+    const anchor = anchorRef.current
+    if (!anchor) return
 
-  useEffect(update, [anchorRef])
-  useEffect(() => {
-    window.addEventListener('resize', update)
+    const onResize = () => {
+      const { paddingLeft, paddingRight } = window.getComputedStyle(anchor)
+      PADDING_START = Number.parseFloat(paddingLeft)
+      PADDING_END = Number.parseFloat(paddingRight)
+    }
+    onResize()
+    window.addEventListener('resize', onResize, { passive: true })
 
     return () => {
-      window.removeEventListener('resize', update)
+      window.removeEventListener('resize', onResize)
     }
   }, [])
 
-  const breakpoints = useResponsive()
+  const { isReady, breakpoints } = useResponsive()
 
-  const columnNumber = useMemo(() => {
+  const columnNumber = (() => {
     if (breakpoints['2xl']) return 7
     if (breakpoints.xl) return 6
     if (breakpoints.lg) return 5
     if (breakpoints.md) return 4
     return 2
-  }, [breakpoints])
+  })()
 
   const [items, setItems] = useState<SelectShortcut[]>([...shortcuts])
   const [hasNextPage, setHasNextPage] = useState(shortcuts.length >= pageSize)
@@ -152,7 +160,7 @@ export default function Albums({
         className="px-safe-max-4 absolute lg:px-[var(--container-inset,0)]"
         ref={anchorRef}
       ></div>
-      <AutoSizer defaultWidth={1440}>
+      <AutoSizer defaultWidth={1440} defaultHeight={148}>
         {({ height, width }) => (
           <InfiniteLoader
             isItemLoaded={isItemLoaded}
@@ -184,6 +192,7 @@ export default function Albums({
                     onItemsRendered={onItemsRendered}
                     ref={ref}
                     direction={direction}
+                    className={cn(isReady || 'hidden')}
                   >
                     {(props) => (
                       <Column {...props}>

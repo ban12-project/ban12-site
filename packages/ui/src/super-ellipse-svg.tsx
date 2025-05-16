@@ -28,8 +28,8 @@ export function generateSuperEllipseSVGPath(
       Math.pow(Math.abs(cosTheta), n) + Math.pow(Math.abs(sinTheta), n),
       -1 / n,
     )
-    const px = a * r * cosTheta + a
-    const py = b * r * sinTheta + b
+    const px = Math.round((a * r * cosTheta + a) * 1000) / 1000
+    const py = Math.round((b * r * sinTheta + b) * 1000) / 1000
 
     if (i === 0) {
       path += `M${px} ${py}`
