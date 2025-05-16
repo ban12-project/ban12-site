@@ -7,7 +7,7 @@ import { cn } from '@repo/ui/lib/utils'
 import { Drawer } from 'vaul'
 
 import type { Messages } from '#/lib/i18n'
-import { useResponsive } from '#/hooks/use-responsive'
+import { useResponsive } from '@repo/ui/hooks/use-responsive'
 import useRootDirection from '#/hooks/use-root-direction'
 
 type RawDrawerProps = React.ComponentProps<typeof Drawer.Root>
@@ -31,7 +31,7 @@ export default function PageDrawer({
   const router = useRouter()
   const [open, setOpen] = useState(true)
 
-  const breakpoints = useResponsive()
+  const { breakpoints } = useResponsive()
   const direction = useRootDirection((dir) =>
     dir === 'ltr' ? 'right' : 'left',
   )

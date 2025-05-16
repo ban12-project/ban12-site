@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState, useLayoutEffect } from 'react'
 
+/** https://tailwindcss.com/docs/screens */
 interface Breakpoints {
   /** (min-width: 640px) This will only center text on screens 640px and wider, not on small screens */
   sm: boolean
@@ -13,8 +14,13 @@ interface Breakpoints {
   '2xl': boolean
 }
 
-export function useResponsive(): Breakpoints
-export function useResponsive<U>(selector: (breakpoints: Breakpoints) => U): U
+interface WithIsReady<T> {
+  isReady: boolean
+  breakpoints: T
+}
+
+export function useResponsive(): WithIsReady<Breakpoints>
+export function useResponsive<U>(selector: (breakpoints: Breakpoints) => U): WithIsReady<U>
 export function useResponsive<U>(selector?: (breakpoints: Breakpoints) => U) {
   const [breakpoints, setBreakpoints] = useState({
     sm: false,
@@ -23,8 +29,9 @@ export function useResponsive<U>(selector?: (breakpoints: Breakpoints) => U) {
     xl: false,
     '2xl': false,
   })
+  const [isReady, setIsReady] = useState(false)
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const onResize = () => {
       // tailwindcss responsive breakpoints
       // https://tailwindcss.com/docs/responsive-design
@@ -35,18 +42,23 @@ export function useResponsive<U>(selector?: (breakpoints: Breakpoints) => U) {
         xl: window.matchMedia('(min-width: 1280px)').matches,
         '2xl': window.matchMedia('(min-width: 1536px)').matches,
       })
+
+      setIsReady(true)
     }
 
-    window.addEventListener('resize', onResize, false)
     onResize()
+    window.addEventListener('resize', onResize, { passive: true })
 
     return () => {
-      window.removeEventListener('resize', onResize, false)
+      window.removeEventListener('resize', onResize)
     }
   }, [])
 
-  return useMemo(
-    () => (selector ? selector(breakpoints) : breakpoints),
-    [breakpoints, selector],
-  )
+  return {
+    isReady,
+    breakpoints: selector ? selector(breakpoints) : breakpoints
+  }
 }
+
+export const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect

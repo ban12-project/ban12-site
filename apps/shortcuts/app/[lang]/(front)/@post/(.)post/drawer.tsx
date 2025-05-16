@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { cn } from '@repo/ui/lib/utils'
 
 import type { Messages } from '#/lib/i18n'
-import { useResponsive } from '#/hooks/use-responsive'
+import { useResponsive } from '@repo/ui/hooks/use-responsive'
 import PageDrawer, { PageDrawerProps } from '#/components/page-drawer'
 
 type Drawer = {
@@ -16,7 +16,7 @@ const snapPoints = [0.7, 1]
 
 export default function Drawer({ messages, children }: Drawer) {
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0])
-  const breakpoints = useResponsive()
+  const { breakpoints } = useResponsive()
 
   const props: PageDrawerProps = useMemo(() => {
     const props = {

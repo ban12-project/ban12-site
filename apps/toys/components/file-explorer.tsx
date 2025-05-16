@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react'
 
 import type { Messages } from '#/lib/i18n'
-import { useResponsive } from '#/hooks/use-responsive'
+import { useResponsive } from '@repo/ui/hooks/use-responsive'
 import List from '#/components/virtual-list'
 
 import FileCard from './file-card'
@@ -111,7 +111,7 @@ export default function FileExplorer({ messages }: FileExplorerProps) {
     })
   }, [])
 
-  const isDesktop = useResponsive((breakpoint) => breakpoint.md)
+  const { breakpoints: isDesktop } = useResponsive((breakpoint) => breakpoint.md)
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-7xl flex-col px-5">
