@@ -1,4 +1,5 @@
 import { exec } from 'node:child_process'
+import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
@@ -9,11 +10,17 @@ async function deployToVercel(url) {
   const rootPath = join(fileURLToPath(url))
   let paths = []
 
-  console.log(process.env.PROJECTS)
   try {
-    paths = JSON.parse(process.env.PROJECTS)
+    const string = await readFile(
+      new URL('../../.vercel/repo.json', import.meta.url),
+      { encoding: 'utf-8' },
+    )
+    const repo = JSON.parse(string)
+    const directories = repo.projects.map((item) => item.directory)
+
+    paths = JSON.parse(process.env.PROJECTS).filter((path) => directories.includes(path))
   } catch (error) {
-    console.error("Failed to parse PROJECTS as JSON:", error);
+    console.error('Failed to parse PROJECTS as JSON:', error)
   }
 
   try {
