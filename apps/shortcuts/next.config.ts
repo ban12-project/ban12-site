@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
   transpilePackages: ['@repo/i18n', '@repo/ui'],
   experimental: {
     reactCompiler: true,
+    viewTransition: true,
   },
 }
 
