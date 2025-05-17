@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Link } from '@repo/i18n/client'
-import SuperEllipseSVG from '@repo/ui/super-ellipse-svg'
+import SuperEllipseSVG from '@repo/ui/components/super-ellipse-svg'
 
 import { getCollections } from '#/lib/db/queries'
 import { Locale } from '#/lib/i18n'

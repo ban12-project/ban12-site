@@ -9,10 +9,6 @@
     "dist"
   ],
   "exports": {
-    "./styles.css": "./dist/index.css",
-    "./card": "./src/card.tsx",
-    "./lenis": "./src/lenis.tsx",
-    "./super-ellipse-svg": "./src/super-ellipse-svg.tsx",
     "./globals.css": "./src/styles/globals.css",
     "./postcss.config": "./postcss.config.mjs",
     "./lib/*": "./src/lib/*.ts",
@@ -21,9 +17,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "pnpm dlx @tailwindcss/cli -i ./src/styles.css -o ./dist/index.css",
+    "build": "pnpm dlx @tailwindcss/cli -i ./src/styles/globals.css -o ./dist/index.css",
     "lint": "eslint .",
-    "dev": "pnpm dlx @tailwindcss/cli -i ./src/styles.css -o ./dist/index.css --watch",
+    "dev": "pnpm dlx @tailwindcss/cli -i ./src/styles/globals.css -o ./dist/index.css --watch",
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {

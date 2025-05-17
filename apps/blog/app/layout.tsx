@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Lenis from '@repo/ui/lenis'
+import Lenis from '@repo/ui/components/lenis'
 import { Analytics } from '@vercel/analytics/react'
 
 import { CMS_NAME, HOME_OG_IMAGE_URL } from '#/lib/constants'

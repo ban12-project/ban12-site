@@ -1,7 +1,7 @@
 'use client'
 
 import { Parallax } from '@repo/ui/components/parallax'
-import Lenis from '@repo/ui/lenis'
+import Lenis from '@repo/ui/components/lenis'
 
 export default function ParallaxWithLenis({
   children,

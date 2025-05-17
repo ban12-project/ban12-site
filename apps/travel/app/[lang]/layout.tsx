@@ -2,7 +2,7 @@ import '#/app/globals.css'
 
 import type { Metadata } from 'next'
 import { LocaleProvider } from '@repo/i18n/client'
-import Lenis from '@repo/ui/lenis'
+import Lenis from '@repo/ui/components/lenis'
 import { ThemeProvider } from 'next-themes'
 
 import { getDictionary, i18n, type Locale } from '#/lib/i18n'

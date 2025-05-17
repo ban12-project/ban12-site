@@ -18,7 +18,7 @@ import { fetchShortcutsByAlbumID } from '#/app/[lang]/(front)/actions'
 
 import ShortcutCard from './shortcut-card'
 
-const SuperEllipseSVG = dynamic(() => import('@repo/ui/super-ellipse-svg'), {
+const SuperEllipseSVG = dynamic(() => import('@repo/ui/components/super-ellipse-svg'), {
   ssr: false,
 })
 

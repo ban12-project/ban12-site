@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/og'
-import { generateBase64 } from '@repo/ui/super-ellipse-svg'
+import { generateBase64 } from '@repo/ui/components/super-ellipse-svg'
 
 type Props = {
   title?: string

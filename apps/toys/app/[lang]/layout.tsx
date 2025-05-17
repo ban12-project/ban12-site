@@ -6,7 +6,7 @@ import { LocaleProvider } from '@repo/i18n/client'
 import { Toaster } from '@repo/ui/components/sonner'
 import { ThemeProvider } from 'next-themes'
 
-// import Lenis from '@repo/ui/lenis'
+// import Lenis from '@repo/ui/components/lenis'
 import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import Footer from '#/components/footer'
 

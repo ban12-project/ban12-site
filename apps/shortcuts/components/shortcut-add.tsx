@@ -2,7 +2,7 @@ import { unstable_cache } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Button } from '@repo/ui/components/button'
 import { cn } from '@repo/ui/lib/utils'
-import SuperEllipseSVG from '@repo/ui/super-ellipse-svg'
+import SuperEllipseSVG from '@repo/ui/components/super-ellipse-svg'
 import { Plus, Share } from 'lucide-react'
 
 import { getShortcutByUuid } from '#/lib/db/queries'
