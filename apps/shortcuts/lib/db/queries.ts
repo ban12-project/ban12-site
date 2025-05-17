@@ -1,10 +1,9 @@
 import 'server-only'
 
 import { cache } from 'react'
-import { Pool } from '@neondatabase/serverless'
 import { kv } from '@vercel/kv'
 import { eq, or, sql } from 'drizzle-orm'
-import { drizzle } from 'drizzle-orm/neon-serverless'
+import { drizzle } from 'drizzle-orm/postgres-js'
 
 import * as schema from './schema'
 import {
@@ -18,9 +17,7 @@ import {
 const connectionString = process.env.DATABASE_URL
 if (!connectionString) throw new Error('Not valid database url')
 
-const pool = new Pool({ connectionString })
-
-export const db = drizzle(pool, { schema })
+export const db = drizzle(connectionString, { schema })
 
 const CACHE_TTL = {
   SHORTCUT: 3600, // 1小时

@@ -46,3 +46,6 @@ catalog:
   'server-only': '^0.0.1'
   '@opennextjs/cloudflare': '^1.0.0'
   'wrangler': '^4.14.1'
+  "drizzle-kit": "^0.31.1"
+  "drizzle-orm": "^0.43.1"
+  "dotenv": "^16.5.0"
