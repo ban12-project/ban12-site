@@ -1,9 +1,9 @@
 'use client'
 
 import { forwardRef, useRef, useState } from 'react'
-import dynamic from 'next/dynamic'
 import { useLocale } from '@repo/i18n/client'
 import { Skeleton } from '@repo/ui/components/skeleton'
+import SuperEllipse from '@repo/ui/components/super-ellipse'
 import { useResponsive } from '@repo/ui/hooks/use-responsive'
 import { cn } from '@repo/ui/lib/utils'
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -17,13 +17,6 @@ import useRootDirection from '#/hooks/use-root-direction'
 import { fetchShortcutsByAlbumID } from '#/app/[lang]/(front)/actions'
 
 import ShortcutCard from './shortcut-card'
-
-const SuperEllipse = dynamic(
-  () => import('@repo/ui/components/super-ellipse'),
-  {
-    ssr: false,
-  },
-)
 
 type AlbumsProps = {
   shortcuts: SelectShortcut[]
@@ -91,12 +84,14 @@ const Column = ({
       style={{
         ...style,
         left: `${Number.parseFloat(style.left as string) + PADDING_START}px`,
-        right: `${Number.parseFloat(style.right as string) + PADDING_END}px`,
         width: `${Number.parseFloat(style.width as string) - GAP_SIZE}px`,
       }}
     >
       {children || (
-        <SuperEllipse asChild svgProps={{ width, height: height - 20/* pb-5 */, n: 10 }}>
+        <SuperEllipse
+          asChild
+          svgProps={{ width, height: height - 20 /* pb-5 */, n: 10 }}
+        >
           <ShortcutCard
             className="block h-full [box-shadow:2px_4px_12px_#00000014] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)]"
             item={data[index]}
@@ -196,7 +191,11 @@ export default function Albums({
                   className={cn(isReady || 'hidden')}
                 >
                   {(props) => (
-                    <Column {...props} width={itemSize - GAP_SIZE} height={height}>
+                    <Column
+                      {...props}
+                      width={itemSize - GAP_SIZE}
+                      height={height}
+                    >
                       {isItemLoaded(props.index) ? null : (
                         <Skeleton className="h-full w-full rounded-3xl" />
                       )}
