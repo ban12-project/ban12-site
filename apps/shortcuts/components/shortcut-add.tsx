@@ -2,7 +2,7 @@ import { unstable_cache } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Button } from '@repo/ui/components/button'
 import { cn } from '@repo/ui/lib/utils'
-import SuperEllipseSVG from '@repo/ui/components/super-ellipse-svg'
+import SuperEllipse from '@repo/ui/components/super-ellipse'
 import { Plus, Share } from 'lucide-react'
 
 import { getShortcutByUuid } from '#/lib/db/queries'
@@ -38,7 +38,6 @@ export default async function ShortcutAdd({
 
   return (
     <>
-      <SuperEllipseSVG width={176} height={128} n={8} id="clip-path" />
       <div
         {...props}
         className={cn(
@@ -56,12 +55,14 @@ export default async function ShortcutAdd({
             </p>
           ))}
 
-          <ShortcutCard
-            className="pointer-events-none inline-block h-32 w-44 text-left [clip-path:url(#clip-path)]"
-            href={shortcut.icloud}
-            item={shortcut}
-            lang={lang}
-          />
+          <SuperEllipse asChild svgProps={{ width: 176, height: 128, n: 8 }}>
+            <ShortcutCard
+              className="pointer-events-none inline-block h-32 w-44 text-left"
+              href={shortcut.icloud}
+              item={shortcut}
+              lang={lang}
+            />
+          </SuperEllipse>
         </section>
 
         <footer className="pb-safe-max-8 px-safe-max-6 w-full pt-4 text-lg">
@@ -101,12 +102,14 @@ export default async function ShortcutAdd({
         )}
       >
         <div className="flex items-center gap-4">
-          <ShortcutCard
-            className="pointer-events-none inline-block h-32 w-44 text-left [clip-path:url(#clip-path)]"
-            href={shortcut.icloud}
-            item={shortcut}
-            lang={lang}
-          />
+          <SuperEllipse asChild svgProps={{ width: 176, height: 128, n: 8 }}>
+            <ShortcutCard
+              className="pointer-events-none inline-block h-32 w-44 text-left"
+              href={shortcut.icloud}
+              item={shortcut}
+              lang={lang}
+            />
+          </SuperEllipse>
 
           <div className="space-y-4">
             <h1 className="text-xl font-semibold leading-6">

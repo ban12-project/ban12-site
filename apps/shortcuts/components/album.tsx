@@ -18,9 +18,12 @@ import { fetchShortcutsByAlbumID } from '#/app/[lang]/(front)/actions'
 
 import ShortcutCard from './shortcut-card'
 
-const SuperEllipseSVG = dynamic(() => import('@repo/ui/components/super-ellipse-svg'), {
-  ssr: false,
-})
+const SuperEllipse = dynamic(
+  () => import('@repo/ui/components/super-ellipse'),
+  {
+    ssr: false,
+  },
+)
 
 type AlbumsProps = {
   shortcuts: SelectShortcut[]
@@ -32,7 +35,6 @@ let PADDING_START: number = 0,
   PADDING_END: number = 0
 
 const GAP_SIZE = 12
-const CLIP_PATH_ID = 'CLIP_PATH_ID'
 
 const outerElementType = forwardRef<
   React.ComponentRef<'div'>,
@@ -74,7 +76,11 @@ const Column = ({
   style,
   data,
   children,
+  width,
+  height,
 }: ListChildComponentProps<SelectShortcut[]> & {
+  width: number
+  height: number
   children?: React.ReactNode
 }) => {
   const lang = useLocale().locale as Locale
@@ -90,11 +96,13 @@ const Column = ({
       }}
     >
       {children || (
-        <ShortcutCard
-          className="block h-full [box-shadow:2px_4px_12px_#00000014] [clip-path:url(#album)] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)]"
-          item={data[index]}
-          lang={lang}
-        />
+        <SuperEllipse asChild svgProps={{ width, height: height - 20/* pb-5 */, n: 10 }}>
+          <ShortcutCard
+            className="block h-full [box-shadow:2px_4px_12px_#00000014] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)]"
+            item={data[index]}
+            lang={lang}
+          />
+        </SuperEllipse>
       )}
     </div>
   )
@@ -173,36 +181,28 @@ export default function Albums({
                 (width - PADDING_START - PADDING_END) / columnNumber +
                 GAP_SIZE / columnNumber
               return (
-                <>
-                  <SuperEllipseSVG
-                    width={itemSize - GAP_SIZE}
-                    height={height - 20} // <Column /> pb-5 = 20
-                    n={10}
-                    id="album"
-                  />
-                  <FixedSizeList
-                    itemSize={itemSize}
-                    width={width}
-                    height={height}
-                    itemCount={itemCount}
-                    itemData={items}
-                    outerElementType={outerElementType}
-                    innerElementType={innerElementType}
-                    layout="horizontal"
-                    onItemsRendered={onItemsRendered}
-                    ref={ref}
-                    direction={direction}
-                    className={cn(isReady || 'hidden')}
-                  >
-                    {(props) => (
-                      <Column {...props}>
-                        {isItemLoaded(props.index) ? null : (
-                          <Skeleton className="h-full w-full rounded-3xl" />
-                        )}
-                      </Column>
-                    )}
-                  </FixedSizeList>
-                </>
+                <FixedSizeList
+                  itemSize={itemSize}
+                  width={width}
+                  height={height}
+                  itemCount={itemCount}
+                  itemData={items}
+                  outerElementType={outerElementType}
+                  innerElementType={innerElementType}
+                  layout="horizontal"
+                  onItemsRendered={onItemsRendered}
+                  ref={ref}
+                  direction={direction}
+                  className={cn(isReady || 'hidden')}
+                >
+                  {(props) => (
+                    <Column {...props} width={itemSize - GAP_SIZE} height={height}>
+                      {isItemLoaded(props.index) ? null : (
+                        <Skeleton className="h-full w-full rounded-3xl" />
+                      )}
+                    </Column>
+                  )}
+                </FixedSizeList>
               )
             }}
           </InfiniteLoader>

@@ -27,17 +27,18 @@ export default function ShortcutCard({
         'relative flex-none overflow-hidden rounded-3xl bg-[var(--background-color,#ef4444)] text-zinc-100 transition-all active:brightness-75',
         className,
       )}
+      data-bg-raw={item.backgroundColor}
+      href={`/get/${item.uuid}`}
+      scroll={false}
+      {...props}
       style={
         {
+          ...props.style,
           '--background-color': item.backgroundColor
             ? negativeToHexColor(item.backgroundColor)
             : '',
         } as React.CSSProperties
       }
-      data-bg-raw={item.backgroundColor}
-      href={`/get/${item.uuid}`}
-      scroll={false}
-      {...props}
     >
       <h3 className="absolute bottom-3 left-3 right-3 max-h-12 overflow-hidden text-lg font-semibold leading-6">
         {item.name[lang]}
