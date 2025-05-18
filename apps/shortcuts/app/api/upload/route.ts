@@ -3,8 +3,6 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 import { auth } from '#/lib/auth'
 
-export const runtime = 'edge'
-
 export async function POST(request: Request) {
   const session = await auth()
 
