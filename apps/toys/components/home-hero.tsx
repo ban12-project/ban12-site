@@ -24,42 +24,81 @@ export default function HomeHero({ messages }: Props) {
   const { locale } = useLocale()
 
   useGSAP(
-    (_context, contextSafe) => {
+    () => {
       const selector = gsap.utils.selector(container)
       const heading = selector('.home-hero__heading-text')[0]
-      const segmenter = new Intl.Segmenter(locale, { granularity: 'word' })
 
-      document.fonts.ready.then(
-        contextSafe!(() => {
-          const split = SplitText.create(heading, {
-            type: 'words, lines',
-            aria: 'hidden',
-            mask: 'lines',
-            prepareText: (text) => {
-              return [...segmenter.segment(text)]
-                .map((s) => s.segment)
-                .join(String.fromCharCode(8204))
-            },
-            wordDelimiter: /\u200c/,
-            autoSplit: true,
-            onSplit: (self) => {
-              return gsap.from(self.words, {
-                yPercent: 100,
-                autoAlpha: 0,
-                ease: 'back.out',
-                stagger: {
-                  amount: 0.5,
-                  from: 'random',
-                },
-                scrollTrigger: heading,
-                onComplete: () => {
-                  split.revert()
-                },
-              })
-            },
-          })
-        }),
-      )
+      const defaults = {
+        ease: 'power2.out',
+        duration: 0.6,
+      }
+
+      const splitText = () => {
+        const segmenter = new Intl.Segmenter(locale, { granularity: 'word' })
+        const highlight = selector('.home-hero__highlight')[0]
+
+        const tl = gsap.timeline({ scrollTrigger: heading })
+
+        const split = new SplitText(heading, {
+          type: 'words, lines',
+          aria: 'hidden',
+          mask: 'words',
+          ignore: '.home-hero__highlight',
+          prepareText: (text) => {
+            return [...segmenter.segment(text)]
+              .map((s) => s.segment)
+              .join(String.fromCharCode(8204))
+          },
+          wordDelimiter: /\u200c/,
+          autoSplit: true,
+        })
+
+        tl.from(split.words, {
+          yPercent: 100,
+          ease: 'back.out',
+          stagger: {
+            amount: 0.5,
+            from: 'random',
+          },
+          onComplete: () => {
+            split.revert()
+          },
+        })
+
+        tl.from(
+          highlight,
+          { rotationX: 180, ease: 'back.out(1.7)', duration: 1 },
+          '-=.4',
+        )
+
+        return tl
+      }
+
+      const scrambleTextIn = () => {
+        const subtitleText = selector('.home-hero__subtitle-text')[0]
+
+        return gsap.from(subtitleText, {
+          yPercent: -100,
+          autoAlpha: 0,
+        })
+      }
+
+      const createTimeline = () => {
+        const tl = gsap.timeline({
+          id: 'home-hero',
+          defaults,
+        })
+
+        tl.set([heading], { autoAlpha: 1 })
+
+        const mm = gsap.matchMedia()
+        mm.add('(prefers-reduced-motion: no-preference)', () => {
+          tl.add(splitText())
+          tl.add(scrambleTextIn(), '+=0.3')
+        })
+      }
+
+      createTimeline()
     },
     {
       scope: container,
@@ -78,21 +117,22 @@ export default function HomeHero({ messages }: Props) {
 
         <h1 className="sr-only">{messages.hero.heading}</h1>
         <div
-          className="home-hero__heading-text pb-10 text-[10vw] lg:text-[8vw]"
+          className="home-hero__heading-text invisible pb-10 text-[10vw] lg:text-[8vw]"
           aria-hidden="true"
         >
           <Highlighter
+            className="perspective-midrange block"
             searchWords={['WebAssembly']}
             textToHighlight={messages.hero.heading}
             highlightTag={({ children }) => (
-              <span className="home-hero__highlight bg-(--webassembly-logo-color) rounded-2xl px-6 py-2 leading-[1.6em] text-white">
+              <span className="home-hero__highlight origin-[50%_100%] backface-hidden bg-(--webassembly-logo-color) inline-block rounded-2xl px-6 py-2 leading-[1.6em] text-white">
                 {children}
               </span>
             )}
           />
         </div>
 
-        <div className="md:max-w-1/2 xl:max-w-2/3 wrap-anywhere">
+        <div className="home-hero__subtitle md:max-w-1/2 xl:max-w-2/3 wrap-anywhere overflow-hidden">
           <h3 className="sr-only">{messages.hero.subtitle}</h3>
           <ScrambleText
             asChild
@@ -101,7 +141,7 @@ export default function HomeHero({ messages }: Props) {
           >
             <h3
               aria-hidden="true"
-              className="font-mono text-base italic md:text-lg"
+              className="home-hero__subtitle-text invisible font-mono text-base italic md:text-lg"
             >
               {messages.hero.subtitle}
             </h3>

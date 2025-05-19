@@ -22,13 +22,14 @@ export default function HomeAnimate({ messages }: Props) {
   const { locale } = useLocale()
 
   useGSAP(
-    (_context, contextSafe) => {
+    () => {
       const selectors = {
         block: gsap.utils.selector(container),
       }
       const DOM = {
         trigger: selectors.block('.home-animate__trigger')[0],
         textTrack: selectors.block('.home-animate__scroll'),
+        intro: selectors.block('.home-animate__intro')[0],
       }
 
       const triggerDefaults: ScrollTrigger.Vars = {
@@ -36,86 +37,82 @@ export default function HomeAnimate({ messages }: Props) {
         horizontal: true,
       }
 
-      const segmenter = new Intl.Segmenter(locale, { granularity: 'word' })
+      const intro = () => {
+        const heading = DOM.intro.querySelector('.home-animate__intro-heading')
+        const text = DOM.intro.querySelector('.home-animate__intro-heading > *')
+
+        gsap.from(text, {
+          rotateX: -95,
+          duration: 4,
+          ease: 'elastic.out(1, 0.3)',
+          scrollTrigger: {
+            trigger: heading,
+            start: 'top 70%',
+          },
+        })
+      }
 
       const basicWords = () => {
-        document.fonts.ready.then(
-          contextSafe!(() => {
-            SplitText.create(DOM.textTrack, {
-              type: 'words',
-              wordsClass: 'home-animate__highlight-word',
-              prepareText: (text) => {
-                return [...segmenter.segment(text)]
-                  .map((s) => s.segment)
-                  .join(String.fromCharCode(8204))
-              },
-              wordDelimiter: /\u200c/,
-              autoSplit: true,
-              onSplit: (self) => {
-                self.words.forEach((word) => {
-                  gsap.from(word, {
-                    autoAlpha: 0,
-                    yPercent: 100,
-                    ease: 'power2.out',
-                    duration: 0.6,
-                    scrollTrigger: {
-                      trigger: word,
-                      ...triggerDefaults,
-                      start: 'left 80%',
-                    },
-                  })
-                })
-              },
-            })
-          }),
-        )
+        const segmenter = new Intl.Segmenter(locale, { granularity: 'word' })
+
+        const split = new SplitText(DOM.textTrack, {
+          type: 'words',
+          wordsClass: 'home-animate__highlight-word',
+          prepareText: (text) => {
+            return [...segmenter.segment(text)]
+              .map((s) => s.segment)
+              .join(String.fromCharCode(8204))
+          },
+          wordDelimiter: /\u200c/,
+          autoSplit: true,
+        })
+
+        split.words.forEach((word) => {
+          gsap.from(word, {
+            autoAlpha: 0,
+            yPercent: 100,
+            ease: 'power2.out',
+            duration: 0.6,
+            scrollTrigger: {
+              trigger: word,
+              ...triggerDefaults,
+              start: 'left 80%',
+            },
+          })
+        })
       }
 
       const textGroup = () => {
-        document.fonts.ready.then(
-          contextSafe!(() => {
-            const triggers = selectors.block('.home-animate__text-group')
+        const triggers = selectors.block('.home-animate__text-group')
 
-            triggers.forEach((trigger) => {
-              const label = trigger.querySelector(
-                '.home-animate__text-group-label',
-              )!
+        triggers.forEach((trigger) => {
+          const label = trigger.querySelector('.home-animate__text-group-label')
+          if (!label) return
 
-              gsap
-                .timeline({
-                  defaults: {
-                    duration: 2,
-                    ease: 'power3.inOut',
-                  },
-                })
-                .to(label, {
-                  yPercent: -100,
-                  scrollTrigger: {
-                    trigger: label,
-                    ...triggerDefaults,
-                    start: 'left center',
-                    scrub: 1,
-                    end: '+=0',
-                  },
-                })
-                .to(
-                  label,
-                  {
-                    x: () => trigger.clientWidth - label.clientWidth,
-                    ease: 'none',
-                    scrollTrigger: {
-                      trigger,
-                      ...triggerDefaults,
-                      start: 'left center',
-                      end: '+=' + (trigger.clientWidth - label.clientWidth),
-                      scrub: 1,
-                    },
-                  },
-                  '<',
-                )
-            })
-          }),
-        )
+          gsap.to(label, {
+            yPercent: -100,
+            ease: 'power3.inOut',
+            scrollTrigger: {
+              trigger: label,
+              ...triggerDefaults,
+              start: 'left center',
+              scrub: 1,
+              end: '+=0',
+            },
+          })
+
+          gsap.to(label, {
+            x: () => trigger.clientWidth - label.clientWidth,
+            ease: 'none',
+            scrollTrigger: {
+              trigger,
+              ...triggerDefaults,
+              start: 'left center',
+              end: '+=' + (trigger.clientWidth - label.clientWidth),
+              scrub: 1,
+            },
+          })
+        })
       }
 
       const createTimelines = () => {
@@ -138,6 +135,7 @@ export default function HomeAnimate({ messages }: Props) {
             })
 
             triggerDefaults.containerAnimation = scrollTween
+            intro()
             basicWords()
             textGroup()
           },
@@ -151,20 +149,18 @@ export default function HomeAnimate({ messages }: Props) {
 
   return (
     <section ref={container} className="overflow-hidden">
-      <div className="home-animate__trigger flex min-h-dvh w-fit [&>*]:flex-shrink-0">
+      <div className="home-animate__trigger invisible flex min-h-dvh w-fit [&>*]:flex-shrink-0">
         <div className="home-animate__landing w-screen py-[18vh] pt-[20vh]">
-          <div className="px-safe-max-4 container relative mx-auto md:px-0">
+          <div className="home-animate__intro px-safe-max-4 container relative mx-auto md:px-0">
             <div className="md:max-w-3/5">
               <ViewTransition name="title-7-zip">
-                <Link href="/7-zip">
-                  <h3 className="text-3xl">7-Zip</h3>
+                <Link href="/7-zip" className="home-animate__intro-heading block perspective-midrange">
+                  <h3 className="w-fit origin-[50%_0] backface-hidden rounded-xl bg-white px-4 py-2 text-3xl text-black">
+                    7-Zip
+                  </h3>
                 </Link>
               </ViewTransition>
-              <p className="py-20 text-4xl">
-                Unlock your files NOW! 7-Zip: FREE, powerful
-                compression/decompression. Stop waiting!
-              </p>
-              <p>
+              <p className="home-animate__intro-text pt-20 text-2xl">
                 Packing / unpacking: 7z, XZ, BZIP2, GZIP, TAR, ZIP and WIM
                 <br />
                 Unpacking only: APFS, AR, ARJ, CAB, CHM, CPIO, CramFS, DMG, EXT,
@@ -174,7 +170,7 @@ export default function HomeAnimate({ messages }: Props) {
               </p>
             </div>
 
-            <div className="absolute right-0 m-auto">
+            <div className="home-animate__intro-icon absolute right-0 m-auto">
               <LibraryBig />
             </div>
           </div>
