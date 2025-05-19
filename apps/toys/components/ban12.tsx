@@ -9,7 +9,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(useGSAP, MorphSVGPlugin, ScrollTrigger)
 
-export default function Ban12() {
+export default function Ban12(props: React.ComponentProps<'a'>) {
   const container = useRef<React.ComponentRef<'a'>>(null)
 
   useGSAP(
@@ -58,7 +58,7 @@ export default function Ban12() {
   )
 
   return (
-    <Link href="https://ban12.com" ref={container} title="ban12">
+    <Link href="https://ban12.com" {...props} ref={container} title="ban12">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="160px"
