@@ -4,10 +4,10 @@ import { useRef, unstable_ViewTransition as ViewTransition } from 'react'
 import { useGSAP } from '@gsap/react'
 import { Link, useLocale } from '@repo/i18n/client'
 import FlairFollower from '@repo/ui/components/flair-follower'
+import OrganizingFiles from '#/public/organizing-files.svg'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
-import { LibraryBig } from 'lucide-react'
 
 import { Messages } from '#/lib/i18n'
 
@@ -154,8 +154,11 @@ export default function HomeAnimate({ messages }: Props) {
           <div className="home-animate__intro px-safe-max-4 container relative mx-auto md:px-0">
             <div className="md:max-w-3/5">
               <ViewTransition name="title-7-zip">
-                <Link href="/7-zip" className="home-animate__intro-heading block perspective-midrange">
-                  <h3 className="w-fit origin-[50%_0] backface-hidden rounded-xl bg-white px-4 py-2 text-3xl text-black">
+                <Link
+                  href="/7-zip"
+                  className="home-animate__intro-heading perspective-midrange block"
+                >
+                  <h3 className="backface-hidden w-fit origin-[50%_0] rounded-xl bg-white px-4 py-2 text-3xl text-black">
                     7-Zip
                   </h3>
                 </Link>
@@ -170,8 +173,8 @@ export default function HomeAnimate({ messages }: Props) {
               </p>
             </div>
 
-            <div className="home-animate__intro-icon absolute right-0 m-auto">
-              <LibraryBig />
+            <div className="home-animate__intro-icon absolute right-0 top-0 m-auto w-2/5">
+              <OrganizingFiles className="h-full w-full fill-current dark:text-white" />
             </div>
           </div>
         </div>

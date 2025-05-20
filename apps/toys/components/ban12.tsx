@@ -77,7 +77,7 @@ export default function Ban12(props: React.ComponentProps<'a'>) {
         <circle cx="10" cy="10" r="10" />
         <circle cx="10" cy="10" r="10" />
       </svg>
-      <Ban12Logo className="invisible" id="ban12__letters" />
+      <Ban12Logo className="hidden" id="ban12__letters" />
     </Link>
   )
 }
