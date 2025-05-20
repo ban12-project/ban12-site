@@ -4,14 +4,13 @@ import { useRef, unstable_ViewTransition as ViewTransition } from 'react'
 import { useGSAP } from '@gsap/react'
 import { useLocale } from '@repo/i18n/client'
 import ScrambleText from '@repo/ui/components/scramble-text'
+import Webassembly from '#/public/webassembly.svg'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import Highlighter from 'react-highlight-words'
 
 import { Messages } from '#/lib/i18n'
-
-import WebassemblyIcon from './webassembly-icon'
 
 gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger)
 
@@ -112,7 +111,7 @@ export default function HomeHero({ messages }: Props) {
         ref={container}
       >
         <ViewTransition name="webassembly-icon">
-          <WebassemblyIcon className="w-50 -top-50 right-safe-max-4 absolute" />
+          <Webassembly className="w-50 -top-50 right-safe-max-4 absolute" />
         </ViewTransition>
 
         <h1 className="sr-only">{messages.hero.heading}</h1>

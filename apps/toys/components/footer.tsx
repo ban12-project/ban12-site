@@ -6,8 +6,8 @@ export default function Footer() {
   return (
     <footer>
       <div className="px-safe-max-4 container mx-auto grid grid-cols-2 md:grid-cols-3 md:px-0">
-        <div className="px-4 py-10 col-span-2 md:col-span-1 text-center md:text-left">
-          <Ban12 className='inline-block' />
+        <div className="col-span-2 px-4 py-10 md:col-span-1">
+          <Ban12 className="mx-auto md:ml-0 w-[160px] block" />
         </div>
         <div className="px-4 py-10">
           <h3 className="font-semibold">Links</h3>

@@ -13,7 +13,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "@types/emscripten"
+    "@types/emscripten",
+    "svgr.d.ts"
   ],
   "exclude": ["node_modules"]
 }
