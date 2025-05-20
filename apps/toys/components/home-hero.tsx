@@ -43,6 +43,7 @@ export default function HomeHero({ messages }: Props) {
           aria: 'hidden',
           mask: 'words',
           ignore: '.home-hero__highlight',
+          tag: 'span',
           prepareText: (text) => {
             return [...segmenter.segment(text)]
               .map((s) => s.segment)
@@ -59,9 +60,6 @@ export default function HomeHero({ messages }: Props) {
             amount: 0.5,
             from: 'random',
           },
-          onComplete: () => {
-            split.revert()
-          },
         })
 
         tl.from(
@@ -69,6 +67,10 @@ export default function HomeHero({ messages }: Props) {
           { rotationX: 180, ease: 'back.out(1.7)', duration: 1 },
           '-=.4',
         )
+
+        tl.eventCallback('onComplete', () => {
+          split.revert()
+        })
 
         return tl
       }
