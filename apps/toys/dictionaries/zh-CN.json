@@ -32,5 +32,10 @@
   "7zip": {
     "title": "在线解压缩/压缩 7-Zip 工具",
     "description": "解压缩 7z, XZ, BZIP2, GZIP, TAR, ZIP, WIM, APFS,AR,ARJ,CAB,CHM,CPIO,CramFS,DMG,EXT,FAT,GPT,HFS,IHEX,ISO,LZH,LZMA,MBR,MSI,NSIS,NTFS,QCOW2,RAR,RPM,SquashFS,UDF,UEFI,VDI,VHD,VHDX,VMDK,XAR,Z 压缩 7z, XZ, BZIP2, GZIP, TAR, ZIP, WIM。替代WinRAR HaoZip（好压） 360压缩 快压（KuaiZip）Bandizip PeaZip 7-Zip WinZip 鲁大师压缩 金舟压缩宝 2345好压"
+  },
+  "text-compare": {
+    "title": "由 WebAssembly 驱动的文本对比",
+    "keywords": "文本比较，比较文本，差异检查器，文本差异，在线文本比较，wasm文本比较，快速文本比较，精确文本比较，内容比较，文档比较，比较字符串，查找文本差异  ",
+    "description": "在线对比文本，立马高亮显示不同之处。采用 WebAssembly 驱动，性能超强，最适合快速找出文本改动的地方。"
   }
 }

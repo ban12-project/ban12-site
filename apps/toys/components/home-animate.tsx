@@ -200,9 +200,9 @@ export default function HomeAnimate({ messages }: Props) {
           </p>
 
           <p className="home-animate__text-group text-[12vh]">
-            <ViewTransition name="title-text-diff">
+            <ViewTransition name="title-text-compare">
               <strong className="home-animate__text-group-label mr-2 inline-block">
-                <Link href="/text-diff">Text diff</Link>
+                <Link href="/text-compare">Text Compare</Link>
               </strong>
             </ViewTransition>
             Compare text differences quickly and efficiently in your browser

@@ -36,5 +36,10 @@
   "7zip": {
     "title": "Online 7-Zip tool by WebAssembly powered",
     "description": "unpacking 7z, XZ, BZIP2, GZIP, TAR, ZIP, WIM, APFS,AR,ARJ,CAB,CHM,CPIO,CramFS,DMG,EXT,FAT,GPT,HFS,IHEX,ISO,LZH,LZMA,MBR,MSI,NSIS,NTFS,QCOW2,RAR,RPM,SquashFS,UDF,UEFI,VDI,VHD,VHDX,VMDK,XAR,Z and packing 7z, XZ, BZIP2, GZIP, TAR, ZIP, WIM"
+  },
+  "text-compare": {
+    "title": "text comparison powered by WebAssembly",
+    "keywords": "text comparison,compare text,difference checker,text diff,online text comparison,wasm text comparison,fast text comparison,accurate text comparison,content comparison,document comparison,compare strings,find text differences",
+    "description": "Compare text online and instantly highlight the differences. Powered by WebAssembly for optimal performance, our tool is perfect for quickly identifying changes in any text."
   }
 }

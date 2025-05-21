@@ -19,8 +19,8 @@ export default function TextDiff() {
 
   return (
     <main className="px-safe-max-4 container mx-auto flex min-h-screen flex-col gap-5">
-      <ViewTransition name="title-text-diff">
-        <h1 className="text-xl w-fit">Text diff</h1>
+      <ViewTransition name="title-text-compare">
+        <h1 className="text-xl w-fit">Text compare</h1>
       </ViewTransition>
 
       <form className="flex gap-5">

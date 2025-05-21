@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 export default function sitemap(): MetadataRoute.Sitemap {
   const locales = Object.keys(i18n.locales)
 
-  const routesMap: MetadataRoute.Sitemap = ['', '/hash', '/7-zip'].map(
+  const routesMap: MetadataRoute.Sitemap = ['', '/hash', '/7-zip', '/exif', '/text-compare'].map(
     (route) => ({
       url: `${process.env.NEXT_PUBLIC_HOST_URL}${route}`,
       lastModified: new Date(),
