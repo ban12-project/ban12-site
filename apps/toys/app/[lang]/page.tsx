@@ -16,6 +16,11 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return {
     title: messages.home.title,
     description: messages.home.description,
+    verification: {
+      other: {
+        'msvalidate.01': 'DA24F815AEB0CFE5CF70ECD94EC9590B',
+      }
+    },
   }
 }
 
