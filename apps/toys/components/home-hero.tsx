@@ -41,9 +41,8 @@ export default function HomeHero({ messages }: Props) {
         const split = new SplitText(heading, {
           type: 'words, lines',
           aria: 'hidden',
-          mask: 'words',
+          mask: 'lines',
           ignore: '.home-hero__highlight',
-          tag: 'span',
           prepareText: (text) => {
             return [...segmenter.segment(text)]
               .map((s) => s.segment)
@@ -117,21 +116,20 @@ export default function HomeHero({ messages }: Props) {
         </ViewTransition>
 
         <h1 className="sr-only">{messages.hero.heading}</h1>
-        <div
-          className="home-hero__heading-text invisible pb-10 text-[10vw] lg:text-[8vw]"
+
+        <Highlighter
           aria-hidden="true"
-        >
-          <Highlighter
-            className="perspective-midrange block"
-            searchWords={['WebAssembly']}
-            textToHighlight={messages.hero.heading}
-            highlightTag={({ children }) => (
-              <span className="home-hero__highlight origin-[50%_100%] backface-hidden bg-(--webassembly-logo-color) inline-block rounded-2xl px-6 py-2 leading-[1.6em] text-white">
+          className="home-hero__heading-text invisible pb-10 text-[10vw] lg:text-[8vw] block"
+          searchWords={['WebAssembly']}
+          textToHighlight={messages.hero.heading}
+          highlightTag={({ children }) => (
+            <span className="perspective-midrange inline-block">
+              <span className="home-hero__highlight backface-hidden bg-(--webassembly-logo-color) inline-block origin-[50%_100%] rounded-2xl px-6 py-2 leading-[1.6em] text-white">
                 {children}
               </span>
-            )}
-          />
-        </div>
+            </span>
+          )}
+        />
 
         <div className="home-hero__subtitle md:max-w-1/2 xl:max-w-2/3 wrap-anywhere overflow-hidden">
           <h3 className="sr-only">{messages.hero.subtitle}</h3>
