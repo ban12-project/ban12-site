@@ -8,6 +8,7 @@ import {
 } from 'react'
 import dynamic from 'next/dynamic'
 import { Textarea } from '@repo/ui/components/textarea'
+import { LoaderCircleIcon } from 'lucide-react'
 
 const DiffView = dynamic(() => import('./diff-view'), { ssr: false })
 
@@ -20,7 +21,7 @@ export default function TextDiff() {
   return (
     <main className="px-safe-max-4 container mx-auto flex min-h-screen flex-col gap-5">
       <ViewTransition name="title-text-compare">
-        <h1 className="text-xl w-fit">Text compare</h1>
+        <h1 className="w-fit text-xl">Text compare</h1>
       </ViewTransition>
 
       <form className="flex gap-5">
@@ -39,14 +40,22 @@ export default function TextDiff() {
       </form>
 
       <div className="flex-1">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          fallback={<LoaderCircleIcon className="mx-auto animate-spin" />}
+        >
           <DiffView old={deferredOld} newer={deferredNewer} />
         </Suspense>
       </div>
 
       <p className="text-center">
         Rust crate create by{' '}
-        <a href="https://github.com/mitsuhiko/similar">mitsuhiko</a>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/mitsuhiko/similar"
+        >
+          mitsuhiko
+        </a>
       </p>
     </main>
   )

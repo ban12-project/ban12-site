@@ -1,12 +1,5 @@
-use wasm_bindgen::prelude::*;
 use similar::{ChangeTag, TextDiff};
-
-// Optional: for better panic messages in the browser console
-#[cfg(feature = "console_error_panic_hook")]
-#[wasm_bindgen(start)]
-pub fn set_panic_hook() {
-    console_error_panic_hook::set_once();
-}
+use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub fn diff_lines_unified(old_text: &str, new_text: &str) -> String {
@@ -55,13 +48,8 @@ pub fn diff_lines_structured(old_text: &str, new_text: &str) -> Result<JsValue, 
 
     for hunk in diff.unified_diff().iter_hunks() {
         for change in hunk.iter_changes() {
-            let tag_str = match change.tag() {
-                ChangeTag::Delete => "Delete",
-                ChangeTag::Insert => "Insert",
-                ChangeTag::Equal => "Equal",
-            };
             changes.push(DiffChange {
-                tag: tag_str.to_string(),
+                tag: change.tag().to_string(),
                 value: change.value().to_string(),
                 old_index: change.old_index(),
                 new_index: change.new_index(),
