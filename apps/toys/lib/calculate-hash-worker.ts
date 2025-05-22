@@ -1,7 +1,15 @@
-onmessage = async (event: MessageEvent<File>) => {
+onmessage = async (
+  event: MessageEvent<{
+    name: string
+    type: string
+    size: number
+    lastModified: number
+    data: ArrayBuffer
+  }>,
+) => {
   const { CreateSha256 } = await import('@crates/calculate-hash/pkg')
 
-  const file = event.data
+  const { size, data } = event.data
 
   const sha256 = new CreateSha256()
   sha256.init()
@@ -9,16 +17,15 @@ onmessage = async (event: MessageEvent<File>) => {
   const chunkSize = 1024 * 1024 * 2
   let start = 0
   let progress = 0
-  const totalSize = file.size
 
   const startTime = Date.now()
-  while (start < totalSize) {
-    progress = start / totalSize
+  while (start < size) {
+    progress = start / size
     postMessage({ progress, time: Date.now() - startTime })
-    const end = Math.min(start + chunkSize, totalSize)
-    const chunk = file.slice(start, end)
+    const end = Math.min(start + chunkSize, size)
+    const chunk = data.slice(start, end)
     start = end
-    const buffer = new Uint8Array(await chunk.arrayBuffer())
+    const buffer = new Uint8Array(chunk)
     sha256.update(buffer)
   }
   postMessage({

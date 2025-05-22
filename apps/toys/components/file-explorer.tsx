@@ -1,9 +1,9 @@
 'use client'
 
 import { useCallback, useState } from 'react'
+import { useResponsive } from '@repo/ui/hooks/use-responsive'
 
 import type { Messages } from '#/lib/i18n'
-import { useResponsive } from '@repo/ui/hooks/use-responsive'
 import List from '#/components/virtual-list'
 
 import FileCard from './file-card'
@@ -59,7 +59,27 @@ const runWorker = (worker: Worker, id: number) => {
     }
   }
 
-  worker.postMessage(file)
+  const reader = new FileReader()
+  reader.onload = (event) => {
+    if (event.target && event.target.result instanceof ArrayBuffer) {
+      worker.postMessage(
+        {
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          lastModified: file.lastModified,
+          data: event.target.result,
+        },
+        { transfer: [event.target.result] },
+      )
+    } else {
+      // Handle the error appropriately, e.g., log it or inform the user
+      console.error('Failed to read file as ArrayBuffer')
+      callback({ progress: -1, time: 0 }) // Indicate error state
+    }
+  }
+  reader.onerror = () => callback({ progress: -1, time: 0 })
+  reader.readAsArrayBuffer(file)
 }
 
 const createWorker = (file: File, callback: (data: MessageResult) => void) => {
@@ -111,7 +131,9 @@ export default function FileExplorer({ messages }: FileExplorerProps) {
     })
   }, [])
 
-  const { breakpoints: isDesktop } = useResponsive((breakpoint) => breakpoint.md)
+  const { breakpoints: isDesktop } = useResponsive(
+    (breakpoint) => breakpoint.md,
+  )
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-7xl flex-col px-5">
