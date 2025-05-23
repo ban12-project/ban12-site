@@ -34,7 +34,7 @@
     "dotenv": "catalog:",
     "drizzle-orm": "catalog:",
     "gsap": "catalog:",
-    "intl-messageformat": "^10.7.10",
+    "intl-messageformat": "catalog:",
     "lucide-react": "catalog:",
     "next": "catalog:",
     "next-auth": "5.0.0-beta.28",
@@ -50,7 +50,7 @@
     "server-only": "^0.0.1",
     "sonner": "catalog:",
     "usehooks-ts": "catalog:",
-    "vaul": "^1.1.2",
+    "vaul": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

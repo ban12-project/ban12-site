@@ -39,7 +39,7 @@
     "server-only": "catalog:",
     "sonner": "catalog:",
     "usehooks-ts": "catalog:",
-    "vaul": "^1.1.1",
+    "vaul": "catalog:",
     "zod": "catalog:",
     "zustand": "^5.0.1"
   },
@@ -49,16 +49,15 @@
     "@repo/typescript-config": "workspace:*",
     "@svgr/webpack": "^8.1.0",
     "@types/emscripten": "^1.39.13",
-    "@types/node": "^22.9.0",
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/react-highlight-words": "^0.20.0",
     "@types/react-window": "catalog:",
     "@types/wicg-file-system-access": "^2023.10.5",
-    "autoprefixer": "^10.4.20",
     "babel-plugin-react-compiler": "catalog:",
     "eslint": "catalog:",
-    "postcss": "^8.4.49",
+    "postcss": "catalog:",
     "typescript": "catalog:",
     "wrangler": "catalog:"
   }
