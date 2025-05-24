@@ -8,12 +8,6 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
       "env": ["NEXT_PUBLIC_*"]
     },
-    "timetable#build": {
-      "env": ["WEB_PUSH_EMAIL", "WEB_PUSH_PRIVATE_KEY"],
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
-    },
     "shortcuts#build": {
       "env": [
         "DATABASE_URL",
@@ -39,7 +33,7 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "web#build": {
-      "env": ["SITE_NAME"],
+      "env": ["SITE_NAME", "DATABASE_URL"],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
@@ -50,7 +44,7 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
-    "travel#build": {
+    "live-photo#build": {
       "env": ["DATABASE_URL"],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],

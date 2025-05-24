@@ -1,4 +1,4 @@
-import { Suspense, unstable_ViewTransition as ViewTransition } from 'react'
+import { Suspense } from 'react'
 import { Link } from '@repo/i18n/client'
 
 import { getRestaurants } from '#/lib/db/queries'
@@ -15,9 +15,7 @@ export default async function GANGCHELIN({ params }: Props) {
   return (
     <main>
       <div className="text-center">
-        <ViewTransition name="link-gangchelin">
-          <h1 className="inline-block text-center">GANGCHELIN</h1>
-        </ViewTransition>
+        <h1 className="inline-block text-center">GANGCHELIN</h1>
       </div>
       <Link href="/">Home</Link>
       <Suspense fallback={<div>Loading...</div>}>

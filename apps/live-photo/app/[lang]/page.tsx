@@ -8,10 +8,6 @@ import { Search } from '#/components/search'
 export default function Home() {
   return (
     <ParallaxWithLenis>
-      <ViewTransition name="link-gangchelin">
-        <Link href="/gangchelin">GANGCHELIN</Link>
-      </ViewTransition>
-
       <ParallaxItem asChild parallax="0.6">
         <h1 className="text-right text-9xl font-bold uppercase">coming soon</h1>
       </ParallaxItem>

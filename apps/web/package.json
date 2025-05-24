@@ -8,7 +8,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "analyze": "ANALYZE=true next build"
+    "analyze": "ANALYZE=true next build",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "npx tsx lib/db/migrate.ts",
+    "db:studio": "drizzle-kit studio",
+    "db:push": "drizzle-kit push",
+    "db:pull": "drizzle-kit pull",
+    "db:check": "drizzle-kit check",
+    "db:up": "drizzle-kit up"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "prettier --write --ignore-unknown"
@@ -19,6 +26,8 @@
     "@react-three/fiber": "9.0.4",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
+    "dotenv": "catalog:",
+    "drizzle-orm": "catalog:",
     "glsl-random": "^0.0.5",
     "gsap": "catalog:",
     "next": "catalog:",
@@ -37,6 +46,7 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/three": "^0.173.0",
+    "drizzle-kit": "catalog:",
     "eslint": "catalog:",
     "file-loader": "^6.2.0",
     "glslify": "^7.1.1",
