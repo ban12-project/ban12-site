@@ -22,12 +22,7 @@ export default function WithSuspense(props: LivePhotoProps) {
       (async () => {
         const url = props.playerProps!.photoSrc! as string
         const filename = url.split('/').pop() || 'image.jpeg'
-        const res = await fetch(url, {
-          mode: 'cors',
-          headers: {
-            'Access-Control-Allow-Origin': window.location.origin,
-          },
-        })
+        const res = await fetch(url)
         return new File([await res.blob()], filename, {
           type: res.headers.get('content-type') || 'image/jpeg',
         })
@@ -35,12 +30,7 @@ export default function WithSuspense(props: LivePhotoProps) {
       (async () => {
         const url = props.playerProps!.videoSrc! as string
         const filename = url.split('/').pop() || 'video.mov'
-        const res = await fetch(props.playerProps!.videoSrc! as string, {
-          mode: 'cors',
-          headers: {
-            'Access-Control-Allow-Origin': window.location.origin,
-          },
-        })
+        const res = await fetch(url)
         return new File([await res.blob()], filename, {
           type: res.headers.get('content-type') || 'video/mp4',
         })
@@ -84,6 +74,8 @@ function LivePhoto({ playerProps, ...props }: LivePhotoProps) {
       ref.current,
       playerProps,
     )
+
+    console.log(player.current.video)
   }, [])
 
   return <div {...props} ref={ref} />
