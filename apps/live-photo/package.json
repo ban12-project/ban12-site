@@ -29,7 +29,8 @@
     "next-auth": "5.0.0-beta.25",
     "next-themes": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "sonner": "catalog:"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "catalog:",
