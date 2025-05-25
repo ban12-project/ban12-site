@@ -3,6 +3,7 @@ import '#/app/globals.css'
 import type { Metadata } from 'next'
 import { LocaleProvider } from '@repo/i18n/client'
 import Lenis from '@repo/ui/components/lenis'
+import { Toaster } from '@repo/ui/components/sonner'
 import { ThemeProvider } from 'next-themes'
 
 import { getDictionary, i18n, type Locale } from '#/lib/i18n'
@@ -79,6 +80,7 @@ export default async function RootLayout({
           </LocaleProvider>
         </ThemeProvider>
 
+        <Toaster />
         <Lenis root gsap scrollTrigger />
         <LivePhotosKitLoader />
       </body>
