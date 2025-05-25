@@ -23,6 +23,7 @@
     "dotenv": "catalog:",
     "drizzle-orm": "catalog:",
     "gsap": "catalog:",
+    "livephotoskit": "^1.5.6",
     "lucide-react": "catalog:",
     "next": "catalog:",
     "next-auth": "5.0.0-beta.25",

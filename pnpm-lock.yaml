@@ -231,6 +231,9 @@ importers:
       gsap:
         specifier: 'catalog:'
         version: 3.13.0
+      livephotoskit:
+        specifier: ^1.5.6
+        version: 1.5.6
       lucide-react:
         specifier: 'catalog:'
         version: 0.485.0(react@19.1.0)
@@ -612,7 +615,7 @@ importers:
         version: link:../../packages/typescript-config
       '@serwist/next':
         specifier: ^9.0.10
-        version: 9.0.10(next@15.3.2(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3)(webpack@5.96.1(esbuild@0.25.4))
+        version: 9.0.10(next@15.3.2(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3)(webpack@5.96.1)
       '@types/node':
         specifier: 'catalog:'
         version: 22.15.21
@@ -633,7 +636,7 @@ importers:
         version: 9.27.0(jiti@2.4.2)
       file-loader:
         specifier: ^6.2.0
-        version: 6.2.0(webpack@5.96.1(esbuild@0.25.4))
+        version: 6.2.0(webpack@5.96.1)
       glslify:
         specifier: ^7.1.1
         version: 7.1.1
@@ -645,7 +648,7 @@ importers:
         version: 8.5.3
       raw-loader:
         specifier: ^4.0.2
-        version: 4.0.2(webpack@5.96.1(esbuild@0.25.4))
+        version: 4.0.2(webpack@5.96.1)
       serwist:
         specifier: ^9.0.10
         version: 9.0.10(typescript@5.8.3)
@@ -654,7 +657,7 @@ importers:
         version: 5.8.3
       url-loader:
         specifier: ^4.1.1
-        version: 4.1.1(file-loader@6.2.0(webpack@5.96.1(esbuild@0.25.4)))(webpack@5.96.1(esbuild@0.25.4))
+        version: 4.1.1(file-loader@6.2.0(webpack@5.96.1))(webpack@5.96.1)
 
   packages/eslint-config:
     devDependencies:
@@ -6691,6 +6694,9 @@ packages:
   listr2@8.3.3:
     resolution: {integrity: sha512-LWzX2KsqcB1wqQ4AHgYb4RsDXauQiqhjLk+6hjbaeHG4zpjjVAB6wC/gz6X0l+Du1cN3pUB5ZlrvTbhGSNnUQQ==}
     engines: {node: '>=18.0.0'}
+
+  livephotoskit@1.5.6:
+    resolution: {integrity: sha512-dsD6EzQnExuYfYvBSxf3t1bdl2Juw7NnlpWZrsGxdYq2x4pnxyOYrkOG6LGHmklytdFdxaru86GvviLpUhaIBQ==}
 
   loader-runner@4.3.0:
     resolution: {integrity: sha512-3R/1M+yS3j5ou80Me59j7F9IMs4PXs3VqRrm0TU3AbKPxlmpoY1TNscJV/oGJXo8qCatFGTfDbY6W6ipGOYXfg==}
@@ -12969,10 +12975,10 @@ snapshots:
     optionalDependencies:
       typescript: 5.8.3
 
-  '@serwist/next@9.0.10(next@15.3.2(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3)(webpack@5.96.1(esbuild@0.25.4))':
+  '@serwist/next@9.0.10(next@15.3.2(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3)(webpack@5.96.1)':
     dependencies:
       '@serwist/build': 9.0.10(typescript@5.8.3)
-      '@serwist/webpack-plugin': 9.0.10(typescript@5.8.3)(webpack@5.96.1(esbuild@0.25.4))
+      '@serwist/webpack-plugin': 9.0.10(typescript@5.8.3)(webpack@5.96.1)
       '@serwist/window': 9.0.10(typescript@5.8.3)
       chalk: 5.3.0
       glob: 10.4.5
@@ -12984,14 +12990,14 @@ snapshots:
     transitivePeerDependencies:
       - webpack
 
-  '@serwist/webpack-plugin@9.0.10(typescript@5.8.3)(webpack@5.96.1(esbuild@0.25.4))':
+  '@serwist/webpack-plugin@9.0.10(typescript@5.8.3)(webpack@5.96.1)':
     dependencies:
       '@serwist/build': 9.0.10(typescript@5.8.3)
       pretty-bytes: 6.1.1
       zod: 3.23.8
     optionalDependencies:
       typescript: 5.8.3
-      webpack: 5.96.1(esbuild@0.25.4)
+      webpack: 5.96.1
 
   '@serwist/window@9.0.10(typescript@5.8.3)':
     dependencies:
@@ -15551,11 +15557,11 @@ snapshots:
     dependencies:
       flat-cache: 4.0.1
 
-  file-loader@6.2.0(webpack@5.96.1(esbuild@0.25.4)):
+  file-loader@6.2.0(webpack@5.96.1):
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
-      webpack: 5.96.1(esbuild@0.25.4)
+      webpack: 5.96.1
 
   fill-range@7.1.1:
     dependencies:
@@ -16283,6 +16289,8 @@ snapshots:
       log-update: 6.1.0
       rfdc: 1.4.1
       wrap-ansi: 9.0.0
+
+  livephotoskit@1.5.6: {}
 
   loader-runner@4.3.0: {}
 
@@ -17204,11 +17212,11 @@ snapshots:
       iconv-lite: 0.6.3
       unpipe: 1.0.0
 
-  raw-loader@4.0.2(webpack@5.96.1(esbuild@0.25.4)):
+  raw-loader@4.0.2(webpack@5.96.1):
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
-      webpack: 5.96.1(esbuild@0.25.4)
+      webpack: 5.96.1
 
   react-dom@19.1.0(react@19.1.0):
     dependencies:
@@ -17910,17 +17918,6 @@ snapshots:
     optionalDependencies:
       react: 19.1.0
 
-  terser-webpack-plugin@5.3.14(esbuild@0.25.4)(webpack@5.96.1(esbuild@0.25.4)):
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.25
-      jest-worker: 27.5.1
-      schema-utils: 4.3.2
-      serialize-javascript: 6.0.2
-      terser: 5.39.2
-      webpack: 5.96.1(esbuild@0.25.4)
-    optionalDependencies:
-      esbuild: 0.25.4
-
   terser-webpack-plugin@5.3.14(webpack@5.96.1):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
@@ -18203,14 +18200,14 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  url-loader@4.1.1(file-loader@6.2.0(webpack@5.96.1(esbuild@0.25.4)))(webpack@5.96.1(esbuild@0.25.4)):
+  url-loader@4.1.1(file-loader@6.2.0(webpack@5.96.1))(webpack@5.96.1):
     dependencies:
       loader-utils: 2.0.4
       mime-types: 2.1.35
       schema-utils: 3.3.0
-      webpack: 5.96.1(esbuild@0.25.4)
+      webpack: 5.96.1
     optionalDependencies:
-      file-loader: 6.2.0(webpack@5.96.1(esbuild@0.25.4))
+      file-loader: 6.2.0(webpack@5.96.1)
 
   urlpattern-polyfill@10.0.0: {}
 
@@ -18334,36 +18331,6 @@ snapshots:
       schema-utils: 3.3.0
       tapable: 2.2.2
       terser-webpack-plugin: 5.3.14(webpack@5.96.1)
-      watchpack: 2.4.4
-      webpack-sources: 3.2.3
-    transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
-      - uglify-js
-
-  webpack@5.96.1(esbuild@0.25.4):
-    dependencies:
-      '@types/eslint-scope': 3.7.7
-      '@types/estree': 1.0.7
-      '@webassemblyjs/ast': 1.14.1
-      '@webassemblyjs/wasm-edit': 1.14.1
-      '@webassemblyjs/wasm-parser': 1.14.1
-      acorn: 8.14.1
-      browserslist: 4.24.5
-      chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.18.1
-      es-module-lexer: 1.7.0
-      eslint-scope: 5.1.1
-      events: 3.3.0
-      glob-to-regexp: 0.4.1
-      graceful-fs: 4.2.11
-      json-parse-even-better-errors: 2.3.1
-      loader-runner: 4.3.0
-      mime-types: 2.1.35
-      neo-async: 2.6.2
-      schema-utils: 3.3.0
-      tapable: 2.2.2
-      terser-webpack-plugin: 5.3.14(esbuild@0.25.4)(webpack@5.96.1(esbuild@0.25.4))
       watchpack: 2.4.4
       webpack-sources: 3.2.3
     transitivePeerDependencies:

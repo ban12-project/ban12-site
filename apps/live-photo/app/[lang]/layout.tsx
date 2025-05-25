@@ -6,6 +6,7 @@ import Lenis from '@repo/ui/components/lenis'
 import { ThemeProvider } from 'next-themes'
 
 import { getDictionary, i18n, type Locale } from '#/lib/i18n'
+import { LivePhotosKitLoader } from '#/components/live-photos-kit'
 
 type RootLayoutProps = Readonly<{
   children: React.ReactNode
@@ -79,6 +80,7 @@ export default async function RootLayout({
         </ThemeProvider>
 
         <Lenis root gsap scrollTrigger />
+        <LivePhotosKitLoader />
       </body>
     </html>
   )
