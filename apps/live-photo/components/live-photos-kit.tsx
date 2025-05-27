@@ -11,10 +11,11 @@ declare global {
 }
 
 export const livePhotosKitModulePromise = (async function () {
-  if (typeof document === 'undefined') return null
-  if (window.LivePhotosKit) return window.LivePhotosKit
+  if (typeof document === 'undefined') return
 
   return new Promise<LivePhotosKit>((resolve) => {
+    if (window.LivePhotosKit) resolve(window.LivePhotosKit)
+
     const listener = () => {
       resolve(window.LivePhotosKit)
       document.removeEventListener('livephotoskitloaded', listener)

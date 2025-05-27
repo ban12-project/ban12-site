@@ -1,5 +1,9 @@
 {
   "default-title": "live photo",
   "default-description": "live photo",
-  "under-construction": "Under construction"
+  "under-construction": "Under construction",
+  "download-tips": [
+    "Currently, it only supports Safari on macOS Add to Photos, and then syncing to your iPhone via iCloud.",
+    "Alternatively, if you only have an iPhone, there's an awkward workaround using a third-party app, e.g., IntoLive."
+  ]
 }

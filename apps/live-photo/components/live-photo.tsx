@@ -4,19 +4,37 @@ import {
   Suspense,
   use,
   useEffect,
+  useImperativeHandle,
   useRef,
   unstable_ViewTransition as ViewTransition,
 } from 'react'
+import { Button } from '@repo/ui/components/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@repo/ui/components/tooltip'
+import { cn } from '@repo/ui/lib/utils'
 import type { Player, PlayerProps } from 'livephotoskit'
+import { DownloadIcon, LoaderCircleIcon } from 'lucide-react'
 import { toast } from 'sonner'
+
+import type { Messages } from '#/lib/i18n'
 
 import { livePhotosKitModulePromise } from './live-photos-kit'
 
-interface LivePhotoProps extends React.ComponentProps<'div'> {
+interface LivePhotoProps extends Omit<React.ComponentProps<'div'>, 'ref'> {
+  ref?: React.Ref<Player>
   playerProps?: Partial<PlayerProps>
+  messages: Messages
 }
 
-export default function WithSuspense(props: LivePhotoProps) {
+export default function WithSuspense({
+  className,
+  messages,
+  ...props
+}: LivePhotoProps) {
   const onClick = async () => {
     const files = await Promise.all([
       (async () => {
@@ -32,12 +50,12 @@ export default function WithSuspense(props: LivePhotoProps) {
         const filename = url.split('/').pop() || 'video.mov'
         const res = await fetch(url)
         return new File([await res.blob()], filename, {
-          type: res.headers.get('content-type') || 'video/mp4',
+          type: res.headers.get('content-type') || 'video/quicktime',
         })
       })(),
     ])
 
-    if (navigator.canShare({ files })) {
+    if (navigator.canShare?.({ files })) {
       navigator
         .share({
           files,
@@ -51,32 +69,53 @@ export default function WithSuspense(props: LivePhotoProps) {
   }
 
   return (
-    <>
-      <ViewTransition>
-        <Suspense fallback={null}>
-          <LivePhoto {...props} />
-        </Suspense>
-      </ViewTransition>
-      <button onClick={onClick}>download</button>
-    </>
+    <div className={cn(className, 'relative [&>*]:data-[load-progress="1"]:[&+*]:visible')}>
+      <Suspense>
+        <LivePhoto {...props} className="h-full">
+          <LoaderCircleIcon className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin" />
+        </LivePhoto>
+      </Suspense>
+
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="link"
+              className="absolute bottom-0 right-0 z-[4] invisible"
+              onClick={onClick}
+            >
+              <DownloadIcon />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            {messages['download-tips'].map((tip, index) => (
+              <p key={index}>{tip}</p>
+            ))}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
   )
 }
 
-function LivePhoto({ playerProps, ...props }: LivePhotoProps) {
+function LivePhoto({
+  playerProps,
+  ...props
+}: Omit<LivePhotoProps, 'messages'>) {
   const LivePhotosKit = use(livePhotosKitModulePromise)
-  const ref = useRef<React.ComponentRef<'div'>>(null)
+  const container = useRef<React.ComponentRef<'div'>>(null)
   const player = useRef<Player>(null)
 
   useEffect(() => {
-    if (!LivePhotosKit || !ref.current) return
+    if (!LivePhotosKit || !container.current) return
 
     player.current = LivePhotosKit.augmentElementAsPlayer(
-      ref.current,
+      container.current,
       playerProps,
     )
-
-    console.log(player.current.video)
   }, [])
 
-  return <div {...props} ref={ref} />
+  useImperativeHandle(props.ref, () => player.current as Player)
+
+  return <div {...props} ref={container} />
 }

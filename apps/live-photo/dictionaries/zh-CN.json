@@ -1,5 +1,9 @@
 {
   "default-title": "实况照片",
   "default-description": "实况照片",
-  "under-construction": "施工中"
+  "under-construction": "施工中",
+  "download-tips": [
+    "目前，它仅支持 macOS 上的 Safari 浏览器添加到照片，然后通过 iCloud 同步到您的iPhone。",
+    "或者，如果你只有iPhone，就只能通过一个蹩脚的办法来保存，比如使用 IntoLive 这样的第三方应用。"
+  ]
 }
