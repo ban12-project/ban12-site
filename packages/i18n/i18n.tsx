@@ -26,6 +26,6 @@ function LocaleProvider<T extends I18nConfig>({
   )
 }
 
-const useLocale = (): LocaleContextValue => useContext(LocaleContext)
+const useLocale = () => useContext(LocaleContext)
 
 export { LocaleProvider, useLocale }
