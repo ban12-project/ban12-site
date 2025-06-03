@@ -8,7 +8,6 @@
     "build": "pnpm build-rust && next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit",
     "build-rust": "wasm-pack build ../../crates/calculate-hash && wasm-pack build ../../crates/similar-wasm-wrapper",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
