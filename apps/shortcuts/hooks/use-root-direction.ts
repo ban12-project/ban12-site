@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useIsomorphicLayoutEffect } from 'usehooks-ts'
 
 type Direction = 'ltr' | 'rtl'
 
@@ -7,7 +8,7 @@ export default function useRootDirection<P>(transform: (dir: Direction) => P): P
 export default function useRootDirection<R>(transform?: (dir: Direction) => R) {
   const [direction, setDirection] = useState<Direction>('ltr')
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const direction = document
       .querySelector('html')!
       .getAttribute('dir') as Direction
