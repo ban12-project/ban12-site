@@ -84,6 +84,7 @@ const Column = ({
       style={{
         ...style,
         left: `${Number.parseFloat(style.left as string) + PADDING_START}px`,
+        right: `${Number.parseFloat(style.right as string) + PADDING_END}px`,
         width: `${Number.parseFloat(style.width as string) - GAP_SIZE}px`,
       }}
     >
