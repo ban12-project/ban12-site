@@ -2,7 +2,7 @@ import { config } from 'dotenv'
 import { desc } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/neon-http'
 
-import { gangchelin } from './schema'
+import { restaurant } from './schema'
 
 config({ path: ['.env'] })
 
@@ -11,8 +11,9 @@ const db = drizzle(process.env.DATABASE_URL!)
 async function main() {
   const record = await db
     .select()
-    .from(gangchelin)
-    .orderBy(desc(gangchelin.created)).limit(1)
+    .from(restaurant)
+    .orderBy(desc(restaurant.created))
+    .limit(1)
 
   console.log(record)
 

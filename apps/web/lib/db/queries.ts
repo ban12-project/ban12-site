@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { drizzle } from 'drizzle-orm/neon-http'
 
-import { gangchelin } from './schema'
+import { restaurant } from './schema'
 
 const connectionString = process.env.DATABASE_URL
 if (!connectionString) throw new Error('Not valid database url')
@@ -11,7 +11,7 @@ const db = drizzle(connectionString)
 export const getRestaurants = unstable_cache(
   async () => {
     try {
-      const restaurants = await db.select().from(gangchelin)
+      const restaurants = await db.select().from(restaurant)
       return restaurants
     } catch (error) {
       console.error('Failed to get restaurants from database')
