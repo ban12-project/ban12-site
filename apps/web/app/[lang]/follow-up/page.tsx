@@ -11,8 +11,8 @@ type Props = Readonly<{
 }>
 
 const fallback = {
-  lat: 104.1954,
-  lng: 35.8617,
+  lng: 104.1954,
+  lat: 35.8617,
 }
 
 export default async function FollowUp({ params }: Props) {
@@ -29,8 +29,8 @@ export default async function FollowUp({ params }: Props) {
         className="h-screen"
         options={{
           center: [
-            latitude ? +latitude : fallback.lat,
             longitude ? +longitude : fallback.lng,
+            latitude ? +latitude : fallback.lat,
           ],
         }}
       />
