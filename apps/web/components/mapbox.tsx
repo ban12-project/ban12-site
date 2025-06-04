@@ -74,10 +74,10 @@ function MapboxImpl({ promise, options, ref, ...props }: Props) {
     mapRef.current = map
 
     return () => {
-      // if (mapRef.current) {
-      //   mapRef.current.remove()
-      //   mapRef.current = null
-      // }
+      if (mapRef.current) {
+        mapRef.current.remove()
+        mapRef.current = null
+      }
     }
   }, [mapboxgl, options, isIntersecting])
 
