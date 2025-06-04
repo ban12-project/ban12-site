@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "tsx lib/db/migrate && next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
@@ -31,12 +31,16 @@
     "drizzle-orm": "catalog:",
     "glsl-random": "^0.0.5",
     "gsap": "catalog:",
+    "lucide-react": "catalog:",
+    "mapbox-gl": "^3.12.0",
     "next": "catalog:",
+    "next-themes": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "three": "^0.173.0",
     "three-stdlib": "^2.35.14",
-    "tunnel-rat": "^0.1.2"
+    "tunnel-rat": "^0.1.2",
+    "usehooks-ts": "catalog:"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "catalog:",
@@ -55,6 +59,7 @@
     "postcss": "catalog:",
     "raw-loader": "^4.0.2",
     "serwist": "^9.0.10",
+    "tsx": "^4.19.4",
     "typescript": "catalog:",
     "url-loader": "^4.1.1"
   }

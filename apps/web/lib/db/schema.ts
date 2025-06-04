@@ -36,8 +36,8 @@ type Meta = {
   ep_num: number
 }
 
-export const gangchelin = pgTable(
-  'gangchelin',
+export const restaurant = pgTable(
+  'restaurant',
   {
     comment: integer('comment').notNull(),
     typeid: integer('typeid').notNull(),
@@ -78,3 +78,5 @@ export const gangchelin = pgTable(
   },
   (table) => [primaryKey({ columns: [table.aid, table.bvid] })],
 )
+
+export type SelectRestaurant = typeof restaurant.$inferSelect

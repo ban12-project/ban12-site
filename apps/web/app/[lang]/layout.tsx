@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import '#/app/globals.css'
 
 import { LocaleProvider } from '@repo/i18n/client'
+import { ThemeProvider } from 'next-themes'
 
 import { i18n, type Locale } from '#/lib/i18n'
 import R3fEntry from '#/components/r3f-entry'
@@ -55,6 +56,9 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: '#FFFFFF',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 export async function generateStaticParams() {
@@ -67,11 +71,18 @@ export default async function RootLayout(props: Props) {
   const { children } = props
 
   return (
-    <html lang={params.lang}>
+    <html suppressHydrationWarning lang={params.lang}>
       <body className={`${inter.className} bg-gray-50 dark:bg-gray-900`}>
-        <LocaleProvider locale={params.lang} i18n={i18n}>
-          {children}
-        </LocaleProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LocaleProvider locale={params.lang} i18n={i18n}>
+            {children}
+          </LocaleProvider>
+        </ThemeProvider>
 
         <R3fEntry />
       </body>
