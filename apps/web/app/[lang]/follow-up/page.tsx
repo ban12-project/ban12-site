@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 import { getRestaurants } from '#/lib/db/queries'
 import { getDictionary, type Locale } from '#/lib/i18n'
 import { CommandMenu } from '#/components/command-menu'
+import { Marker } from '#/components/mapbox'
 
 import MapboxClientWrapper from './mapbox-client-wrapper'
 
@@ -33,7 +34,9 @@ export default async function FollowUp({ params }: Props) {
             latitude ? +latitude : fallback.lat,
           ],
         }}
-      />
+      >
+        <Marker lnglat={[104.059235, 30.677879]} />
+      </MapboxClientWrapper>
       <CommandMenu restaurants={restaurants} />
     </main>
   )
