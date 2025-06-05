@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "@gsap/react": "catalog:",
-    "@react-three/drei": "^10.0.6",
-    "@react-three/fiber": "9.0.4",
+    "@react-three/drei": "^10.1.2",
+    "@react-three/fiber": "9.1.2",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
     "dotenv": "catalog:",

@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
 
 import '#/app/globals.css'
 
@@ -7,14 +6,11 @@ import { LocaleProvider } from '@repo/i18n/client'
 import { ThemeProvider } from 'next-themes'
 
 import { i18n, type Locale } from '#/lib/i18n'
-import R3fEntry from '#/components/r3f-entry'
 
 type Props = Readonly<{
   params: Promise<{ lang: Locale }>
   children: React.ReactNode
 }>
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   applicationName: 'Ban12',
@@ -72,7 +68,7 @@ export default async function RootLayout(props: Props) {
 
   return (
     <html suppressHydrationWarning lang={params.lang}>
-      <body className={`${inter.className} bg-gray-50 dark:bg-gray-900`}>
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -83,8 +79,6 @@ export default async function RootLayout(props: Props) {
             {children}
           </LocaleProvider>
         </ThemeProvider>
-
-        <R3fEntry />
       </body>
     </html>
   )
