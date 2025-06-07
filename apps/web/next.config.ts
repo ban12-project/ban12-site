@@ -45,6 +45,10 @@ const nextConfig: NextConfig = {
 
     return config
   },
+  experimental: {
+    reactCompiler: true,
+    viewTransition: true,
+  },
 }
 
 /** @type {(phase: string, defaultConfig: import("next").NextConfig) => Promise<import("next").NextConfig>} */

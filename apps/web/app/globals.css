@@ -1,19 +1,11 @@
 @import '@repo/ui/globals.css';
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+  ::view-transition-old(.mapbox-fallback-exit) {
+    @apply animate-out slide-out-to-top-20 zoom-out fade-out fill-mode-forwards duration-300 ease-[cubic-bezier(0.7,0,0.3,1)];
+  }
+
+  ::view-transition-new(.mapbox-enter) {
+    @apply animate-in slide-in-from-bottom fade-in fill-mode-forwards duration-500 ease-[cubic-bezier(0.7,0,0.3,1)];
   }
 }

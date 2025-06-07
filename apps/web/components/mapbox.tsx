@@ -8,8 +8,11 @@ import {
   useEffect,
   useRef,
   useState,
+  unstable_ViewTransition as ViewTransition,
 } from 'react'
 import Script from 'next/script'
+import { cn } from '@repo/ui/lib/utils'
+import { LoaderCircleIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useIntersectionObserver } from 'usehooks-ts'
 
@@ -116,7 +119,11 @@ function MapboxImpl({
   }
 
   return (
-    <div {...props} ref={mergeRefs}>
+    <div
+      {...props}
+      ref={mergeRefs}
+      // className={cn('bg-rose-300', props.className)}
+    >
       <MapContext.Provider value={map}>{children}</MapContext.Provider>
     </div>
   )
@@ -150,8 +157,18 @@ export default function Mapbox(props: Omit<Props, 'externalScript'>) {
   return (
     <>
       <Loader />
-      <Suspense fallback={<p>loading</p>}>
-        <MapboxImpl externalScript={mapboxResourcesPromise()} {...props} />
+      <Suspense
+        fallback={
+          <ViewTransition exit="mapbox-fallback-exit">
+            <div className="slide-in-from-bottom-10 fade-in fill-mode-forwards animate-in flex h-screen items-center justify-center ease-[cubic-bezier(0.7,0,0.3,1)]">
+              <LoaderCircleIcon className="animate-spin" />
+            </div>
+          </ViewTransition>
+        }
+      >
+        <ViewTransition enter="mapbox-enter">
+          <MapboxImpl externalScript={mapboxResourcesPromise()} {...props} />
+        </ViewTransition>
       </Suspense>
     </>
   )
