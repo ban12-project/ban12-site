@@ -2,22 +2,12 @@
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
     "paths": {
-      "#/*": [
-        "./*"
-      ]
+      "#/*": ["./*"],
+      "@repo/ui/*": ["../../packages/ui/src/*"]
     },
-    "types": [
-      "@serwist/next/typings"
-    ],
+    "types": ["@serwist/next/typings"],
     "target": "ES2017"
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

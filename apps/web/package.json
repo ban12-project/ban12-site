@@ -22,11 +22,15 @@
     "*.{js,jsx,ts,tsx}": "prettier --write --ignore-unknown"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "catalog:",
+    "@google/genai": "catalog:",
     "@gsap/react": "catalog:",
     "@react-three/drei": "^10.1.2",
     "@react-three/fiber": "9.1.2",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@simplewebauthn/browser": "catalog:",
+    "@simplewebauthn/server": "catalog:",
     "dotenv": "catalog:",
     "drizzle-orm": "catalog:",
     "glsl-random": "^0.0.5",
@@ -34,13 +38,15 @@
     "lucide-react": "catalog:",
     "mapbox-gl": "^3.12.0",
     "next": "catalog:",
+    "next-auth": "catalog:",
     "next-themes": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "three": "^0.173.0",
     "three-stdlib": "^2.35.14",
     "tunnel-rat": "^0.1.2",
-    "usehooks-ts": "catalog:"
+    "usehooks-ts": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "catalog:",

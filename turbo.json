@@ -33,7 +33,13 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "web#build": {
-      "env": ["SITE_NAME", "DATABASE_URL"],
+      "env": [
+        "SITE_NAME",
+        "DATABASE_URL",
+        "GOOGLE_GEMINI_KEY",
+        "GOOGLE_GEMINI_MODEL",
+        "AUTH_SECRET"
+      ],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]

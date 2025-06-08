@@ -6,7 +6,7 @@ import { restaurant } from './schema'
 const connectionString = process.env.DATABASE_URL
 if (!connectionString) throw new Error('Not valid database url')
 
-const db = drizzle(connectionString)
+export const db = drizzle(connectionString)
 
 export const getRestaurants = unstable_cache(
   async () => {
