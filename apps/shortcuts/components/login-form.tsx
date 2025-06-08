@@ -31,7 +31,7 @@ export default function LoginForm() {
       //   void signIn('passkey', { email })
       // }
       try {
-        await signIn('passkey', { email })
+        await signIn('passkey', { action: 'authenticate', email })
       } catch (error) {
         console.error(error)
       }
