@@ -3,6 +3,7 @@ packages:
   - 'packages/*'
 
 catalog:
+  '@google/genai': '^1.4.0'
   '@types/node': '^22.15.21'
   'postcss': '^8.5.3'
   'typescript': '^5.8.3'
@@ -46,7 +47,7 @@ catalog:
   'server-only': '^0.0.1'
   '@opennextjs/cloudflare': '^1.0.4'
   'wrangler': '^4.16.1'
-  "drizzle-kit": "^0.31.1"
-  "drizzle-orm": "^0.43.1"
-  "dotenv": "^16.5.0"
-  "vaul": "^1.1.2"
+  'drizzle-kit': '^0.31.1'
+  'drizzle-orm': '^0.43.1'
+  'dotenv': '^16.5.0'
+  'vaul': '^1.1.2'
