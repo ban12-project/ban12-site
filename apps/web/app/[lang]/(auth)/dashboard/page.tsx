@@ -1,23 +1,14 @@
-'use client'
+import { getRestaurants } from '#/lib/db/queries'
 
-import { useTransition } from 'react'
-import { Button } from '@repo/ui/components/button'
+import { columns } from './columns'
+import { DataTable } from './data-table'
 
-import { videoUnderstanding } from '../actions'
-
-export default function DashboardPage() {
-  const [isPending, startTransition] = useTransition()
-
-  const handleClick = () => {
-    startTransition(async () => {
-      const text = await videoUnderstanding()
-      console.log(text)
-    })
-  }
+export default async function DashboardPage() {
+  const data = await getRestaurants()
 
   return (
-    <Button disabled={isPending} onClick={handleClick}>
-      Dashboard
-    </Button>
+    <div className="container mx-auto py-10">
+      <DataTable columns={columns} data={data} />
+    </div>
   )
 }

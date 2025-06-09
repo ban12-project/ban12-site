@@ -4,6 +4,7 @@ import {
   foreignKey,
   integer,
   jsonb,
+  pgEnum,
   pgTable,
   primaryKey,
   text,
@@ -126,6 +127,13 @@ type Meta = {
   ep_num: number
 }
 
+const restaurantStatusEnum = pgEnum('status', [
+  'pending',
+  'processing',
+  'success',
+  'failed',
+])
+
 export const restaurant = pgTable(
   'restaurant',
   {
@@ -165,6 +173,8 @@ export const restaurant = pgTable(
     vt_display: text('vt_display').notNull(),
     playback_position: integer('playback_position').notNull(),
     is_self_view: boolean('is_self_view').notNull(),
+    youtube: text('youtube'),
+    status: restaurantStatusEnum().default('pending').notNull(),
   },
   (table) => [primaryKey({ columns: [table.aid, table.bvid] })],
 )
