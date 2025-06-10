@@ -28,17 +28,48 @@ import {
   FormItem,
   FormMessage,
 } from '@repo/ui/components/form'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@repo/ui/components/hover-card'
 import { Input } from '@repo/ui/components/input'
 import { ColumnDef } from '@tanstack/react-table'
-import { LoaderCircleIcon, MoreHorizontal } from 'lucide-react'
+import { ArrowUpDown, LoaderCircleIcon, MoreHorizontal } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import type { SelectRestaurant } from '#/lib/db/schema'
 
 import { updateYoutubeLink, videoUnderstanding } from '../actions'
 
+const parseLengthToSeconds = (lengthStr: string | undefined | null): number => {
+  if (!lengthStr || typeof lengthStr !== 'string') return 0
+  const parts = lengthStr.split(':').map(Number)
+  let seconds = 0
+  if (parts.some(isNaN)) return 0 // Handle cases like "N/A" or malformed strings
+
+  if (parts.length === 1) {
+    // ss
+    seconds = parts[0]
+  } else if (parts.length === 2) {
+    // mm:ss
+    seconds = parts[0] * 60 + parts[1]
+  } else if (parts.length === 3) {
+    // hh:mm:ss
+    seconds = parts[0] * 3600 + parts[1] * 60 + parts[2]
+  } else {
+    return 0 // Invalid format
+  }
+  return seconds
+}
+
 export const columns: ColumnDef<SelectRestaurant>[] = [
+  {
+    accessorKey: 'id',
+    header: 'ID',
+  },
   {
     accessorKey: 'title',
     header: 'Title',
@@ -74,12 +105,65 @@ export const columns: ColumnDef<SelectRestaurant>[] = [
     ),
   },
   {
+    accessorKey: 'length',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Length
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    sortingFn: (rowA, rowB) => {
+      const a = parseLengthToSeconds(rowA.original.length)
+      const b = parseLengthToSeconds(rowB.original.length)
+      return a - b
+    },
+  },
+  {
     accessorKey: 'youtube',
     header: 'Youtube link',
+    cell: ({ row }) =>
+      row.original.ai_summarize ? (
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <a target="_blank" rel="noreferrer" href={row.original.youtube!}>
+              {row.original.youtube}
+            </a>
+          </HoverCardTrigger>
+          <HoverCardContent className="w-[50dvw] overflow-auto">
+            <h4 className="text-sm font-semibold mb-2">AI Summarize:</h4>
+            <pre>{JSON.stringify(row.original.ai_summarize, null, 2)}</pre>
+          </HoverCardContent>
+        </HoverCard>
+      ) : (
+        row.original.youtube && (
+          <a target="_blank" rel="noreferrer" href={row.original.youtube}>
+            {row.original.youtube}
+          </a>
+        )
+      ),
   },
   {
     accessorKey: 'status',
     header: 'Status',
+  },
+  {
+    accessorKey: 'updated_at',
+    header: 'Updated at',
+    cell: ({ row }) =>
+      row.original.updated_at.toLocaleString(undefined, {
+        year: 'numeric',
+        month: 'numeric', // Or '2-digit' for MM
+        day: 'numeric', // Or '2-digit' for DD
+        hour: '2-digit', // Ensures HH format
+        minute: '2-digit', // Ensures mm format
+        second: '2-digit', // Ensures ss format
+        hour12: false, // This is key for 24-hour format
+      }),
   },
   {
     id: 'actions',
@@ -91,10 +175,25 @@ function Actions({ row }: { row: SelectRestaurant }) {
   const [isPending, startTransition] = useTransition()
 
   const handleClick = () => {
-    if (!row.youtube || row.status === 'processing') return
+    if (!row.youtube) return toast.error('No youtube link')
+    if (row.status === 'processing') return toast.info('Processing')
     startTransition(async () => {
-      const text = await videoUnderstanding(row.youtube!)
-      console.log(text)
+      await new Promise<void>((resolve) => {
+        toast.promise(
+          videoUnderstanding({
+            fileUri: row.youtube!,
+            id: row.id,
+          }),
+          {
+            loading: 'Processing',
+            success: () => {
+              return `${row.title} AI summarize done`
+            },
+            error: 'Error',
+            finally: resolve,
+          },
+        )
+      })
     })
   }
 
@@ -112,7 +211,11 @@ function Actions({ row }: { row: SelectRestaurant }) {
           <DialogTrigger asChild>
             <DropdownMenuItem>link youtube</DropdownMenuItem>
           </DialogTrigger>
-          <DropdownMenuItem disabled={isPending} onClick={() => handleClick()}>
+          <DropdownMenuItem
+            disabled={isPending}
+            aria-disabled={isPending}
+            onClick={() => handleClick()}
+          >
             video understanding
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -194,7 +297,7 @@ function LinkYoutubeDialog({
               )}
             />
 
-            <input type="hidden" name="bvid" value={row.bvid} />
+            <input type="hidden" name="id" value={row.id} />
 
             <DialogFooter className="sm:justify-start">
               <DialogClose asChild>
