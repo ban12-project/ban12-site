@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { cache } from 'react'
 import { revalidatePath } from 'next/cache'
 import { eq } from 'drizzle-orm'
@@ -68,6 +70,39 @@ export async function updateAISummarize({
       .where(eq(restaurant.id, id))
   } catch (error) {
     console.error('Failed to update ai_summarize in database')
+    throw error
+  }
+
+  revalidatePath('/dashboard')
+}
+
+export async function getRestaurantById(id: string) {
+  try {
+    const [item] = await db
+      .select()
+      .from(restaurant)
+      .where(eq(restaurant.id, id))
+      .limit(1)
+    return item
+  } catch (error) {
+    console.error('Failed to get restaurant by id from database')
+    throw error
+  }
+}
+
+export async function updateLatlngById({
+  lat,
+  lng,
+  id,
+}: {
+  lat: string
+  lng: string
+  id: string
+}) {
+  try {
+    await db.update(restaurant).set({ lat, lng }).where(eq(restaurant.id, id))
+  } catch (error) {
+    console.error('Failed to update latlng in database')
     throw error
   }
 

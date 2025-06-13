@@ -185,6 +185,8 @@ export const restaurant = pgTable('restaurant', {
     service: string
     precautions: string[]
   }>(),
+  lat: text('lat'),
+  lng: text('lng'),
 })
 
 export type SelectRestaurant = typeof restaurant.$inferSelect

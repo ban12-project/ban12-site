@@ -1,7 +1,8 @@
 'use client'
 
-import { startTransition, useActionState, useState, useTransition } from 'react'
+import { useActionState, useEffect, useState, useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Badge } from '@repo/ui/components/badge'
 import { Button } from '@repo/ui/components/button'
 import {
   Dialog,
@@ -11,7 +12,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@repo/ui/components/dialog'
 import {
   DropdownMenu,
@@ -26,6 +26,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@repo/ui/components/form'
 import {
@@ -42,7 +43,11 @@ import { z } from 'zod'
 
 import type { SelectRestaurant } from '#/lib/db/schema'
 
-import { updateYoutubeLink, videoUnderstanding } from '../actions'
+import {
+  updateLatitudeLongitude,
+  updateYoutubeLink,
+  videoUnderstanding,
+} from '../actions'
 
 const parseLengthToSeconds = (lengthStr: string | undefined | null): number => {
   if (!lengthStr || typeof lengthStr !== 'string') return 0
@@ -130,26 +135,56 @@ export const columns: ColumnDef<SelectRestaurant>[] = [
       row.original.ai_summarize ? (
         <HoverCard>
           <HoverCardTrigger asChild>
-            <a target="_blank" rel="noreferrer" href={row.original.youtube!}>
-              {row.original.youtube}
-            </a>
+            <Badge
+              asChild
+              variant={
+                row.original.status === 'pending'
+                  ? 'outline'
+                  : row.original.status === 'processing'
+                    ? 'secondary'
+                    : row.original.status === 'success'
+                      ? 'default'
+                      : 'destructive'
+              }
+            >
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={row.original.youtube!}
+              >
+                {row.original.youtube}
+              </a>
+            </Badge>
           </HoverCardTrigger>
           <HoverCardContent className="w-[50dvw] overflow-auto">
-            <h4 className="text-sm font-semibold mb-2">AI Summarize:</h4>
+            <h4 className="mb-2 text-sm font-semibold">AI Summarize:</h4>
             <pre>{JSON.stringify(row.original.ai_summarize, null, 2)}</pre>
           </HoverCardContent>
         </HoverCard>
       ) : (
         row.original.youtube && (
-          <a target="_blank" rel="noreferrer" href={row.original.youtube}>
-            {row.original.youtube}
-          </a>
+          <Badge
+            asChild
+            variant={
+              row.original.status === 'pending'
+                ? 'outline'
+                : row.original.status === 'processing'
+                  ? 'secondary'
+                  : row.original.status === 'success'
+                    ? 'default'
+                    : 'destructive'
+            }
+          >
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={row.original.youtube}
+            >
+              {row.original.youtube}
+            </a>
+          </Badge>
         )
       ),
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
   },
   {
     accessorKey: 'updated_at',
@@ -172,9 +207,12 @@ export const columns: ColumnDef<SelectRestaurant>[] = [
 ]
 
 function Actions({ row }: { row: SelectRestaurant }) {
+  const [dialogActive, setDialogActive] = useState<'linkYoutube' | 'latlng'>(
+    'linkYoutube',
+  )
   const [isPending, startTransition] = useTransition()
 
-  const handleClick = () => {
+  const resolveYoutubeLink = () => {
     if (!row.youtube) return toast.error('No youtube link')
     if (row.status === 'processing') return toast.info('Processing')
     startTransition(async () => {
@@ -197,8 +235,10 @@ function Actions({ row }: { row: SelectRestaurant }) {
     })
   }
 
+  const [open, setOpen] = useState(false)
+
   return (
-    <LinkYoutubeDialog row={row}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -208,22 +248,42 @@ function Actions({ row }: { row: SelectRestaurant }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DialogTrigger asChild>
-            <DropdownMenuItem>link youtube</DropdownMenuItem>
-          </DialogTrigger>
+          <DropdownMenuItem
+            onClick={() => {
+              setOpen(true)
+              setDialogActive('linkYoutube')
+            }}
+          >
+            link youtube
+          </DropdownMenuItem>
           <DropdownMenuItem
             disabled={isPending}
             aria-disabled={isPending}
-            onClick={() => handleClick()}
+            onClick={resolveYoutubeLink}
           >
             video understanding
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>View customer</DropdownMenuItem>
-          <DropdownMenuItem>View payment details</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              setOpen(true)
+              setDialogActive('latlng')
+            }}
+          >
+            latitude and longitude
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </LinkYoutubeDialog>
+
+      <DialogContent className="sm:max-w-md">
+        {dialogActive === 'linkYoutube' && (
+          <LinkYoutubeForm row={row} setOpen={setOpen} />
+        )}
+        {dialogActive === 'latlng' && (
+          <LatitudeLongitudeForm row={row} setOpen={setOpen} />
+        )}
+      </DialogContent>
+    </Dialog>
   )
 }
 
@@ -236,14 +296,13 @@ const formSchema = z.object({
 
 const initialState = { message: '', errors: {} }
 
-function LinkYoutubeDialog({
-  children,
+function LinkYoutubeForm({
   row,
+  setOpen,
 }: {
-  children?: React.ReactNode
   row: SelectRestaurant
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  const [open, setOpen] = useState(false)
   const [state, action, pending] = useActionState(
     updateYoutubeLink,
     initialState,
@@ -252,11 +311,13 @@ function LinkYoutubeDialog({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      link: '',
+      link: row.youtube || '',
     },
   })
 
-  const onSubmit: React.ReactEventHandler<HTMLFormElement> = async (e) => {
+  const onSubmit: React.ReactEventHandler<
+    React.ComponentRef<'button'>
+  > = async (e) => {
     e.preventDefault()
 
     const currentTarget = e.currentTarget
@@ -264,61 +325,169 @@ function LinkYoutubeDialog({
     const isValid = await form.trigger()
     if (!isValid) return
 
-    startTransition(async () => {
-      await action(new FormData(currentTarget))
-      form.reset()
-      setOpen(false)
-    })
+    currentTarget.form?.requestSubmit()
   }
 
+  useEffect(() => {
+    if (state.message !== 'success') return
+
+    form.reset()
+    setOpen(false)
+  }, [form, setOpen, state.message])
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      {children}
-      <DialogContent className="sm:max-w-md">
-        <Form {...form}>
-          <form action={action} onSubmit={onSubmit}>
-            <DialogHeader>
-              <DialogTitle>Youtube link</DialogTitle>
-              <DialogDescription>{row.title}</DialogDescription>
-            </DialogHeader>
+    <Form {...form}>
+      <form action={action}>
+        <DialogHeader>
+          <DialogTitle>Youtube link</DialogTitle>
+          <DialogDescription>{row.title}</DialogDescription>
+        </DialogHeader>
 
-            <FormField
-              control={form.control}
-              name="link"
-              render={({ field }) => (
-                <FormItem className="my-2">
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage>
-                    {state.message !== 'success' ? state.message : ''}
-                  </FormMessage>
-                </FormItem>
-              )}
-            />
+        <FormField
+          control={form.control}
+          name="link"
+          render={({ field }) => (
+            <FormItem className="my-2">
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage>
+                {state.message !== 'success' ? state.message : ''}
+              </FormMessage>
+            </FormItem>
+          )}
+        />
 
-            <input type="hidden" name="id" value={row.id} />
+        <input type="hidden" name="id" value={row.id} />
 
-            <DialogFooter className="sm:justify-start">
-              <DialogClose asChild>
-                <Button type="button" variant="secondary">
-                  Close
-                </Button>
-              </DialogClose>
-              <Button
-                disabled={pending}
-                aria-disabled={pending}
-                type="submit"
-                variant="primary"
-                className="sm:ml-auto"
-              >
-                Submit
-                {pending && <LoaderCircleIcon className="animate-spin" />}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+        <DialogFooter className="sm:justify-start">
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              Close
+            </Button>
+          </DialogClose>
+          <Button
+            disabled={pending}
+            aria-disabled={pending}
+            type="submit"
+            variant="primary"
+            className="sm:ml-auto"
+            onClick={onSubmit}
+          >
+            Submit
+            {pending && <LoaderCircleIcon className="animate-spin" />}
+          </Button>
+        </DialogFooter>
+      </form>
+    </Form>
+  )
+}
+
+const latitudeLongitudeSchema = z.object({
+  lat: z.string().nonempty(),
+  lng: z.string().nonempty(),
+})
+
+function LatitudeLongitudeForm({
+  row,
+  setOpen,
+}: {
+  row: SelectRestaurant
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}) {
+  const [state, action, pending] = useActionState(
+    updateLatitudeLongitude,
+    initialState,
+  )
+
+  const form = useForm<z.infer<typeof latitudeLongitudeSchema>>({
+    resolver: zodResolver(latitudeLongitudeSchema),
+    defaultValues: {
+      lat: row.lat || '',
+      lng: row.lng || '',
+    },
+  })
+
+  const onSubmit: React.ReactEventHandler<
+    React.ComponentRef<'button'>
+  > = async (e) => {
+    e.preventDefault()
+
+    const currentTarget = e.currentTarget
+
+    const isValid = await form.trigger()
+    if (!isValid) return
+
+    currentTarget.form?.requestSubmit()
+  }
+
+  useEffect(() => {
+    if (state.message !== 'success') return
+    form.reset()
+    setOpen(false)
+  }, [form, setOpen, state])
+
+  return (
+    <Form {...form}>
+      <form action={action}>
+        <DialogHeader>
+          <DialogTitle>Latitude and Longitude</DialogTitle>
+          <DialogDescription>{row.title}</DialogDescription>
+        </DialogHeader>
+
+        <FormField
+          control={form.control}
+          name="lat"
+          render={({ field }) => (
+            <FormItem className="my-2">
+              <FormLabel>Latitude</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="latitude" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="lng"
+          render={({ field }) => (
+            <FormItem className="my-2">
+              <FormLabel>Longitude</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="longitude" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <input type="hidden" name="id" value={row.id} />
+
+        <FormMessage>
+          {state.message !== 'success' ? state.message : ''}
+        </FormMessage>
+
+        <DialogFooter className="sm:justify-start">
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              Close
+            </Button>
+          </DialogClose>
+          <Button
+            disabled={pending}
+            aria-disabled={pending}
+            type="submit"
+            variant="primary"
+            className="sm:ml-auto"
+            onClick={onSubmit}
+          >
+            Submit
+            {pending && <LoaderCircleIcon className="animate-spin" />}
+          </Button>
+        </DialogFooter>
+      </form>
+    </Form>
   )
 }

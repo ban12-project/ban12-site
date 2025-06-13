@@ -6,6 +6,7 @@ import { z } from 'zod'
 
 import {
   updateAISummarize,
+  updateLatlngById,
   updateStatusById,
   updateYoutubeLinkById,
 } from '#/lib/db/queries'
@@ -120,6 +121,43 @@ export async function updateYoutubeLink(prevState: State, formData: FormData) {
 
   try {
     await updateYoutubeLinkById({ link, id })
+  } catch {
+    return {
+      message: 'Failed to update youtube link.',
+    }
+  }
+
+  revalidateTag('restaurants')
+  return {
+    message: 'success',
+  }
+}
+
+const latitudeLongitudeSchema = z.object({
+  lat: z.string().nonempty(),
+  lng: z.string().nonempty(),
+  id: z.string().nonempty(),
+})
+
+export async function updateLatitudeLongitude(prevState: State, formData: FormData) {
+  const validatedFields = latitudeLongitudeSchema.safeParse({
+    lat: formData.get('lat'),
+    lng: formData.get('lng'),
+    id: formData.get('id'),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Failed to validate form data.',
+    }
+  }
+
+  const { lat, lng, id } = validatedFields.data
+
+  try {
+    // await updateLatlngById({ lat, lng, id })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
   } catch {
     return {
       message: 'Failed to update youtube link.',
