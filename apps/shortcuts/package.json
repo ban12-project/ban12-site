@@ -46,7 +46,7 @@
     "react-virtualized-auto-sizer": "catalog:",
     "react-window": "catalog:",
     "react-window-infinite-loader": "catalog:",
-    "server-only": "^0.0.1",
+    "server-only": "catalog:",
     "sonner": "catalog:",
     "usehooks-ts": "catalog:",
     "vaul": "catalog:",

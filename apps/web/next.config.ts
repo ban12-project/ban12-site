@@ -46,7 +46,7 @@ const nextConfig: NextConfig = {
     return config
   },
   experimental: {
-    reactCompiler: true,
+    // reactCompiler: true,
     viewTransition: true,
   },
 }

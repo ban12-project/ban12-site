@@ -71,7 +71,7 @@ function RenderCommandGroup({ restaurants }: Props) {
       </CommandGroup>
       <CommandGroup heading="Restaurants">
         {data.map((restaurant) => (
-          <CommandItem key={restaurant.bvid}>
+          <CommandItem key={restaurant.id}>
             <div>
               {restaurant.title}
               <p className="text-sm">{restaurant.description}</p>

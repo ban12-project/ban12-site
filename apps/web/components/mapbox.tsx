@@ -11,7 +11,7 @@ import {
   unstable_ViewTransition as ViewTransition,
 } from 'react'
 import Script from 'next/script'
-import { cn } from '@repo/ui/lib/utils'
+import { useLocale } from '@repo/i18n/client'
 import { LoaderCircleIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useIntersectionObserver } from 'usehooks-ts'
@@ -24,17 +24,15 @@ declare global {
   }
 }
 
-const mapboxResourcesPromise = () => {
-  return new Promise<Mapbox>((resolve) => {
-    if (window.mapboxgl) return resolve(window.mapboxgl)
+const mapboxResourcesPromise = new Promise<Mapbox>((resolve) => {
+  if (window.mapboxgl) return resolve(window.mapboxgl)
 
-    const listener = () => {
-      resolve(window.mapboxgl)
-      document.removeEventListener('mapboxloaded', listener)
-    }
-    document.addEventListener('mapboxloaded', listener)
-  })
-}
+  const listener = () => {
+    resolve(window.mapboxgl)
+    document.removeEventListener('mapboxloaded', listener)
+  }
+  document.addEventListener('mapboxloaded', listener)
+})
 
 function Loader() {
   return (
@@ -78,6 +76,7 @@ function MapboxImpl({
 
   const { isIntersecting, ref: observerRef } = useIntersectionObserver()
   const { resolvedTheme } = useTheme()
+  const { locale } = useLocale()
 
   useEffect(() => {
     const container = mapContainerRef.current
@@ -91,6 +90,7 @@ function MapboxImpl({
           ? 'mapbox://styles/mapbox/dark-v11'
           : 'mapbox://styles/mapbox/light-v11',
       zoom: 9, // starting zoom
+      language: locale === 'zh-CN' ? 'zh-Hans' : locale,
       ...options,
     })
 
@@ -119,11 +119,7 @@ function MapboxImpl({
   }
 
   return (
-    <div
-      {...props}
-      ref={mergeRefs}
-      // className={cn('bg-rose-300', props.className)}
-    >
+    <div {...props} ref={mergeRefs}>
       <MapContext.Provider value={map}>{children}</MapContext.Provider>
     </div>
   )
@@ -167,7 +163,7 @@ export default function Mapbox(props: Omit<Props, 'externalScript'>) {
         }
       >
         <ViewTransition enter="mapbox-enter">
-          <MapboxImpl externalScript={mapboxResourcesPromise()} {...props} />
+          <MapboxImpl externalScript={mapboxResourcesPromise} {...props} />
         </ViewTransition>
       </Suspense>
     </>

@@ -22,14 +22,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   const restaurantsPromise = getRestaurants().then((restaurants) =>
-    restaurants.map((shortcut) => ({
-      url: `${process.env.NEXT_PUBLIC_HOST_URL}/gangchelin/${shortcut.bvid}`,
-      lastModified: new Date(shortcut.created),
+    restaurants.map((item) => ({
+      url: `${process.env.NEXT_PUBLIC_HOST_URL}/follow-up/${item.id}`,
+      lastModified: item.updated_at,
       alternates: {
         languages: Object.fromEntries(
           locales.map((locale) => [
             locale,
-            `${process.env.NEXT_PUBLIC_HOST_URL}/${locale}/gangchelin/${shortcut.bvid}`,
+            `${process.env.NEXT_PUBLIC_HOST_URL}/${locale}/follow-up/${item.id}`,
           ]),
         ),
       },
