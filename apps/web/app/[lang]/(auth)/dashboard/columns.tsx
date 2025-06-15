@@ -1,6 +1,14 @@
 'use client'
 
-import { useActionState, useEffect, useState, useTransition } from 'react'
+import React, {
+  startTransition,
+  useActionState,
+  useEffect,
+  useOptimistic,
+  useRef,
+  useState,
+  useTransition,
+} from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Badge } from '@repo/ui/components/badge'
 import { Button } from '@repo/ui/components/button'
@@ -35,6 +43,7 @@ import {
   HoverCardTrigger,
 } from '@repo/ui/components/hover-card'
 import { Input } from '@repo/ui/components/input'
+import { Switch } from '@repo/ui/components/switch'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, LoaderCircleIcon, MoreHorizontal } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -44,6 +53,7 @@ import { z } from 'zod'
 import type { SelectRestaurant } from '#/lib/db/schema'
 
 import {
+  updateInvisible,
   updateLatitudeLongitude,
   updateYoutubeLink,
   videoUnderstanding,
@@ -199,6 +209,11 @@ export const columns: ColumnDef<SelectRestaurant>[] = [
         second: '2-digit', // Ensures ss format
         hour12: false, // This is key for 24-hour format
       }),
+  },
+  {
+    accessorKey: 'invisible',
+    header: 'Invisible',
+    cell: ({ row }) => <InvisibleForm row={row.original} />,
   },
   {
     id: 'actions',
@@ -489,5 +504,38 @@ function LatitudeLongitudeForm({
         </DialogFooter>
       </form>
     </Form>
+  )
+}
+
+function InvisibleForm({ row }: { row: SelectRestaurant }) {
+  const ref = useRef<React.ComponentRef<'form'>>(null)
+  const [invisible, setInvisible] = useState(row.invisible)
+  const [optimisticInvisible, setOptimisticInvisible] = useOptimistic(invisible)
+  const [state, action, pending] = useActionState(updateInvisible, initialState)
+
+  const onCheckedChange = (checked: boolean) => {
+    startTransition(() => {
+      setOptimisticInvisible(checked)
+    })
+    ref.current?.requestSubmit()
+  }
+
+  useEffect(() => {
+    if (state.message !== 'success') return
+    setInvisible(optimisticInvisible)
+  }, [optimisticInvisible, state])
+
+  return (
+    <form action={action} ref={ref}>
+      <Switch
+        name="invisible"
+        value="true" // send to server action only checked
+        defaultChecked={optimisticInvisible}
+        onCheckedChange={onCheckedChange}
+        disabled={pending}
+        aria-disabled={pending}
+      />
+      <input type="hidden" name="id" value={row.id} />
+    </form>
   )
 }

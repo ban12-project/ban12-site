@@ -6,6 +6,7 @@ import { z } from 'zod'
 
 import {
   updateAISummarize,
+  updateInvisibleById,
   updateLatlngById,
   updateStatusById,
   updateYoutubeLinkById,
@@ -139,7 +140,10 @@ const latitudeLongitudeSchema = z.object({
   id: z.string().nonempty(),
 })
 
-export async function updateLatitudeLongitude(prevState: State, formData: FormData) {
+export async function updateLatitudeLongitude(
+  prevState: State,
+  formData: FormData,
+) {
   const validatedFields = latitudeLongitudeSchema.safeParse({
     lat: formData.get('lat'),
     lng: formData.get('lng'),
@@ -156,8 +160,7 @@ export async function updateLatitudeLongitude(prevState: State, formData: FormDa
   const { lat, lng, id } = validatedFields.data
 
   try {
-    // await updateLatlngById({ lat, lng, id })
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await updateLatlngById({ lat, lng, id })
   } catch {
     return {
       message: 'Failed to update youtube link.',
@@ -165,6 +168,39 @@ export async function updateLatitudeLongitude(prevState: State, formData: FormDa
   }
 
   revalidateTag('restaurants')
+  return {
+    message: 'success',
+  }
+}
+
+const InvisibleSchema = z.object({
+  id: z.string().nonempty(),
+  invisible: z.boolean(),
+})
+
+export async function updateInvisible(prevState: State, formData: FormData) {
+  const validatedFields = InvisibleSchema.safeParse({
+    id: formData.get('id'),
+    invisible: formData.get('invisible') === 'true',
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Failed to validate form data.',
+    }
+  }
+
+  const { invisible, id } = validatedFields.data
+
+  try {
+    await updateInvisibleById({ invisible, id })
+  } catch {
+    return {
+      message: 'Failed to update youtube link.',
+    }
+  }
+
   return {
     message: 'success',
   }

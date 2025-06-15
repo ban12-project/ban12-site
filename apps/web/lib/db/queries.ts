@@ -108,3 +108,18 @@ export async function updateLatlngById({
 
   revalidatePath('/dashboard')
 }
+
+export async function updateInvisibleById({
+  id,
+  invisible,
+}: {
+  id: string
+  invisible: boolean
+}) {
+  try {
+    await db.update(restaurant).set({ invisible }).where(eq(restaurant.id, id))
+  } catch (error) {
+    console.error('Failed to update invisible in database')
+    throw error
+  }
+}
