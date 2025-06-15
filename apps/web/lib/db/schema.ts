@@ -102,7 +102,7 @@ export const authenticators = pgTable(
   ],
 )
 
-const restaurantStatusEnum = pgEnum('status', [
+export const restaurantStatusEnum = pgEnum('status', [
   'pending',
   'processing',
   'success',
