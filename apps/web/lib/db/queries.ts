@@ -90,19 +90,17 @@ export async function getRestaurantById(id: string) {
   }
 }
 
-export async function updateLatlngById({
-  lat,
-  lng,
+export async function updateLocationById({
+  location,
   id,
 }: {
-  lat: string
-  lng: string
+  location: [number, number]
   id: string
 }) {
   try {
-    await db.update(restaurant).set({ lat, lng }).where(eq(restaurant.id, id))
+    await db.update(restaurant).set({ location }).where(eq(restaurant.id, id))
   } catch (error) {
-    console.error('Failed to update latlng in database')
+    console.error('Failed to update location in database')
     throw error
   }
 

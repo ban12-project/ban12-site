@@ -6,6 +6,7 @@ import {
   jsonb,
   pgEnum,
   pgTable,
+  point,
   primaryKey,
   text,
   timestamp,
@@ -185,8 +186,10 @@ export const restaurant = pgTable('restaurant', {
     service: string
     precautions: string[]
   }>(),
-  lat: text('lat'),
-  lng: text('lng'),
+  /**
+   * [lng, lat]
+   */
+  location: point('location')
 })
 
 export type SelectRestaurant = typeof restaurant.$inferSelect

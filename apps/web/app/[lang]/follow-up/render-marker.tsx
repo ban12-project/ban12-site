@@ -11,12 +11,10 @@ export default function RenderMarker({
 }) {
   const data = use(restaurants)
 
-  return data.map(({ lng, lat, id }) => {
-    if (!lng || !lat) return
+  return data.map(({ location, id, invisible }) => {
+    if (!location || invisible) return
 
-    const lnglat = coordtransform.gcj02towgs84(
-      ...([lng, lat].map(Number) as [number, number]),
-    )
+    const lnglat = coordtransform.gcj02towgs84(...location)
 
     return <Marker key={id} lnglat={lnglat} />
   })

@@ -1,6 +1,7 @@
 'use client'
 
-import { Suspense, use, useEffect, useState } from 'react'
+import { Suspense, use, useEffect, useState, useTransition } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@repo/ui/components/button'
 import {
   CommandDialog,
@@ -12,7 +13,8 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from '@repo/ui/components/command'
-import { LoaderCircleIcon } from 'lucide-react'
+import { LoaderCircleIcon, MapPin } from 'lucide-react'
+import { toast } from 'sonner'
 
 import type { SelectRestaurant } from '#/lib/db/schema'
 
@@ -53,7 +55,7 @@ export function CommandMenu(props: Props) {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <Suspense fallback={<LoaderCircleIcon />}>
-            <RenderCommandGroup {...props} />
+            <RenderCommandGroup {...props} closeMenu={() => setOpen(false)} />
           </Suspense>
         </CommandList>
       </CommandDialog>
@@ -61,23 +63,80 @@ export function CommandMenu(props: Props) {
   )
 }
 
-function RenderCommandGroup({ restaurants }: Props) {
+function RenderCommandGroup({
+  restaurants,
+  closeMenu,
+}: Props & { closeMenu: () => void }) {
   const data = use(restaurants)
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'm' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        requestGeolocation()
+      }
+    }
+
+    document.addEventListener('keydown', down)
+    return () => document.removeEventListener('keydown', down)
+  }, [])
+
+  const [isPending, startTransition] = useTransition()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const { replace } = useRouter()
+
+  const requestGeolocation = () => {
+    if (!navigator.geolocation)
+      return toast.error('Geolocation is not supported by this browser.')
+
+    startTransition(async () => {
+      try {
+        const position = await new Promise<GeolocationPosition>(
+          (resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject)
+          },
+        )
+        go(position.coords.longitude, position.coords.latitude)
+      } catch (error) {
+        if (error instanceof GeolocationPositionError) {
+          toast.error(`ERROR(${error.code}): ${error.message}`)
+        }
+      }
+    })
+  }
+
+  const go = (lng: number, lat: number) => {
+    const params = new URLSearchParams(searchParams)
+    params.set('location', `${lng},${lat}`)
+    replace(`${pathname}?${params.toString()}`)
+    closeMenu()
+  }
 
   return (
     <>
       <CommandGroup heading="Suggestions">
-        <CommandItem>near me</CommandItem>
+        <CommandItem disabled={isPending} onSelect={requestGeolocation}>
+          <MapPin />
+          Near me
+          <CommandShortcut>⌘M</CommandShortcut>
+        </CommandItem>
       </CommandGroup>
+      <CommandSeparator />
       <CommandGroup heading="Restaurants">
-        {data.map((restaurant) => (
-          <CommandItem key={restaurant.id}>
-            <div>
-              {restaurant.title}
-              <p className="text-sm">{restaurant.description}</p>
-            </div>
-          </CommandItem>
-        ))}
+        {data
+          .filter((item) => item.invisible === false)
+          .map((restaurant) => (
+            <CommandItem
+              key={restaurant.id}
+              onSelect={() => {
+                if (!restaurant.location) return toast.info('No found location')
+                go(...restaurant.location)
+              }}
+            >
+              <span>{restaurant.title}</span>
+            </CommandItem>
+          ))}
       </CommandGroup>
     </>
   )

@@ -10,32 +10,42 @@ import RenderMarker from './render-marker'
 
 type Props = Readonly<{
   params: Promise<{ lang: Locale }>
+  searchParams?: Promise<{
+    location?: string
+  }>
 }>
 
-const fallback = {
-  lng: 104.1954,
-  lat: 35.8617,
-}
-
-export default async function FollowUp({ params }: Props) {
-  const { lang } = await params
+export default async function FollowUp(props: Props) {
+  const [{ lang }, searchParams] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ])
   const [message, headersList] = await Promise.all([
     getDictionary(lang),
     headers(),
   ])
-  const latitude = headersList.get('x-vercel-ip-latitude')
-  const longitude = headersList.get('x-vercel-ip-longitude')
+
+  const locationFromHeader = (() => {
+    const location = [
+      headersList.get('x-vercel-ip-longitude'),
+      headersList.get('x-vercel-ip-latitude'),
+    ]
+      .filter(Boolean)
+      .map(Number)
+
+    if (location.length) return location as [number, number]
+  })()
+  const location = searchParams?.location?.split(',').map(Number) as
+    | [number, number]
+    | undefined
   const restaurants = getRestaurants()
 
   return (
     <main className="relative">
       <MapboxClientWrapper
-        className="h-screen"
+        className="min-h-screen"
         options={{
-          center: [
-            longitude ? +longitude : fallback.lng,
-            latitude ? +latitude : fallback.lat,
-          ],
+          center: location || locationFromHeader,
         }}
       >
         <Suspense>

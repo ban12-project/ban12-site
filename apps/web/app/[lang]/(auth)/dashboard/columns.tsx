@@ -54,7 +54,7 @@ import type { SelectRestaurant } from '#/lib/db/schema'
 
 import {
   updateInvisible,
-  updateLatitudeLongitude,
+  updateLocation,
   updateYoutubeLink,
   videoUnderstanding,
 } from '../actions'
@@ -222,7 +222,7 @@ export const columns: ColumnDef<SelectRestaurant>[] = [
 ]
 
 function Actions({ row }: { row: SelectRestaurant }) {
-  const [dialogActive, setDialogActive] = useState<'linkYoutube' | 'latlng'>(
+  const [dialogActive, setDialogActive] = useState<'linkYoutube' | 'location'>(
     'linkYoutube',
   )
   const [isPending, startTransition] = useTransition()
@@ -282,7 +282,7 @@ function Actions({ row }: { row: SelectRestaurant }) {
           <DropdownMenuItem
             onClick={() => {
               setOpen(true)
-              setDialogActive('latlng')
+              setDialogActive('location')
             }}
           >
             latitude and longitude
@@ -294,8 +294,8 @@ function Actions({ row }: { row: SelectRestaurant }) {
         {dialogActive === 'linkYoutube' && (
           <LinkYoutubeForm row={row} setOpen={setOpen} />
         )}
-        {dialogActive === 'latlng' && (
-          <LatitudeLongitudeForm row={row} setOpen={setOpen} />
+        {dialogActive === 'location' && (
+          <LocationForm row={row} setOpen={setOpen} />
         )}
       </DialogContent>
     </Dialog>
@@ -398,28 +398,23 @@ function LinkYoutubeForm({
   )
 }
 
-const latitudeLongitudeSchema = z.object({
-  lat: z.string().nonempty(),
-  lng: z.string().nonempty(),
+const locationSchema = z.object({
+  location: z.tuple([z.string().nonempty(), z.string().nonempty()]),
 })
 
-function LatitudeLongitudeForm({
+function LocationForm({
   row,
   setOpen,
 }: {
   row: SelectRestaurant
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  const [state, action, pending] = useActionState(
-    updateLatitudeLongitude,
-    initialState,
-  )
+  const [state, action, pending] = useActionState(updateLocation, initialState)
 
-  const form = useForm<z.infer<typeof latitudeLongitudeSchema>>({
-    resolver: zodResolver(latitudeLongitudeSchema),
+  const form = useForm<z.infer<typeof locationSchema>>({
+    resolver: zodResolver(locationSchema),
     defaultValues: {
-      lat: row.lat || '',
-      lng: row.lng || '',
+      location: (row.location?.map(String) as [string, string]) || ['', ''],
     },
   })
 
@@ -452,12 +447,12 @@ function LatitudeLongitudeForm({
 
         <FormField
           control={form.control}
-          name="lat"
+          name="location.1"
           render={({ field }) => (
             <FormItem className="my-2">
               <FormLabel>Latitude</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="latitude" />
+                <Input placeholder="latitude" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -466,12 +461,12 @@ function LatitudeLongitudeForm({
 
         <FormField
           control={form.control}
-          name="lng"
+          name="location.0"
           render={({ field }) => (
             <FormItem className="my-2">
               <FormLabel>Longitude</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="longitude" />
+                <Input placeholder="longitude" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

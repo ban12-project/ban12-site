@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import '#/app/globals.css'
 
 import { LocaleProvider } from '@repo/i18n/client'
+import { Toaster } from '@repo/ui/components/sonner'
 import { ThemeProvider } from 'next-themes'
 
 import { i18n, type Locale } from '#/lib/i18n'
@@ -78,6 +79,7 @@ export default async function RootLayout(props: Props) {
           <LocaleProvider locale={params.lang} i18n={i18n}>
             {children}
           </LocaleProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

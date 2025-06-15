@@ -50,6 +50,13 @@
       "when": 1749814926685,
       "tag": "0006_nosy_songbird",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1749957465297,
+      "tag": "0007_fresh_wolf_cub",
+      "breakpoints": true
     }
   ]
 }

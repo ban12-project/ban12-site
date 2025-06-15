@@ -7,7 +7,7 @@ import { z } from 'zod'
 import {
   updateAISummarize,
   updateInvisibleById,
-  updateLatlngById,
+  updateLocationById,
   updateStatusById,
   updateYoutubeLinkById,
 } from '#/lib/db/queries'
@@ -134,19 +134,17 @@ export async function updateYoutubeLink(prevState: State, formData: FormData) {
   }
 }
 
-const latitudeLongitudeSchema = z.object({
-  lat: z.string().nonempty(),
-  lng: z.string().nonempty(),
+const locationSchema = z.object({
+  location: z.tuple([z.number(), z.number()]),
   id: z.string().nonempty(),
 })
 
-export async function updateLatitudeLongitude(
-  prevState: State,
-  formData: FormData,
-) {
-  const validatedFields = latitudeLongitudeSchema.safeParse({
-    lat: formData.get('lat'),
-    lng: formData.get('lng'),
+export async function updateLocation(prevState: State, formData: FormData) {
+  const lng = formData.get('location.0')
+  const lat = formData.get('location.1')
+
+  const validatedFields = locationSchema.safeParse({
+    location: [lng ? Number(lng) : undefined, lat ? Number(lat) : undefined],
     id: formData.get('id'),
   })
 
@@ -157,10 +155,10 @@ export async function updateLatitudeLongitude(
     }
   }
 
-  const { lat, lng, id } = validatedFields.data
+  const { location, id } = validatedFields.data
 
   try {
-    await updateLatlngById({ lat, lng, id })
+    await updateLocationById({ location, id })
   } catch {
     return {
       message: 'Failed to update youtube link.',
