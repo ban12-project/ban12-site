@@ -1,23 +1,10 @@
-'use client'
+import { getRestaurants } from '#/lib/db/queries'
 
-import { useTransition } from 'react'
-import { Button } from '@repo/ui/components/button'
+import { columns } from './columns'
+import { DataTable } from './data-table'
 
-import { videoUnderstanding } from '../actions'
+export default async function DashboardPage() {
+  const data = await getRestaurants()
 
-export default function DashboardPage() {
-  const [isPending, startTransition] = useTransition()
-
-  const handleClick = () => {
-    startTransition(async () => {
-      const text = await videoUnderstanding()
-      console.log(text)
-    })
-  }
-
-  return (
-    <Button disabled={isPending} onClick={handleClick}>
-      Dashboard
-    </Button>
-  )
+  return <DataTable columns={columns} data={data} />
 }

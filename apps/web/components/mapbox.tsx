@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  memo,
   Suspense,
   use,
   useContext,
@@ -11,7 +12,8 @@ import {
   unstable_ViewTransition as ViewTransition,
 } from 'react'
 import Script from 'next/script'
-import { cn } from '@repo/ui/lib/utils'
+import { useLocale } from '@repo/i18n/client'
+import equal from 'fast-deep-equal'
 import { LoaderCircleIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useIntersectionObserver } from 'usehooks-ts'
@@ -24,17 +26,15 @@ declare global {
   }
 }
 
-const mapboxResourcesPromise = () => {
-  return new Promise<Mapbox>((resolve) => {
-    if (window.mapboxgl) return resolve(window.mapboxgl)
+const mapboxResourcesPromise = new Promise<Mapbox>((resolve) => {
+  if (window.mapboxgl) return resolve(window.mapboxgl)
 
-    const listener = () => {
-      resolve(window.mapboxgl)
-      document.removeEventListener('mapboxloaded', listener)
-    }
-    document.addEventListener('mapboxloaded', listener)
-  })
-}
+  const listener = () => {
+    resolve(window.mapboxgl)
+    document.removeEventListener('mapboxloaded', listener)
+  }
+  document.addEventListener('mapboxloaded', listener)
+})
 
 function Loader() {
   return (
@@ -56,7 +56,7 @@ function Loader() {
 
 interface Props extends React.ComponentProps<'div'> {
   externalScript: Promise<Mapbox>
-  options?: Partial<ConstructorParameters<Mapbox['Map']>[0]>
+  options?: Partial<mapboxgl.MapOptions>
 }
 
 const MapContext = createContext<mapboxgl.Map | null>(null)
@@ -65,9 +65,14 @@ export function useMap() {
   return useContext(MapContext)
 }
 
+const fallbackOptions = {
+  center: [104.1954, 35.8617] as [number, number],
+  zoom: 9,
+} satisfies Omit<mapboxgl.MapOptions, 'container'>
+
 function MapboxImpl({
   externalScript,
-  options,
+  options = fallbackOptions,
   ref,
   children,
   ...props
@@ -78,6 +83,7 @@ function MapboxImpl({
 
   const { isIntersecting, ref: observerRef } = useIntersectionObserver()
   const { resolvedTheme } = useTheme()
+  const { locale } = useLocale()
 
   useEffect(() => {
     const container = mapContainerRef.current
@@ -90,8 +96,10 @@ function MapboxImpl({
         resolvedTheme === 'dark'
           ? 'mapbox://styles/mapbox/dark-v11'
           : 'mapbox://styles/mapbox/light-v11',
-      zoom: 9, // starting zoom
+      language: locale === 'zh-CN' ? 'zh-Hans' : locale,
       ...options,
+      center: options?.center || fallbackOptions.center,
+      zoom: options?.zoom || fallbackOptions.zoom,
     })
 
     setMap(newMap)
@@ -100,7 +108,8 @@ function MapboxImpl({
       newMap.remove()
       setMap(null)
     }
-  }, [mapboxgl, options, isIntersecting])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapboxgl, isIntersecting])
 
   useEffect(() => {
     if (!map) return
@@ -109,7 +118,10 @@ function MapboxImpl({
         ? 'mapbox://styles/mapbox/dark-v11'
         : 'mapbox://styles/mapbox/light-v11',
     )
-  }, [map, resolvedTheme])
+
+    map.setCenter(options?.center || fallbackOptions.center)
+    map.setZoom(options?.zoom || fallbackOptions.zoom)
+  }, [map, resolvedTheme, options])
 
   const mergeRefs = (el: React.ComponentRef<'div'>) => {
     if (typeof ref === 'function') ref(el)
@@ -119,11 +131,7 @@ function MapboxImpl({
   }
 
   return (
-    <div
-      {...props}
-      ref={mergeRefs}
-      // className={cn('bg-rose-300', props.className)}
-    >
+    <div {...props} ref={mergeRefs}>
       <MapContext.Provider value={map}>{children}</MapContext.Provider>
     </div>
   )
@@ -134,16 +142,21 @@ interface MarkerProps {
   lnglat: mapboxgl.LngLatLike
 }
 
-export function Marker({ lnglat, options }: MarkerProps) {
+function PureMarker({ lnglat, options }: MarkerProps) {
   const map = useMap()
 
   useEffect(() => {
     if (!map) return
 
     let marker: mapboxgl.Marker | null
-    map.once('load', () => {
+    const genMarker = () => {
       marker = new window.mapboxgl.Marker(options).setLngLat(lnglat).addTo(map)
-    })
+    }
+    if (map.loaded()) {
+      genMarker()
+    } else {
+      map.once('load', genMarker)
+    }
 
     return () => {
       marker?.remove()
@@ -152,6 +165,11 @@ export function Marker({ lnglat, options }: MarkerProps) {
 
   return null
 }
+export const Marker = memo(PureMarker, (prev, next) => {
+  if (!equal(prev.lnglat, next.lnglat)) return false
+  if (typeof prev.options !== typeof next.options) return false
+  return true
+})
 
 export default function Mapbox(props: Omit<Props, 'externalScript'>) {
   return (
@@ -167,7 +185,7 @@ export default function Mapbox(props: Omit<Props, 'externalScript'>) {
         }
       >
         <ViewTransition enter="mapbox-enter">
-          <MapboxImpl externalScript={mapboxResourcesPromise()} {...props} />
+          <MapboxImpl externalScript={mapboxResourcesPromise} {...props} />
         </ViewTransition>
       </Suspense>
     </>

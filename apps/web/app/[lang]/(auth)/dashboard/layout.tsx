@@ -24,8 +24,6 @@ type Props = Readonly<{
 export default async function DashboardLayout({ children }: Props) {
   const session = await auth()
 
-  console.log(session)
-
   return (
     <SidebarProvider>
       <AppSidebar

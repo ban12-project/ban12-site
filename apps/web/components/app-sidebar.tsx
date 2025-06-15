@@ -154,7 +154,7 @@ export function AppSidebar({ user, signOut, ...props }: React.ComponentProps<typ
 }) {
   return (
     <Sidebar variant="inset" {...props}>
-      <SidebarHeader>
+      {/* <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
@@ -170,7 +170,7 @@ export function AppSidebar({ user, signOut, ...props }: React.ComponentProps<typ
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarHeader>
+      </SidebarHeader> */}
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
