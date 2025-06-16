@@ -12,8 +12,8 @@ ogImage:
 在实践 Next.js 技术栈时，写了相当多的表单这篇文章总结一下目前来说解决掉的疑难问题
 
 实现目标：
-1. **数据验证：**在浏览器启用 javascript 的情况下浏览器执行用户输入验证，服务器（server action）再次验证；禁用 javascript 的时候使用服务器验证
-2. **提交状态：**同步验证错误信息和等待状态
+1. **数据验证：** 在浏览器启用 javascript 的情况下浏览器执行用户输入验证，服务器（server action）再次验证；禁用 javascript 的时候使用服务器验证
+2. **提交状态：** 同步验证错误信息和等待状态
 
 从 shadcn/ui 的 React Hook Form [文档](https://ui.shadcn.com/docs/components/form#usage)说起
 
