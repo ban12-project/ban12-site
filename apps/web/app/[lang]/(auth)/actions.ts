@@ -19,77 +19,79 @@ export async function videoUnderstanding({
   fileUri: string
   id: string
 }) {
-  await updateStatusById({ id, status: 'processing' })
+  try {
+    await updateStatusById({ id, status: 'processing' })
 
-  const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GEMINI_KEY })
-  const response = await ai.models.generateContent({
-    model: process.env.GOOGLE_GEMINI_MODEL!,
-    contents: [
-      {
-        fileData: {
-          fileUri,
+    const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GEMINI_KEY })
+    const response = await ai.models.generateContent({
+      model: process.env.GOOGLE_GEMINI_MODEL!,
+      contents: [
+        {
+          fileData: {
+            fileUri,
+          },
         },
-      },
-      "Based on the video description, provide the restaurant's name and restaurant's address, give a recommendation rating (out of five points) in terms of price, waiting time, dishes, and service, and offer precautions for diners visiting this place",
-    ],
-    config: {
-      responseMimeType: 'application/json',
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          restaurantName: {
-            type: Type.STRING,
-          },
-          restaurantAddress: {
-            type: Type.STRING,
-          },
-          rating: {
-            type: Type.NUMBER,
-          },
-          price: {
-            type: Type.STRING,
-          },
-          waitingTime: {
-            type: Type.STRING,
-          },
-          dishes: {
-            type: Type.STRING,
-          },
-          service: {
-            type: Type.STRING,
-          },
-          precautions: {
-            type: Type.ARRAY,
-            items: {
+        "Based on the video description, provide the restaurant's name and restaurant's address, give a recommendation rating (out of five points) in terms of price, waiting time, dishes, and service, and offer precautions for diners visiting this place",
+      ],
+      config: {
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            restaurantName: {
               type: Type.STRING,
             },
+            restaurantAddress: {
+              type: Type.STRING,
+            },
+            rating: {
+              type: Type.NUMBER,
+            },
+            price: {
+              type: Type.STRING,
+            },
+            waitingTime: {
+              type: Type.STRING,
+            },
+            dishes: {
+              type: Type.STRING,
+            },
+            service: {
+              type: Type.STRING,
+            },
+            precautions: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.STRING,
+              },
+            },
           },
+          propertyOrdering: [
+            'restaurantName',
+            'restaurantAddress',
+            'rating',
+            'price',
+            'waitingTime',
+            'dishes',
+            'service',
+            'precautions',
+          ],
         },
-        propertyOrdering: [
-          'restaurantName',
-          'restaurantAddress',
-          'rating',
-          'price',
-          'waitingTime',
-          'dishes',
-          'service',
-          'precautions',
-        ],
       },
-    },
-  })
+    })
 
-  if (!response.text) {
-    await updateStatusById({ id, status: 'failed' })
-    return
-  }
-  try {
+    if (!response.text) {
+      await updateStatusById({ id, status: 'failed' })
+      return
+    }
+
     await updateAISummarize({
       ai_summarize: JSON.parse(response.text),
       id,
     })
-  } catch {
+  } catch (error) {
     await updateStatusById({ id, status: 'failed' })
+    throw error
   }
 }
 
