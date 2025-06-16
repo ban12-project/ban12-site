@@ -197,6 +197,11 @@ export const columns: ColumnDef<SelectRestaurant>[] = [
       ),
   },
   {
+    accessorKey: 'location',
+    header: 'Location',
+    cell: ({ row }) => row.original.location?.join(', '),
+  },
+  {
     accessorKey: 'updated_at',
     header: 'Updated at',
     cell: ({ row }) =>
@@ -437,6 +442,16 @@ function LocationForm({
     setOpen(false)
   }, [form, setOpen, state])
 
+  const onPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    const text = e.clipboardData.getData('text/plain')
+    if (text.indexOf(',') === -1) return
+    const strings = text.split(',')
+    if (strings.length !== 2) return
+    const location = strings.toSorted((a, b) => Number(b) - Number(a)) as [string, string]
+    form.setValue('location', location)
+  }
+
   return (
     <Form {...form}>
       <form action={action}>
@@ -452,7 +467,7 @@ function LocationForm({
             <FormItem className="my-2">
               <FormLabel>Latitude</FormLabel>
               <FormControl>
-                <Input placeholder="latitude" {...field} />
+                <Input placeholder="latitude" {...field} onPaste={onPaste} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -466,7 +481,7 @@ function LocationForm({
             <FormItem className="my-2">
               <FormLabel>Longitude</FormLabel>
               <FormControl>
-                <Input placeholder="longitude" {...field} />
+                <Input placeholder="longitude" {...field} onPaste={onPaste} />
               </FormControl>
               <FormMessage />
             </FormItem>
