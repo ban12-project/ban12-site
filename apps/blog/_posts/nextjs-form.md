@@ -1,5 +1,5 @@
 ---
-title: 'next.js Server Actions 渐进增强表单'
+title: 'Next.js Server Actions 渐进增强表单'
 excerpt: '结合 next.js / server action / zod / react-hook-form 创建渐进增强表单'
 date: '2025-06-16T06:28:38.837Z'
 author:
@@ -12,8 +12,9 @@ ogImage:
 在实践 Next.js 技术栈时，写了相当多的表单这篇文章总结一下目前来说解决掉的疑难问题
 
 实现目标：
-1. **数据验证：** 在浏览器启用 javascript 的情况下浏览器执行用户输入验证，服务器（server action）再次验证；禁用 javascript 的时候使用服务器验证
-2. **提交状态：** 同步验证错误信息和等待状态
+
+1.  **数据验证：** 在浏览器启用 javascript 的情况下浏览器执行用户输入验证，服务器（server action）再次验证；禁用 javascript 的时候使用服务器验证
+2.  **提交状态：** 同步验证错误信息和等待状态
 
 从 shadcn/ui 的 React Hook Form [文档](https://ui.shadcn.com/docs/components/form#usage)说起
 
@@ -73,12 +74,13 @@ function MyForm() {
 ```
 
 shadcn/ui 的示例代码使用的时候发现两个问题：
+
 1. onSubmit 提交数据的时候结合 server action 不能方便的访问提交状态和服务器验证的错误信息。
 2. 在禁用 javascript 的时候，表单不会工作
 
 理想的情况下当用户点击 Submit 时候需要禁用提交按钮显示一个*加载中*的效果，提供及时反馈对用户友好，当服务器抛出错误时将有用的信息显示在用户界面上
 
-```typescript
+````typescript
 // 定义默认 ActionState
 const initialState = { message: '', errors: {} }
 
@@ -132,7 +134,7 @@ const onSubmit: React.ReactEventHandler<
     e.currentTarget?.requestSubmit();
   }}
 >
-```
+````
 
 这里的 `form.formState.isValid` 不总是实时的状态，一旦用户的输入满足验证模式的时候点击提交可能会导致表单提交需要点击两次提交按钮的情况（第一次`form.formState.isValid` 任然可能是 `false` 即使表单验证通过了，点两次提交按钮才会发起请求）。
 所以这里需要手动触发验证，验证动过后结合 requestSubmit 进行提交
