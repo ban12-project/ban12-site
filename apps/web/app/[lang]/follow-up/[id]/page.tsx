@@ -4,12 +4,19 @@ import { notFound } from 'next/navigation'
 import coordtransform from 'coordtransform'
 import { ExternalLink, Star } from 'lucide-react'
 
-import { getRestaurantById } from '#/lib/db/queries'
+import { getRestaurantById, getRestaurants } from '#/lib/db/queries'
 import { getDictionary, Locale } from '#/lib/i18n'
 import { generateMapLink } from '#/lib/map-links'
 
 type Props = {
   params: Promise<{ lang: Locale; id: string }>
+}
+
+export async function generateStaticParams() {
+  const restaurants = await getRestaurants()
+  return restaurants.map((restaurant) => ({
+    id: restaurant.id,
+  }))
 }
 
 const defaultPrecautions = ['No precautions found.']

@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 import { GoogleGenAI, Type } from '@google/genai'
 import { z } from 'zod'
 
@@ -93,6 +93,9 @@ export async function videoUnderstanding({
     await updateStatusById({ id, status: 'failed' })
     throw error
   }
+
+  revalidatePath('/dashboard')
+  revalidatePath(`/follow-up/${id}}`)
 }
 
 export type State = {
@@ -130,7 +133,8 @@ export async function updateYoutubeLink(prevState: State, formData: FormData) {
     }
   }
 
-  revalidateTag('restaurants')
+  revalidatePath('/dashboard')
+
   return {
     message: 'success',
   }
@@ -167,7 +171,9 @@ export async function updateLocation(prevState: State, formData: FormData) {
     }
   }
 
-  revalidateTag('restaurants')
+  revalidatePath('/dashboard')
+  revalidatePath(`/follow-up/${id}}`)
+
   return {
     message: 'success',
   }
@@ -200,6 +206,9 @@ export async function updateInvisible(prevState: State, formData: FormData) {
       message: 'Failed to update youtube link.',
     }
   }
+
+  revalidatePath('/dashboard')
+  revalidatePath(`/follow-up/${id}}`)
 
   return {
     message: 'success',

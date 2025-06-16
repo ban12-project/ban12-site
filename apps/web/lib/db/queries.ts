@@ -1,8 +1,7 @@
 import 'server-only'
 
 import { cache } from 'react'
-import { revalidatePath } from 'next/cache'
-import { eq } from 'drizzle-orm'
+import { and, eq, isNotNull } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/neon-http'
 
 import { restaurant, SelectRestaurant } from './schema'
@@ -12,9 +11,19 @@ if (!connectionString) throw new Error('Not valid database url')
 
 export const db = drizzle(connectionString)
 
-export const getRestaurants = cache(async () => {
+export const getRestaurants = cache(async (all = false) => {
   try {
-    const restaurants = await db.select().from(restaurant)
+    const restaurants = await db
+      .select()
+      .from(restaurant)
+      .where(
+        all
+          ? undefined
+          : and(
+              eq(restaurant.invisible, false),
+              isNotNull(restaurant.ai_summarize),
+            ),
+      )
     return restaurants
   } catch (error) {
     console.error('Failed to get restaurants from database')
@@ -38,8 +47,6 @@ export async function updateYoutubeLinkById({
     console.error('Failed to update link in database')
     throw error
   }
-
-  revalidatePath('/dashboard')
 }
 
 export async function updateStatusById({
@@ -55,8 +62,6 @@ export async function updateStatusById({
     console.error('Failed to update status in database')
     throw error
   }
-
-  revalidatePath('/dashboard')
 }
 
 export async function updateAISummarize({
@@ -72,8 +77,6 @@ export async function updateAISummarize({
     console.error('Failed to update ai_summarize in database')
     throw error
   }
-
-  revalidatePath('/dashboard')
 }
 
 export async function getRestaurantById(id: string) {
@@ -103,8 +106,6 @@ export async function updateLocationById({
     console.error('Failed to update location in database')
     throw error
   }
-
-  revalidatePath('/dashboard')
 }
 
 export async function updateInvisibleById({

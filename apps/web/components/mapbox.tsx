@@ -26,15 +26,16 @@ declare global {
   }
 }
 
-const mapboxResourcesPromise = new Promise<Mapbox>((resolve) => {
-  if (window.mapboxgl) return resolve(window.mapboxgl)
+const mapboxResourcesPromise = () =>
+  new Promise<Mapbox>((resolve) => {
+    if (window.mapboxgl) return resolve(window.mapboxgl)
 
-  const listener = () => {
-    resolve(window.mapboxgl)
-    document.removeEventListener('mapboxloaded', listener)
-  }
-  document.addEventListener('mapboxloaded', listener)
-})
+    const listener = () => {
+      resolve(window.mapboxgl)
+      document.removeEventListener('mapboxloaded', listener)
+    }
+    document.addEventListener('mapboxloaded', listener)
+  })
 
 function Loader() {
   return (
@@ -185,7 +186,7 @@ export default function Mapbox(props: Omit<Props, 'externalScript'>) {
         }
       >
         <ViewTransition enter="mapbox-enter">
-          <MapboxImpl externalScript={mapboxResourcesPromise} {...props} />
+          <MapboxImpl externalScript={mapboxResourcesPromise()} {...props} />
         </ViewTransition>
       </Suspense>
     </>

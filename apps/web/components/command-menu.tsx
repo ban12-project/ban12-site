@@ -124,19 +124,17 @@ function RenderCommandGroup({
       </CommandGroup>
       <CommandSeparator />
       <CommandGroup heading="Restaurants">
-        {data
-          .filter((item) => item.invisible === false)
-          .map((restaurant) => (
-            <CommandItem
-              key={restaurant.id}
-              onSelect={() => {
-                if (!restaurant.location) return toast.info('No found location')
-                go(...restaurant.location)
-              }}
-            >
-              <span>{restaurant.title}</span>
-            </CommandItem>
-          ))}
+        {data.map((restaurant) => (
+          <CommandItem
+            key={restaurant.id}
+            onSelect={() => {
+              if (!restaurant.location) return toast.info('No found location')
+              go(...restaurant.location)
+            }}
+          >
+            <span>{restaurant.title}</span>
+          </CommandItem>
+        ))}
       </CommandGroup>
     </>
   )
