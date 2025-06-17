@@ -55,3 +55,4 @@ catalog:
   'drizzle-orm': '^0.44.2'
   'dotenv': '^16.5.0'
   'vaul': '^1.1.2'
+  '@upstash/redis': '^1.35.0'

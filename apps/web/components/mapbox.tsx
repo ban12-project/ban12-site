@@ -168,7 +168,7 @@ function PureMarker({ lnglat, options }: MarkerProps) {
 }
 export const Marker = memo(PureMarker, (prev, next) => {
   if (!equal(prev.lnglat, next.lnglat)) return false
-  if (typeof prev.options !== typeof next.options) return false
+  if (!equal(prev.options, next.options)) return false
   return true
 })
 

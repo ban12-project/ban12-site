@@ -33,6 +33,7 @@
     "@simplewebauthn/browser": "catalog:",
     "@simplewebauthn/server": "catalog:",
     "@tanstack/react-table": "^8.21.3",
+    "@upstash/redis": "catalog:",
     "coordtransform": "^2.1.2",
     "dotenv": "catalog:",
     "drizzle-orm": "catalog:",

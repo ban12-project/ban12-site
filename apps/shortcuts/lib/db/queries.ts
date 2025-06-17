@@ -1,7 +1,7 @@
 import 'server-only'
 
 import { cache } from 'react'
-import { kv } from '@vercel/kv'
+import { Redis } from '@upstash/redis'
 import { eq, or, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/postgres-js'
 
@@ -13,6 +13,8 @@ import {
   type LocalizedString,
   type SelectShortcut,
 } from './schema'
+
+const redis = Redis.fromEnv()
 
 const connectionString = process.env.DATABASE_URL
 if (!connectionString) throw new Error('Not valid database url')
@@ -80,9 +82,9 @@ export async function saveShortcut({
       albumId,
     })
 
-    await kv.del(`shortcut:uuid:${uuid}`)
+    await redis.del(`shortcut:uuid:${uuid}`)
     if (albumId) {
-      await kv.del(`shortcuts:album:${albumId}:*`)
+      await redis.del(`shortcuts:album:${albumId}:*`)
     }
   } catch (error) {
     console.error('Failed to save shortcut in database')
@@ -131,9 +133,9 @@ export async function updateShortcutByUuid({
       })
       .where(eq(shortcut.uuid, uuid))
 
-    await kv.del(`shortcut:uuid:${uuid}`)
+    await redis.del(`shortcut:uuid:${uuid}`)
     if (albumId) {
-      await kv.del(`shortcuts:album:${albumId}:*`)
+      await redis.del(`shortcuts:album:${albumId}:*`)
     }
   } catch (error) {
     console.error('Failed to update shortcut in database')
@@ -145,7 +147,7 @@ export async function deleteShortcutByUuid(uuid: string) {
   try {
     await db.delete(shortcut).where(eq(shortcut.uuid, uuid))
 
-    await kv.del(`shortcut:uuid:${uuid}`)
+    await redis.del(`shortcut:uuid:${uuid}`)
   } catch (error) {
     console.error('Failed to delete shortcut in database')
     throw error
@@ -166,7 +168,7 @@ export const getShortcutByUuid = cache(async (uuid: string) => {
   const cacheKey = `shortcut:uuid:${uuid}`
 
   try {
-    const cachedShortcut = await kv.get<SelectShortcut>(cacheKey)
+    const cachedShortcut = await redis.get<SelectShortcut>(cacheKey)
     if (cachedShortcut) return cachedShortcut
 
     const shortcut = await db.query.shortcut.findFirst({
@@ -174,7 +176,7 @@ export const getShortcutByUuid = cache(async (uuid: string) => {
     })
 
     if (shortcut) {
-      await kv.set(cacheKey, shortcut, { ex: CACHE_TTL.SHORTCUT })
+      await redis.set(cacheKey, shortcut, { ex: CACHE_TTL.SHORTCUT })
     }
 
     return shortcut
@@ -189,7 +191,7 @@ export const getShortcutByAlbumId = cache(
     const cacheKey = `shortcuts:album:${albumId}:page:${currentPage}:size:${pageSize}`
 
     try {
-      const cachedShortcuts = await kv.get<SelectShortcut[]>(cacheKey)
+      const cachedShortcuts = await redis.get<SelectShortcut[]>(cacheKey)
       if (cachedShortcuts) {
         return cachedShortcuts
       }
@@ -202,7 +204,9 @@ export const getShortcutByAlbumId = cache(
       })
 
       if (shortcuts.length > 0) {
-        await kv.set(cacheKey, shortcuts, { ex: CACHE_TTL.SHORTCUTS_BY_ALBUM })
+        await redis.set(cacheKey, shortcuts, {
+          ex: CACHE_TTL.SHORTCUTS_BY_ALBUM,
+        })
       }
 
       return shortcuts
@@ -217,7 +221,7 @@ export async function searchShortcutsByQuery(query: string) {
   const cacheKey = `search:${query}`
 
   try {
-    const cachedResults = await kv.get<SelectShortcut[]>(cacheKey)
+    const cachedResults = await redis.get<SelectShortcut[]>(cacheKey)
     if (cachedResults) {
       return cachedResults
     }
@@ -233,7 +237,7 @@ export async function searchShortcutsByQuery(query: string) {
       )
 
     if (shortcuts.length > 0) {
-      await kv.set(cacheKey, shortcuts, { ex: CACHE_TTL.SEARCH })
+      await redis.set(cacheKey, shortcuts, { ex: CACHE_TTL.SEARCH })
     }
 
     return shortcuts

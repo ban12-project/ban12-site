@@ -30,7 +30,7 @@
     "@sentry/nextjs": "catalog:",
     "@simplewebauthn/browser": "catalog:",
     "@simplewebauthn/server": "catalog:",
-    "@vercel/kv": "^3.0.0",
+    "@upstash/redis": "catalog:",
     "dotenv": "catalog:",
     "drizzle-orm": "catalog:",
     "gsap": "catalog:",
