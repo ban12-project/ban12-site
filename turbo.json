@@ -38,7 +38,9 @@
         "DATABASE_URL",
         "GOOGLE_GEMINI_KEY",
         "GOOGLE_GEMINI_MODEL",
-        "AUTH_SECRET"
+        "AUTH_SECRET",
+        "UPSTASH_REDIS_REST_URL",
+        "UPSTASH_REDIS_REST_TOKEN"
       ],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
