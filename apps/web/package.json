@@ -54,6 +54,7 @@
     "three-stdlib": "^2.35.14",
     "tunnel-rat": "^0.1.2",
     "usehooks-ts": "catalog:",
+    "vaul": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

@@ -141,9 +141,10 @@ function MapboxImpl({
 interface MarkerProps {
   options?: Partial<ConstructorParameters<Mapbox['Marker']>[0]>
   lnglat: mapboxgl.LngLatLike
+  onClick?: () => void
 }
 
-function PureMarker({ lnglat, options }: MarkerProps) {
+function PureMarker({ lnglat, options, onClick }: MarkerProps) {
   const map = useMap()
 
   useEffect(() => {
@@ -152,6 +153,9 @@ function PureMarker({ lnglat, options }: MarkerProps) {
     let marker: mapboxgl.Marker | null
     const genMarker = () => {
       marker = new window.mapboxgl.Marker(options).setLngLat(lnglat).addTo(map)
+      if (typeof onClick === 'function') {
+        marker.getElement().addEventListener('click', onClick)
+      }
     }
     if (map.loaded()) {
       genMarker()
@@ -161,6 +165,7 @@ function PureMarker({ lnglat, options }: MarkerProps) {
 
     return () => {
       marker?.remove()
+      if (onClick) marker?.getElement().removeEventListener('click', onClick)
     }
   }, [lnglat, map, options])
 

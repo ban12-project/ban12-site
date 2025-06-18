@@ -4,6 +4,7 @@ import { Suspense, use, useEffect, useState, useTransition } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@repo/ui/components/button'
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -13,8 +14,10 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from '@repo/ui/components/command'
-import { LoaderCircleIcon, MapPin } from 'lucide-react'
+import { LoaderCircleIcon, MapPin, SearchIcon } from 'lucide-react'
 import { toast } from 'sonner'
+import { useMediaQuery } from 'usehooks-ts'
+import { Drawer } from 'vaul'
 
 import type { SelectRestaurant } from '#/lib/db/schema'
 
@@ -39,9 +42,12 @@ export function CommandMenu(props: Props) {
 
   return (
     <>
+      <button className="md:hidden" onClick={() => setOpen(true)}>
+        <SearchIcon />
+      </button>
       <Button
         variant="outline"
-        className="top-safe-max-4 right-safe-max-4 bg-muted/80 text-muted-foreground absolute h-8 w-full justify-start rounded-[0.5rem] text-sm font-normal shadow-none saturate-[180%] backdrop-blur-[20px] backdrop-filter sm:pr-12 md:w-40 lg:w-56 xl:w-64"
+        className="bg-muted/80 text-muted-foreground hidden h-8 w-full justify-start rounded-[0.5rem] text-sm font-normal shadow-none saturate-[180%] backdrop-blur-[20px] backdrop-filter sm:pr-12 md:inline-flex md:w-40 lg:w-56 xl:w-64"
         onClick={() => setOpen(true)}
       >
         <span className="hidden lg:inline-flex">Search address...</span>
@@ -50,7 +56,7 @@ export function CommandMenu(props: Props) {
           <span className="text-xs">⌘</span>K
         </kbd>
       </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <ResponsiveDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
@@ -58,7 +64,7 @@ export function CommandMenu(props: Props) {
             <RenderCommandGroup {...props} closeMenu={() => setOpen(false)} />
           </Suspense>
         </CommandList>
-      </CommandDialog>
+      </ResponsiveDialog>
     </>
   )
 }
@@ -137,5 +143,32 @@ function RenderCommandGroup({
         ))}
       </CommandGroup>
     </>
+  )
+}
+
+function ResponsiveDialog({
+  children,
+  ...props
+}: { children: React.ReactNode } & (
+  | React.ComponentProps<typeof CommandDialog>
+  | React.ComponentProps<typeof Drawer.Root>
+)) {
+  const isDesktop = useMediaQuery('(min-width: 768px)')
+
+  if (isDesktop) return <CommandDialog {...props}>{children}</CommandDialog>
+
+  return (
+    <Drawer.Root {...props}>
+      <Drawer.Portal>
+        <Drawer.Overlay className="fixed inset-0 bg-black/40" />
+        <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex h-[80vh] flex-col rounded-t-[10px] outline-none">
+          <Drawer.Title className="sr-only"></Drawer.Title>
+          <Drawer.Description className="sr-only"></Drawer.Description>
+          <Command className="[&_[cmdk-group-heading]]:text-muted-foreground **:data-[slot=command-input-wrapper]:h-12 rounded-none [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
+            {children}
+          </Command>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
   )
 }

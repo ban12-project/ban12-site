@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
+import { Link } from '@repo/i18n/client'
 import coordtransform from 'coordtransform'
 import { ExternalLink, Star } from 'lucide-react'
 
@@ -193,6 +194,8 @@ export default async function Page({ params }: Props) {
           </ul>
         </section>
       </div>
+
+      <Link className="py-2 inline-block" href="/follow-up">See more restaurants</Link>
 
       <script
         type="application/ld+json"

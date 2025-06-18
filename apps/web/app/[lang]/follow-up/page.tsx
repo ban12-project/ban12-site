@@ -41,18 +41,24 @@ export default async function FollowUp(props: Props) {
   const restaurants = getRestaurants()
 
   return (
-    <main className="relative">
-      <MapboxClientOnly
-        className="min-h-screen"
-        options={{
-          center: location || locationFromHeader,
-        }}
-      >
-        <Suspense>
-          <RenderMarker restaurants={restaurants} />
-        </Suspense>
-      </MapboxClientOnly>
-      <CommandMenu restaurants={restaurants} />
-    </main>
+    <>
+      <header className="p-safe-max-4 fixed z-10 flex w-full">
+        <div className="ml-auto">
+          <CommandMenu restaurants={restaurants} />
+        </div>
+      </header>
+      <main className="relative">
+        <MapboxClientOnly
+          className="min-h-screen"
+          options={{
+            center: location || locationFromHeader,
+          }}
+        >
+          <Suspense>
+            <RenderMarker restaurants={restaurants} />
+          </Suspense>
+        </MapboxClientOnly>
+      </main>
+    </>
   )
 }
