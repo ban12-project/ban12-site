@@ -96,6 +96,7 @@ export const columns: ColumnDef<SelectRestaurant>[] = [
       new Date(+row.original.created.toString().padEnd(13, '0')).toLocaleString(
         undefined,
         {
+          timeZone: 'Asia/Shanghai',
           year: 'numeric',
           month: 'numeric', // Or '2-digit' for MM
           day: 'numeric', // Or '2-digit' for DD
