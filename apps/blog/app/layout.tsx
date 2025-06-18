@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import Lenis from '@repo/ui/components/lenis'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { ThemeProvider } from 'next-themes'
 
 import { CMS_NAME, HOME_OG_IMAGE_URL } from '#/lib/constants'
 import Footer from '#/components/footer'
@@ -52,15 +53,22 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="zh-CN" className="system">
+    <html lang="zh-CN">
       <body
         className={cn(
           inter.className,
           'max-w-screen min-h-screen overflow-x-hidden',
         )}
       >
-        {children}
-        <Footer />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Footer />
+        </ThemeProvider>
         <Lenis root />
         <Analytics />
         <SpeedInsights />

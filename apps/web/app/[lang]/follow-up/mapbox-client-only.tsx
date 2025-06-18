@@ -7,7 +7,7 @@ const Mapbox = dynamic(() => import('#/components/mapbox'), {
   ssr: false,
 })
 
-export default function MapboxClientWrapper(
+export default function MapboxClientOnly(
   props: React.ComponentProps<typeof Mapbox>,
 ) {
   preload('https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css', {

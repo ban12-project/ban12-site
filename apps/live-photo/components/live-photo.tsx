@@ -8,6 +8,7 @@ import {
   useRef,
   unstable_ViewTransition as ViewTransition,
 } from 'react'
+import Script from 'next/script'
 import { Button } from '@repo/ui/components/button'
 import {
   Tooltip,
@@ -22,19 +23,50 @@ import { toast } from 'sonner'
 
 import type { Messages } from '#/lib/i18n'
 
-import { livePhotosKitModulePromise } from './live-photos-kit'
+type LivePhotosKit = typeof import('livephotoskit')
+
+declare global {
+  interface Window {
+    LivePhotosKit: LivePhotosKit
+  }
+}
 
 interface LivePhotoProps extends Omit<React.ComponentProps<'div'>, 'ref'> {
   ref?: React.Ref<Player>
   playerProps?: Partial<PlayerProps>
   messages: Messages
+  externalScript: Promise<LivePhotosKit>
+}
+
+export const livePhotosKitResourcesPromise = () =>
+  new Promise<LivePhotosKit>((resolve) => {
+    if (window.LivePhotosKit) resolve(window.LivePhotosKit)
+
+    const listener = () => {
+      resolve(window.LivePhotosKit)
+      document.removeEventListener('livephotoskitloaded', listener)
+    }
+
+    // https://developer.apple.com/documentation/livephotoskitjs/livephotoskit/livephotoskit_loaded
+    document.addEventListener('livephotoskitloaded', listener)
+  })
+
+export function Loader() {
+  return (
+    <Script
+      id="apple-livephotoskit"
+      strategy="afterInteractive"
+      src="https://cdn.apple-livephotoskit.com/lpk/1/livephotoskit.js"
+      crossOrigin="anonymous"
+    />
+  )
 }
 
 export default function WithSuspense({
   className,
   messages,
   ...props
-}: LivePhotoProps) {
+}: Omit<LivePhotoProps, 'externalScript'>) {
   const onClick = async () => {
     const files = await Promise.all([
       (async () => {
@@ -69,19 +101,32 @@ export default function WithSuspense({
   }
 
   return (
-    <div className={cn(className, 'relative [&>*]:data-[load-progress="1"]:[&+*]:visible')}>
-      <Suspense>
-        <LivePhoto {...props} className="h-full">
-          <LoaderCircleIcon className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin" />
-        </LivePhoto>
-      </Suspense>
-
+    <div
+      className={cn(
+        className,
+        'relative [&>*]:data-[load-progress="1"]:[&+*]:visible',
+      )}
+    >
+      <Loader />
+      <ViewTransition>
+        <Suspense
+          fallback={
+            <LoaderCircleIcon className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin" />
+          }
+        >
+          <LivePhoto
+            externalScript={livePhotosKitResourcesPromise()}
+            {...props}
+            className="h-full"
+          />
+        </Suspense>
+      </ViewTransition>
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               variant="link"
-              className="absolute bottom-0 right-0 z-[4] invisible"
+              className="invisible absolute bottom-0 right-0 z-[4]"
               onClick={onClick}
             >
               <DownloadIcon />
@@ -100,14 +145,15 @@ export default function WithSuspense({
 
 function LivePhoto({
   playerProps,
+  externalScript,
   ...props
 }: Omit<LivePhotoProps, 'messages'>) {
-  const LivePhotosKit = use(livePhotosKitModulePromise)
+  const LivePhotosKit = use(externalScript)
   const container = useRef<React.ComponentRef<'div'>>(null)
   const player = useRef<Player>(null)
 
   useEffect(() => {
-    if (!LivePhotosKit || !container.current) return
+    if (!container.current) return
 
     player.current = LivePhotosKit.augmentElementAsPlayer(
       container.current,

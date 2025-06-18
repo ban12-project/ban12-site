@@ -1,8 +1,6 @@
-import { unstable_ViewTransition as ViewTransition } from 'react'
-import { Link } from '@repo/i18n/client'
-
 import { getDictionary, Locale } from '#/lib/i18n'
-import LivePhoto from '#/components/live-photo'
+import Form from '#/components/form'
+import LivePhotoClientOnly from '#/components/live-photo-client-only'
 import { Search } from '#/components/search'
 
 type HomePageProps = {
@@ -16,7 +14,7 @@ export default async function Home(props: HomePageProps) {
   return (
     <>
       <Search />
-      <LivePhoto
+      <LivePhotoClientOnly
         messages={messages}
         className="aspect-[3/4] max-w-[540px]"
         playerProps={{
@@ -26,6 +24,7 @@ export default async function Home(props: HomePageProps) {
             'https://assets.ban12.com/18bba191-e1e5-4a81-84bf-d464840e2d52.mov',
         }}
       />
+      <Form />
     </>
   )
 }

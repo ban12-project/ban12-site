@@ -16,6 +16,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "gray-matter": "^4.0.3",
     "next": "catalog:",
+    "next-themes": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "rehype-highlight": "^7.0.0",

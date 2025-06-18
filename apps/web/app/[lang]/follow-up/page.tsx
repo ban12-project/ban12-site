@@ -5,7 +5,7 @@ import { getRestaurants } from '#/lib/db/queries'
 import { getDictionary, type Locale } from '#/lib/i18n'
 import { CommandMenu } from '#/components/command-menu'
 
-import MapboxClientWrapper from './mapbox-client-wrapper'
+import MapboxClientOnly from './mapbox-client-only'
 import RenderMarker from './render-marker'
 
 type Props = Readonly<{
@@ -42,7 +42,7 @@ export default async function FollowUp(props: Props) {
 
   return (
     <main className="relative">
-      <MapboxClientWrapper
+      <MapboxClientOnly
         className="min-h-screen"
         options={{
           center: location || locationFromHeader,
@@ -51,7 +51,7 @@ export default async function FollowUp(props: Props) {
         <Suspense>
           <RenderMarker restaurants={restaurants} />
         </Suspense>
-      </MapboxClientWrapper>
+      </MapboxClientOnly>
       <CommandMenu restaurants={restaurants} />
     </main>
   )

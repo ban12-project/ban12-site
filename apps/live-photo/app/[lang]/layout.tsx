@@ -7,7 +7,6 @@ import { Toaster } from '@repo/ui/components/sonner'
 import { ThemeProvider } from 'next-themes'
 
 import { getDictionary, i18n, type Locale } from '#/lib/i18n'
-import { LivePhotosKitLoader } from '#/components/live-photos-kit'
 
 type RootLayoutProps = Readonly<{
   children: React.ReactNode
@@ -30,29 +29,29 @@ export async function generateMetadata({
       ),
     },
     openGraph: {
-    images: 'https://ban12.com/api/og',
-  },
-  icons: {
-    icon: {
-      url: 'https://ban12.com/api/og?w=48&h=48&bg=transparent',
-      type: 'image/png',
+      images: 'https://ban12.com/api/og',
     },
-    shortcut: {
-      url: 'https://ban12.com/api/og?w=192&h=192&bg=transparent',
-      type: 'image/png',
-    },
-    apple: [
-      {
-        url: 'https://ban12.com/api/og?w=64&h=64&bg=transparent',
+    icons: {
+      icon: {
+        url: 'https://ban12.com/api/og?w=48&h=48&bg=transparent',
         type: 'image/png',
       },
-      {
-        url: 'https://ban12.com/api/og?w=180&h=180&bg=transparent',
-        sizes: '180x180',
+      shortcut: {
+        url: 'https://ban12.com/api/og?w=192&h=192&bg=transparent',
         type: 'image/png',
       },
-    ],
-  },
+      apple: [
+        {
+          url: 'https://ban12.com/api/og?w=64&h=64&bg=transparent',
+          type: 'image/png',
+        },
+        {
+          url: 'https://ban12.com/api/og?w=180&h=180&bg=transparent',
+          sizes: '180x180',
+          type: 'image/png',
+        },
+      ],
+    },
   }
 }
 
@@ -82,7 +81,6 @@ export default async function RootLayout({
 
         <Toaster />
         <Lenis root gsap scrollTrigger />
-        <LivePhotosKitLoader />
       </body>
     </html>
   )
