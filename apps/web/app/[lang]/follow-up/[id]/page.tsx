@@ -154,7 +154,7 @@ export default async function Page({ params, searchParams }: Props) {
               </>
             )}
           </div>
-          <div className="mt-2 flex space-x-4">
+          <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
             <span className="rounded-2xl bg-gray-100 px-3 py-1 text-sm text-gray-700 dark:bg-gray-700 dark:text-gray-300">
               Price: {restaurant.ai_summarize.price || 'N/A'}
             </span>
