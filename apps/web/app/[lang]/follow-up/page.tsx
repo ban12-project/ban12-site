@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { Metadata, Viewport } from 'next'
 import { headers } from 'next/headers'
 
 import { getRestaurants } from '#/lib/db/queries'
@@ -15,7 +16,18 @@ type Props = Readonly<{
   }>
 }>
 
-export default async function FollowUp(props: Props) {
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#292929' },
+    { media: '(prefers-color-scheme: light)', color: '#fcfcfd' },
+  ],
+}
+
+export const metadata: Metadata = {
+  title: 'Follow up'
+}
+
+export default async function FollowUpPage(props: Props) {
   const [{ lang }, searchParams] = await Promise.all([
     props.params,
     props.searchParams,
