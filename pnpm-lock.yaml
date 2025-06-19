@@ -10,8 +10,8 @@ catalogs:
       specifier: ^1.9.1
       version: 1.9.1
     '@google/genai':
-      specifier: ^1.4.0
-      version: 1.4.0
+      specifier: ^1.5.1
+      version: 1.5.1
     '@gsap/react':
       specifier: ^2.1.2
       version: 2.1.2
@@ -327,7 +327,7 @@ importers:
         version: 3.717.0
       '@google/genai':
         specifier: 'catalog:'
-        version: 1.4.0(@modelcontextprotocol/sdk@1.12.1)(bufferutil@4.0.8)
+        version: 1.5.1(@modelcontextprotocol/sdk@1.12.1)(bufferutil@4.0.8)
       '@gsap/react':
         specifier: 'catalog:'
         version: 2.1.2(gsap@3.13.0)(react@19.1.0)
@@ -587,7 +587,7 @@ importers:
         version: 1.9.1(@simplewebauthn/browser@9.0.1)(@simplewebauthn/server@9.0.3)
       '@google/genai':
         specifier: 'catalog:'
-        version: 1.4.0(@modelcontextprotocol/sdk@1.12.1)(bufferutil@4.0.8)
+        version: 1.5.1(@modelcontextprotocol/sdk@1.12.1)(bufferutil@4.0.8)
       '@gsap/react':
         specifier: 'catalog:'
         version: 2.1.2(gsap@3.13.0)(react@19.1.0)
@@ -2619,11 +2619,14 @@ packages:
   '@formatjs/intl-localematcher@0.6.1':
     resolution: {integrity: sha512-ePEgLgVCqi2BBFnTMWPfIghu6FkbZnnBVhO2sSxvLfrdFw7wCHAHiDoM2h4NRgjbaY7+B7HgOLZGkK187pZTZg==}
 
-  '@google/genai@1.4.0':
-    resolution: {integrity: sha512-u9LQZbWBhqaaLelCcYsxMNDTeW12jzNwGkI/eqUeMG/iB1gJBu56LCxrFJ/hkHeZQgPg+j1pckBLZS/dnOh+Bw==}
+  '@google/genai@1.5.1':
+    resolution: {integrity: sha512-9SKpNo5iqvB622lN3tSCbeuiLGTcStRd+3muOrI9pZMpzfLDc/xC7dWIJd5kK+4AZuY28nsvQmCZe0fPj3JUew==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       '@modelcontextprotocol/sdk': ^1.11.0
+    peerDependenciesMeta:
+      '@modelcontextprotocol/sdk':
+        optional: true
 
   '@gsap/react@2.1.2':
     resolution: {integrity: sha512-JqliybO1837UcgH2hVOM4VO+38APk3ECNrsuSM4MuXp+rbf+/2IG2K1YJiqfTcXQHH7XlA0m3ykniFYstfq0Iw==}
@@ -12016,13 +12019,14 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@google/genai@1.4.0(@modelcontextprotocol/sdk@1.12.1)(bufferutil@4.0.8)':
+  '@google/genai@1.5.1(@modelcontextprotocol/sdk@1.12.1)(bufferutil@4.0.8)':
     dependencies:
-      '@modelcontextprotocol/sdk': 1.12.1
       google-auth-library: 9.15.1
       ws: 8.18.0(bufferutil@4.0.8)
-      zod: 3.25.23
-      zod-to-json-schema: 3.24.5(zod@3.25.23)
+      zod: 3.25.57
+      zod-to-json-schema: 3.24.5(zod@3.25.57)
+    optionalDependencies:
+      '@modelcontextprotocol/sdk': 1.12.1
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -12293,6 +12297,7 @@ snapshots:
       zod-to-json-schema: 3.24.5(zod@3.25.57)
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@monogrid/gainmap-js@3.1.0(three@0.173.0)':
     dependencies:
@@ -15587,6 +15592,7 @@ snapshots:
     dependencies:
       object-assign: 4.1.1
       vary: 1.1.2
+    optional: true
 
   cosmiconfig@8.3.6(typescript@5.8.3):
     dependencies:
@@ -16143,11 +16149,13 @@ snapshots:
 
   events@3.3.0: {}
 
-  eventsource-parser@3.0.2: {}
+  eventsource-parser@3.0.2:
+    optional: true
 
   eventsource@3.0.7:
     dependencies:
       eventsource-parser: 3.0.2
+    optional: true
 
   execa@5.1.1:
     dependencies:
@@ -16166,6 +16174,7 @@ snapshots:
   express-rate-limit@7.5.0(express@5.1.0):
     dependencies:
       express: 5.1.0
+    optional: true
 
   express@5.0.1:
     dependencies:
@@ -16235,6 +16244,7 @@ snapshots:
       vary: 1.1.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   exsolve@1.0.5: {}
 
@@ -17940,7 +17950,8 @@ snapshots:
 
   pidtree@0.6.0: {}
 
-  pkce-challenge@5.0.0: {}
+  pkce-challenge@5.0.0:
+    optional: true
 
   possible-typed-array-names@1.0.0: {}
 
@@ -18640,7 +18651,8 @@ snapshots:
 
   statuses@2.0.1: {}
 
-  statuses@2.0.2: {}
+  statuses@2.0.2:
+    optional: true
 
   stoppable@1.1.0: {}
 
@@ -19367,10 +19379,6 @@ snapshots:
       cookie: 0.7.2
       mustache: 4.2.0
       stacktracey: 2.1.8
-
-  zod-to-json-schema@3.24.5(zod@3.25.23):
-    dependencies:
-      zod: 3.25.23
 
   zod-to-json-schema@3.24.5(zod@3.25.57):
     dependencies:
