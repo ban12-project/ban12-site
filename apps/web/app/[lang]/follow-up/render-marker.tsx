@@ -25,7 +25,7 @@ export default function RenderMarker({
         key={id}
         lnglat={lnglat}
         onClick={() => {
-          router.push(`/follow-up/${id}`)
+          router.push(`/follow-up/${id}?drawer=1`)
         }}
       />
     )

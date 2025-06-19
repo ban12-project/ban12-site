@@ -14,9 +14,9 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from '@repo/ui/components/command'
+import { useMediaQuery } from '@repo/ui/hooks/use-media-query'
 import { LoaderCircleIcon, MapPin, SearchIcon } from 'lucide-react'
 import { toast } from 'sonner'
-import { useMediaQuery } from 'usehooks-ts'
 import { Drawer } from 'vaul'
 
 import type { SelectRestaurant } from '#/lib/db/schema'
@@ -164,7 +164,7 @@ function ResponsiveDialog({
         <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex h-[80vh] flex-col rounded-t-[10px] outline-none">
           <Drawer.Title className="sr-only"></Drawer.Title>
           <Drawer.Description className="sr-only"></Drawer.Description>
-          <Command className="[&_[cmdk-group-heading]]:text-muted-foreground **:data-[slot=command-input-wrapper]:h-12 rounded-none [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
+          <Command className="[&_[cmdk-group-heading]]:text-muted-foreground **:data-[slot=command-input-wrapper]:h-12 rounded-none [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5 [&>[cmdk-list]]:max-h-none [&>[cmdk-list]]:pb-safe-max-4">
             {children}
           </Command>
         </Drawer.Content>

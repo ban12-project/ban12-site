@@ -11,6 +11,7 @@ import { generateMapLink } from '#/lib/map-links'
 
 type Props = {
   params: Promise<{ lang: Locale; id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export async function generateStaticParams() {
@@ -23,8 +24,8 @@ export async function generateStaticParams() {
 const defaultPrecautions = ['No precautions found.']
 const defaultDishes = 'No dishes information available.'
 
-export default async function Page({ params }: Props) {
-  const { id, lang } = await params
+export default async function Page({ params, searchParams }: Props) {
+  const [{ id, lang }, { drawer }] = await Promise.all([params, searchParams])
   const [restaurant, messages, headersList] = await Promise.all([
     getRestaurantById(id),
     getDictionary(lang),
@@ -195,7 +196,11 @@ export default async function Page({ params }: Props) {
         </section>
       </div>
 
-      <Link className="py-2 inline-block" href="/follow-up">See more restaurants</Link>
+      {drawer || (
+        <Link className="inline-block py-2" href="/follow-up">
+          See more restaurants
+        </Link>
+      )}
 
       <script
         type="application/ld+json"
