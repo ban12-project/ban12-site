@@ -82,7 +82,7 @@ export async function videoUnderstanding({
 
     if (!response.text) {
       await updateStatusById({ id, status: 'failed' })
-      return
+      throw new Error('No response text')
     }
 
     await updateAISummarize({
