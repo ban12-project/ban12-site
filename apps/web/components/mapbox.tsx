@@ -16,6 +16,7 @@ import { useLocale } from '@repo/i18n/client'
 import equal from 'fast-deep-equal'
 import { LoaderCircleIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { createPortal } from 'react-dom'
 import { useIntersectionObserver } from 'usehooks-ts'
 
 type Mapbox = typeof import('mapbox-gl').default
@@ -141,21 +142,21 @@ function MapboxImpl({
 interface MarkerProps {
   options?: Partial<ConstructorParameters<Mapbox['Marker']>[0]>
   lnglat: mapboxgl.LngLatLike
-  onClick?: () => void
+  container?: (innerHTML: string) => React.ReactNode
 }
 
-function PureMarker({ lnglat, options, onClick }: MarkerProps) {
+function PureMarker({ lnglat, options, container }: MarkerProps) {
   const map = useMap()
+  const [marker, setMarker] = useState<mapboxgl.Marker | null>(null)
 
   useEffect(() => {
     if (!map) return
 
-    let marker: mapboxgl.Marker | null
     const genMarker = () => {
-      marker = new window.mapboxgl.Marker(options).setLngLat(lnglat).addTo(map)
-      if (typeof onClick === 'function') {
-        marker.getElement().addEventListener('click', onClick)
-      }
+      const marker = new window.mapboxgl.Marker(options)
+        .setLngLat(lnglat)
+        .addTo(map)
+      setMarker(marker)
     }
     if (map.loaded()) {
       genMarker()
@@ -164,12 +165,18 @@ function PureMarker({ lnglat, options, onClick }: MarkerProps) {
     }
 
     return () => {
+      setMarker(null)
       marker?.remove()
-      if (onClick) marker?.getElement().removeEventListener('click', onClick)
     }
   }, [lnglat, map, options])
 
-  return null
+  if (!container) return null
+  if (!marker) return null
+
+  const portalContainer = marker.getElement()
+  const innerHTML = portalContainer.innerHTML
+  portalContainer.innerHTML = ''
+  return createPortal(container(innerHTML), portalContainer)
 }
 export const Marker = memo(PureMarker, (prev, next) => {
   if (!equal(prev.lnglat, next.lnglat)) return false

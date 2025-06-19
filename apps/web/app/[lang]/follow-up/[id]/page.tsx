@@ -196,7 +196,7 @@ export default async function Page({ params, searchParams }: Props) {
         </section>
       </div>
 
-      {drawer || (
+      {drawer ? null : (
         <Link className="inline-block py-2" href="/follow-up">
           See more restaurants
         </Link>
