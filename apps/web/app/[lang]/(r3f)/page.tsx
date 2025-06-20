@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 
 import { getDictionary, type Locale } from '#/lib/i18n'
+import HomeHeader from '#/components/home-header'
 
 const View = dynamic(
   () =>
@@ -47,19 +48,15 @@ export default async function Home(props: Props) {
   const messages = await getDictionary(params.lang)
 
   return (
-    <main className="relative h-screen w-screen">
-      <View className="absolute h-full w-full">
-        <Suspense fallback={null}>
-          <Voxel />
-        </Suspense>
-      </View>
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-5 text-center">
-        <nav className="uppercase [&>a]:ml-2">
-          <a href="https://shortcuts.ban12.com">shortcuts</a>
-          <a href="https://blog.ban12.com">blog</a>
-          <a href="https://toys.ban12.com">toys</a>
-        </nav>
-      </div>
-    </main>
+    <>
+      <HomeHeader />
+      <main className="relative h-[calc(100dvh-calc(var(--spacing)*16))] w-screen">
+        <View className="absolute h-full w-full">
+          <Suspense fallback={null}>
+            <Voxel />
+          </Suspense>
+        </View>
+      </main>
+    </>
   )
 }

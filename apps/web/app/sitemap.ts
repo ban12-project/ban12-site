@@ -3,12 +3,10 @@ import type { MetadataRoute } from 'next'
 import { getRestaurants } from '#/lib/db/queries'
 import { i18n } from '#/lib/i18n'
 
-export const dynamic = 'force-dynamic'
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const locales = Object.keys(i18n.locales)
 
-  const routesMap: MetadataRoute.Sitemap = [''].map((route) => ({
+  const routesMap: MetadataRoute.Sitemap = ['', '/follow-up'].map((route) => ({
     url: `${process.env.NEXT_PUBLIC_HOST_URL}${route}`,
     lastModified: new Date(),
     alternates: {
