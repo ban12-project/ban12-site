@@ -1,12 +1,21 @@
 {
   "version": "0.2.0",
+  "inputs": [
+    {
+      "id": "app",
+      "type": "pickString",
+      "description": "Select the app to debug",
+      "options": ["apps/web", "apps/shortcuts", "apps/toys"],
+      "default": "apps/web"
+    }
+  ],
   "configurations": [
     {
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",
       "command": "pnpm dev",
-      "cwd": "${workspaceFolder}/apps/shortcuts"
+      "cwd": "${workspaceFolder}/${input:app}"
     },
     {
       "name": "Next.js: debug client-side",
@@ -18,7 +27,7 @@
       "name": "Next.js: debug full stack",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/node_modules/.bin/next",
+      "program": "${workspaceFolder}/${input:app}/node_modules/next/dist/bin/next",
       "runtimeArgs": ["--inspect"],
       "skipFiles": ["<node_internals>/**"],
       "serverReadyAction": {
@@ -28,7 +37,7 @@
         "uriFormat": "%s",
         "webRoot": "${workspaceFolder}"
       },
-      "cwd": "${workspaceFolder}/apps/shortcuts"
+      "cwd": "${workspaceFolder}/${input:app}"
     }
   ]
 }
