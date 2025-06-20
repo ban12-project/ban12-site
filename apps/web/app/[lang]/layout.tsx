@@ -11,7 +11,6 @@ import { i18n, type Locale } from '#/lib/i18n'
 type Props = Readonly<{
   params: Promise<{ lang: Locale }>
   children: React.ReactNode
-  drawer: React.ReactNode
 }>
 
 export const metadata: Metadata = {
@@ -66,7 +65,7 @@ export async function generateStaticParams() {
 export default async function RootLayout(props: Props) {
   const params = await props.params
 
-  const { children, drawer } = props
+  const { children } = props
 
   return (
     <html suppressHydrationWarning lang={params.lang}>
@@ -79,7 +78,6 @@ export default async function RootLayout(props: Props) {
         >
           <LocaleProvider locale={params.lang} i18n={i18n}>
             {children}
-            {drawer}
           </LocaleProvider>
           <Toaster />
         </ThemeProvider>

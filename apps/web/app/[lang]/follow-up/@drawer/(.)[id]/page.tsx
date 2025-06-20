@@ -1,7 +1,7 @@
 import { Suspense, unstable_ViewTransition as ViewTransition } from 'react'
 import { LoaderCircle } from 'lucide-react'
 
-import { default as PagePrimitive } from '../../../follow-up/[id]/page'
+import { default as PagePrimitive } from '../../[id]/page'
 import Drawer from './drawer'
 
 export default function Page(
