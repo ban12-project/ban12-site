@@ -2,11 +2,13 @@ import type { Metadata, Viewport } from 'next'
 
 import '#/app/globals.css'
 
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
 import { Toaster } from '@repo/ui/components/sonner'
 import { ThemeProvider } from 'next-themes'
 
 import { i18n, type Locale } from '#/lib/i18n'
+import { WebVitals } from '#/components/web-vitals'
 
 type Props = Readonly<{
   params: Promise<{ lang: Locale }>
@@ -52,7 +54,10 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#FFFFFF',
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+  ],
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
@@ -79,8 +84,16 @@ export default async function RootLayout(props: Props) {
           <LocaleProvider locale={params.lang} i18n={i18n}>
             {children}
           </LocaleProvider>
-          <Toaster />
         </ThemeProvider>
+
+        <Toaster />
+
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+            <WebVitals />
+          </>
+        )}
       </body>
     </html>
   )

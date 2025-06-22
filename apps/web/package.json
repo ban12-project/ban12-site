@@ -26,6 +26,7 @@
     "@google/genai": "catalog:",
     "@gsap/react": "catalog:",
     "@hookform/resolvers": "catalog:",
+    "@next/third-parties": "catalog:",
     "@react-three/drei": "^10.1.2",
     "@react-three/fiber": "9.1.2",
     "@repo/i18n": "workspace:*",
