@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react'
+import Script from 'next/script'
 import { useGSAP } from '@gsap/react'
 import { OrbitControls, PerspectiveCamera, useGLTF } from '@react-three/drei'
 import {
@@ -9,7 +10,6 @@ import {
   useThree,
   type ThreeElement,
 } from '@react-three/fiber'
-import gsap from 'gsap'
 import * as THREE from 'three'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
 
@@ -20,10 +20,6 @@ declare module '@react-three/fiber' {
 }
 
 extend({ RoundedBoxGeometry })
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(useGSAP)
-}
 
 const params = {
   modelSize: 9,
@@ -154,7 +150,19 @@ export function Voxel() {
           <shadowMaterial opacity={0.1} />
         </mesh>
       </group>
-      <VoxelMesh voxelsPerModel={voxelsPerModel} />
+      <Suspense>
+        <VoxelMesh voxelsPerModel={voxelsPerModel} />
+      </Suspense>
+      <Script
+        src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/gsap/3.13.0/gsap.min.js"
+        integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA=="
+        crossOrigin="anonymous"
+        referrerPolicy="no-referrer"
+        id="gsap-script"
+        onLoad={() => {
+          document.dispatchEvent(new Event('gsaploaded'))
+        }}
+      />
       <PerspectiveCamera
         ref={cameraRef}
         makeDefault
@@ -175,7 +183,28 @@ export function Voxel() {
   )
 }
 
+type Gsap = typeof import('gsap').default
+
+declare global {
+  interface Window {
+    gsap: Gsap
+  }
+}
+
+const gsapResourcesPromise = new Promise<Gsap>((resolve) => {
+  if (window.gsap) return resolve(window.gsap)
+
+  const listener = () => {
+    window.gsap.registerPlugin(useGSAP)
+    resolve(window.gsap)
+    document.removeEventListener('gsaploaded', listener)
+  }
+  document.addEventListener('gsaploaded', listener)
+})
+
 function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
+  const gsap = use(gsapResourcesPromise)
+
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null)
   const [voxels, setVoxels] = useState<Voxel[]>([])
   const dummy = useMemo(() => new THREE.Object3D(), [])
