@@ -17,5 +17,6 @@
     "Mapbox",
     "mapboxgl"
   ],
-  "tailwindCSS.experimental.configFile": "packages/ui/src/styles/globals.css"
+  "tailwindCSS.experimental.configFile": "packages/ui/src/styles/globals.css",
+  "typescript.experimental.useTsgo": true
 }
