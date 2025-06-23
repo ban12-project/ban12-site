@@ -80,7 +80,7 @@ shadcn/ui 的示例代码使用的时候发现两个问题：
 
 理想的情况下当用户点击 Submit 时候需要禁用提交按钮显示一个*加载中*的效果，提供及时反馈对用户友好，当服务器抛出错误时将有用的信息显示在用户界面上
 
-````typescript
+```typescript
 // 定义默认 ActionState
 const initialState = { message: '', errors: {} }
 
@@ -118,8 +118,10 @@ const onSubmit: React.ReactEventHandler<
   Submit
 +   {pending && <LoaderCircleIcon className="animate-spin" />}
 + </Button>
+```
 
 在 onSubmit 中手动调用了 `form.trigger()` 来验证表单，你可能在其他地方找到类似这样的代码
+
 ```typescript
 // https://github.com/react-hook-form/react-hook-form/issues/10391#issuecomment-2153833104
 <form
@@ -134,7 +136,7 @@ const onSubmit: React.ReactEventHandler<
     e.currentTarget?.requestSubmit();
   }}
 >
-````
+```
 
 这里的 `form.formState.isValid` 不总是实时的状态，一旦用户的输入满足验证模式的时候点击提交可能会导致表单提交需要点击两次提交按钮的情况（第一次`form.formState.isValid` 任然可能是 `false` 即使表单验证通过了，点两次提交按钮才会发起请求）。
 所以这里需要手动触发验证，验证动过后结合 requestSubmit 进行提交
