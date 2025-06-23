@@ -293,7 +293,7 @@ function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
       args={[undefined, undefined, voxelsPerModel.length]}
       castShadow
       receiveShadow
-      onPointerMissed={() => {
+      onClick={() => {
         tl.current?.reversed(!tl.current?.reversed())
       }}
     >

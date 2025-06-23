@@ -69,13 +69,9 @@ function NavMenu() {
 
   return (
     <>
-      <Popover>
+      <Popover onOpenChange={() => ref.current?.toggle()}>
         <PopoverTrigger asChild>
-          <Button
-            className="md:hidden"
-            variant="ghost"
-            onClick={() => ref.current?.toggle()}
-          >
+          <Button className="md:hidden" variant="ghost">
             <MenuTriggerBread ref={ref} />
           </Button>
         </PopoverTrigger>
