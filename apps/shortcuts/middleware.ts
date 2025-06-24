@@ -14,6 +14,16 @@ const withTokenConflictPaths: string[] = ['/login', '/register'].flatMap(
 export function middleware(...args: Parameters<NextMiddleware>) {
   return i18nMiddleware(...args, async (request) => {
     const { pathname } = request.nextUrl
+
+    if (
+      pathname.startsWith('/api/auth') ||
+      !protectedPaths
+        .concat(withTokenConflictPaths)
+        .some((url) => pathname.startsWith(url))
+    ) {
+      return NextResponse.next()
+    }
+
     const token = await getToken({
       req: request,
       secret: process.env.AUTH_SECRET,
