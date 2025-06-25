@@ -1,4 +1,6 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
+import { unstable_cache } from 'next/cache'
 import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { Link } from '@repo/i18n/client'
@@ -9,10 +11,18 @@ import { getRestaurantById, getRestaurants } from '#/lib/db/queries'
 import { getDictionary, Locale } from '#/lib/i18n'
 import { generateMapLink } from '#/lib/map-links'
 
-type Props = {
+export type Props = {
   params: Promise<{ lang: Locale; id: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
+
+const getCachedRestaurantById = unstable_cache(
+  getRestaurantById,
+  ['restaurant'],
+  {
+    tags: ['restaurant'],
+  },
+)
 
 export async function generateStaticParams() {
   const restaurants = await getRestaurants()
@@ -21,24 +31,16 @@ export async function generateStaticParams() {
   }))
 }
 
-const defaultPrecautions = ['No precautions found.']
-const defaultDishes = 'No dishes information available.'
-
 export default async function Page({ params, searchParams }: Props) {
   const [{ id, lang }, { drawer }] = await Promise.all([params, searchParams])
-  const [restaurant, messages, headersList] = await Promise.all([
-    getRestaurantById(id),
+  const [restaurant, messages] = await Promise.all([
+    getCachedRestaurantById(id),
     getDictionary(lang),
-    headers(),
   ])
 
   if (!restaurant || !restaurant.ai_summarize) {
     notFound()
   }
-
-  const country = headersList.get('x-vercel-ip-country')
-  const inChina = country === 'CN'
-  const latlng = restaurant.location?.toReversed() as [number, number] | null
 
   const jsonLd = {
     '@context': 'http://schema.org',
@@ -76,83 +78,9 @@ export default async function Page({ params, searchParams }: Props) {
           </div>
           <div className="mt-2 items-center space-x-2 text-sm text-gray-600 md:flex dark:text-gray-300">
             <p>{restaurant.ai_summarize.restaurantAddress}</p>
-            {latlng && (
-              <>
-                <a
-                  href={generateMapLink('apple', {
-                    q: restaurant.ai_summarize.restaurantName,
-                    ll: inChina
-                      ? latlng.join(',')
-                      : coordtransform
-                          .gcj02towgs84(
-                            ...(latlng.toReversed() as [number, number]),
-                          )
-                          .toReversed()
-                          .join(','),
-                  })}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Apple Map
-                  <ExternalLink className="ml-1 inline size-3" />
-                </a>
-                <a
-                  href={generateMapLink('google', {
-                    api: '1',
-                    query: latlng.join(','),
-                  })}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Google Map
-                  <ExternalLink className="ml-1 inline size-3" />
-                </a>
-                {inChina && (
-                  <>
-                    <a
-                      href={generateMapLink('amap', {
-                        position: latlng.toReversed().join(','),
-                        name: restaurant.ai_summarize.restaurantName,
-                        callnative: '1',
-                      })}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      高德地图
-                      <ExternalLink className="ml-1 inline size-3" />
-                    </a>
-                    <a
-                      href={generateMapLink('baidu', {
-                        location: coordtransform
-                          .gcj02tobd09(
-                            ...(latlng.toReversed() as [number, number]),
-                          )
-                          .toReversed()
-                          .join(','),
-                        title: restaurant.ai_summarize.restaurantName,
-                        output: 'html',
-                      })}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      百度地图
-                      <ExternalLink className="ml-1 inline size-3" />
-                    </a>
-                    <a
-                      href={generateMapLink('tencent', {
-                        marker: `coord:${latlng.join(',')};title:${restaurant.ai_summarize.restaurantName};addr:${restaurant.ai_summarize.restaurantAddress}`,
-                        referer: process.env.SITE_NAME!,
-                      })}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      腾讯地图
-                      <ExternalLink className="ml-1 inline size-3" />
-                    </a>
-                  </>
-                )}
-              </>
-            )}
+            <Suspense fallback={<span>Loading map links...</span>}>
+              <JumpToThirdPartyMap restaurant={restaurant} />
+            </Suspense>
           </div>
           <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
             <span className="rounded-2xl bg-gray-100 px-3 py-1 text-sm text-gray-700 dark:bg-gray-700 dark:text-gray-300">
@@ -169,7 +97,7 @@ export default async function Page({ params, searchParams }: Props) {
             Dishes
           </h2>
           <p className="mt-2 text-gray-600 dark:text-gray-300">
-            {restaurant.ai_summarize.dishes || defaultDishes}
+            {restaurant.ai_summarize.dishes}
           </p>
         </section>
 
@@ -178,7 +106,7 @@ export default async function Page({ params, searchParams }: Props) {
             Service
           </h2>
           <p className="mt-2 text-gray-600 dark:text-gray-300">
-            {restaurant.ai_summarize.service || 'No service information.'}
+            {restaurant.ai_summarize.service}
           </p>
         </section>
 
@@ -187,11 +115,9 @@ export default async function Page({ params, searchParams }: Props) {
             Precautions
           </h2>
           <ul className="mt-2 list-disc pl-5 text-gray-600 dark:text-gray-300">
-            {(restaurant.ai_summarize.precautions || defaultPrecautions).map(
-              (precaution, index) => (
-                <li key={index}>{precaution}</li>
-              ),
-            )}
+            {restaurant.ai_summarize.precautions.map((precaution, index) => (
+              <li key={index}>{precaution}</li>
+            ))}
           </ul>
         </section>
       </div>
@@ -214,7 +140,7 @@ export default async function Page({ params, searchParams }: Props) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
-  const restaurant = await getRestaurantById(id)
+  const restaurant = await getCachedRestaurantById(id)
 
   if (!restaurant || !restaurant.ai_summarize) {
     notFound()
@@ -229,4 +155,92 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
     },
   }
+}
+
+async function JumpToThirdPartyMap({
+  restaurant,
+}: {
+  restaurant: NonNullable<Awaited<ReturnType<typeof getRestaurantById>>>
+}) {
+  const headersList = await headers()
+  const country = headersList.get('x-vercel-ip-country')
+  const inChina = country === 'CN'
+  const latlng = restaurant.location?.toReversed() as [number, number] | null
+
+  if (!latlng) return null
+  if (!restaurant.ai_summarize) return null
+
+  return (
+    <>
+      <a
+        href={generateMapLink('apple', {
+          q: restaurant.ai_summarize.restaurantName,
+          ll: inChina
+            ? latlng.join(',')
+            : coordtransform
+                .gcj02towgs84(...(latlng.toReversed() as [number, number]))
+                .toReversed()
+                .join(','),
+        })}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Apple Map
+        <ExternalLink className="ml-1 inline size-3" />
+      </a>
+      <a
+        href={generateMapLink('google', {
+          api: '1',
+          query: latlng.join(','),
+        })}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Google Map
+        <ExternalLink className="ml-1 inline size-3" />
+      </a>
+      {inChina && (
+        <>
+          <a
+            href={generateMapLink('amap', {
+              position: latlng.toReversed().join(','),
+              name: restaurant.ai_summarize.restaurantName,
+              callnative: '1',
+            })}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            高德地图
+            <ExternalLink className="ml-1 inline size-3" />
+          </a>
+          <a
+            href={generateMapLink('baidu', {
+              location: coordtransform
+                .gcj02tobd09(...(latlng.toReversed() as [number, number]))
+                .toReversed()
+                .join(','),
+              title: restaurant.ai_summarize.restaurantName,
+              output: 'html',
+            })}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            百度地图
+            <ExternalLink className="ml-1 inline size-3" />
+          </a>
+          <a
+            href={generateMapLink('tencent', {
+              marker: `coord:${latlng.join(',')};title:${restaurant.ai_summarize.restaurantName};addr:${restaurant.ai_summarize.restaurantAddress}`,
+              referer: process.env.SITE_NAME!,
+            })}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            腾讯地图
+            <ExternalLink className="ml-1 inline size-3" />
+          </a>
+        </>
+      )}
+    </>
+  )
 }

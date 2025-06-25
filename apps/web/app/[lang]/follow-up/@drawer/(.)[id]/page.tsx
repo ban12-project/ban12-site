@@ -1,12 +1,10 @@
 import { Suspense, unstable_ViewTransition as ViewTransition } from 'react'
 import { LoaderCircle } from 'lucide-react'
 
-import { default as PagePrimitive } from '../../[id]/page'
+import { default as PagePrimitive, type Props } from '../../[id]/page'
 import Drawer from './drawer'
 
-export default function Page(
-  props: React.ComponentProps<typeof PagePrimitive>,
-) {
+export default function Page(props: Props) {
   return (
     <Drawer>
       <Suspense

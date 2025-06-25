@@ -24,10 +24,15 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: 'Follow up'
+  title: 'Follow up',
+}
+
+const preload = () => {
+  void getRestaurants()
 }
 
 export default async function FollowUpPage(props: Props) {
+  preload()
   const [{ lang }, searchParams] = await Promise.all([
     props.params,
     props.searchParams,
