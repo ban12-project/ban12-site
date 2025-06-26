@@ -2,10 +2,10 @@ import { Suspense } from 'react'
 import { Metadata, Viewport } from 'next'
 import { headers } from 'next/headers'
 
-import { getRestaurants } from '#/lib/db/queries'
 import { getDictionary, type Locale } from '#/lib/i18n'
 import { CommandMenu } from '#/components/command-menu'
 
+import { getCachedRestaurants } from './actions'
 import MapboxClientOnly from './mapbox-client-only'
 import RenderMarker from './render-marker'
 
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 }
 
 const preload = () => {
-  void getRestaurants()
+  void getCachedRestaurants()
 }
 
 export default async function FollowUpPage(props: Props) {
@@ -37,10 +37,37 @@ export default async function FollowUpPage(props: Props) {
     props.params,
     props.searchParams,
   ])
-  const [message, headersList] = await Promise.all([
-    getDictionary(lang),
-    headers(),
-  ])
+  const messages = await getDictionary(lang)
+
+  const restaurants = getCachedRestaurants()
+
+  return (
+    <>
+      <header className="p-safe-max-4 fixed z-10 flex w-full">
+        <div className="ml-auto">
+          <CommandMenu restaurants={restaurants} />
+        </div>
+      </header>
+      <main className="relative">
+        <Suspense>
+          <MapboxWithLocation
+            searchParams={searchParams}
+            restaurants={restaurants}
+          />
+        </Suspense>
+      </main>
+    </>
+  )
+}
+
+async function MapboxWithLocation({
+  searchParams,
+  restaurants,
+}: {
+  searchParams: Awaited<Props['searchParams']>
+  restaurants: ReturnType<typeof getCachedRestaurants>
+}) {
+  const headersList = await headers()
 
   const locationFromHeader = (() => {
     const location = [
@@ -55,27 +82,17 @@ export default async function FollowUpPage(props: Props) {
   const location = searchParams?.location?.split(',').map(Number) as
     | [number, number]
     | undefined
-  const restaurants = getRestaurants()
 
   return (
-    <>
-      <header className="p-safe-max-4 fixed z-10 flex w-full">
-        <div className="ml-auto">
-          <CommandMenu restaurants={restaurants} />
-        </div>
-      </header>
-      <main className="relative">
-        <MapboxClientOnly
-          className="min-h-screen"
-          options={{
-            center: location || locationFromHeader,
-          }}
-        >
-          <Suspense>
-            <RenderMarker restaurants={restaurants} />
-          </Suspense>
-        </MapboxClientOnly>
-      </main>
-    </>
+    <MapboxClientOnly
+      className="min-h-screen"
+      options={{
+        center: location || locationFromHeader,
+      }}
+    >
+      <Suspense>
+        <RenderMarker restaurants={restaurants} />
+      </Suspense>
+    </MapboxClientOnly>
   )
 }

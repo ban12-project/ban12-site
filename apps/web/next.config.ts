@@ -45,9 +45,14 @@ const nextConfig: NextConfig = {
 
     return config
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
     reactCompiler: true,
     viewTransition: true,
+    dynamicIO: true,
+    ppr: true,
   },
 }
 

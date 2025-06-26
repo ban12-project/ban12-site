@@ -43,6 +43,7 @@ export const getRestaurants = cache(async (all = false) => {
 
     return restaurants
   } catch (error) {
+    console.log(error)
     console.error('Failed to get restaurants from database')
     throw error
   }

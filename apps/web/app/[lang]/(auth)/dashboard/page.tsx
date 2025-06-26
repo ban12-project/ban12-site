@@ -1,3 +1,5 @@
+'use cache'
+
 import { getRestaurants } from '#/lib/db/queries'
 
 import { columns } from './columns'

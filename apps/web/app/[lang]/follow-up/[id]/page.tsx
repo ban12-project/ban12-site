@@ -1,28 +1,21 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
-import { unstable_cache } from 'next/cache'
 import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { Link } from '@repo/i18n/client'
 import coordtransform from 'coordtransform'
 import { ExternalLink, Star } from 'lucide-react'
 
-import { getRestaurantById, getRestaurants } from '#/lib/db/queries'
+import { getRestaurants } from '#/lib/db/queries'
 import { getDictionary, Locale } from '#/lib/i18n'
 import { generateMapLink } from '#/lib/map-links'
+
+import { getCachedRestaurantById } from '../actions'
 
 export type Props = {
   params: Promise<{ lang: Locale; id: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
-
-const getCachedRestaurantById = unstable_cache(
-  getRestaurantById,
-  ['restaurant'],
-  {
-    tags: ['restaurant'],
-  },
-)
 
 export async function generateStaticParams() {
   const restaurants = await getRestaurants()
@@ -160,7 +153,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 async function JumpToThirdPartyMap({
   restaurant,
 }: {
-  restaurant: NonNullable<Awaited<ReturnType<typeof getRestaurantById>>>
+  restaurant: NonNullable<Awaited<ReturnType<typeof getCachedRestaurantById>>>
 }) {
   const headersList = await headers()
   const country = headersList.get('x-vercel-ip-country')

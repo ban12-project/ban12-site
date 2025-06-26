@@ -26,7 +26,7 @@
     "@google/genai": "catalog:",
     "@gsap/react": "catalog:",
     "@hookform/resolvers": "catalog:",
-    "@next/third-parties": "catalog:",
+    "@next/third-parties": "catalog:canary",
     "@react-three/drei": "^10.1.2",
     "@react-three/fiber": "9.1.2",
     "@repo/i18n": "workspace:*",
@@ -43,7 +43,7 @@
     "gsap": "catalog:",
     "lucide-react": "catalog:",
     "mapbox-gl": "^3.12.0",
-    "next": "catalog:",
+    "next": "catalog:canary",
     "next-auth": "catalog:",
     "next-themes": "catalog:",
     "react": "catalog:",
@@ -59,7 +59,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "catalog:",
+    "@next/bundle-analyzer": "catalog:canary",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@serwist/next": "^9.0.10",
