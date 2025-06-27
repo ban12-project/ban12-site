@@ -11,10 +11,10 @@ import { getDictionary, Locale } from '#/lib/i18n'
 import { generateMapLink } from '#/lib/map-links'
 
 import { getCachedRestaurantById } from '../actions'
+import InvisibleWithDrawerSegment from './invisible-with-drawer-segment'
 
 export type Props = {
   params: Promise<{ lang: Locale; id: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export async function generateStaticParams() {
@@ -24,8 +24,8 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function Page({ params, searchParams }: Props) {
-  const [{ id, lang }, { drawer }] = await Promise.all([params, searchParams])
+export default async function Page({ params }: Props) {
+  const { id, lang } = await params
   const [restaurant, messages] = await Promise.all([
     getCachedRestaurantById(id),
     getDictionary(lang),
@@ -115,11 +115,9 @@ export default async function Page({ params, searchParams }: Props) {
         </section>
       </div>
 
-      {drawer ? null : (
-        <Link className="inline-block py-2" href="/follow-up">
-          See more restaurants
-        </Link>
-      )}
+      <InvisibleWithDrawerSegment asChild className="inline-block py-2">
+        <Link href="/follow-up">See more restaurants</Link>
+      </InvisibleWithDrawerSegment>
 
       <script
         type="application/ld+json"
