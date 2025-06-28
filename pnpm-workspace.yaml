@@ -59,11 +59,11 @@ catalog:
 
 catalogs:
   canary:
-    next: canary
-    '@next/third-parties': canary
-    '@next/bundle-analyzer': canary
-    eslint-config-next: canary
-    '@next/eslint-plugin-next': canary
+    next: 15.4.0-canary.102
+    '@next/third-parties': 15.4.0-canary.102
+    '@next/bundle-analyzer': 15.4.0-canary.102
+    eslint-config-next: 15.4.0-canary.102
+    '@next/eslint-plugin-next': 15.4.0-canary.102
 
 onlyBuiltDependencies:
   - '@vercel/speed-insights'

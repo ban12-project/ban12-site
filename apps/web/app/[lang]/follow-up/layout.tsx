@@ -7,11 +7,11 @@ export default function Layout(props: {
   drawer: React.ReactNode
 }) {
   return (
-    <LayoutSegmentContextProvider parallelRouteKey="drawer">
-      <Suspense>
+    <Suspense>
+      <LayoutSegmentContextProvider parallelRouteKey="drawer">
         {props.children}
         {props.drawer}
-      </Suspense>
-    </LayoutSegmentContextProvider>
+      </LayoutSegmentContextProvider>
+    </Suspense>
   )
 }
