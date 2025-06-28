@@ -1,16 +1,7 @@
 'use client'
 
-import {
-  createContext,
-  memo,
-  Suspense,
-  use,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  unstable_ViewTransition as ViewTransition,
-} from 'react'
+import { Suspense, unstable_ViewTransition as ViewTransition } from 'react'
+import * as React from 'react'
 import Script from 'next/script'
 import { useLocale } from '@repo/i18n/client'
 import equal from 'fast-deep-equal'
@@ -27,26 +18,15 @@ declare global {
   }
 }
 
-const mapboxResourcesPromise = () =>
-  new Promise<Mapbox>((resolve) => {
-    if (window.mapboxgl) return resolve(window.mapboxgl)
-
-    const listener = () => {
-      resolve(window.mapboxgl)
-      document.removeEventListener('mapboxloaded', listener)
-    }
-    document.addEventListener('mapboxloaded', listener)
-  })
-
 function Loader() {
   return (
     <>
       <link
-        href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css"
+        href="https://api.mapbox.com/mapbox-gl-js/v3.13.0/mapbox-gl.css"
         rel="stylesheet"
       />
       <Script
-        src="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"
+        src="https://api.mapbox.com/mapbox-gl-js/v3.13.0/mapbox-gl.js"
         crossOrigin="anonymous"
         onLoad={() => {
           document.dispatchEvent(new Event('mapboxloaded'))
@@ -61,10 +41,10 @@ interface Props extends React.ComponentProps<'div'> {
   options?: Partial<mapboxgl.MapOptions>
 }
 
-const MapContext = createContext<mapboxgl.Map | null>(null)
+const MapContext = React.createContext<mapboxgl.Map | null>(null)
 
 export function useMap() {
-  return useContext(MapContext)
+  return React.useContext(MapContext)
 }
 
 const fallbackOptions = {
@@ -79,15 +59,15 @@ function MapboxImpl({
   children,
   ...props
 }: Props) {
-  const mapboxgl = use(externalScript)
-  const mapContainerRef = useRef<React.ComponentRef<'div'>>(null)
-  const [map, setMap] = useState<mapboxgl.Map | null>(null)
+  const mapboxgl = React.use(externalScript)
+  const mapContainerRef = React.useRef<React.ComponentRef<'div'>>(null)
+  const [map, setMap] = React.useState<mapboxgl.Map | null>(null)
 
   const { isIntersecting, ref: observerRef } = useIntersectionObserver()
   const { resolvedTheme } = useTheme()
   const { locale } = useLocale()
 
-  useEffect(() => {
+  React.useEffect(() => {
     const container = mapContainerRef.current
     if (map || !container || !isIntersecting) return
 
@@ -113,17 +93,24 @@ function MapboxImpl({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapboxgl, isIntersecting])
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!map) return
+
+    map.easeTo({
+      center: options?.center || fallbackOptions.center,
+      zoom: options?.zoom || fallbackOptions.zoom,
+    })
+  }, [map, options])
+
+  React.useEffect(() => {
+    if (!map) return
+
     map.setStyle(
       resolvedTheme === 'dark'
         ? 'mapbox://styles/mapbox/dark-v11'
         : 'mapbox://styles/mapbox/light-v11',
     )
-
-    map.setCenter(options?.center || fallbackOptions.center)
-    map.setZoom(options?.zoom || fallbackOptions.zoom)
-  }, [map, resolvedTheme, options])
+  }, [map, resolvedTheme])
 
   const mergeRefs = (el: React.ComponentRef<'div'>) => {
     if (typeof ref === 'function') ref(el)
@@ -139,6 +126,50 @@ function MapboxImpl({
   )
 }
 
+// https://github.com/mapbox/mapbox-gl-js/issues/6707
+export function useMapReady(
+  callback: (map: mapboxgl.Map) => void | (() => void),
+  deps: React.DependencyList = [],
+) {
+  const map = useMap()
+
+  const id = React.useRef(NaN)
+  const clean = React.useRef<ReturnType<typeof callback>>(undefined)
+  const cb = React.useCallback(() => {
+    if (id.current) {
+      window.cancelAnimationFrame(id.current)
+      id.current = NaN
+    }
+    clean.current = callback(map!)
+  }, [callback, map])
+
+  React.useEffect(() => {
+    if (!map) return
+
+    if (map.loaded()) {
+      cb()
+    } else {
+      map.once('load', cb)
+      map.once('style.load', cb)
+
+      const loop = () => {
+        if (map.loaded()) {
+          cb()
+        } else {
+          id.current = window.requestAnimationFrame(loop)
+        }
+      }
+
+      id.current = window.requestAnimationFrame(loop)
+    }
+
+    return () => {
+      clean.current?.()
+      window.cancelAnimationFrame(id.current)
+    }
+  }, [cb, map, ...deps])
+}
+
 interface MarkerProps {
   options?: Partial<ConstructorParameters<Mapbox['Marker']>[0]>
   lnglat: mapboxgl.LngLatLike
@@ -146,29 +177,19 @@ interface MarkerProps {
 }
 
 function PureMarker({ lnglat, options, container }: MarkerProps) {
-  const map = useMap()
-  const [marker, setMarker] = useState<mapboxgl.Marker | null>(null)
+  const [marker, setMarker] = React.useState<mapboxgl.Marker | null>(null)
 
-  useEffect(() => {
-    if (!map) return
-
-    const genMarker = () => {
-      const marker = new window.mapboxgl.Marker(options)
-        .setLngLat(lnglat)
-        .addTo(map)
-      setMarker(marker)
-    }
-    if (map.loaded()) {
-      genMarker()
-    } else {
-      map.once('load', genMarker)
-    }
+  useMapReady((map) => {
+    const marker = new window.mapboxgl.Marker(options)
+      .setLngLat(lnglat)
+      .addTo(map)
+    setMarker(marker)
 
     return () => {
-      setMarker(null)
       marker?.remove()
+      setMarker(null)
     }
-  }, [lnglat, map, options])
+  })
 
   if (!container) return null
   if (!marker) return null
@@ -178,13 +199,27 @@ function PureMarker({ lnglat, options, container }: MarkerProps) {
   portalContainer.innerHTML = ''
   return createPortal(container(innerHTML), portalContainer)
 }
-export const Marker = memo(PureMarker, (prev, next) => {
+export const Marker = React.memo(PureMarker, (prev, next) => {
   if (!equal(prev.lnglat, next.lnglat)) return false
   if (!equal(prev.options, next.options)) return false
   return true
 })
 
 export default function Mapbox(props: Omit<Props, 'externalScript'>) {
+  const mapboxResourcesPromise = React.useCallback(
+    () =>
+      new Promise<Mapbox>((resolve) => {
+        if (window.mapboxgl) return resolve(window.mapboxgl)
+
+        const listener = () => {
+          resolve(window.mapboxgl)
+          document.removeEventListener('mapboxloaded', listener)
+        }
+        document.addEventListener('mapboxloaded', listener)
+      }),
+    [],
+  )
+
   return (
     <>
       <Loader />

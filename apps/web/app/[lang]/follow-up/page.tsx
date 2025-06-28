@@ -7,12 +7,13 @@ import { CommandMenu } from '#/components/command-menu'
 
 import { getCachedRestaurants } from './actions'
 import MapboxClientOnly from './mapbox-client-only'
-import RenderMarker from './render-marker'
+import RenderMapboxControls from './render-mapbox-controls'
 
 type Props = Readonly<{
   params: Promise<{ lang: Locale }>
   searchParams?: Promise<{
     location?: string
+    marker?: string
   }>
 }>
 
@@ -33,10 +34,7 @@ const preload = () => {
 
 export default async function FollowUpPage(props: Props) {
   preload()
-  const [{ lang }, searchParams] = await Promise.all([
-    props.params,
-    props.searchParams,
-  ])
+  const { lang } = await props.params
   const messages = await getDictionary(lang)
 
   const restaurants = getCachedRestaurants()
@@ -50,8 +48,8 @@ export default async function FollowUpPage(props: Props) {
       </header>
       <main className="relative">
         <Suspense>
-          <MapboxWithLocation
-            searchParams={searchParams}
+          <SuspendedMapbox
+            searchParams={props.searchParams}
             restaurants={restaurants}
           />
         </Suspense>
@@ -60,26 +58,25 @@ export default async function FollowUpPage(props: Props) {
   )
 }
 
-async function MapboxWithLocation({
+async function SuspendedMapbox({
   searchParams,
   restaurants,
 }: {
-  searchParams: Awaited<Props['searchParams']>
+  searchParams: Props['searchParams']
   restaurants: ReturnType<typeof getCachedRestaurants>
 }) {
-  const headersList = await headers()
+  const [headersList, awaitedSearchParams] = await Promise.all([
+    headers(),
+    searchParams,
+  ])
 
-  const locationFromHeader = (() => {
-    const location = [
-      headersList.get('x-vercel-ip-longitude'),
-      headersList.get('x-vercel-ip-latitude'),
-    ]
-      .filter(Boolean)
-      .map(Number)
-
-    if (location.length) return location as [number, number]
-  })()
-  const location = searchParams?.location?.split(',').map(Number) as
+  const locationFromHeader = [
+    headersList.get('x-vercel-ip-longitude'),
+    headersList.get('x-vercel-ip-latitude'),
+  ]
+    .filter(Boolean)
+    .map(Number) as [number, number]
+  const location = awaitedSearchParams?.location?.split(',').map(Number) as
     | [number, number]
     | undefined
 
@@ -87,11 +84,17 @@ async function MapboxWithLocation({
     <MapboxClientOnly
       className="min-h-screen"
       options={{
-        center: location || locationFromHeader,
+        center:
+          location ||
+          (locationFromHeader.length ? locationFromHeader : undefined),
+        zoom: location ? 15 : 9,
       }}
     >
       <Suspense>
-        <RenderMarker restaurants={restaurants} />
+        <RenderMapboxControls
+          restaurants={restaurants}
+          location={awaitedSearchParams?.marker ? location : undefined}
+        />
       </Suspense>
     </MapboxClientOnly>
   )

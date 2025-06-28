@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense, use, useEffect, useState, useTransition } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@repo/ui/components/button'
 import {
   Command,
@@ -15,6 +15,7 @@ import {
   CommandShortcut,
 } from '@repo/ui/components/command'
 import { useMediaQuery } from '@repo/ui/hooks/use-media-query'
+import coordtransform from 'coordtransform'
 import { LoaderCircleIcon, MapPin, SearchIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { Drawer } from 'vaul'
@@ -88,7 +89,6 @@ function RenderCommandGroup({
   }, [])
 
   const [isPending, startTransition] = useTransition()
-  const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
 
@@ -103,7 +103,7 @@ function RenderCommandGroup({
             navigator.geolocation.getCurrentPosition(resolve, reject)
           },
         )
-        go(position.coords.longitude, position.coords.latitude)
+        navigation(position.coords.longitude, position.coords.latitude, true)
       } catch (error) {
         if (error instanceof GeolocationPositionError) {
           toast.error(`ERROR(${error.code}): ${error.message}`)
@@ -112,9 +112,10 @@ function RenderCommandGroup({
     })
   }
 
-  const go = (lng: number, lat: number) => {
-    const params = new URLSearchParams(searchParams)
+  const navigation = (lng: number, lat: number, marker?: boolean) => {
+    const params = new URLSearchParams()
     params.set('location', `${lng},${lat}`)
+    if (marker) params.set('marker', '1')
     replace(`${pathname}?${params.toString()}`)
     closeMenu()
   }
@@ -135,7 +136,7 @@ function RenderCommandGroup({
             key={restaurant.id}
             onSelect={() => {
               if (!restaurant.location) return toast.info('No found location')
-              go(...restaurant.location)
+              navigation(...coordtransform.gcj02towgs84(...restaurant.location))
             }}
           >
             <span>{restaurant.title}</span>
@@ -164,7 +165,7 @@ function ResponsiveDialog({
         <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex h-[80vh] flex-col rounded-t-[10px] outline-none">
           <Drawer.Title className="sr-only"></Drawer.Title>
           <Drawer.Description className="sr-only"></Drawer.Description>
-          <Command className="[&_[cmdk-group-heading]]:text-muted-foreground **:data-[slot=command-input-wrapper]:h-12 rounded-none [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5 [&>[cmdk-list]]:max-h-none [&>[cmdk-list]]:pb-safe-max-4">
+          <Command className="[&_[cmdk-group-heading]]:text-muted-foreground **:data-[slot=command-input-wrapper]:h-12 [&>[cmdk-list]]:pb-safe-max-4 rounded-none [&>[cmdk-list]]:max-h-none [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
             {children}
           </Command>
         </Drawer.Content>
