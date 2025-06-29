@@ -11,7 +11,7 @@ import RenderMapboxControls from './render-mapbox-controls'
 
 type Props = Readonly<{
   params: Promise<{ lang: Locale }>
-  searchParams?: Promise<{
+  searchParams: Promise<{
     location?: string
     marker?: string
   }>
@@ -76,7 +76,7 @@ async function SuspendedMapbox({
   ]
     .filter(Boolean)
     .map(Number) as [number, number]
-  const location = awaitedSearchParams?.location?.split(',').map(Number) as
+  const location = awaitedSearchParams.location?.split(',').map(Number) as
     | [number, number]
     | undefined
 

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 
 import '#/app/globals.css'
 
+import { Suspense } from 'react'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { LocaleProvider } from '@repo/i18n/client'
 import { Toaster } from '@repo/ui/components/sonner'
@@ -73,28 +74,30 @@ export default async function RootLayout(props: Props) {
   const { children } = props
 
   return (
-    <html suppressHydrationWarning lang={params.lang}>
-      <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <LocaleProvider locale={params.lang} i18n={i18n}>
-            {children}
-          </LocaleProvider>
-        </ThemeProvider>
+    <Suspense>
+      <html suppressHydrationWarning lang={params.lang}>
+        <body>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <LocaleProvider locale={params.lang} i18n={i18n}>
+              {children}
+            </LocaleProvider>
+          </ThemeProvider>
 
-        <Toaster />
+          <Toaster />
 
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-            <WebVitals />
-          </>
-        )}
-      </body>
-    </html>
+          {process.env.NEXT_PUBLIC_GA_ID && (
+            <>
+              <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+              <WebVitals />
+            </>
+          )}
+        </body>
+      </html>
+    </Suspense>
   )
 }

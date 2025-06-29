@@ -45,7 +45,14 @@ import {
 import { Input } from '@repo/ui/components/input'
 import { Switch } from '@repo/ui/components/switch'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown, LoaderCircleIcon, MoreHorizontal } from 'lucide-react'
+import {
+  ArrowUpDown,
+  CircleCheck,
+  CircleDot,
+  CircleX,
+  LoaderCircleIcon,
+  MoreHorizontal,
+} from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -142,40 +149,10 @@ export const columns: ColumnDef<SelectRestaurant>[] = [
   {
     accessorKey: 'youtube',
     header: 'Youtube link',
-    cell: ({ row }) =>
-      row.original.ai_summarize ? (
-        <HoverCard>
-          <HoverCardTrigger asChild>
-            <Badge
-              asChild
-              variant={
-                row.original.status === 'pending'
-                  ? 'outline'
-                  : row.original.status === 'processing'
-                    ? 'secondary'
-                    : row.original.status === 'success'
-                      ? 'default'
-                      : 'destructive'
-              }
-            >
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={row.original.youtube!}
-              >
-                {row.original.youtube}
-              </a>
-            </Badge>
-          </HoverCardTrigger>
-          <HoverCardContent className="w-[50dvw] overflow-auto">
-            <h4 className="mb-2 text-sm font-semibold">AI Summarize:</h4>
-            <pre>{JSON.stringify(row.original.ai_summarize, null, 2)}</pre>
-          </HoverCardContent>
-        </HoverCard>
-      ) : (
-        row.original.youtube && (
+    cell: ({ row }) => (
+      <HoverCard>
+        <HoverCardTrigger asChild>
           <Badge
-            asChild
             variant={
               row.original.status === 'pending'
                 ? 'outline'
@@ -186,16 +163,30 @@ export const columns: ColumnDef<SelectRestaurant>[] = [
                     : 'destructive'
             }
           >
+            {row.original.status === 'pending' ? (
+              <CircleDot />
+            ) : row.original.status === 'processing' ? (
+              <LoaderCircleIcon className="animate-spin" />
+            ) : row.original.status === 'success' ? (
+              <CircleCheck className="fill-green-500 dark:fill-green-400" />
+            ) : (
+              <CircleX className="fill-red-500 dark:fill-red-400" />
+            )}
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href={row.original.youtube}
+              href={row.original.youtube!}
             >
               {row.original.youtube}
             </a>
           </Badge>
-        )
-      ),
+        </HoverCardTrigger>
+        <HoverCardContent className="w-[50dvw] overflow-auto">
+          <h4 className="mb-2 text-sm font-semibold">AI Summarize:</h4>
+          <pre>{JSON.stringify(row.original.ai_summarize, null, 2)}</pre>
+        </HoverCardContent>
+      </HoverCard>
+    ),
   },
   {
     accessorKey: 'location',
@@ -449,7 +440,10 @@ function LocationForm({
     if (text.indexOf(',') === -1) return
     const strings = text.split(',')
     if (strings.length !== 2) return
-    const location = strings.toSorted((a, b) => Number(b) - Number(a)) as [string, string]
+    const location = strings.toSorted((a, b) => Number(b) - Number(a)) as [
+      string,
+      string,
+    ]
     form.setValue('location', location)
   }
 
