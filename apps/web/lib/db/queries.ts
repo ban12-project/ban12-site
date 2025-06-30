@@ -21,10 +21,10 @@ export const db = drizzle(connectionString)
 export const getRestaurants = cache(async (all = false) => {
   const cacheKey = `restaurants:${all ? 'all' : 'filtered'}`
 
-  try {
-    const cachedRestaurants = await redis.get<SelectRestaurant[]>(cacheKey)
-    if (cachedRestaurants) return cachedRestaurants
+  const cachedRestaurants = await redis.get<SelectRestaurant[]>(cacheKey)
+  if (cachedRestaurants) return cachedRestaurants
 
+  try {
     const restaurants = await db
       .select()
       .from(restaurant)

@@ -2,10 +2,10 @@ import { Suspense } from 'react'
 import { Metadata, Viewport } from 'next'
 import { headers } from 'next/headers'
 
+import { getRestaurants } from '#/lib/db/queries'
 import { getDictionary, type Locale } from '#/lib/i18n'
 import { CommandMenu } from '#/components/command-menu'
 
-import { getCachedRestaurants } from './actions'
 import MapboxClientOnly from './mapbox-client-only'
 import RenderMapboxControls from './render-mapbox-controls'
 
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 }
 
 const preload = () => {
-  void getCachedRestaurants()
+  void getRestaurants()
 }
 
 export default async function FollowUpPage(props: Props) {
@@ -37,7 +37,7 @@ export default async function FollowUpPage(props: Props) {
   const { lang } = await props.params
   const messages = await getDictionary(lang)
 
-  const restaurants = getCachedRestaurants()
+  const restaurants = getRestaurants()
 
   return (
     <>
@@ -63,7 +63,7 @@ async function SuspendedMapbox({
   restaurants,
 }: {
   searchParams: Props['searchParams']
-  restaurants: ReturnType<typeof getCachedRestaurants>
+  restaurants: ReturnType<typeof getRestaurants>
 }) {
   const [headersList, awaitedSearchParams] = await Promise.all([
     headers(),

@@ -2,7 +2,7 @@
 
 import { unstable_cacheTag as cacheTag } from 'next/cache'
 
-import { getRestaurantById, getRestaurants } from '#/lib/db/queries'
+import { getRestaurantById } from '#/lib/db/queries'
 
 export async function getCachedRestaurantById(id: string) {
   'use cache'
@@ -10,11 +10,4 @@ export async function getCachedRestaurantById(id: string) {
 
   const restaurant = await getRestaurantById(id)
   return restaurant
-}
-
-export async function getCachedRestaurants() {
-  'use cache'
-
-  const restaurants = await getRestaurants()
-  return restaurants
 }

@@ -14,7 +14,7 @@ export default function RenderMapboxControls({
   restaurants,
   location,
 }: {
-  restaurants: ReturnType<typeof import('./actions').getCachedRestaurants>
+  restaurants: Promise<SelectRestaurant[]>
   location?: [number, number]
 }) {
   const data = React.use(restaurants)

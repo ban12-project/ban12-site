@@ -53,6 +53,7 @@ const nextConfig: NextConfig = {
     viewTransition: true,
     dynamicIO: true,
     ppr: true,
+    clientSegmentCache: true,
   },
 }
 

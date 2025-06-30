@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { SessionProvider } from 'next-auth/react'
 
 import { auth } from './auth'
@@ -6,7 +7,15 @@ type Props = Readonly<{
   children: React.ReactNode
 }>
 
-export default async function AuthLayout({ children }: Props) {
+export default function AuthLayout({ children }: Props) {
+  return (
+    <Suspense>
+      <Suspended>{children}</Suspended>
+    </Suspense>
+  )
+}
+
+async function Suspended({ children }: { children: React.ReactNode }) {
   const session = await auth()
 
   return <SessionProvider session={session}>{children}</SessionProvider>
