@@ -6,7 +6,7 @@ import { Loader2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { signIn } from 'next-auth/webauthn'
 
-import { login } from '#/app/[lang]/(dashboard)/actions'
+import { login } from '#/app/[lang]/(auth)/actions'
 
 import CloudflareTurnstile from './cloudflare-turnstile'
 

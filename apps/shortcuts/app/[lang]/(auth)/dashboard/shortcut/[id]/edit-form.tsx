@@ -7,7 +7,7 @@ import { Label } from '@repo/ui/components/label'
 
 import type { LocalizedString, SelectShortcut } from '#/lib/db/schema'
 import { LocalizedHelper } from '#/lib/utils'
-import { updateShortcut } from '#/app/[lang]/(dashboard)/actions'
+import { updateShortcut } from '#/app/[lang]/(auth)/actions'
 
 type Props = {
   shortcut: SelectShortcut

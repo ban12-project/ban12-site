@@ -14,7 +14,7 @@ import { useIsomorphicLayoutEffect } from 'usehooks-ts'
 import type { SelectShortcut } from '#/lib/db/schema'
 import { Locale } from '#/lib/i18n'
 import useRootDirection from '#/hooks/use-root-direction'
-import { fetchShortcutsByAlbumID } from '#/app/[lang]/(front)/actions'
+import { fetchShortcutsByAlbumID } from '#/app/[lang]/(public)/actions'
 
 import ShortcutCard from './shortcut-card'
 

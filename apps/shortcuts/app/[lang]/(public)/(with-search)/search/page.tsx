@@ -5,7 +5,7 @@ import { Loader } from 'lucide-react'
 
 import { getDictionary, Messages, type Locale } from '#/lib/i18n'
 import ShortcutList from '#/components/shortcut-list'
-import { searchShortcuts } from '#/app/[lang]/(front)/actions'
+import { searchShortcuts } from '#/app/[lang]/(public)/actions'
 
 type SearchPageProps = {
   params: Promise<{

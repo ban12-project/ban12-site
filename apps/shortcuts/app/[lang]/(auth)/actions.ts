@@ -156,7 +156,7 @@ export async function updateShortcut(
   }
 
   revalidatePath('/dashboard')
-  revalidatePath('/[lang]/(front)/(with-search)', 'page')
+  revalidatePath('/[lang]/(public)/(with-search)', 'page')
   revalidatePath(`/get/${uuid}`)
   revalidateTag('shortcut')
   redirect('/dashboard')
@@ -176,7 +176,7 @@ export async function deleteShortcut(formData: FormData) {
   }
 
   revalidatePath('/dashboard')
-  revalidatePath('/[lang]/(front)/(with-search)', 'page')
+  revalidatePath('/[lang]/(public)/(with-search)', 'page')
   revalidateTag('shortcut')
   redirect('/dashboard')
 }
@@ -215,7 +215,7 @@ export async function createCollection(
   }
 
   revalidatePath('/dashboard/collection')
-  revalidatePath('/[lang]/(front)/(with-search)', 'page')
+  revalidatePath('/[lang]/(public)/(with-search)', 'page')
   revalidateTag('collection')
   redirect('/dashboard/collection')
 }
@@ -277,7 +277,7 @@ export async function deleteCollection(formData: FormData) {
   }
 
   revalidatePath('/dashboard/collection')
-  revalidatePath('/[lang]/(front)/(with-search)', 'page')
+  revalidatePath('/[lang]/(public)/(with-search)', 'page')
   revalidateTag('collection')
   redirect('/dashboard/collection')
 }
@@ -322,7 +322,7 @@ export async function createAlbum(
   }
 
   revalidatePath('/dashboard/album')
-  revalidatePath('/[lang]/(front)/(with-search)', 'page')
+  revalidatePath('/[lang]/(public)/(with-search)', 'page')
   revalidateTag('album')
   redirect('/dashboard/album')
 }
@@ -366,7 +366,7 @@ export async function updateAlbum(
 
   revalidatePath('/dashboard/album')
   revalidatePath(`/album/${id}`)
-  revalidatePath('/[lang]/(front)/(with-search)', 'page')
+  revalidatePath('/[lang]/(public)/(with-search)', 'page')
   revalidateTag('album')
   redirect('/dashboard/album')
 }
@@ -385,7 +385,7 @@ export async function deleteAlbum(formData: FormData) {
   }
 
   revalidatePath('/dashboard/album')
-  revalidatePath('/[lang]/(front)/(with-search)', 'page')
+  revalidatePath('/[lang]/(public)/(with-search)', 'page')
   revalidateTag('album')
   redirect('/dashboard/album')
 }

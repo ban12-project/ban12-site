@@ -37,7 +37,7 @@ import * as z from 'zod'
 import type { Messages } from '#/lib/i18n'
 import { RecordType } from '#/lib/shortcut'
 import { LocalizedHelper } from '#/lib/utils'
-import { postShortcut } from '#/app/[lang]/(front)/actions'
+import { postShortcut } from '#/app/[lang]/(public)/actions'
 
 import CloudflareTurnstile from './cloudflare-turnstile'
 import { PAGE_DRAWER_HEADER_ID } from './page-drawer'
