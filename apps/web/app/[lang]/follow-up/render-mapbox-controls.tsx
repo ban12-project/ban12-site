@@ -72,11 +72,11 @@ const Clusters = React.memo(
           'circle-color': [
             'step',
             ['get', 'point_count'],
-            '#51bbd6',
+            '#FFCADE',
             10,
-            '#f1f075',
+            '#EC85AD',
             50,
-            '#f28cb1',
+            '#CC3366',
           ],
           'circle-radius': [
             'step',
@@ -97,8 +97,7 @@ const Clusters = React.memo(
         source: 'restaurants',
         layout: {
           'text-field': '{point_count_abbreviated}',
-          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-          'text-size': 12,
+          'text-size': 16,
         },
       })
 
@@ -111,7 +110,7 @@ const Clusters = React.memo(
           'text-field': ['get', 'restaurantName'],
         },
         paint: {
-          'text-color': resolvedTheme === 'dark' ? '#fff' : '#000',
+          'text-color': resolvedTheme === 'dark' ? '#7DD7BE' : '#004F3C',
         },
       })
 
