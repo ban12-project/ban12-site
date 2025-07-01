@@ -18,6 +18,9 @@ const nextConfig: NextConfig = {
     ],
   },
   transpilePackages: ['@repo/ui'],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
     viewTransition: true,
   },

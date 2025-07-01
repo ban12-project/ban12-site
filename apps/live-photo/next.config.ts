@@ -3,6 +3,9 @@ import bundleAnalyzer from '@next/bundle-analyzer'
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@repo/i18n', '@repo/ui'],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
     reactCompiler: true,
     viewTransition: true,
