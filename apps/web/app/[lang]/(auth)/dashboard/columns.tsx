@@ -60,10 +60,10 @@ import { z } from 'zod'
 import type { SelectRestaurant } from '#/lib/db/schema'
 
 import {
+  startVideoUnderstanding,
   updateInvisible,
   updateLocation,
   updateYoutubeLink,
-  videoUnderstanding,
 } from '../actions'
 
 const parseLengthToSeconds = (lengthStr: string | undefined | null): number => {
@@ -230,14 +230,14 @@ function Actions({ row }: { row: SelectRestaurant }) {
     startTransition(async () => {
       await new Promise<void>((resolve) => {
         toast.promise(
-          videoUnderstanding({
+          startVideoUnderstanding({
             fileUri: row.youtube!,
             id: row.id,
           }),
           {
             loading: 'Processing',
             success: () => {
-              return `${row.title} AI summarize done`
+              return `${row.title} already start processing`
             },
             error: 'Error',
             finally: resolve,

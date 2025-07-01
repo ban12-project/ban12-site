@@ -41,7 +41,8 @@
         "GOOGLE_GEMINI_MODEL",
         "AUTH_SECRET",
         "UPSTASH_REDIS_REST_URL",
-        "UPSTASH_REDIS_REST_TOKEN"
+        "UPSTASH_REDIS_REST_TOKEN",
+        "REVALIDATE_TOKEN"
       ],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],

@@ -1,98 +1,32 @@
 'use server'
 
 import { revalidatePath, revalidateTag } from 'next/cache'
-import { GoogleGenAI, Type } from '@google/genai'
 import { z } from 'zod'
 
 import {
-  updateAISummarize,
   updateInvisibleById,
   updateLocationById,
   updateStatusById,
   updateYoutubeLinkById,
 } from '#/lib/db/queries'
+import { inngest } from '#/lib/inngest/client'
 
-export async function videoUnderstanding({
+export async function startVideoUnderstanding({
   fileUri,
   id,
 }: {
   fileUri: string
   id: string
 }) {
-  try {
-    await updateStatusById({ id, status: 'processing' })
+  await updateStatusById({ id, status: 'processing' })
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GEMINI_KEY })
-    const response = await ai.models.generateContent({
-      model: process.env.GOOGLE_GEMINI_MODEL!,
-      contents: [
-        {
-          fileData: {
-            fileUri,
-          },
-        },
-        "Based on the video description, provide the restaurant's name and restaurant's address, give a recommendation rating (out of five points) in terms of price, waiting time, dishes, and service, and offer precautions for diners visiting this place",
-      ],
-      config: {
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            restaurantName: {
-              type: Type.STRING,
-            },
-            restaurantAddress: {
-              type: Type.STRING,
-            },
-            rating: {
-              type: Type.NUMBER,
-            },
-            price: {
-              type: Type.STRING,
-            },
-            waitingTime: {
-              type: Type.STRING,
-            },
-            dishes: {
-              type: Type.STRING,
-            },
-            service: {
-              type: Type.STRING,
-            },
-            precautions: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.STRING,
-              },
-            },
-          },
-          propertyOrdering: [
-            'restaurantName',
-            'restaurantAddress',
-            'rating',
-            'price',
-            'waitingTime',
-            'dishes',
-            'service',
-            'precautions',
-          ],
-        },
-      },
-    })
-
-    if (!response.text) {
-      await updateStatusById({ id, status: 'failed' })
-      throw new Error('No response text')
-    }
-
-    await updateAISummarize({
-      ai_summarize: JSON.parse(response.text),
+  await inngest.send({
+    name: 'video/understand',
+    data: {
       id,
-    })
-  } catch (error) {
-    await updateStatusById({ id, status: 'failed' })
-    throw error
-  }
+      fileUri,
+    },
+  })
 
   revalidatePath('/[lang]/dashboard', 'page')
   revalidateTag(`restaurant:${id}`)
