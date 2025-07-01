@@ -5,7 +5,6 @@
       "#/*": ["./*"],
       "@repo/ui/*": ["../../packages/ui/src/*"]
     },
-    "types": ["@serwist/next/typings"],
     "target": "ES2017"
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

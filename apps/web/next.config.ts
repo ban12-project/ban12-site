@@ -1,14 +1,5 @@
 import type { NextConfig } from 'next'
-import {
-  PHASE_DEVELOPMENT_SERVER,
-  PHASE_PRODUCTION_BUILD,
-} from 'next/constants.js'
 import bundleAnalyzer from '@next/bundle-analyzer'
-import withSerwistInit from '@serwist/next'
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-})
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@repo/ui', '@repo/i18n', 'three'],
@@ -57,18 +48,8 @@ const nextConfig: NextConfig = {
   },
 }
 
-/** @type {(phase: string, defaultConfig: import("next").NextConfig) => Promise<import("next").NextConfig>} */
-const genConfig = async (phase: string) => {
-  if (phase === PHASE_DEVELOPMENT_SERVER || phase === PHASE_PRODUCTION_BUILD) {
-    const withSerwist = withSerwistInit({
-      swSrc: 'app/sw.ts',
-      swDest: 'public/sw.js',
-      disable: process.env.NODE_ENV === 'development',
-    })
-    return withBundleAnalyzer(withSerwist(nextConfig))
-  }
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})(nextConfig)
 
-  return withBundleAnalyzer(nextConfig)
-}
-
-export default genConfig
+export default withBundleAnalyzer
