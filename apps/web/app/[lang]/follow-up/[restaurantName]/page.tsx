@@ -10,24 +10,24 @@ import { getRestaurants } from '#/lib/db/queries'
 import { getDictionary, Locale } from '#/lib/i18n'
 import { generateMapLink } from '#/lib/map-links'
 
-import { getCachedRestaurantById } from '../actions'
+import { getCachedRestaurantByName } from '../actions'
 import InvisibleWithDrawerSegment from './invisible-with-drawer-segment'
 
 export type Props = {
-  params: Promise<{ lang: Locale; id: string }>
+  params: Promise<{ lang: Locale; restaurantName: string }>
 }
 
 export async function generateStaticParams() {
   const restaurants = await getRestaurants()
   return restaurants.map((restaurant) => ({
-    id: restaurant.id,
+    restaurantName: restaurant.ai_summarize?.restaurantName,
   }))
 }
 
 export default async function Page({ params }: Props) {
-  const { id, lang } = await params
+  const { restaurantName, lang } = await params
   const [restaurant, messages] = await Promise.all([
-    getCachedRestaurantById(id),
+    getCachedRestaurantByName(decodeURIComponent(restaurantName)),
     getDictionary(lang),
   ])
 
@@ -130,8 +130,8 @@ export default async function Page({ params }: Props) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params
-  const restaurant = await getCachedRestaurantById(id)
+  const { restaurantName } = await params
+  const restaurant = await getCachedRestaurantByName(decodeURIComponent(restaurantName))
 
   if (!restaurant || !restaurant.ai_summarize) {
     notFound()
@@ -151,7 +151,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 async function JumpToThirdPartyMap({
   restaurant,
 }: {
-  restaurant: NonNullable<Awaited<ReturnType<typeof getCachedRestaurantById>>>
+  restaurant: NonNullable<Awaited<ReturnType<typeof getCachedRestaurantByName>>>
 }) {
   const headersList = await headers()
   const country = headersList.get('x-vercel-ip-country')

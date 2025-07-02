@@ -21,13 +21,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const restaurantsPromise = getRestaurants().then((restaurants) =>
     restaurants.map((item) => ({
-      url: `${process.env.NEXT_PUBLIC_HOST_URL}/follow-up/${item.id}`,
+      url: `${process.env.NEXT_PUBLIC_HOST_URL}/follow-up/${item.ai_summarize?.restaurantName}`,
       lastModified: item.updated_at,
       alternates: {
         languages: Object.fromEntries(
           locales.map((locale) => [
             locale,
-            `${process.env.NEXT_PUBLIC_HOST_URL}/${locale}/follow-up/${item.id}`,
+            `${process.env.NEXT_PUBLIC_HOST_URL}/${locale}/follow-up/${item.ai_summarize?.restaurantName}`,
           ]),
         ),
       },

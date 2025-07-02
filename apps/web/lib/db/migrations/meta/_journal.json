@@ -57,6 +57,13 @@
       "when": 1749957465297,
       "tag": "0007_fresh_wolf_cub",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1751463842378,
+      "tag": "0008_large_beast",
+      "breakpoints": true
     }
   ]
 }

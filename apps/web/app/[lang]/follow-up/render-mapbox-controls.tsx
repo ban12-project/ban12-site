@@ -151,17 +151,17 @@ const Clusters = React.memo(
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
         }
 
-        router.push(`/follow-up/${e.features![0].properties?.id}`)
+        router.push(`/follow-up/${e.features![0].properties?.restaurantName}`)
       })
 
       map.on('mouseenter', 'unclustered-point', (e) => {
-        router.prefetch(`/en/follow-up/${e.features![0].properties?.id}`)
+        router.prefetch(`/follow-up/${e.features![0].properties?.restaurantName}`)
       })
 
-      map.on('mouseenter', 'clusters', () => {
+      map.on('mouseenter', ['clusters', 'unclustered-point'], () => {
         map.getCanvas().style.cursor = 'pointer'
       })
-      map.on('mouseleave', 'clusters', () => {
+      map.on('mouseleave', ['clusters', 'unclustered-point'], () => {
         map.getCanvas().style.cursor = ''
       })
 

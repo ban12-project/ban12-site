@@ -1,0 +1,2 @@
+-- CREATE TYPE "public"."status" AS ENUM('pending', 'processing', 'success', 'failed');--> statement-breakpoint
+CREATE INDEX "restaurant_name_idx" ON "restaurant" USING btree (((ai_summarize->>'restaurantName')));

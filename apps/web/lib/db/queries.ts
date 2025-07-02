@@ -2,7 +2,7 @@ import 'server-only'
 
 import { cache } from 'react'
 import { Redis } from '@upstash/redis'
-import { and, eq, isNotNull } from 'drizzle-orm'
+import { and, eq, isNotNull, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/neon-http'
 
 import { restaurant, SelectRestaurant } from './schema'
@@ -134,6 +134,29 @@ export async function getRestaurantById(id: string) {
     return item
   } catch (error) {
     console.error('Failed to get restaurant by id from database')
+    throw error
+  }
+}
+
+export async function getRestaurantByName(name: string) {
+  const cacheKey = `restaurant:name:${name}`
+
+  try {
+    const cachedRestaurant = await redis.get<SelectRestaurant>(cacheKey)
+    if (cachedRestaurant) return cachedRestaurant
+    const [item] = await db
+      .select()
+      .from(restaurant)
+      .where(sql`${restaurant.ai_summarize}->>'restaurantName' = ${name}`)
+      .limit(1)
+
+    if (item) {
+      await redis.set(cacheKey, item, { ex: CACHE_TTL.RESTAURANTS })
+    }
+
+    return item
+  } catch (error) {
+    console.error('Failed to get restaurant by name from database')
     throw error
   }
 }
