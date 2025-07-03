@@ -5,7 +5,7 @@ import { Link } from '@repo/i18n/client'
 import { Loader } from 'lucide-react'
 
 import { getShortcuts } from '#/lib/db/queries'
-import { getDictionary } from '#/lib/i18n'
+import { getDictionary, i18n } from '#/lib/i18n'
 import ShortcutAdd, {
   getCachedShortcutByUuid,
   preload,
@@ -60,6 +60,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: shortcut.name[lang],
     description: shortcut.description[lang],
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+    alternates: {
+      canonical: `/get/${id}`,
+      languages: Object.fromEntries(
+        Object.keys(i18n.locales).map((lang) => [lang, `/${lang}/get/${id}`]),
+      ),
+    },
     openGraph: {
       images: `https://ban12.com/api/og?title=${shortcut.name[lang]}`,
     },

@@ -8,7 +8,7 @@ import {
   getCollectionByIdWithAlbumsAndShortcuts,
   getCollections,
 } from '#/lib/db/queries'
-import { getDictionary, Messages, type Locale } from '#/lib/i18n'
+import { getDictionary, i18n, type Locale, type Messages } from '#/lib/i18n'
 import AlbumList from '#/components/album-list'
 import AlbumListSkeleton from '#/components/album-list-skeleton'
 import ShortcutList from '#/components/shortcut-list'
@@ -104,5 +104,15 @@ export async function generateMetadata({
   return {
     title: collection.title[lang],
     description: collection.title[lang],
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+    alternates: {
+      canonical: `/collection/${id}`,
+      languages: Object.fromEntries(
+        Object.keys(i18n.locales).map((lang) => [
+          lang,
+          `/${lang}/collection/${id}`,
+        ]),
+      ),
+    },
   }
 }

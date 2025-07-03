@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Loader } from 'lucide-react'
 
-import { getDictionary, Messages, type Locale } from '#/lib/i18n'
+import { getDictionary, i18n, type Locale, type Messages } from '#/lib/i18n'
 import ShortcutList from '#/components/shortcut-list'
 import { searchShortcuts } from '#/app/[lang]/(public)/actions'
 
@@ -85,5 +85,12 @@ export async function generateMetadata(
   return {
     title: `${messages.common.search} ${query}`,
     description: `${messages.common.search} ${query}`,
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+    alternates: {
+      canonical: '/search',
+      languages: Object.fromEntries(
+        Object.keys(i18n.locales).map((lang) => [lang, `/${lang}/search`]),
+      ),
+    },
   }
 }

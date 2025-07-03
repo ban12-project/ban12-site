@@ -7,7 +7,7 @@ import coordtransform from 'coordtransform'
 import { ExternalLink, Star } from 'lucide-react'
 
 import { getRestaurants } from '#/lib/db/queries'
-import { getDictionary, Locale } from '#/lib/i18n'
+import { getDictionary, i18n, Locale } from '#/lib/i18n'
 import { generateMapLink } from '#/lib/map-links'
 
 import { getCachedRestaurantByName } from '../actions'
@@ -131,17 +131,30 @@ export default async function Page({ params }: Props) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { restaurantName } = await params
-  const restaurant = await getCachedRestaurantByName(decodeURIComponent(restaurantName))
+  const restaurant = await getCachedRestaurantByName(
+    decodeURIComponent(restaurantName),
+  )
 
   if (!restaurant || !restaurant.ai_summarize) {
     notFound()
   }
 
-  const title = `${restaurant.ai_summarize.restaurantName} - Restaurant Review`
+  const name = restaurant.ai_summarize.restaurantName
+  const title = `${name} - Restaurant Review`
 
   return {
     title,
-    description: `Read reviews and information about ${restaurant.ai_summarize.restaurantName}, including dishes, service quality, and more.`,
+    description: `Read reviews and information about ${name}, including dishes, service quality, and more.`,
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+    alternates: {
+      canonical: `/follow-up/${name}`,
+      languages: Object.fromEntries(
+        Object.keys(i18n.locales).map((lang) => [
+          lang,
+          `/${lang}/follow-up/${name}`,
+        ]),
+      ),
+    },
     openGraph: {
       title,
     },

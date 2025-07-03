@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { Skeleton } from '@repo/ui/components/skeleton'
 
 import { getAlbumByIdWithShortcuts, getAlbums } from '#/lib/db/queries'
-import type { Locale } from '#/lib/i18n'
+import { i18n, type Locale } from '#/lib/i18n'
 import ShortcutList from '#/components/shortcut-list'
 
 type ListPageProps = {
@@ -87,5 +87,12 @@ export async function generateMetadata({
   return {
     title: album.title[lang],
     description: album.description[lang],
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+    alternates: {
+      canonical: `/album/${id}`,
+      languages: Object.fromEntries(
+        Object.keys(i18n.locales).map((lang) => [lang, `/${lang}/album/${id}`]),
+      ),
+    },
   }
 }

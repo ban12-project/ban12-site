@@ -27,6 +27,7 @@ export async function generateMetadata(
   const messages = await getDictionary(params.lang)
 
   return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
     alternates: {
       canonical: '/',
       languages: Object.fromEntries(

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Link } from '@repo/i18n/client'
 
-import { getDictionary, type Locale } from '#/lib/i18n'
+import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import ShortcutPost from '#/components/shortcut-post'
 
 type Props = {
@@ -14,6 +14,13 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return {
     title: messages.post.title,
     description: messages.post.description,
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+    alternates: {
+      canonical: '/post',
+      languages: Object.fromEntries(
+        Object.keys(i18n.locales).map((lang) => [lang, `/${lang}/post`]),
+      ),
+    },
   }
 }
 

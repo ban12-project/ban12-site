@@ -35,6 +35,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     formatDetection: {
       telephone: false,
     },
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+    alternates: {
+      canonical: '/',
+      languages: Object.fromEntries(
+        Object.keys(i18n.locales).map((lang) => [lang, `/${lang}`]),
+      ),
+    },
     openGraph: {
       type: 'website',
       siteName: 'Ban12',

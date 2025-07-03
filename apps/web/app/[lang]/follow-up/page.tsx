@@ -3,7 +3,7 @@ import { Metadata, Viewport } from 'next'
 import { headers } from 'next/headers'
 
 import { getRestaurants } from '#/lib/db/queries'
-import { getDictionary, type Locale } from '#/lib/i18n'
+import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import { CommandMenu } from '#/components/command-menu'
 
 import MapboxClientOnly from './mapbox-client-only'
@@ -26,6 +26,13 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: 'Follow up',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+  alternates: {
+    canonical: '/follow-up',
+    languages: Object.fromEntries(
+      Object.keys(i18n.locales).map((lang) => [lang, `/${lang}/follow-up`]),
+    ),
+  },
 }
 
 const preload = () => {
