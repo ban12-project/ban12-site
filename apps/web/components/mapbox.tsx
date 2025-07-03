@@ -135,13 +135,19 @@ export function useMapReady(
 
   const id = React.useRef(NaN)
   const clean = React.useRef<ReturnType<typeof callback>>(undefined)
+  const emitMapLoadEvent = React.useCallback(() => {
+    map!.fire('load')
+  }, [map])
   const cb = React.useCallback(() => {
     if (id.current) {
       window.cancelAnimationFrame(id.current)
       id.current = NaN
     }
     clean.current = callback(map!)
-  }, [callback, map])
+
+    map!.off('style.load', emitMapLoadEvent)
+    map!.on('style.load', emitMapLoadEvent)
+  }, [callback, map, emitMapLoadEvent])
 
   React.useEffect(() => {
     if (!map) return
@@ -150,7 +156,6 @@ export function useMapReady(
       cb()
     } else {
       map.once('load', cb)
-      map.once('style.load', cb)
 
       const loop = () => {
         if (map.loaded()) {
@@ -165,7 +170,6 @@ export function useMapReady(
 
     return () => {
       clean.current?.()
-      window.cancelAnimationFrame(id.current)
     }
   }, [cb, map, ...deps])
 }
