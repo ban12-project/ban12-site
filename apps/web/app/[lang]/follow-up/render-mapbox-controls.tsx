@@ -141,7 +141,9 @@ const Clusters = React.memo(
             `/${locale}/follow-up/${e.features![0].properties?.restaurantName}`,
           )
         }
-        const unclusteredPointMouseenter = (e: mapboxgl.MapMouseEvent) => {
+        const prefetch = (
+          e: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent,
+        ) => {
           router.prefetch(
             `/${locale}/follow-up/${e.features![0].properties?.restaurantName}`,
             {
@@ -158,7 +160,8 @@ const Clusters = React.memo(
         // inspect a cluster on click
         map.on('click', 'clusters', clustersClick)
         map.on('click', 'unclustered-point', unclusteredPointClick)
-        map.on('mouseenter', 'unclustered-point', unclusteredPointMouseenter)
+        map.on('mouseenter', 'unclustered-point', prefetch)
+        map.on('touchstart', 'unclustered-point', prefetch)
         map.on(
           'mouseenter',
           ['clusters', 'unclustered-point'],
@@ -169,7 +172,8 @@ const Clusters = React.memo(
         return () => {
           map.off('click', 'clusters', clustersClick)
           map.off('click', 'unclustered-point', unclusteredPointClick)
-          map.off('mouseenter', 'unclustered-point', unclusteredPointMouseenter)
+          map.off('mouseenter', 'unclustered-point', prefetch)
+          map.off('touchstart', 'unclustered-point', prefetch)
           map.off(
             'mouseenter',
             ['clusters', 'unclustered-point'],
