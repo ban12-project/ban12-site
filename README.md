@@ -11,8 +11,8 @@ This projects includes the following packages/apps:
 - `web`: [ban12](https://ban12.com/)
 - `blog`: a [blog](https://blog.ban12.com/) app with [Tailwind CSS](https://tailwindcss.com/)
 - `shortcuts`: the app for sharing [shortcuts](https://support.apple.com/guide/shortcuts/welcome/ios) access online [here](https://shortcuts.ban12.com/)
-- `i18n`: minimal i18n routing and translations
-- `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `blog` applications
+- `@repo/i18n`: minimal i18n routing and translations
+- `@repo/ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `blog` applications
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
