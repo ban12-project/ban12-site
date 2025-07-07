@@ -1,6 +1,7 @@
 'use client'
 
-import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense } from 'react'
+import * as React from 'react'
 import Script from 'next/script'
 import { useGSAP } from '@gsap/react'
 import { OrbitControls, PerspectiveCamera, useGLTF } from '@react-three/drei'
@@ -102,24 +103,24 @@ function isInsideMesh(
 }
 
 export function Voxel() {
-  const light = useRef<THREE.DirectionalLight>(null)
-  const lightHolderRef = useRef<THREE.Group>(null)
-  const cameraRef = useRef<THREE.PerspectiveCamera>(null)
+  const light = React.useRef<THREE.DirectionalLight>(null)
+  const lightHolderRef = React.useRef<THREE.Group>(null)
+  const cameraRef = React.useRef<THREE.PerspectiveCamera>(null)
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!light.current) return
     light.current.shadow.camera.near = 10
     light.current.shadow.camera.far = 30
     light.current.shadow.mapSize.set(1024, 1024)
   }, [])
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!cameraRef.current) return
     cameraRef.current.position.set(0, 0.5, 2).multiplyScalar(8)
   }, [])
 
   const { scene } = useGLTF('dog.glb')
-  const voxelsPerModel = useMemo(() => voxelizeModel(scene), [scene])
+  const voxelsPerModel = React.useMemo(() => voxelizeModel(scene), [scene])
 
   const { gl, camera } = useThree()
   gl.shadowMap.enabled = true
@@ -129,6 +130,21 @@ export function Voxel() {
   useFrame(() => {
     lightHolderRef.current?.quaternion.copy(camera.quaternion)
   })
+
+  const gsapResourcesPromise = React.useCallback(
+    () =>
+      new Promise<Gsap>((resolve) => {
+        if (window.gsap) return resolve(window.gsap)
+
+        const listener = () => {
+          window.gsap.registerPlugin(useGSAP)
+          resolve(window.gsap)
+          document.removeEventListener('gsaploaded', listener)
+        }
+        document.addEventListener('gsaploaded', listener)
+      }),
+    [],
+  )
 
   return (
     <>
@@ -151,7 +167,10 @@ export function Voxel() {
         </mesh>
       </group>
       <Suspense>
-        <VoxelMesh voxelsPerModel={voxelsPerModel} />
+        <VoxelMesh
+          voxelsPerModel={voxelsPerModel}
+          gsapResourcesPromise={gsapResourcesPromise()}
+        />
       </Suspense>
       <Script
         src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/gsap/3.13.0/gsap.min.js"
@@ -191,24 +210,19 @@ declare global {
   }
 }
 
-const gsapResourcesPromise = new Promise<Gsap>((resolve) => {
-  if (window.gsap) return resolve(window.gsap)
+function VoxelMesh({
+  voxelsPerModel,
+  gsapResourcesPromise,
+}: {
+  voxelsPerModel: Voxel[]
+  gsapResourcesPromise: Promise<Gsap>
+}) {
+  const gsap = React.use(gsapResourcesPromise)
 
-  const listener = () => {
-    window.gsap.registerPlugin(useGSAP)
-    resolve(window.gsap)
-    document.removeEventListener('gsaploaded', listener)
-  }
-  document.addEventListener('gsaploaded', listener)
-})
-
-function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
-  const gsap = use(gsapResourcesPromise)
-
-  const instancedMeshRef = useRef<THREE.InstancedMesh>(null)
-  const [voxels, setVoxels] = useState<Voxel[]>([])
-  const dummy = useMemo(() => new THREE.Object3D(), [])
-  const tl = useRef<ReturnType<typeof gsap.timeline> | null>(null)
+  const instancedMeshRef = React.useRef<THREE.InstancedMesh>(null)
+  const [voxels, setVoxels] = React.useState<Voxel[]>([])
+  const dummy = React.useMemo(() => new THREE.Object3D(), [])
+  const tl = React.useRef<ReturnType<typeof gsap.timeline> | null>(null)
 
   const randomCoordinate = () => {
     let v = Math.random() - 0.5
@@ -216,7 +230,7 @@ function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
     return v
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!instancedMeshRef.current) return
 
     const voxels = []
