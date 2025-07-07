@@ -1,4 +1,9 @@
-import { GoogleGenAI, Type } from '@google/genai'
+import {
+  createPartFromUri,
+  createUserContent,
+  GoogleGenAI,
+  Type,
+} from '@google/genai'
 
 import { updateAISummarize, updateStatusById } from '#/lib/db/queries'
 
@@ -46,10 +51,14 @@ export const videoUnderstanding = inngest.createFunction(
   { id: 'video-understand', concurrency: 5 },
   { event: 'video/understand' },
   async ({ event, step }) => {
-    const { id, fileUri } = event.data
+    const { id, fileUri, part } = event.data
 
-    if (!fileUri || !id) {
-      return { message: 'No fileUri or id' }
+    const invalidPart =
+      typeof part !== 'object' ||
+      typeof part.uri !== 'string' ||
+      typeof part.mimeType !== 'string'
+    if ((!fileUri && invalidPart) || !id) {
+      return { message: `Invalid input: ${JSON.stringify(event.data)}` }
     }
 
     const text = await step.run(
@@ -57,14 +66,16 @@ export const videoUnderstanding = inngest.createFunction(
       async () => {
         const response = await ai.models.generateContent({
           model: process.env.GOOGLE_GEMINI_MODEL!,
-          contents: [
-            {
-              fileData: {
-                fileUri,
-              },
-            },
+          contents: createUserContent([
+            part
+              ? createPartFromUri(part.uri, part.mimeType)
+              : {
+                  fileData: {
+                    fileUri,
+                  },
+                },
             "Based on the video description, provide the restaurant's name and restaurant's address, give a recommendation rating (out of five points) in terms of price, waiting time, dishes, and service, and offer precautions for diners visiting this place",
-          ],
+          ]),
           config: {
             responseMimeType: 'application/json',
             responseSchema: {

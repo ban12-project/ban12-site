@@ -14,9 +14,14 @@ import { inngest } from '#/lib/inngest/client'
 export async function startVideoUnderstanding({
   fileUri,
   id,
+  part,
 }: {
-  fileUri: string
+  fileUri?: string
   id: string
+  part?: {
+    uri: string
+    mimeType: string
+  }
 }) {
   await updateStatusById({ id, status: 'processing' })
 
@@ -25,6 +30,7 @@ export async function startVideoUnderstanding({
     data: {
       id,
       fileUri,
+      part,
     },
   })
 

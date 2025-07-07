@@ -65,6 +65,7 @@ import {
   updateLocation,
   updateYoutubeLink,
 } from '../actions'
+import UploadToGeminiFiles from './upload-to-gemini-files'
 
 const parseLengthToSeconds = (lengthStr: string | undefined | null): number => {
   if (!lengthStr || typeof lengthStr !== 'string') return 0
@@ -219,9 +220,9 @@ export const columns: ColumnDef<SelectRestaurant>[] = [
 ]
 
 function Actions({ row }: { row: SelectRestaurant }) {
-  const [dialogActive, setDialogActive] = useState<'linkYoutube' | 'location'>(
-    'linkYoutube',
-  )
+  const [dialogActive, setDialogActive] = useState<
+    'linkYoutube' | 'location' | 'upload-to-gemini-files'
+  >('linkYoutube')
   const [isPending, startTransition] = useTransition()
 
   const resolveYoutubeLink = () => {
@@ -284,6 +285,15 @@ function Actions({ row }: { row: SelectRestaurant }) {
           >
             latitude and longitude
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => {
+              setOpen(true)
+              setDialogActive('upload-to-gemini-files')
+            }}
+          >
+            upload video to gemini files
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -293,6 +303,9 @@ function Actions({ row }: { row: SelectRestaurant }) {
         )}
         {dialogActive === 'location' && (
           <LocationForm row={row} setOpen={setOpen} />
+        )}
+        {dialogActive === 'upload-to-gemini-files' && (
+          <UploadToGeminiFiles row={row} setOpen={setOpen} />
         )}
       </DialogContent>
     </Dialog>
