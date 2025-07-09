@@ -75,7 +75,7 @@ async function _getPostSlugs() {
 }
 
 async function _getPostBySlug(slug: string, download_url?: string) {
-  const realSlug = slug.replace(/\.md$/, '')
+  const realSlug = decodeURIComponent(slug.replace(/\.md$/, ''))
   download_url ||= `https://raw.githubusercontent.com/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/main/${process.env.GITHUB_REPO_POSTS_PATH}/${slug}.md`
   const response = await fetch(download_url, {
     headers: {
