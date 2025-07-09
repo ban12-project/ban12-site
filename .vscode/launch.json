@@ -5,7 +5,7 @@
       "id": "app",
       "type": "pickString",
       "description": "Select the app to debug",
-      "options": ["apps/web", "apps/shortcuts", "apps/toys"],
+      "options": ["apps/web", "apps/shortcuts", "apps/toys", "apps/blog"],
       "default": "apps/web"
     }
   ],
@@ -14,7 +14,7 @@
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",
-      "command": "pnpm dev",
+      "command": "pnpm build",
       "cwd": "${workspaceFolder}/${input:app}"
     },
     {

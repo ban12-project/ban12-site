@@ -39,7 +39,7 @@ export default async function Post(props: Params) {
       </div>
 
       <div className="max-xl:max-w-(--breakpoint-md) max-xl:mx-auto max-xl:w-full">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 sticky top-0">
           <GridContainer
             direction="to-left"
             className="max-xl:before:-left-[100vw]! max-xl:after:-left-[100vw]! flex items-center whitespace-nowrap px-4 py-2 font-medium xl:px-2 xl:before:hidden"

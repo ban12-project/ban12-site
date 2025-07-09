@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '*.ban12.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.gstatic.com',
+      },
     ],
   },
   transpilePackages: ['@repo/ui'],
