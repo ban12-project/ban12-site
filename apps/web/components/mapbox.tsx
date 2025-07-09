@@ -1,48 +1,18 @@
 'use client'
 
-import { Suspense, unstable_ViewTransition as ViewTransition } from 'react'
+import 'mapbox-gl/dist/mapbox-gl.css'
+
 import * as React from 'react'
-import Script from 'next/script'
+import { unstable_ViewTransition as ViewTransition } from 'react'
 import { useLocale } from '@repo/i18n/client'
 import equal from 'fast-deep-equal'
 import { LoaderCircleIcon } from 'lucide-react'
+import mapboxgl, { MarkerOptions } from 'mapbox-gl'
 import { useTheme } from 'next-themes'
 import { createPortal } from 'react-dom'
 import { useIntersectionObserver } from 'usehooks-ts'
 
-type Mapbox = typeof import('mapbox-gl').default
-
-declare global {
-  interface Window {
-    mapboxgl: Mapbox
-  }
-}
-
-function Loader() {
-  return (
-    <>
-      <link
-        href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/mapbox-gl/3.13.0/mapbox-gl.min.css"
-        rel="stylesheet"
-        crossOrigin="anonymous"
-        integrity="sha512-1/8PrBC3zrZF3spK3/9XjVGnR31hCx1mnE+iX/4X7Ppc/SEEtzVOvpxyciGjW6rcrir7URC48HOnVjvMGTmLjQ=="
-        referrerPolicy="no-referrer"
-      />
-      <Script
-        src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/mapbox-gl/3.13.0/mapbox-gl.js"
-        crossOrigin="anonymous"
-        integrity="sha512-Eq4J2Zlv+fbCW4UOXL2C2hG7YZZmM1lh6iYpLgXkC1HvDR4Jtt19DRHZ3hyvIt0baSQflNoblbNola49d/7Oqw=="
-        referrerPolicy="no-referrer"
-        onLoad={() => {
-          document.dispatchEvent(new Event('mapboxloaded'))
-        }}
-      />
-    </>
-  )
-}
-
 interface Props extends React.ComponentProps<'div'> {
-  externalScript: Promise<Mapbox>
   options?: Partial<mapboxgl.MapOptions>
 }
 
@@ -57,24 +27,24 @@ const fallbackOptions = {
   zoom: 9,
 } satisfies Omit<mapboxgl.MapOptions, 'container'>
 
-function MapboxImpl({
-  externalScript,
+export function Mapbox({
   options = fallbackOptions,
   ref,
   children,
   ...props
 }: Props) {
-  const mapboxgl = React.use(externalScript)
-  const mapContainerRef = React.useRef<React.ComponentRef<'div'>>(null)
+  const mapContainerRef = React.useRef<React.ComponentRef<'div'>>(null!)
   const [map, setMap] = React.useState<mapboxgl.Map | null>(null)
 
   const { isIntersecting, ref: observerRef } = useIntersectionObserver()
   const { resolvedTheme } = useTheme()
   const { locale } = useLocale()
+  const [pending, startTransition] = React.useTransition()
 
   React.useEffect(() => {
     const container = mapContainerRef.current
-    if (map || !container || !isIntersecting) return
+    // reuse map instance, reduce cost
+    if (map || !isIntersecting) return
 
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     const newMap = new mapboxgl.Map({
@@ -91,12 +61,18 @@ function MapboxImpl({
 
     setMap(newMap)
 
+    startTransition(async () => {
+      await new Promise((resolve) => {
+        newMap.once('load', resolve)
+      })
+    })
+
     return () => {
       newMap.remove()
       setMap(null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapboxgl, isIntersecting])
+  }, [isIntersecting])
 
   React.useEffect(() => {
     if (!map) return
@@ -117,6 +93,12 @@ function MapboxImpl({
     )
   }, [map, resolvedTheme])
 
+  React.useEffect(() => {
+    if (!map) return
+
+    map.setLanguage(locale === 'zh-CN' ? 'zh-Hans' : locale)
+  }, [map, locale])
+
   const mergeRefs = (el: React.ComponentRef<'div'>) => {
     if (typeof ref === 'function') ref(el)
     else if (ref != null) ref.current = el
@@ -125,9 +107,19 @@ function MapboxImpl({
   }
 
   return (
-    <div {...props} ref={mergeRefs}>
+    <>
+      {pending && (
+        <ViewTransition exit="mapbox-fallback-exit">
+          <div className="slide-in-from-bottom-10 fade-in fill-mode-forwards animate-in flex h-screen items-center justify-center ease-[cubic-bezier(0.7,0,0.3,1)]">
+            <LoaderCircleIcon className="animate-spin" />
+          </div>
+        </ViewTransition>
+      )}
+      <ViewTransition enter="mapbox-enter">
+        <div {...props} ref={mergeRefs}></div>
+      </ViewTransition>
       <MapContext.Provider value={map}>{children}</MapContext.Provider>
-    </div>
+    </>
   )
 }
 
@@ -180,7 +172,7 @@ export function useMapReady(
 }
 
 interface MarkerProps {
-  options?: Partial<ConstructorParameters<Mapbox['Marker']>[0]>
+  options?: MarkerOptions
   lnglat: mapboxgl.LngLatLike
   container?: (innerHTML: string) => React.ReactNode
 }
@@ -189,9 +181,7 @@ function PureMarker({ lnglat, options, container }: MarkerProps) {
   const [marker, setMarker] = React.useState<mapboxgl.Marker | null>(null)
 
   useMapReady((map) => {
-    const marker = new window.mapboxgl.Marker(options)
-      .setLngLat(lnglat)
-      .addTo(map)
+    const marker = new mapboxgl.Marker(options).setLngLat(lnglat).addTo(map)
     setMarker(marker)
 
     return () => {
@@ -213,38 +203,3 @@ export const Marker = React.memo(PureMarker, (prev, next) => {
   if (!equal(prev.options, next.options)) return false
   return true
 })
-
-export default function Mapbox(props: Omit<Props, 'externalScript'>) {
-  const mapboxResourcesPromise = React.useCallback(
-    () =>
-      new Promise<Mapbox>((resolve) => {
-        if (window.mapboxgl) return resolve(window.mapboxgl)
-
-        const listener = () => {
-          resolve(window.mapboxgl)
-          document.removeEventListener('mapboxloaded', listener)
-        }
-        document.addEventListener('mapboxloaded', listener)
-      }),
-    [],
-  )
-
-  return (
-    <>
-      <Loader />
-      <Suspense
-        fallback={
-          <ViewTransition exit="mapbox-fallback-exit">
-            <div className="slide-in-from-bottom-10 fade-in fill-mode-forwards animate-in flex h-screen items-center justify-center ease-[cubic-bezier(0.7,0,0.3,1)]">
-              <LoaderCircleIcon className="animate-spin" />
-            </div>
-          </ViewTransition>
-        }
-      >
-        <ViewTransition enter="mapbox-enter">
-          <MapboxImpl externalScript={mapboxResourcesPromise()} {...props} />
-        </ViewTransition>
-      </Suspense>
-    </>
-  )
-}

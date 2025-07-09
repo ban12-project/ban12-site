@@ -2,7 +2,6 @@
 
 import { Suspense } from 'react'
 import * as React from 'react'
-import Script from 'next/script'
 import { useGSAP } from '@gsap/react'
 import { OrbitControls, PerspectiveCamera, useGLTF } from '@react-three/drei'
 import {
@@ -11,8 +10,13 @@ import {
   useThree,
   type ThreeElement,
 } from '@react-three/fiber'
+import { gsap } from 'gsap'
 import * as THREE from 'three'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(useGSAP)
+}
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
@@ -119,7 +123,7 @@ export function Voxel() {
     cameraRef.current.position.set(0, 0.5, 2).multiplyScalar(8)
   }, [])
 
-  const { scene } = useGLTF('dog.glb')
+  const { scene } = useGLTF('/dog.glb')
   const voxelsPerModel = React.useMemo(() => voxelizeModel(scene), [scene])
 
   const { gl, camera } = useThree()
@@ -130,21 +134,6 @@ export function Voxel() {
   useFrame(() => {
     lightHolderRef.current?.quaternion.copy(camera.quaternion)
   })
-
-  const gsapResourcesPromise = React.useCallback(
-    () =>
-      new Promise<Gsap>((resolve) => {
-        if (window.gsap) return resolve(window.gsap)
-
-        const listener = () => {
-          window.gsap.registerPlugin(useGSAP)
-          resolve(window.gsap)
-          document.removeEventListener('gsaploaded', listener)
-        }
-        document.addEventListener('gsaploaded', listener)
-      }),
-    [],
-  )
 
   return (
     <>
@@ -167,21 +156,8 @@ export function Voxel() {
         </mesh>
       </group>
       <Suspense>
-        <VoxelMesh
-          voxelsPerModel={voxelsPerModel}
-          gsapResourcesPromise={gsapResourcesPromise()}
-        />
+        <VoxelMesh voxelsPerModel={voxelsPerModel} />
       </Suspense>
-      <Script
-        src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/gsap/3.13.0/gsap.min.js"
-        integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA=="
-        crossOrigin="anonymous"
-        referrerPolicy="no-referrer"
-        id="gsap-script"
-        onLoad={() => {
-          document.dispatchEvent(new Event('gsaploaded'))
-        }}
-      />
       <PerspectiveCamera
         ref={cameraRef}
         makeDefault
@@ -202,23 +178,7 @@ export function Voxel() {
   )
 }
 
-type Gsap = typeof import('gsap').default
-
-declare global {
-  interface Window {
-    gsap: Gsap
-  }
-}
-
-function VoxelMesh({
-  voxelsPerModel,
-  gsapResourcesPromise,
-}: {
-  voxelsPerModel: Voxel[]
-  gsapResourcesPromise: Promise<Gsap>
-}) {
-  const gsap = React.use(gsapResourcesPromise)
-
+function VoxelMesh({ voxelsPerModel }: { voxelsPerModel: Voxel[] }) {
   const instancedMeshRef = React.useRef<THREE.InstancedMesh>(null)
   const [voxels, setVoxels] = React.useState<Voxel[]>([])
   const dummy = React.useMemo(() => new THREE.Object3D(), [])
@@ -262,6 +222,7 @@ function VoxelMesh({
   useGSAP(() => {
     if (!instancedMeshRef.current) return
 
+    const instancedMesh = instancedMeshRef.current
     tl.current = gsap.timeline()
 
     for (let i = 0; i < voxels.length; i++) {
@@ -277,7 +238,7 @@ function VoxelMesh({
           b: voxelsPerModel[i].color.b,
           ease: 'power1.in',
           onUpdate: () => {
-            instancedMeshRef.current!.setColorAt(i, voxels[i].color)
+            instancedMesh.setColorAt(i, voxels[i].color)
           },
         },
         0,
@@ -295,7 +256,7 @@ function VoxelMesh({
           onUpdate: () => {
             dummy.position.copy(voxels[i].position)
             dummy.updateMatrix()
-            instancedMeshRef.current!.setMatrixAt(i, dummy.matrix)
+            instancedMesh.setMatrixAt(i, dummy.matrix)
           },
         },
         0,
@@ -304,7 +265,7 @@ function VoxelMesh({
 
     // increase the model rotation during transition
     tl.current.to(
-      instancedMeshRef.current.rotation,
+      instancedMesh.rotation,
       {
         duration: 1.2,
         y: '+=' + 1.3 * Math.PI,
@@ -315,7 +276,7 @@ function VoxelMesh({
 
     // show the right number of voxels
     tl.current.to(
-      instancedMeshRef.current,
+      instancedMesh,
       {
         duration: 0.4,
         count: voxelsPerModel.length,
@@ -325,8 +286,8 @@ function VoxelMesh({
 
     // update the instanced mesh accordingly to voxels data
     tl.current.eventCallback('onUpdate', () => {
-      instancedMeshRef.current!.instanceMatrix.needsUpdate = true
-      instancedMeshRef.current!.instanceColor!.needsUpdate = true
+      instancedMesh.instanceMatrix.needsUpdate = true
+      instancedMesh.instanceColor!.needsUpdate = true
     })
   }, [voxelsPerModel, voxels])
 

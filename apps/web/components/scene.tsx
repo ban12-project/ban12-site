@@ -4,7 +4,7 @@ import * as THREE from 'three'
 
 import { r3f } from './three'
 
-export default function Scene({ ...props }: Omit<CanvasProps, 'children'>) {
+export default function Scene({ ...props }: CanvasProps) {
   // Everything defined in here will persist between route changes, only children are swapped
   return (
     <Canvas

@@ -3,7 +3,7 @@ import HomeHeader from '#/components/home-header'
 
 import R3f from './r3f'
 
-type Props = { params: Promise<{ lang: Locale }> }
+type Props = Readonly<{ params: Promise<{ lang: Locale }> }>
 
 export default async function Home(props: Props) {
   const params = await props.params

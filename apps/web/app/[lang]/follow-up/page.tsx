@@ -5,8 +5,8 @@ import { headers } from 'next/headers'
 import { getRestaurants } from '#/lib/db/queries'
 import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import { CommandMenu } from '#/components/command-menu'
+import { Mapbox } from '#/components/mapbox'
 
-import MapboxClientOnly from './mapbox-client-only'
 import RenderMapboxControls from './render-mapbox-controls'
 
 type Props = Readonly<{
@@ -88,7 +88,7 @@ async function SuspendedMapbox({
     | undefined
 
   return (
-    <MapboxClientOnly
+    <Mapbox
       className="min-h-screen"
       options={{
         center:
@@ -103,6 +103,6 @@ async function SuspendedMapbox({
           location={awaitedSearchParams?.marker ? location : undefined}
         />
       </Suspense>
-    </MapboxClientOnly>
+    </Mapbox>
   )
 }
