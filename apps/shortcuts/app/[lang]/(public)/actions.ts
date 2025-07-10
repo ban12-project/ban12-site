@@ -3,7 +3,7 @@
 import { cache } from 'react'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { z } from 'zod'
+import * as z from 'zod'
 
 import {
   cfTurnstileResponseSchema,
@@ -21,7 +21,6 @@ import type { ShortcutRecord } from '#/lib/shortcut'
 
 const icloudSchema = z.object({
   icloud: z
-    .string()
     .url()
     .startsWith(
       'https://www.icloud.com/shortcuts/',
@@ -54,7 +53,7 @@ export async function getShortcutByiCloud(
 
   if (!validatedFields.success) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: z.flattenError(validatedFields.error).fieldErrors,
       message: 'Failed to validate form data.',
     }
   }
@@ -119,9 +118,11 @@ const shortcutSchema = z.object({
     .nullable(),
   language: z.enum(['zh-CN', 'en']),
 })
-const formSchema = icloudSchema
-  .merge(shortcutSchema)
-  .merge(cfTurnstileResponseSchema)
+const formSchema = z.object({
+  ...icloudSchema.shape,
+  ...shortcutSchema.shape,
+  ...cfTurnstileResponseSchema.shape,
+})
 
 export async function postShortcut(prevState: State, formData: FormData) {
   if (formData.get('name') === null)
@@ -140,7 +141,7 @@ export async function postShortcut(prevState: State, formData: FormData) {
 
   if (!validatedFields.success) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: z.flattenError(validatedFields.error).fieldErrors,
       message: 'Failed to validate form data',
     }
   }
@@ -234,7 +235,7 @@ export async function searchShortcuts(query: string) {
 
   if (!validatedFields.success) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: z.flattenError(validatedFields.error).fieldErrors,
       message: 'Failed to validate form data.',
     }
   }

@@ -30,7 +30,7 @@ import {
 import { Loader2 } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
-import { z } from 'zod'
+import * as z from 'zod'
 
 import { call, JS7zEventName, SCRIPT_LOADED_EVENT, type Out } from '#/lib/7-zip'
 import { useDragDrop } from '#/hooks/use-drag-drop'
@@ -241,7 +241,10 @@ export function useTotalToast() {
 
 const FormSchema = z.object({
   format: z.enum(supportedFormats.packingAndUnpacking, {
-    required_error: 'Please select an format to continue.',
+    error: (issue) =>
+      issue === undefined
+        ? 'Please select an format to continue.'
+        : 'Invalid format.',
   }),
 })
 

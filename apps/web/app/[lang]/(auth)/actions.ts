@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath, revalidateTag } from 'next/cache'
-import { z } from 'zod'
+import * as z from 'zod'
 
 import {
   updateInvisibleById,
@@ -46,7 +46,7 @@ export type State = {
 }
 
 const updateYoutubeFormSchema = z.object({
-  link: z.string().url().startsWith('https://www.youtube.com/watch?v='),
+  link: z.url().startsWith('https://www.youtube.com/watch?v='),
   id: z.string().nonempty(),
 })
 
@@ -58,7 +58,7 @@ export async function updateYoutubeLink(prevState: State, formData: FormData) {
 
   if (!validatedFields.success) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: z.flattenError(validatedFields.error).fieldErrors,
       message: 'Failed to validate form data.',
     }
   }
@@ -96,7 +96,7 @@ export async function updateLocation(prevState: State, formData: FormData) {
 
   if (!validatedFields.success) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: z.flattenError(validatedFields.error).fieldErrors,
       message: 'Failed to validate form data.',
     }
   }
@@ -132,7 +132,7 @@ export async function updateInvisible(prevState: State, formData: FormData) {
 
   if (!validatedFields.success) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: z.flattenError(validatedFields.error).fieldErrors,
       message: 'Failed to validate form data.',
     }
   }

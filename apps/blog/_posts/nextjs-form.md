@@ -154,7 +154,10 @@ export async function createUser(prevState: State, formData: FormData) {
 
   if (!validatedFields.success) {
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      // zod v4
+      errors: z.flattenError(validatedFields.error).fieldErrors,
+      // zod v3
+      // errors: validatedFields.error.flatten().fieldErrors,
       message: 'Failed to validate form data.',
     }
   }

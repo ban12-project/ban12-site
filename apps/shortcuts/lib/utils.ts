@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import * as z from 'zod'
 
 import type { LocalizedString } from './db/schema'
 import type { Locale } from './i18n'

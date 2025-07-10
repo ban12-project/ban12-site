@@ -21,7 +21,7 @@ import { Input } from '@repo/ui/components/input'
 import { LoaderCircleIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { z } from 'zod'
+import * as z from 'zod'
 
 import type { SelectRestaurant } from '#/lib/db/schema'
 

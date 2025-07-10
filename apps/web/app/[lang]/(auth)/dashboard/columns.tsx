@@ -55,7 +55,7 @@ import {
 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { z } from 'zod'
+import * as z from 'zod'
 
 import type { SelectRestaurant } from '#/lib/db/schema'
 
@@ -314,7 +314,6 @@ function Actions({ row }: { row: SelectRestaurant }) {
 
 const formSchema = z.object({
   link: z
-    .string()
     .url()
     .startsWith('https://www.youtube.com/watch?v=', 'invalid youtube link'),
 })

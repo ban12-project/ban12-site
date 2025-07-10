@@ -3,7 +3,7 @@
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { AuthError } from 'next-auth'
-import { z } from 'zod'
+import * as z from 'zod'
 
 import { signIn } from '#/lib/auth'
 import {
@@ -23,12 +23,11 @@ import {
 import { answerTranslate } from '#/lib/prompt'
 import { LocalizedHelper } from '#/lib/utils'
 
-const authFormSchema = z
-  .object({
-    email: z.string().email(),
-    password: z.string().min(6),
-  })
-  .merge(cfTurnstileResponseSchema)
+const authFormSchema = z.object({
+  email: z.email(),
+  password: z.string().min(6),
+  ...cfTurnstileResponseSchema.shape,
+})
 
 export async function login(prevState: string | undefined, formData: FormData) {
   try {
@@ -65,44 +64,38 @@ export async function login(prevState: string | undefined, formData: FormData) {
   }
 }
 
-const shortcutSchema = z
-  .object({
-    icloud: z
-      .string()
-      .url()
-      .startsWith(
-        'https://www.icloud.com/shortcuts/',
-        'must be start with https://www.icloud.com/shortcuts/',
-      )
-      .regex(/\/[0-9a-f]{32}\/?$/, 'iCloud url is broken'),
-    name: LocalizedHelper.schema,
-    description: LocalizedHelper.schema,
-    icon: z
-      .string()
-      .nullable()
-      .transform((val) => (val === null ? '' : val)),
-    backgroundColor: z.string(),
-    details: z
-      .array(
-        z.enum([
-          'SHARE_SHEET',
-          'APPLE_WATCH',
-          'MENU_BAR_ON_MAC',
-          'QUICK_ACTIONS_ON_MAC',
-          'RECEIVES_SCREEN',
-        ]),
-      )
-      .transform((val) => val.join(','))
-      .nullable(),
-    language: z.enum(['zh-CN', 'en']),
-  })
-  .merge(
-    z.object({
-      uuid: z.string(),
-      albumId: z.string().nullable(),
-      collectionId: z.string().nullable(),
-    }),
-  )
+const shortcutSchema = z.object({
+  icloud: z
+    .url()
+    .startsWith(
+      'https://www.icloud.com/shortcuts/',
+      'must be start with https://www.icloud.com/shortcuts/',
+    )
+    .regex(/\/[0-9a-f]{32}\/?$/, 'iCloud url is broken'),
+  name: LocalizedHelper.schema,
+  description: LocalizedHelper.schema,
+  icon: z
+    .string()
+    .nullable()
+    .transform((val) => (val === null ? '' : val)),
+  backgroundColor: z.string(),
+  details: z
+    .array(
+      z.enum([
+        'SHARE_SHEET',
+        'APPLE_WATCH',
+        'MENU_BAR_ON_MAC',
+        'QUICK_ACTIONS_ON_MAC',
+        'RECEIVES_SCREEN',
+      ]),
+    )
+    .transform((val) => val.join(','))
+    .nullable(),
+  language: z.enum(['zh-CN', 'en']),
+  uuid: z.string(),
+  albumId: z.string().nullable(),
+  collectionId: z.string().nullable(),
+})
 
 export async function updateShortcut(
   prevState: string | undefined,

@@ -1,5 +1,5 @@
 import { headers } from 'next/headers'
-import { z } from 'zod'
+import * as z from 'zod'
 
 /** https://developers.cloudflare.com/turnstile/get-started/server-side-validation/#accepted-parameters */
 interface TurnstileResponse {

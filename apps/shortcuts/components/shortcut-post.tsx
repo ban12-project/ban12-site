@@ -48,7 +48,6 @@ interface ShortcutPostProps {
 
 const icloudSchema = z.object({
   icloud: z
-    .string()
     .url()
     .startsWith(
       'https://www.icloud.com/shortcuts/',
@@ -76,7 +75,10 @@ const shortcutSchema = z.object({
   language: z.enum(['zh-CN', 'en']),
 })
 
-const formSchema = icloudSchema.merge(shortcutSchema)
+const formSchema = z.object({
+  ...icloudSchema.shape,
+  ...shortcutSchema.shape,
+})
 
 export type FormSchemaType = z.infer<typeof formSchema>
 

@@ -20,14 +20,15 @@ import {
   SelectValue,
 } from '@repo/ui/components/select'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import * as z from 'zod'
 
 const FormSchema = z.object({
-  email: z
-    .string({
-      required_error: 'Please select an email to display.',
-    })
-    .email(),
+  email: z.email({
+    error: (issue) =>
+      issue.input === undefined
+        ? 'Please select an email to display.'
+        : 'Please enter a valid email.',
+  }),
 })
 
 const supportedDataTypes = [

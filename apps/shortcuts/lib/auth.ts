@@ -2,7 +2,7 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import NextAuth, { type Session, type User } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import Passkey from 'next-auth/providers/passkey'
-import { z } from 'zod'
+import * as z from 'zod'
 
 import { authConfig } from './auth.config'
 import { db, getUser } from './db/queries'
@@ -23,7 +23,7 @@ export const {
     Credentials({
       async authorize(credentials) {
         const parsedCredentials = z
-          .object({ email: z.string().email(), password: z.string().min(6) })
+          .object({ email: z.email(), password: z.string().min(6) })
           .safeParse(credentials)
 
         if (parsedCredentials.success) {
