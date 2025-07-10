@@ -3,8 +3,8 @@
 import 'lenis/dist/lenis.css'
 
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ReactLenis, useLenis, type LenisRef } from 'lenis/react'
 import Tempus from 'tempus'
 import { useTempus } from 'tempus/react'
