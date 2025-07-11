@@ -27,7 +27,7 @@ export async function generateStaticParams() {
 export default async function Page({ params }: Props) {
   const { restaurantName, lang } = await params
   const [restaurant, messages] = await Promise.all([
-    getCachedRestaurantByName(decodeURIComponent(restaurantName)),
+    getCachedRestaurantByName(restaurantName),
     getDictionary(lang),
   ])
 
@@ -131,9 +131,7 @@ export default async function Page({ params }: Props) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { restaurantName } = await params
-  const restaurant = await getCachedRestaurantByName(
-    decodeURIComponent(restaurantName),
-  )
+  const restaurant = await getCachedRestaurantByName(restaurantName)
 
   if (!restaurant || !restaurant.ai_summarize) {
     notFound()
