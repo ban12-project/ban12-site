@@ -193,6 +193,10 @@ const Clusters = React.memo(
       [resolvedTheme],
     )
 
+    React.useEffect(() => {
+      router.prefetch(`/${locale}/follow-up/[restaurantName]`)
+    }, [router, locale])
+
     return null
   },
   (prev, next) => {

@@ -56,11 +56,11 @@ export default async function Page({ params }: Props) {
     <main className="container mx-auto px-4 py-12">
       <div className="grid gap-8">
         <section className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
-          <div className="flex">
+          <div className="flex flex-wrap gap-4">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
               {restaurant.ai_summarize.restaurantName}
             </h1>
-            <div className="ml-4 flex items-center">
+            <div className="flex items-center">
               <span className="mr-2 text-yellow-500">
                 <Star className="h-5 w-5 fill-current" />
               </span>
@@ -68,6 +68,15 @@ export default async function Page({ params }: Props) {
                 {restaurant.ai_summarize.rating || 'N/A'}
               </span>
             </div>
+            <a
+              href={`https://www.bilibili.com/video/${restaurant.bvid}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-auto block self-end w-full md:w-fit"
+            >
+              {restaurant.title}
+              <ExternalLink className="ml-1 inline size-3" />
+            </a>
           </div>
           <div className="mt-2 items-center space-x-2 text-sm text-gray-600 md:flex dark:text-gray-300">
             <p>{restaurant.ai_summarize.restaurantAddress}</p>
