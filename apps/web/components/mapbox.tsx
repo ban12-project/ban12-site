@@ -10,7 +10,6 @@ import { LoaderCircleIcon } from 'lucide-react'
 import mapboxgl, { MarkerOptions } from 'mapbox-gl'
 import { useTheme } from 'next-themes'
 import { createPortal } from 'react-dom'
-import { useIntersectionObserver } from 'usehooks-ts'
 
 interface Props extends React.ComponentProps<'div'> {
   options?: Partial<mapboxgl.MapOptions>
@@ -36,7 +35,6 @@ export function Mapbox({
   const mapContainerRef = React.useRef<React.ComponentRef<'div'>>(null!)
   const [map, setMap] = React.useState<mapboxgl.Map | null>(null)
 
-  const { isIntersecting, ref: observerRef } = useIntersectionObserver()
   const { resolvedTheme } = useTheme()
   const { locale } = useLocale()
   const [pending, startTransition] = React.useTransition()
@@ -44,7 +42,7 @@ export function Mapbox({
   React.useEffect(() => {
     const container = mapContainerRef.current
     // reuse map instance, reduce cost
-    if (map || !isIntersecting) return
+    if (map) return
 
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     const newMap = new mapboxgl.Map({
@@ -72,7 +70,7 @@ export function Mapbox({
       setMap(null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isIntersecting])
+  }, [])
 
   React.useEffect(() => {
     if (!map) return
@@ -103,7 +101,6 @@ export function Mapbox({
     if (typeof ref === 'function') ref(el)
     else if (ref != null) ref.current = el
     mapContainerRef.current = el
-    observerRef(el)
   }
 
   return (
