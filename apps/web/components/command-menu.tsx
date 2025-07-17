@@ -1,6 +1,7 @@
 'use client'
 
-import { Suspense, use, useEffect, useState, useTransition } from 'react'
+import { Suspense } from 'react'
+import * as React from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@repo/ui/components/button'
 import {
@@ -27,9 +28,9 @@ type Props = {
 }
 
 export function CommandMenu(props: Props) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = React.useState(false)
 
-  useEffect(() => {
+  React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if ((e.key === 'k' && (e.metaKey || e.ctrlKey)) || e.key === '/') {
         e.preventDefault()
@@ -51,7 +52,7 @@ export function CommandMenu(props: Props) {
         className="bg-muted/80 text-muted-foreground hidden h-8 w-full justify-start rounded-[0.5rem] text-sm font-normal shadow-none saturate-[180%] backdrop-blur-[20px] backdrop-filter sm:pr-12 md:inline-flex md:w-40 lg:w-56 xl:w-64"
         onClick={() => setOpen(true)}
       >
-        <span className="hidden lg:inline-flex">Search address...</span>
+        <span className="hidden lg:inline-flex">Search restaurant...</span>
         <span className="inline-flex lg:hidden">Search...</span>
         <kbd className="bg-muted pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
           <span className="text-xs">⌘</span>K
@@ -74,25 +75,24 @@ function RenderCommandGroup({
   restaurants,
   closeMenu,
 }: Props & { closeMenu: () => void }) {
-  const data = use(restaurants)
+  const data = React.use(restaurants)
 
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === 'm' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        requestGeolocation()
-      }
-    }
-
-    document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
-  }, [])
-
-  const [isPending, startTransition] = useTransition()
+  const [isPending, startTransition] = React.useTransition()
   const pathname = usePathname()
   const { replace } = useRouter()
 
-  const requestGeolocation = () => {
+  const navigation = React.useCallback(
+    (lng: number, lat: number, marker?: boolean) => {
+      const params = new URLSearchParams()
+      params.set('location', `${lng},${lat}`)
+      if (marker) params.set('marker', '1')
+      replace(`${pathname}?${params.toString()}`)
+      closeMenu()
+    },
+    [closeMenu, pathname, replace],
+  )
+
+  const requestGeolocation = React.useCallback(() => {
     if (!navigator.geolocation)
       return toast.error('Geolocation is not supported by this browser.')
 
@@ -110,15 +110,19 @@ function RenderCommandGroup({
         }
       }
     })
-  }
+  }, [navigation])
 
-  const navigation = (lng: number, lat: number, marker?: boolean) => {
-    const params = new URLSearchParams()
-    params.set('location', `${lng},${lat}`)
-    if (marker) params.set('marker', '1')
-    replace(`${pathname}?${params.toString()}`)
-    closeMenu()
-  }
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'm' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        requestGeolocation()
+      }
+    }
+
+    document.addEventListener('keydown', down)
+    return () => document.removeEventListener('keydown', down)
+  }, [requestGeolocation])
 
   return (
     <>
@@ -139,7 +143,7 @@ function RenderCommandGroup({
               navigation(...coordtransform.gcj02towgs84(...restaurant.location))
             }}
           >
-            <span>{restaurant.title}</span>
+            <span>{restaurant.ai_summarize?.restaurantName}</span>
           </CommandItem>
         ))}
       </CommandGroup>

@@ -8,7 +8,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu'
-import { Input } from '@repo/ui/components/input'
 import { Label } from '@repo/ui/components/label'
 import {
   Select,
@@ -29,16 +28,15 @@ import {
   ColumnDef,
   ColumnFiltersState,
   flexRender,
-  functionalUpdate,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Table as PrimitiveTable,
   SortingState,
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table'
-import equal from 'fast-deep-equal'
 import {
   ChevronLeft,
   ChevronRight,
@@ -49,11 +47,13 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  header?: React.ComponentType<{ table: PrimitiveTable<TData> }>
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  header: Header,
 }: DataTableProps<TData, TValue>) {
   // https://github.com/TanStack/table/issues/5567
   'use no memo'
@@ -91,14 +91,7 @@ export function DataTable<TData, TValue>({
   return (
     <>
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter title..."
-          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('title')?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        {Header && <Header table={table} />}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

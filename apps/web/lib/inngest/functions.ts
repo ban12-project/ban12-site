@@ -35,7 +35,7 @@ async function triggerRevalidation(id: string) {
     },
     body: JSON.stringify({
       tags: [`restaurant:${id}`],
-      paths: [{ path: '/[lang]/dashboard', type: 'page' }],
+      paths: [{ path: '/[lang]/dashboard/restaurants', type: 'page' }],
     }),
   })
 
@@ -74,7 +74,7 @@ export const videoUnderstanding = inngest.createFunction(
                     fileUri,
                   },
                 },
-            "Based on the video description, provide the restaurant's name and restaurant's address, give a recommendation rating (out of five points) in terms of price, waiting time, dishes, and service, and offer precautions for diners visiting this place",
+            "Based on the video description, provide the restaurant's name and restaurant's address, give a recommendation rating (out of five points) in terms of price, waiting time, dishes, and service, and offer precautions for diners visiting this place, with all fields in Chinese.",
           ]),
           config: {
             responseMimeType: 'application/json',

@@ -26,6 +26,10 @@ declare global {
     [K in keyof T]: NonNullable<T[K]>
   }
 
+  export type WithNonNullableKey<T, K extends keyof T> = T & {
+    [P in K]-?: NonNullable<T[P]>
+  }
+
   type Enumerate<
     N extends number,
     Acc extends number[] = [],

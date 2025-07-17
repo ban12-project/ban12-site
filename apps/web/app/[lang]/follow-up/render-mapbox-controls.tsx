@@ -45,12 +45,11 @@ const Clusters = React.memo(
           data: {
             type: 'FeatureCollection',
             features: restaurants
-              .map(({ location, ai_summarize, id }) => {
+              .map(({ location, ai_summarize }) => {
                 const [lng, lat] = coordtransform.gcj02towgs84(...location!)
                 return {
                   type: 'Feature' as const,
                   properties: {
-                    id,
                     ...ai_summarize,
                   },
                   geometry: {

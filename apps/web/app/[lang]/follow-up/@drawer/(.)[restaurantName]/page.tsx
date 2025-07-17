@@ -1,10 +1,18 @@
 import { Suspense, unstable_ViewTransition as ViewTransition } from 'react'
+import { notFound } from 'next/navigation'
 import { LoaderCircle } from 'lucide-react'
 
-import { default as PagePrimitive, type Props } from '../../[restaurantName]/page'
+import { getDictionary, type Messages } from '#/lib/i18n'
+
+import { type Props } from '../../[restaurantName]/page'
+import RestaurantDetail from '../../[restaurantName]/restaurant-detail'
+import { getCachedRestaurantWithPostsByName } from '../../actions'
 import Drawer from './drawer'
 
-export default function Page(props: Props) {
+export default async function Page({ params }: Props) {
+  const { restaurantName, lang } = await params
+  const messages = await getDictionary(lang)
+
   return (
     <Drawer>
       <Suspense
@@ -17,9 +25,36 @@ export default function Page(props: Props) {
         }
       >
         <ViewTransition enter="mapbox-enter">
-          <PagePrimitive {...props} />
+          <Suspended restaurantName={restaurantName} messages={messages} />
         </ViewTransition>
       </Suspense>
     </Drawer>
+  )
+}
+
+async function Suspended({
+  restaurantName,
+  messages,
+}: {
+  restaurantName: string
+  messages: Messages
+}) {
+  const { restaurant, posts } =
+    await getCachedRestaurantWithPostsByName(restaurantName)
+
+  if (!restaurant || !restaurant.ai_summarize) {
+    notFound()
+  }
+
+  return (
+    <main className="container mx-auto px-4 py-12">
+      <RestaurantDetail
+        restaurant={
+          restaurant as WithNonNullableKey<typeof restaurant, 'ai_summarize'>
+        }
+        posts={posts}
+        messages={messages}
+      />
+    </main>
   )
 }

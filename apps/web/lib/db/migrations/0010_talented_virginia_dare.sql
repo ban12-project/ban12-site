@@ -1,0 +1,1 @@
+ALTER TABLE "authors" ALTER COLUMN "platformId" SET DATA TYPE text;

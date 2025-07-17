@@ -1,15 +1,26 @@
 import 'server-only'
 
 import { cache } from 'react'
+import { isHangingPromiseRejectionError } from 'next/dist/server/dynamic-rendering-utils'
 import { Redis } from '@upstash/redis'
 import { and, eq, isNotNull, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/neon-http'
 
-import { restaurant, SelectRestaurant } from './schema'
+import {
+  authors,
+  posts,
+  postsToRestaurants,
+  restaurant,
+  type SelectAuthor,
+  type SelectPost,
+  type SelectRestaurant,
+} from './schema'
 
 const redis = Redis.fromEnv()
 
 const CACHE_TTL = {
+  AUTHORS: 3600,
+  POSTS: 3600,
   RESTAURANTS: 3600, // 1小时
 }
 
@@ -21,10 +32,10 @@ export const db = drizzle(connectionString)
 export const getRestaurants = cache(async (all = false) => {
   const cacheKey = `restaurants:${all ? 'all' : 'filtered'}`
 
-  const cachedRestaurants = await redis.get<SelectRestaurant[]>(cacheKey)
-  if (cachedRestaurants) return cachedRestaurants
-
   try {
+    const cachedRestaurants = await redis.get<SelectRestaurant[]>(cacheKey)
+    if (cachedRestaurants) return cachedRestaurants
+
     const restaurants = await db
       .select()
       .from(restaurant)
@@ -43,10 +54,56 @@ export const getRestaurants = cache(async (all = false) => {
 
     return restaurants
   } catch (error) {
+    if (isHangingPromiseRejectionError(error)) throw error
+
     console.error('Failed to get restaurants from database')
     throw error
   }
 })
+
+export async function getAuthors() {
+  const cacheKey = `authors`
+
+  try {
+    const cachedAuthors = await redis.get<SelectAuthor[]>(cacheKey)
+    if (cachedAuthors) return cachedAuthors
+
+    const data = await db.select().from(authors)
+
+    if (data.length > 0) {
+      await redis.set(cacheKey, data, { ex: CACHE_TTL.AUTHORS })
+    }
+
+    return data
+  } catch (error) {
+    if (isHangingPromiseRejectionError(error)) throw error
+
+    console.error('Failed to get authors from database')
+    throw error
+  }
+}
+
+export async function getPosts() {
+  const cacheKey = `posts`
+
+  try {
+    const cachedPosts = await redis.get<SelectPost[]>(cacheKey)
+    if (cachedPosts) return cachedPosts
+
+    const data = await db.select().from(posts)
+
+    if (data.length > 0) {
+      await redis.set(cacheKey, data, { ex: CACHE_TTL.POSTS })
+    }
+
+    return data
+  } catch (error) {
+    if (isHangingPromiseRejectionError(error)) throw error
+
+    console.error('Failed to get posts from database')
+    throw error
+  }
+}
 
 export async function updateYoutubeLinkById({
   link,
@@ -138,15 +195,24 @@ export async function getRestaurantById(id: string) {
   }
 }
 
-export async function getRestaurantByName(name: string) {
+export async function getRestaurantWithPostsByName(name: string) {
   const cacheKey = `restaurant:name:${name}`
 
   try {
-    const cachedRestaurant = await redis.get<SelectRestaurant>(cacheKey)
+    const cachedRestaurant = await redis.get<typeof item>(cacheKey)
     if (cachedRestaurant) return cachedRestaurant
+
     const [item] = await db
-      .select()
+      .select({
+        restaurant: restaurant,
+        posts: posts,
+      })
       .from(restaurant)
+      .leftJoin(
+        postsToRestaurants,
+        eq(restaurant.id, postsToRestaurants.restaurantId),
+      )
+      .leftJoin(posts, eq(postsToRestaurants.postId, posts.id))
       .where(sql`${restaurant.ai_summarize}->>'restaurantName' = ${name}`)
       .limit(1)
 
@@ -199,6 +265,20 @@ export async function updateInvisibleById({
     ])
   } catch (error) {
     console.error('Failed to update invisible in database')
+    throw error
+  }
+}
+
+export async function insertAuthor({
+  platform,
+  platformId,
+}: Pick<Required<typeof authors.$inferInsert>, 'platform' | 'platformId'>) {
+  try {
+    await db.insert(authors).values({ platform, platformId })
+
+    await redis.del('authors')
+  } catch (error) {
+    console.error('Failed to add author in database')
     throw error
   }
 }

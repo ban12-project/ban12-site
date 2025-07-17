@@ -64,6 +64,34 @@
       "when": 1751463842378,
       "tag": "0008_large_beast",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1752678529797,
+      "tag": "0009_shocking_solo",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1752679132715,
+      "tag": "0010_talented_virginia_dare",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1752712479344,
+      "tag": "0011_special_deathbird",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1752723178444,
+      "tag": "0012_secret_freak",
+      "breakpoints": true
     }
   ]
 }

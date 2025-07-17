@@ -14,7 +14,7 @@
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",
-      "command": "pnpm build",
+      "command": "pnpm dev",
       "cwd": "${workspaceFolder}/${input:app}"
     },
     {

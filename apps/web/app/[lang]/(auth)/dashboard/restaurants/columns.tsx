@@ -46,7 +46,6 @@ import { Input } from '@repo/ui/components/input'
 import { Switch } from '@repo/ui/components/switch'
 import { ColumnDef } from '@tanstack/react-table'
 import {
-  ArrowUpDown,
   CircleCheck,
   CircleDot,
   CircleX,
@@ -64,88 +63,13 @@ import {
   updateInvisible,
   updateLocation,
   updateYoutubeLink,
-} from '../actions'
+} from '../../actions'
 import UploadToGeminiFiles from './upload-to-gemini-files'
-
-const parseLengthToSeconds = (lengthStr: string | undefined | null): number => {
-  if (!lengthStr || typeof lengthStr !== 'string') return 0
-  const parts = lengthStr.split(':').map(Number)
-  let seconds = 0
-  if (parts.some(isNaN)) return 0 // Handle cases like "N/A" or malformed strings
-
-  if (parts.length === 1) {
-    // ss
-    seconds = parts[0]
-  } else if (parts.length === 2) {
-    // mm:ss
-    seconds = parts[0] * 60 + parts[1]
-  } else if (parts.length === 3) {
-    // hh:mm:ss
-    seconds = parts[0] * 3600 + parts[1] * 60 + parts[2]
-  } else {
-    return 0 // Invalid format
-  }
-  return seconds
-}
 
 export const columns: ColumnDef<SelectRestaurant>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
-  },
-  {
-    accessorKey: 'title',
-    header: 'Title',
-  },
-  {
-    accessorKey: 'created',
-    header: 'Created',
-    cell: ({ row }) =>
-      new Date(+row.original.created.toString().padEnd(13, '0')).toLocaleString(
-        undefined,
-        {
-          timeZone: 'Asia/Shanghai',
-          year: 'numeric',
-          month: 'numeric', // Or '2-digit' for MM
-          day: 'numeric', // Or '2-digit' for DD
-          hour: '2-digit', // Ensures HH format
-          minute: '2-digit', // Ensures mm format
-          second: '2-digit', // Ensures ss format
-          hour12: false, // This is key for 24-hour format
-        },
-      ),
-  },
-  {
-    accessorKey: 'bvid',
-    header: 'Bilibili bvid',
-    cell: ({ row }) => (
-      <a
-        target="_blank"
-        rel="noreferrer"
-        href={`https://www.bilibili.com/video/${row.original.bvid}`}
-      >
-        {row.original.bvid}
-      </a>
-    ),
-  },
-  {
-    accessorKey: 'length',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Length
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    sortingFn: (rowA, rowB) => {
-      const a = parseLengthToSeconds(rowA.original.length)
-      const b = parseLengthToSeconds(rowB.original.length)
-      return a - b
-    },
   },
   {
     accessorKey: 'youtube',
@@ -238,7 +162,7 @@ function Actions({ row }: { row: SelectRestaurant }) {
           {
             loading: 'Processing',
             success: () => {
-              return `${row.title} already start processing`
+              return `${row.id} already start processing`
             },
             error: 'Error',
             finally: resolve,
@@ -364,7 +288,7 @@ function LinkYoutubeForm({
       <form action={action}>
         <DialogHeader>
           <DialogTitle>Youtube link</DialogTitle>
-          <DialogDescription>{row.title}</DialogDescription>
+          <DialogDescription>{row.id}</DialogDescription>
         </DialogHeader>
 
         <FormField
@@ -464,7 +388,7 @@ function LocationForm({
       <form action={action}>
         <DialogHeader>
           <DialogTitle>Latitude and Longitude</DialogTitle>
-          <DialogDescription>{row.title}</DialogDescription>
+          <DialogDescription>{row.id}</DialogDescription>
         </DialogHeader>
 
         <FormField

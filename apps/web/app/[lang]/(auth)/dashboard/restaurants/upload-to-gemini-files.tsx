@@ -25,7 +25,7 @@ import * as z from 'zod'
 
 import type { SelectRestaurant } from '#/lib/db/schema'
 
-import { startVideoUnderstanding } from '../actions'
+import { startVideoUnderstanding } from '../../actions'
 
 const formSchema = z.object({
   key: z.string().nonempty('API key is required'),
@@ -74,7 +74,7 @@ export default function UploadToGeminiFiles({
       {
         loading: 'Processing',
         success: () => {
-          return `${row.title} already start processing`
+          return `${row.id} already start processing`
         },
         error: 'Error',
       },

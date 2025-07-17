@@ -1,0 +1,37 @@
+ALTER TABLE "restaurant" ADD COLUMN "created_at" timestamp DEFAULT now() NOT NULL;--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "comment";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "typeid";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "play";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "pic";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "subtitle";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "description";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "copyright";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "title";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "review";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "author";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "mid";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "created";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "length";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "video_review";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "aid";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "bvid";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "hide_click";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "is_pay";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "is_union_video";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "is_steins_gate";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "is_live_playback";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "is_lesson_video";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "is_lesson_finished";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "lesson_update_info";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "jump_url";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "meta";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "is_avoided";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "season_id";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "attribute";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "is_charging_arc";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "elec_arc_type";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "vt";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "enable_vt";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "vt_display";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "playback_position";--> statement-breakpoint
+ALTER TABLE "restaurant" DROP COLUMN "is_self_view";

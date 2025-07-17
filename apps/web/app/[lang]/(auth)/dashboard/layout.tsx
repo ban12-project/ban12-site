@@ -1,11 +1,3 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@repo/ui/components/breadcrumb'
 import { Separator } from '@repo/ui/components/separator'
 import {
   SidebarInset,
@@ -14,6 +6,7 @@ import {
 } from '@repo/ui/components/sidebar'
 
 import { AppSidebar } from '#/components/app-sidebar'
+import Breadcrumb from '#/components/dashboard-breadcrumb'
 
 import { auth, signOut } from '../auth'
 
@@ -41,19 +34,7 @@ export default async function DashboardLayout({ children }: Props) {
               orientation="vertical"
               className="mr-2 data-[orientation=vertical]:h-4"
             />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            <Breadcrumb />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>

@@ -4,6 +4,7 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import * as z from 'zod'
 
 import {
+  insertAuthor,
   updateInvisibleById,
   updateLocationById,
   updateStatusById,
@@ -34,7 +35,7 @@ export async function startVideoUnderstanding({
     },
   })
 
-  revalidatePath('/[lang]/dashboard', 'page')
+  revalidatePath('/[lang]/dashboard/restaurants', 'page')
   revalidateTag(`restaurant:${id}`)
 }
 
@@ -73,7 +74,7 @@ export async function updateYoutubeLink(prevState: State, formData: FormData) {
     }
   }
 
-  revalidatePath('/[lang]/dashboard', 'page')
+  revalidatePath('/[lang]/dashboard/restaurants', 'page')
 
   return {
     message: 'success',
@@ -111,7 +112,7 @@ export async function updateLocation(prevState: State, formData: FormData) {
     }
   }
 
-  revalidatePath('/[lang]/dashboard', 'page')
+  revalidatePath('/[lang]/dashboard/restaurants', 'page')
   revalidateTag(`restaurant:${id}`)
 
   return {
@@ -147,8 +148,43 @@ export async function updateInvisible(prevState: State, formData: FormData) {
     }
   }
 
-  revalidatePath('/[lang]/dashboard', 'page')
+  revalidatePath('/[lang]/dashboard/restaurants', 'page')
   revalidateTag(`restaurant:${id}`)
+
+  return {
+    message: 'success',
+  }
+}
+
+const authorSchema = z.object({
+  platform: z.enum(['bilibili']),
+  platformId: z.string().nonempty(),
+})
+
+export async function addAuthor(prevState: State, formData: FormData) {
+  const validatedFields = authorSchema.safeParse({
+    platform: formData.get('platform'),
+    platformId: formData.get('platformId'),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: z.flattenError(validatedFields.error).fieldErrors,
+      message: 'Failed to validate form data.',
+    }
+  }
+
+  const { platform, platformId } = validatedFields.data
+
+  try {
+    await insertAuthor({ platform, platformId })
+  } catch {
+    return {
+      message: 'Failed to add author.',
+    }
+  }
+
+  revalidatePath('/[lang]/dashboard/authors', 'page')
 
   return {
     message: 'success',
