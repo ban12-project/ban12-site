@@ -7,9 +7,9 @@ catalog:
   '@google/genai': ^1.9.0
   '@gsap/react': ^2.1.2
   '@hookform/resolvers': ^5.1.1
-  '@next/bundle-analyzer': ^15.4.1
-  '@next/eslint-plugin-next': ^15.4.1
-  '@next/third-parties': ^15.4.1
+  '@next/bundle-analyzer': ^15.4.2
+  '@next/eslint-plugin-next': ^15.4.2
+  '@next/third-parties': ^15.4.2
   '@opennextjs/cloudflare': ^1.3.0
   '@radix-ui/react-icons': ^1.3.2
   '@radix-ui/react-label': ^2.1.2
@@ -32,12 +32,12 @@ catalog:
   drizzle-kit: ^0.31.1
   drizzle-orm: ^0.44.2
   eslint: ^9.29.0
-  eslint-config-next: ^15.4.1
+  eslint-config-next: ^15.4.2
   eslint-plugin-turbo: ^2.5.4
   gsap: ^3.13.0
   intl-messageformat: ^10.7.16
   lucide-react: ^0.485.0
-  next: ^15.4.1
+  next: ^15.4.2
   next-auth: 5.0.0-beta.28
   next-themes: ^0.4.6
   postcss: ^8.5.6
@@ -56,14 +56,15 @@ catalog:
   vaul: ^1.1.2
   wrangler: ^4.20.0
   zod: ^4.0.5
+  recharts: ^2.15.4
 
 catalogs:
   canary:
-    '@next/bundle-analyzer': 15.4.2-canary.5
-    '@next/eslint-plugin-next': 15.4.2-canary.5
-    '@next/third-parties': 15.4.2-canary.5
-    eslint-config-next: 15.4.2-canary.5
-    next: 15.4.2-canary.5
+    '@next/bundle-analyzer': 15.4.2-canary.9
+    '@next/eslint-plugin-next': 15.4.2-canary.9
+    '@next/third-parties': 15.4.2-canary.9
+    eslint-config-next: 15.4.2-canary.9
+    next: 15.4.2-canary.9
 
 onlyBuiltDependencies:
   - '@sentry/cli'
@@ -74,3 +75,6 @@ onlyBuiltDependencies:
   - protobufjs
   - sharp
   - workerd
+
+overrides:
+  react-is: ^19.1.0

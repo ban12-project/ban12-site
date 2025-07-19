@@ -10,6 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@repo/ui/components/breadcrumb'
+import { cn } from '@repo/ui/lib/utils'
 
 export default function DashboardBreadcrumb() {
   const pathname = usePathname()
@@ -24,14 +25,16 @@ export default function DashboardBreadcrumb() {
             <Link href="/dashboard">Dashboard</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator className="hidden md:block" />
+        <BreadcrumbSeparator
+          className={cn(items.length > 0 ? 'hidden md:block' : 'hidden')}
+        />
         {items.map((item, index) =>
           index === items.length - 1 ? (
-            <BreadcrumbItem key={item}>
+            <BreadcrumbItem key={item} className="hidden md:block">
               <BreadcrumbPage className="capitalize">{item}</BreadcrumbPage>
             </BreadcrumbItem>
           ) : (
-            <BreadcrumbItem key={item}>
+            <BreadcrumbItem key={item} className="hidden md:block">
               <BreadcrumbLink asChild>
                 <Link href={`/dashboard/${item}`} className="capitalize">
                   {item}

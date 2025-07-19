@@ -7,7 +7,7 @@ import { columns } from './columns'
 
 export default function RestaurantsPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<div>Loading...</div>}>
       <Suspended />
     </Suspense>
   )

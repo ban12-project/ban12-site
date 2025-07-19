@@ -62,19 +62,8 @@ export const getRestaurants = cache(async (all = false) => {
 })
 
 export async function getAuthors() {
-  const cacheKey = `authors`
-
   try {
-    const cachedAuthors = await redis.get<SelectAuthor[]>(cacheKey)
-    if (cachedAuthors) return cachedAuthors
-
-    const data = await db.select().from(authors)
-
-    if (data.length > 0) {
-      await redis.set(cacheKey, data, { ex: CACHE_TTL.AUTHORS })
-    }
-
-    return data
+    return await db.select().from(authors)
   } catch (error) {
     if (isHangingPromiseRejectionError(error)) throw error
 
@@ -84,19 +73,8 @@ export async function getAuthors() {
 }
 
 export async function getPosts() {
-  const cacheKey = `posts`
-
   try {
-    const cachedPosts = await redis.get<SelectPost[]>(cacheKey)
-    if (cachedPosts) return cachedPosts
-
-    const data = await db.select().from(posts)
-
-    if (data.length > 0) {
-      await redis.set(cacheKey, data, { ex: CACHE_TTL.POSTS })
-    }
-
-    return data
+    return await db.select().from(posts)
   } catch (error) {
     if (isHangingPromiseRejectionError(error)) throw error
 

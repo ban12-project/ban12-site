@@ -72,7 +72,7 @@ export const columns: ColumnDef<SelectPost>[] = [
     ),
   },
   {
-    accessorKey: 'length',
+    accessorKey: 'metadata.length',
     header: ({ column }) => {
       return (
         <Button

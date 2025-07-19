@@ -18,7 +18,7 @@ export default async function DashboardLayout({ children }: Props) {
   const session = await auth()
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider>
       <AppSidebar
         user={session!.user!}
         signOut={async () => {
