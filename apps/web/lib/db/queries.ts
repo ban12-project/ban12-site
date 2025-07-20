@@ -11,8 +11,6 @@ import {
   posts,
   postsToRestaurants,
   restaurant,
-  type SelectAuthor,
-  type SelectPost,
   type SelectRestaurant,
 } from './schema'
 
@@ -54,7 +52,12 @@ export const getRestaurants = cache(async (all = false) => {
 
     return restaurants
   } catch (error) {
-    if (isHangingPromiseRejectionError(error)) throw error
+    if (
+      isHangingPromiseRejectionError(
+        (error as { cause: { sourceError: unknown } }).cause.sourceError,
+      )
+    )
+      throw error
 
     console.error('Failed to get restaurants from database')
     throw error
@@ -65,7 +68,12 @@ export async function getAuthors() {
   try {
     return await db.select().from(authors)
   } catch (error) {
-    if (isHangingPromiseRejectionError(error)) throw error
+    if (
+      isHangingPromiseRejectionError(
+        (error as { cause: { sourceError: unknown } }).cause.sourceError,
+      )
+    )
+      throw error
 
     console.error('Failed to get authors from database')
     throw error
@@ -76,7 +84,12 @@ export async function getPosts() {
   try {
     return await db.select().from(posts)
   } catch (error) {
-    if (isHangingPromiseRejectionError(error)) throw error
+    if (
+      isHangingPromiseRejectionError(
+        (error as { cause: { sourceError: unknown } }).cause.sourceError,
+      )
+    )
+      throw error
 
     console.error('Failed to get posts from database')
     throw error
