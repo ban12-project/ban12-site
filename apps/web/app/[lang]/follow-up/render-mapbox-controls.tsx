@@ -42,6 +42,7 @@ const Clusters = React.memo(
       (map) => {
         map.addSource('restaurants', {
           type: 'geojson',
+          generateId: true,
           data: {
             type: 'FeatureCollection',
             features: restaurants

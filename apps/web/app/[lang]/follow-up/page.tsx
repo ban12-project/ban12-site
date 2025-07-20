@@ -5,7 +5,7 @@ import { headers } from 'next/headers'
 import { getRestaurants } from '#/lib/db/queries'
 import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import { CommandMenu } from '#/components/command-menu'
-import { Mapbox } from '#/components/mapbox'
+import { Mapbox, PreloadResources } from '#/components/mapbox'
 
 import RenderMapboxControls from './render-mapbox-controls'
 
@@ -60,6 +60,7 @@ export default async function FollowUpPage(props: Props) {
             restaurants={restaurants}
           />
         </Suspense>
+        <PreloadResources />
       </main>
     </>
   )

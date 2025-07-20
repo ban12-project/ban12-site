@@ -3,13 +3,11 @@
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import * as React from 'react'
-import { unstable_ViewTransition as ViewTransition } from 'react'
 import { useLocale } from '@repo/i18n/client'
 import equal from 'fast-deep-equal'
-import { LoaderCircleIcon } from 'lucide-react'
 import mapboxgl, { MarkerOptions } from 'mapbox-gl'
 import { useTheme } from 'next-themes'
-import { createPortal } from 'react-dom'
+import ReactDOM from 'react-dom'
 
 interface Props extends React.ComponentProps<'div'> {
   options?: Partial<mapboxgl.MapOptions>
@@ -37,7 +35,6 @@ export function Mapbox({
 
   const { resolvedTheme } = useTheme()
   const { locale } = useLocale()
-  const [pending, startTransition] = React.useTransition()
 
   React.useEffect(() => {
     const container = mapContainerRef.current
@@ -58,12 +55,6 @@ export function Mapbox({
     })
 
     setMap(newMap)
-
-    startTransition(async () => {
-      await new Promise((resolve) => {
-        newMap.once('load', resolve)
-      })
-    })
 
     return () => {
       newMap.remove()
@@ -105,16 +96,7 @@ export function Mapbox({
 
   return (
     <>
-      {pending && (
-        <ViewTransition exit="mapbox-fallback-exit">
-          <div className="slide-in-from-bottom-10 fade-in fill-mode-forwards animate-in flex h-screen items-center justify-center ease-[cubic-bezier(0.7,0,0.3,1)]">
-            <LoaderCircleIcon className="animate-spin" />
-          </div>
-        </ViewTransition>
-      )}
-      <ViewTransition enter="mapbox-enter">
-        <div {...props} ref={mergeRefs}></div>
-      </ViewTransition>
+      <div {...props} ref={mergeRefs}></div>
       <MapContext.Provider value={map}>{children}</MapContext.Provider>
     </>
   )
@@ -193,10 +175,17 @@ function PureMarker({ lnglat, options, container }: MarkerProps) {
   const portalContainer = marker.getElement()
   const innerHTML = portalContainer.innerHTML
   portalContainer.innerHTML = ''
-  return createPortal(container(innerHTML), portalContainer)
+  return ReactDOM.createPortal(container(innerHTML), portalContainer)
 }
 export const Marker = React.memo(PureMarker, (prev, next) => {
   if (!equal(prev.lnglat, next.lnglat)) return false
   if (!equal(prev.options, next.options)) return false
   return true
 })
+
+export function PreloadResources() {
+  ReactDOM.prefetchDNS('https://api.mapbox.com')
+  ReactDOM.prefetchDNS('https://events.mapbox.com')
+
+  return null
+}
