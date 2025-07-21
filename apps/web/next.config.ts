@@ -42,7 +42,8 @@ const nextConfig: NextConfig = {
   experimental: {
     reactCompiler: true,
     viewTransition: true,
-    cacheComponents: true,
+    dynamicIO: true,
+    ppr: true,
     clientSegmentCache: true,
   },
 }
