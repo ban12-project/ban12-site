@@ -1,0 +1,30 @@
+{
+  "name": "video-worker",
+  "version": "1.0.0",
+  "description": "automatically upload videos to the cloud",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon"
+  },
+  "author": "google gemini",
+  "license": "MIT",
+  "packageManager": "pnpm@10.13.1",
+  "engines": {
+    "node": ">=24",
+    "pnpm": ">=10"
+  },
+  "dependencies": {
+    "@google/genai": "catalog:",
+    "dotenv": "catalog:",
+    "inngest": "^3.40.1",
+    "postgres": "^3.4.5"
+  },
+  "devDependencies": {
+    "@tsconfig/node24": "^24.0.1",
+    "@types/node": "catalog:",
+    "nodemon": "^3.1.10",
+    "typescript": "catalog:"
+  }
+}
