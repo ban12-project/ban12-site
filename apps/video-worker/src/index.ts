@@ -1,42 +1,73 @@
-import http from 'http'
+import { createServer } from 'http'
+import { ConnectionState } from 'inngest/components/connect/types'
+import { connect } from 'inngest/connect'
 
 import 'dotenv/config'
 
 import { serve } from 'inngest/node'
 
 import { sql } from './db'
-import { healthCheckHandler } from './health-check'
 import { functions, inngest } from './inngest'
 
 const PORT = process.env.PORT || 3000
 
-const server = http.createServer((req, res) => {
-  if (req.url?.startsWith('/api/inngest')) {
-    return serve({
-      client: inngest,
-      functions,
-    })(req, res)
-  }
+;(async () => {
+  const connection = await connect({
+    apps: [{ client: inngest, functions }],
+  })
 
-  if (req.url?.startsWith('/health-check')) {
-    return healthCheckHandler(req, res)
-  }
+  console.log('Worker: connected', connection)
 
-  res.writeHead(404, { 'Content-Type': 'application/json' })
-  res.end(JSON.stringify({ error: 'Not Found' }))
-})
+  const httpServer = createServer((req, res) => {
+    if (req.url?.startsWith('/api/inngest')) {
+      return serve({
+        client: inngest,
+        functions,
+      })(req, res)
+    }
 
-server.listen(PORT, () => {
-  console.log(`🚀 Server ready at http://localhost:${PORT}`)
-})
+    if (req.url === '/ready') {
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server')
-  server.close(() => {
-    console.log('HTTP server closed')
-    sql.end().then(() => {
-      console.log('Database connection closed')
-      process.exit(0)
+      if (req.method === 'OPTIONS') {
+        res.writeHead(204)
+        res.end()
+        return
+      }
+
+      if (connection.state === ConnectionState.ACTIVE) {
+        res.writeHead(200, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ status: 'ok' }))
+      } else {
+        res.writeHead(500, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'NOT OK' }))
+      }
+      return
+    }
+
+    res.writeHead(404, { 'Content-Type': 'application/json' })
+    res.end(JSON.stringify({ error: 'Not Found' }))
+  })
+
+  httpServer.listen(PORT, () => {
+    console.log(`Worker: HTTP server listening on port ${PORT}`)
+  })
+
+  process.on('SIGTERM', async () => {
+    console.log('SIGTERM signal received: closing HTTP server')
+    // When the Inngest connection has gracefully closed,
+    // this will resolve and the app will exit.
+    await connection.closed
+    console.log('Worker: Shut down')
+
+    httpServer.close(() => {
+      console.log('HTTP server closed')
+      sql.end().then(() => {
+        console.log('Database connection closed')
+        process.exit(0)
+      })
     })
   })
-})
+})()
