@@ -2,26 +2,23 @@ import http from 'http'
 
 import 'dotenv/config'
 
+import { serve } from 'inngest/node'
+
 import { sql } from './db'
 import { healthCheckHandler } from './health-check'
-import { processPostHandler } from './process-post'
+import { functions, inngest } from './inngest'
 
 const PORT = process.env.PORT || 3000
 
-// 定义 URL 路由模式
-const processPostPattern = new URLPattern({ pathname: '/process-post/:postId' })
-const healthCheckPattern = new URLPattern({ pathname: '/health-check' })
-
-const server = http.createServer(async (req, res) => {
-  const { url, method } = req
-
-  const matchingPath = processPostPattern.exec(url)
-  const healthMatch = healthCheckPattern.exec(url)
-
-  if (matchingPath) {
-    return processPostHandler(req, res, matchingPath.pathname.groups.postId)
+const server = http.createServer((req, res) => {
+  if (req.url?.startsWith('/api/inngest')) {
+    return serve({
+      client: inngest,
+      functions,
+    })(req, res)
   }
-  if (healthMatch) {
+
+  if (req.url?.startsWith('/health-check')) {
     return healthCheckHandler(req, res)
   }
 
@@ -33,7 +30,6 @@ server.listen(PORT, () => {
   console.log(`🚀 Server ready at http://localhost:${PORT}`)
 })
 
-// 添加优雅关闭逻辑
 process.on('SIGTERM', () => {
   console.log('SIGTERM signal received: closing HTTP server')
   server.close(() => {

@@ -1,47 +1,31 @@
 import { createWriteStream } from 'fs'
 import fs from 'fs/promises'
-import http from 'http'
 import { Readable } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
 import { GoogleGenAI } from '@google/genai'
 
-import { sql } from './db'
-import { inngest } from './inngest'
+import { sql } from '../db'
+import { inngest } from './client'
 
-export async function processPostHandler(
-  req: http.IncomingMessage,
-  res: http.ServerResponse<http.IncomingMessage> & {
-    req: http.IncomingMessage
-  },
-  postId?: string,
-) {
-  if (!postId) {
-    res.writeHead(400, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ error: 'postId is required' }))
-    return
-  }
+export default inngest.createFunction(
+  { id: 'video-process', concurrency: 3 },
+  { event: 'video/process' },
+  async ({ event, step }) => {
+    const { postId } = event.data
 
-  try {
-    const id = parseInt(postId, 10)
-    if (isNaN(id)) {
-      res.writeHead(400, { 'Content-Type': 'application/json' })
-      res.end(JSON.stringify({ error: 'Invalid postId' }))
-      return
-    }
-
-    console.log(`Processing postId: ${postId}`)
-
-    // 查询帖子及其关联的作者信息
-    const [post] = await sql<
-      {
-        postId: number
-        metadata: any
-        authorId: number
-        platform: string
-        platformId: string
-        restaurantId: string
-      }[]
-    >`
+    const post = await step.run(
+      `1. Get post by postId: ${postId}`,
+      async () => {
+        const [post] = await sql<
+          {
+            postId: number
+            metadata: any
+            authorId: number
+            platform: string
+            platformId: string
+            restaurantId: string
+          }[]
+        >`
         SELECT
           p.id as "postId",
           p.metadata,
@@ -52,39 +36,35 @@ export async function processPostHandler(
         FROM posts p
         JOIN authors a ON p."authorId" = a.id
         JOIN "postsToRestaurants" ptr ON p.id = ptr."postId"
-        WHERE p.id = ${id}
+        WHERE p.id = ${postId}
       `
 
+        return post
+      },
+    )
+
     if (!post) {
-      res.writeHead(404, { 'Content-Type': 'application/json' })
-      res.end(JSON.stringify({ error: `Post with id ${postId} not found` }))
-      return
+      return { message: `Post with id ${postId} not found` }
     }
 
-    // 根据作者平台执行不同逻辑
-    switch (post.platform) {
-      case 'bilibili':
-        console.log(
-          `Handling bilibili author: ${post.authorId}, platformId: ${post.platformId}`,
-        )
-        // 在这里添加处理 Bilibili 视频的逻辑
-        await bilibiliHandler({
-          bvid: post.metadata.bvid,
-          restaurantId: post.restaurantId,
-        })
-        break
-      default:
-        console.warn(`Unhandled platform: ${post.platform}`)
-    }
+    await step.run(
+      `2. Handle post by ${post.authorId}:${post.platform}:${post.platformId}->${post.restaurantId}`,
+      async () => {
+        switch (post.platform) {
+          case 'bilibili':
+            await bilibiliHandler({
+              bvid: post.metadata.bvid,
+              restaurantId: post.restaurantId,
+            })
 
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ message: 'Post processed successfully', post }))
-  } catch (error) {
-    console.error('Error processing request:', error)
-    res.writeHead(500, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ error: 'Internal Server Error' }))
-  }
-}
+            break
+          default:
+            console.warn(`Unhandled platform: ${post.platform}`)
+        }
+      },
+    )
+  },
+)
 
 async function bilibiliHandler({
   bvid,
@@ -127,7 +107,10 @@ async function bilibiliHandler({
     throw new Error(`No response body for video download of bvid ${bvid}`)
   }
 
-  await pipeline(Readable.fromWeb(fileResponse.body as any), createWriteStream(filePath))
+  await pipeline(
+    Readable.fromWeb(fileResponse.body as any),
+    createWriteStream(filePath),
+  )
   console.log(`Video downloaded to ${filePath}`)
 
   const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY })
@@ -144,7 +127,7 @@ async function bilibiliHandler({
   )
 
   await inngest.send({
-    name: 'video/understand',
+    name: 'video/understanding',
     data: {
       id: restaurantId,
       part: { uri: myfile.uri, mimeType: myfile.mimeType },
