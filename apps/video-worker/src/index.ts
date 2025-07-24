@@ -55,19 +55,14 @@ const PORT = process.env.PORT || 3000
     console.log(`Worker: HTTP server listening on port ${PORT}`)
   })
 
-  process.on('SIGTERM', async () => {
-    console.log('SIGTERM signal received: closing HTTP server')
-    // When the Inngest connection has gracefully closed,
-    // this will resolve and the app will exit.
-    await connection.closed
-    console.log('Worker: Shut down')
+  await connection.closed
+  console.log('Worker: Shut down')
 
-    httpServer.close(() => {
-      console.log('HTTP server closed')
-      sql.end().then(() => {
-        console.log('Database connection closed')
-        process.exit(0)
-      })
+  httpServer.close(() => {
+    console.log('HTTP server closed')
+    sql.end().then(() => {
+      console.log('Database connection closed')
+      process.exit(0)
     })
   })
 })()
