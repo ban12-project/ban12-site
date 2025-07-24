@@ -14,14 +14,13 @@ export default function WorkerStatus({ className, ...props }: Props) {
   useEffect(() => {
     const checkStatus = async () => {
       try {
-        // TODO: Replace with actual health check endpoint
         const response = await fetch(
-          'https://www.githubstatus.com/api/v2/status.json',
+          'https://lacvbsobpuxp.ap-southeast-1.clawcloudrun.com/ready',
         )
         const data = await response.json()
 
         if (response.ok) {
-          setStatus(data.status.indicator === 'none' ? 'online' : 'offline')
+          setStatus(data.status === 'ok' ? 'online' : 'offline')
         } else {
           setStatus('offline')
         }

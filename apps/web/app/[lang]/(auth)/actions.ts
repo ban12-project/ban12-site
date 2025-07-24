@@ -1,10 +1,13 @@
 'use server'
 
 import { revalidatePath, revalidateTag } from 'next/cache'
+import { redirect } from 'next/navigation'
 import * as z from 'zod'
 
 import {
   insertAuthor,
+  insertPostsToRestaurants,
+  insertRestaurant,
   updateInvisibleById,
   updateLocationById,
   updateStatusById,
@@ -27,7 +30,7 @@ export async function startVideoUnderstanding({
   await updateStatusById({ id, status: 'processing' })
 
   await inngest.send({
-    name: 'video/understand',
+    name: 'video/understanding',
     data: {
       id,
       fileUri,
@@ -189,4 +192,50 @@ export async function addAuthor(prevState: State, formData: FormData) {
   return {
     message: 'success',
   }
+}
+
+const linkSchema = z.object({
+  postId: z.number(),
+})
+
+export async function linkPostToNewRestaurant(
+  prevState: State,
+  formData: FormData,
+) {
+  const validatedFields = linkSchema.safeParse({
+    postId: Number(formData.get('postId')),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: z.flattenError(validatedFields.error).fieldErrors,
+      message: 'Failed to validate form data.',
+    }
+  }
+
+  const { postId } = validatedFields.data
+
+  try {
+    const [restaurant] = await insertRestaurant()
+    await insertPostsToRestaurants({
+      postId: postId,
+      restaurantId: restaurant.id,
+    })
+
+    await inngest.send({
+      name: 'video/process',
+      data: {
+        postId,
+        restaurantId: restaurant.id,
+      },
+    })
+  } catch (error) {
+    console.error('Failed to link post to new restaurant:', error)
+    return {
+      message: 'Failed to link post to restaurant',
+    }
+  }
+
+  revalidatePath('/[lang]/dashboard/restaurants', 'page')
+  redirect('/dashboard/posts')
 }

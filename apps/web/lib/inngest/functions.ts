@@ -48,8 +48,8 @@ async function triggerRevalidation(id: string) {
 }
 
 export const videoUnderstanding = inngest.createFunction(
-  { id: 'video-understand', concurrency: 5 },
-  { event: 'video/understand' },
+  { id: 'video-understanding', concurrency: 5 },
+  { event: 'video/understanding' },
   async ({ event, step }) => {
     const { id, fileUri, part } = event.data
 

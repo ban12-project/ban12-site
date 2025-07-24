@@ -11,7 +11,7 @@ export default inngest.createFunction(
   { id: 'video-process', concurrency: 3 },
   { event: 'video/process' },
   async ({ event, step }) => {
-    const { postId } = event.data
+    const { postId, restaurantId } = event.data
 
     const post = await step.run(
       `1. Get post by postId: ${postId}`,
@@ -23,7 +23,6 @@ export default inngest.createFunction(
             authorId: number
             platform: string
             platformId: string
-            restaurantId: string
           }[]
         >`
         SELECT
@@ -31,11 +30,9 @@ export default inngest.createFunction(
           p.metadata,
           a.id as "authorId",
           a.platform,
-          a."platformId",
-          ptr."restaurantId"
+          a."platformId"
         FROM posts p
         JOIN authors a ON p."authorId" = a.id
-        JOIN "postsToRestaurants" ptr ON p.id = ptr."postId"
         WHERE p.id = ${postId}
       `
 
@@ -48,13 +45,13 @@ export default inngest.createFunction(
     }
 
     await step.run(
-      `2. Handle post by ${post.authorId}:${post.platform}:${post.platformId}->${post.restaurantId}`,
+      `2. Handle post by ${post.authorId}:${post.platform}:${post.platformId}->${restaurantId}`,
       async () => {
         switch (post.platform) {
           case 'bilibili':
             await bilibiliHandler({
               bvid: post.metadata.bvid,
-              restaurantId: post.restaurantId,
+              restaurantId: restaurantId,
             })
 
             break

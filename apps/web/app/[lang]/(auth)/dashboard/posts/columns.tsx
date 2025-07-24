@@ -1,10 +1,21 @@
 'use client'
 
+import * as React from 'react'
 import { Button } from '@repo/ui/components/button'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@repo/ui/components/hover-card'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
+import { toast } from 'sonner'
 
-import type { SelectPost } from '#/lib/db/schema'
+import type { SelectPost, SelectPostsToRestaurants } from '#/lib/db/schema'
+
+import { linkPostToNewRestaurant } from '../../actions'
+
+type Row = SelectPost & { postsToRestaurants: SelectPostsToRestaurants | null }
 
 const parseLengthToSeconds = (lengthStr: string | undefined | null): number => {
   if (!lengthStr || typeof lengthStr !== 'string') return 0
@@ -27,7 +38,7 @@ const parseLengthToSeconds = (lengthStr: string | undefined | null): number => {
   return seconds
 }
 
-export const columns: ColumnDef<SelectPost>[] = [
+export const columns: ColumnDef<Row>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
@@ -35,6 +46,10 @@ export const columns: ColumnDef<SelectPost>[] = [
   {
     accessorKey: 'authorId',
     header: 'Author ID',
+  },
+  {
+    accessorKey: 'postsToRestaurants.restaurantId',
+    header: 'restaurant ID',
   },
   {
     accessorKey: 'title',
@@ -91,7 +106,55 @@ export const columns: ColumnDef<SelectPost>[] = [
     },
   },
   {
+    accessorKey: 'created_at',
+    header: 'Created At',
+    id: 'created_at',
+  },
+  {
     header: 'Metadata',
-    cell: ({ row }) => JSON.stringify(row.original.metadata, null, 2),
+    cell: ({ row }) => (
+      <HoverCard>
+        <HoverCardTrigger asChild>
+          <Button variant="outline" size="sm">
+            View Metadata
+          </Button>
+        </HoverCardTrigger>
+        <HoverCardContent className="max-h-[50dvh] w-[50dvw] overflow-auto">
+          <pre>{JSON.stringify(row.original.metadata, null, 2)}</pre>
+        </HoverCardContent>
+      </HoverCard>
+    ),
+  },
+  {
+    id: 'actions',
+    header: 'Actions',
+    cell: ({ row }) =>
+      row.original.postsToRestaurants === null && (
+        <LinkNewRestaurantForm row={row.original} />
+      ),
   },
 ]
+
+const initialState = { message: '', errors: {} }
+
+function LinkNewRestaurantForm({ row }: { row: Row }) {
+  const [state, action, pending] = React.useActionState(
+    linkPostToNewRestaurant,
+    initialState,
+  )
+
+  React.useEffect(() => {
+    if (state.message) {
+      toast.error(state.message)
+    }
+  }, [state.message])
+
+  return (
+    <form action={action}>
+      <Button size="sm" disabled={pending} aria-disabled={pending}>
+        link new restaurant
+      </Button>
+      <input type="hidden" name="postId" value={row.id} />
+    </form>
+  )
+}

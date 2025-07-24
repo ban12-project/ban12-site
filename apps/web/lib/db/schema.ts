@@ -267,3 +267,5 @@ export const postsToRestaurantsRelations = relations(
     }),
   }),
 )
+
+export type SelectPostsToRestaurants = typeof postsToRestaurants.$inferSelect

@@ -8,6 +8,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu'
+import { Input } from '@repo/ui/components/input'
 import { Label } from '@repo/ui/components/label'
 import {
   Select,
@@ -48,20 +49,23 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   header?: React.ComponentType<{ table: PrimitiveTable<TData> }>
+  defaultSorting?: SortingState
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   header: Header,
+  defaultSorting = [],
 }: DataTableProps<TData, TValue>) {
   // https://github.com/TanStack/table/issues/5567
   'use no memo'
 
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>(defaultSorting)
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   )
+  const [globalFilter, setGlobalFilter] = React.useState('')
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [pagination, setPagination] = React.useState({
@@ -77,12 +81,14 @@ export function DataTable<TData, TValue>({
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
+      globalFilter,
       columnVisibility,
       pagination,
     },
@@ -90,8 +96,14 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-3">
         {Header && <Header table={table} />}
+        <Input
+          placeholder="Filter all fields..."
+          value={globalFilter ?? ''}
+          onChange={(event) => setGlobalFilter(event.target.value)}
+          className="max-w-sm"
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

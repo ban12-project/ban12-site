@@ -17,5 +17,12 @@ export default function PostsPage() {
 async function Suspended() {
   const data = await getPosts()
 
-  return <DataTable columns={columns} data={data} header={Filter} />
+  return (
+    <DataTable
+      columns={columns}
+      data={data}
+      header={Filter}
+      defaultSorting={[{ id: 'created_at', desc: true }]}
+    />
+  )
 }

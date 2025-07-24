@@ -4,6 +4,7 @@ type VideoProcess = {
   name: 'video/process'
   data: {
     postId: number
+    restaurantId: string
   }
 }
 

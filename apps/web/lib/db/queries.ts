@@ -11,8 +11,6 @@ import {
   posts,
   postsToRestaurants,
   restaurant,
-  type SelectAuthor,
-  type SelectPost,
   type SelectRestaurant,
 } from './schema'
 
@@ -54,34 +52,17 @@ export const getRestaurants = cache(async (all = false) => {
 
     return restaurants
   } catch (error) {
-    if (isHangingPromiseRejectionError(error)) throw error
+    if (
+      isHangingPromiseRejectionError(
+        (error as { cause: { sourceError: unknown } }).cause.sourceError,
+      )
+    )
+      throw error
 
     console.error('Failed to get restaurants from database')
     throw error
   }
 })
-
-export async function getAuthors() {
-  try {
-    return await db.select().from(authors)
-  } catch (error) {
-    if (isHangingPromiseRejectionError(error)) throw error
-
-    console.error('Failed to get authors from database')
-    throw error
-  }
-}
-
-export async function getPosts() {
-  try {
-    return await db.select().from(posts)
-  } catch (error) {
-    if (isHangingPromiseRejectionError(error)) throw error
-
-    console.error('Failed to get posts from database')
-    throw error
-  }
-}
 
 export async function updateYoutubeLinkById({
   link,
@@ -247,16 +228,90 @@ export async function updateInvisibleById({
   }
 }
 
+export async function insertRestaurant(data: typeof restaurant.$inferInsert = {}) {
+  try {
+    const restaurants = await db.insert(restaurant).values(data).returning()
+
+    await Promise.all([
+      redis.del('restaurants:filtered'),
+      redis.del('restaurants:all'),
+    ])
+
+    return restaurants
+  } catch (error) {
+    console.error('Failed to insert restaurant in database')
+    throw error
+  }
+}
+
+export async function insertPostsToRestaurants({
+  postId,
+  restaurantId,
+}: {
+  postId: number
+  restaurantId: string
+}) {
+  try {
+    return await db
+      .insert(postsToRestaurants)
+      .values({ postId, restaurantId })
+      .returning()
+  } catch (error) {
+    console.error('Failed to insert post to restaurant in database')
+    throw error
+  }
+}
+
 export async function insertAuthor({
   platform,
   platformId,
 }: Pick<Required<typeof authors.$inferInsert>, 'platform' | 'platformId'>) {
   try {
     await db.insert(authors).values({ platform, platformId })
-
-    await redis.del('authors')
   } catch (error) {
-    console.error('Failed to add author in database')
+    console.error('Failed to insert author in database')
+    throw error
+  }
+}
+
+export async function getAuthors() {
+  try {
+    return await db.select().from(authors)
+  } catch (error) {
+    if (
+      isHangingPromiseRejectionError(
+        (error as { cause: { sourceError: unknown } }).cause.sourceError,
+      )
+    )
+      throw error
+
+    console.error('Failed to get authors from database')
+    throw error
+  }
+}
+
+export async function getPosts() {
+  try {
+    return await db
+      .select({
+        id: posts.id,
+        authorId: posts.authorId,
+        metadata: posts.metadata,
+        created_at: posts.created_at,
+        updated_at: posts.updated_at,
+        postsToRestaurants: postsToRestaurants,
+      })
+      .from(posts)
+      .leftJoin(postsToRestaurants, eq(posts.id, postsToRestaurants.postId))
+  } catch (error) {
+    if (
+      isHangingPromiseRejectionError(
+        (error as { cause: { sourceError: unknown } }).cause.sourceError,
+      )
+    )
+      throw error
+
+    console.error('Failed to get posts from database')
     throw error
   }
 }
