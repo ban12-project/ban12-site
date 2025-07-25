@@ -3,7 +3,6 @@ import fs from 'fs/promises'
 import { Readable } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
 import { GoogleGenAI } from '@google/genai'
-import type { Logger } from 'inngest/middleware/logger'
 
 import { sql } from '../db'
 import { inngest } from './client'
@@ -11,7 +10,7 @@ import { inngest } from './client'
 export default inngest.createFunction(
   { id: 'video-process', concurrency: 3 },
   { event: 'video/process' },
-  async ({ event, step, logger }) => {
+  async ({ event, step }) => {
     const { postId, restaurantId } = event.data
 
     const post = await step.run(
@@ -50,33 +49,27 @@ export default inngest.createFunction(
       async () => {
         switch (post.platform) {
           case 'bilibili':
-            await bilibiliHandler(
-              {
-                bvid: post.metadata.bvid,
-                restaurantId: restaurantId,
-              },
-              logger,
-            )
+            await bilibiliHandler({
+              bvid: post.metadata.bvid,
+              restaurantId: restaurantId,
+            })
 
             break
           default:
-            logger.warn(`Unhandled platform: ${post.platform}`)
+            console.warn(`Unhandled platform: ${post.platform}`)
         }
       },
     )
   },
 )
 
-async function bilibiliHandler(
-  {
-    bvid,
-    restaurantId,
-  }: {
-    bvid: string
-    restaurantId: string
-  },
-  logger: Logger,
-) {
+async function bilibiliHandler({
+  bvid,
+  restaurantId,
+}: {
+  bvid: string
+  restaurantId: string
+}) {
   const response = await fetch(
     new URL(
       `/functions/v1/bilibili-get-video-urls/${bvid}`,
@@ -101,23 +94,21 @@ async function bilibiliHandler(
   // 使用 downloadUrl 下载文件保存到 /tmp 目录
   const fileName = `${bvid}.mp4`
   const filePath = `/tmp/${fileName}`
-  const fileResponse = await fetch(downloadUrl)
+  const fileResponse = await fetch(downloadUrl.url)
   if (!fileResponse.ok) {
-    logger.error(
+    throw new Error(
       `Failed to download video for bvid ${bvid}: ${fileResponse.statusText}`,
     )
-    return
   }
   if (!fileResponse.body) {
-    logger.error(`No response body for video download of bvid ${bvid}`)
-    return
+    throw new Error(`No response body for video download of bvid ${bvid}`)
   }
 
   await pipeline(
     Readable.fromWeb(fileResponse.body as any),
     createWriteStream(filePath),
   )
-  logger.info(`Video downloaded to ${filePath}`)
+  console.log(`Video downloaded to ${filePath}`)
 
   const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY })
 
@@ -126,10 +117,9 @@ async function bilibiliHandler(
     config: { mimeType: 'video/mp4' },
   })
   if (!myfile.uri || !myfile.mimeType) {
-    logger.error('Upload failed: No URI or MIME type returned')
-    return
+    throw new Error('Upload failed: No URI or MIME type returned')
   }
-  logger.info(
+  console.log(
     `File uploaded successfully. URI: ${myfile.uri}, MIME Type: ${myfile.mimeType}`,
   )
 
@@ -140,7 +130,7 @@ async function bilibiliHandler(
       part: { uri: myfile.uri, mimeType: myfile.mimeType },
     },
   })
-  logger.info(
+  console.log(
     `Inngest event 'video/understand' sent for restaurant ${restaurantId}`,
   )
 }
