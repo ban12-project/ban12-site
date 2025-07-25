@@ -7,9 +7,9 @@ catalog:
   '@google/genai': ^1.9.0
   '@gsap/react': ^2.1.2
   '@hookform/resolvers': ^5.1.1
-  '@next/bundle-analyzer': ^15.4.2
-  '@next/eslint-plugin-next': ^15.4.2
-  '@next/third-parties': ^15.4.2
+  '@next/bundle-analyzer': ^15.4.4
+  '@next/eslint-plugin-next': ^15.4.4
+  '@next/third-parties': ^15.4.4
   '@opennextjs/cloudflare': ^1.3.0
   '@radix-ui/react-icons': ^1.3.2
   '@radix-ui/react-label': ^2.1.2
@@ -32,12 +32,12 @@ catalog:
   drizzle-kit: ^0.31.1
   drizzle-orm: ^0.44.2
   eslint: ^9.29.0
-  eslint-config-next: ^15.4.2
+  eslint-config-next: ^15.4.4
   eslint-plugin-turbo: ^2.5.4
   gsap: ^3.13.0
   intl-messageformat: ^10.7.16
   lucide-react: ^0.485.0
-  next: ^15.4.2
+  next: ^15.4.4
   next-auth: 5.0.0-beta.28
   next-themes: ^0.4.6
   postcss: ^8.5.6
@@ -56,7 +56,7 @@ catalog:
   usehooks-ts: ^3.1.1
   vaul: ^1.1.2
   wrangler: ^4.20.0
-  zod: ^4.0.5
+  zod: ^4.0.10
 
 catalogs:
   canary:
