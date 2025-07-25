@@ -109,23 +109,15 @@ export async function updateStatusById({
   }
 }
 
-export async function updateAISummarize({
-  ai_summarize,
-  id,
-}: NonNullable<Pick<SelectRestaurant, 'ai_summarize' | 'id'>>) {
+export async function cleanRestaurantCacheById(id: SelectRestaurant['id']) {
   try {
-    await db
-      .update(restaurant)
-      .set({ ai_summarize, updated_at: new Date(), status: 'success' })
-      .where(eq(restaurant.id, id))
-
     await Promise.all([
       redis.del(`restaurant:id:${id}`),
       redis.del('restaurants:filtered'),
       redis.del('restaurants:all'),
     ])
   } catch (error) {
-    console.error('Failed to update ai_summarize in database')
+    console.error('Failed to clean restaurant cache by id')
     throw error
   }
 }
@@ -228,7 +220,9 @@ export async function updateInvisibleById({
   }
 }
 
-export async function insertRestaurant(data: typeof restaurant.$inferInsert = {}) {
+export async function insertRestaurant(
+  data: typeof restaurant.$inferInsert = {},
+) {
   try {
     const restaurants = await db.insert(restaurant).values(data).returning()
 

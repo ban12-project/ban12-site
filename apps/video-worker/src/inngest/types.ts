@@ -20,6 +20,14 @@ type VideoUnderstanding = {
   }
 }
 
-type Events = VideoProcess | VideoUnderstanding
+type TriggerRevalidation = {
+  name: 'web/revalidation.trigger'
+  data: {
+    /** restaurant ID */
+    id: string
+  }
+}
+
+type Events = VideoProcess | VideoUnderstanding | TriggerRevalidation
 
 export const schemas = new EventSchemas().fromUnion<Events>()

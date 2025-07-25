@@ -216,6 +216,7 @@ export async function linkPostToNewRestaurant(
   const { postId } = validatedFields.data
 
   try {
+    // TODO: rewrite this to use a transaction
     const [restaurant] = await insertRestaurant()
     await insertPostsToRestaurants({
       postId: postId,
