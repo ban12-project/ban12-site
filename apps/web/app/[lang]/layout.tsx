@@ -76,6 +76,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  width: 'device-width',
+  viewportFit: 'cover',
 }
 
 export async function generateStaticParams() {
