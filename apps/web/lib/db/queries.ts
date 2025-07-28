@@ -237,7 +237,6 @@ export async function linkPostToNewRestaurantByPostId({
       await tx
         .insert(postsToRestaurants)
         .values({ postId, restaurantId: newRestaurant.id })
-        .returning()
 
       return newRestaurant
     })

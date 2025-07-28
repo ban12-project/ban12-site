@@ -23,6 +23,7 @@ export const columns: ColumnDef<SelectAuthor>[] = [
     id: 'created_at',
     cell: ({ row }) =>
       row.original.created_at.toLocaleString('zh-Hans-CN', {
+        timeZone: 'Asia/Shanghai',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -38,6 +39,7 @@ export const columns: ColumnDef<SelectAuthor>[] = [
     id: 'updated_at',
     cell: ({ row }) =>
       row.original.updated_at.toLocaleString('zh-Hans-CN', {
+        timeZone: 'Asia/Shanghai',
         year: 'numeric',
         month: 'long',
         day: 'numeric',

@@ -40,12 +40,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import * as z from 'zod'
 
-import { getRestaurants } from '#/lib/db/queries'
-import type {
-  SelectPost,
-  SelectPostsToRestaurants,
-  SelectRestaurant,
-} from '#/lib/db/schema'
+import type { SelectPost, SelectPostsToRestaurants } from '#/lib/db/schema'
 
 import { linkPostToNewRestaurant, linkPostToRestaurant } from '../../actions'
 
@@ -145,6 +140,7 @@ export const columns: ColumnDef<Row>[] = [
     id: 'created_at',
     cell: ({ row }) =>
       row.original.created_at.toLocaleString('zh-Hans-CN', {
+        timeZone: 'Asia/Shanghai',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
