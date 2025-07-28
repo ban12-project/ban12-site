@@ -7,7 +7,7 @@ import * as z from 'zod'
 import {
   insertAuthor,
   insertPostsToRestaurants,
-  insertRestaurant,
+  linkPostToNewRestaurantByPostId,
   updateInvisibleById,
   updateLocationById,
   updateStatusById,
@@ -216,22 +216,21 @@ export async function linkPostToNewRestaurant(
   const { postId } = validatedFields.data
 
   try {
-    // TODO: rewrite this to use a transaction
-    const [restaurant] = await insertRestaurant()
-    await insertPostsToRestaurants({
-      postId: postId,
-      restaurantId: restaurant.id,
+    const { id: restaurantId } = await linkPostToNewRestaurantByPostId({
+      postId,
+      data: {
+        invisible: true,
+      },
     })
 
     await inngest.send({
       name: 'video/process',
       data: {
         postId,
-        restaurantId: restaurant.id,
+        restaurantId,
       },
     })
-  } catch (error) {
-    console.error('Failed to link post to new restaurant:', error)
+  } catch {
     return {
       message: 'Failed to link post to restaurant',
     }
@@ -239,4 +238,40 @@ export async function linkPostToNewRestaurant(
 
   revalidatePath('/[lang]/dashboard/restaurants', 'page')
   redirect('/dashboard/posts')
+}
+
+const linkRestaurantSchema = z.object({
+  postId: z.number(),
+  restaurantId: z.string().nonempty(),
+})
+
+export async function linkPostToRestaurant(
+  prevState: State,
+  formData: FormData,
+) {
+  const validatedFields = linkRestaurantSchema.safeParse({
+    postId: Number(formData.get('postId')),
+    restaurantId: formData.get('restaurantId'),
+  })
+
+  if (!validatedFields.success) {
+    return {
+      errors: z.flattenError(validatedFields.error).fieldErrors,
+      message: 'Failed to validate form data.',
+    }
+  }
+
+  const { postId, restaurantId } = validatedFields.data
+
+  try {
+    await insertPostsToRestaurants({ postId, restaurantId })
+  } catch {
+    return {
+      message: 'Failed to link post to restaurant',
+    }
+  }
+
+  revalidatePath('/[lang]/dashboard/restaurants', 'page')
+
+  return { message: 'success' }
 }

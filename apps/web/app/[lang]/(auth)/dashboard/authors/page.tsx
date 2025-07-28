@@ -17,5 +17,12 @@ export default function AuthorsPage() {
 async function Suspended() {
   const data = await getAuthors()
 
-  return <DataTable columns={columns} data={data} header={AddForm} />
+  return (
+    <DataTable
+      columns={columns}
+      data={data}
+      header={AddForm}
+      defaultSorting={[{ id: 'created_at', desc: true }]}
+    />
+  )
 }

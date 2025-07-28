@@ -16,5 +16,11 @@ export default function RestaurantsPage() {
 async function Suspended() {
   const data = await getRestaurants(true)
 
-  return <DataTable columns={columns} data={data} />
+  return (
+    <DataTable
+      columns={columns}
+      data={data}
+      defaultSorting={[{ id: 'created_at', desc: true }]}
+    />
+  )
 }

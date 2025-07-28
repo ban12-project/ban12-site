@@ -1,19 +1,53 @@
 'use client'
 
 import * as React from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@repo/ui/components/button'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@repo/ui/components/dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@repo/ui/components/dropdown-menu'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@repo/ui/components/form'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from '@repo/ui/components/hover-card'
+import { Input } from '@repo/ui/components/input'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown } from 'lucide-react'
+import { ArrowUpDown, LoaderCircleIcon, MoreHorizontal } from 'lucide-react'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import * as z from 'zod'
 
-import type { SelectPost, SelectPostsToRestaurants } from '#/lib/db/schema'
+import { getRestaurants } from '#/lib/db/queries'
+import type {
+  SelectPost,
+  SelectPostsToRestaurants,
+  SelectRestaurant,
+} from '#/lib/db/schema'
 
-import { linkPostToNewRestaurant } from '../../actions'
+import { linkPostToNewRestaurant, linkPostToRestaurant } from '../../actions'
 
 type Row = SelectPost & { postsToRestaurants: SelectPostsToRestaurants | null }
 
@@ -62,7 +96,7 @@ export const columns: ColumnDef<Row>[] = [
     cell: ({ row }) =>
       new Date(
         +row.original.metadata.created.toString().padEnd(13, '0'),
-      ).toLocaleString(undefined, {
+      ).toLocaleString('zh-Hans-CN', {
         timeZone: 'Asia/Shanghai',
         year: 'numeric',
         month: 'numeric', // Or '2-digit' for MM
@@ -109,6 +143,16 @@ export const columns: ColumnDef<Row>[] = [
     accessorKey: 'created_at',
     header: 'Created At',
     id: 'created_at',
+    cell: ({ row }) =>
+      row.original.created_at.toLocaleString('zh-Hans-CN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      }),
   },
   {
     header: 'Metadata',
@@ -128,12 +172,51 @@ export const columns: ColumnDef<Row>[] = [
   {
     id: 'actions',
     header: 'Actions',
-    cell: ({ row }) =>
-      row.original.postsToRestaurants === null && (
-        <LinkNewRestaurantForm row={row.original} />
-      ),
+    cell: ({ row }) => <Actions row={row.original} />,
   },
 ]
+
+function Actions({ row }: { row: Row }) {
+  const [dialogActive, setDialogActive] =
+    React.useState<'linkRestaurant'>('linkRestaurant')
+  const [open, setOpen] = React.useState(false)
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {row.postsToRestaurants === null && (
+            <DropdownMenuItem asChild>
+              <LinkNewRestaurantForm row={row} />
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuItem
+            onClick={() => {
+              setOpen(true)
+              setDialogActive('linkRestaurant')
+            }}
+          >
+            link restaurant
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <DialogContent className="sm:max-w-md">
+        {dialogActive === 'linkRestaurant' && (
+          <LinkRestaurantForm row={row} setOpen={setOpen} />
+        )}
+      </DialogContent>
+    </Dialog>
+  )
+}
 
 const initialState = { message: '', errors: {} }
 
@@ -151,10 +234,108 @@ function LinkNewRestaurantForm({ row }: { row: Row }) {
 
   return (
     <form action={action}>
-      <Button size="sm" disabled={pending} aria-disabled={pending}>
+      <Button
+        variant="ghost"
+        size="sm"
+        disabled={pending}
+        aria-disabled={pending}
+      >
         link new restaurant
       </Button>
       <input type="hidden" name="postId" value={row.id} />
     </form>
+  )
+}
+
+const formSchema = z.object({
+  postId: z.string().min(1, 'Post ID is required'),
+  restaurantId: z.string().min(1, 'Restaurant ID is required'),
+})
+
+function LinkRestaurantForm({
+  row,
+  setOpen,
+}: {
+  row: Row
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}) {
+  const [state, action, pending] = React.useActionState(
+    linkPostToRestaurant,
+    initialState,
+  )
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      postId: row.id.toString(),
+      restaurantId: '',
+    },
+  })
+
+  const onSubmit: React.ReactEventHandler<
+    React.ComponentRef<'button'>
+  > = async (e) => {
+    e.preventDefault()
+
+    const currentTarget = e.currentTarget
+
+    const isValid = await form.trigger()
+    if (!isValid) return
+
+    currentTarget.form?.requestSubmit()
+  }
+
+  React.useEffect(() => {
+    if (state.message !== 'success') return
+
+    form.reset()
+    setOpen(false)
+  }, [form, setOpen, state.message])
+
+  return (
+    <Form {...form}>
+      <form action={action}>
+        <DialogHeader>
+          <DialogTitle>link restaurant</DialogTitle>
+          <DialogDescription>{row.id}</DialogDescription>
+        </DialogHeader>
+
+        <FormField
+          control={form.control}
+          name="restaurantId"
+          render={({ field }) => (
+            <FormItem className="my-2">
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage>
+                {state.message !== 'success' ? state.message : ''}
+              </FormMessage>
+            </FormItem>
+          )}
+        />
+
+        <input type="hidden" name="postId" value={row.id} />
+
+        <DialogFooter className="sm:justify-start">
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              Close
+            </Button>
+          </DialogClose>
+          <Button
+            disabled={pending}
+            aria-disabled={pending}
+            type="submit"
+            variant="primary"
+            className="sm:ml-auto"
+            onClick={onSubmit}
+          >
+            Submit
+            {pending && <LoaderCircleIcon className="animate-spin" />}
+          </Button>
+        </DialogFooter>
+      </form>
+    </Form>
   )
 }

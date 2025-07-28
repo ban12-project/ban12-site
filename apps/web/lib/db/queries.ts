@@ -220,20 +220,35 @@ export async function updateInvisibleById({
   }
 }
 
-export async function insertRestaurant(
-  data: typeof restaurant.$inferInsert = {},
-) {
+export async function linkPostToNewRestaurantByPostId({
+  postId,
+  data,
+}: {
+  postId: number
+  data: typeof restaurant.$inferInsert
+}) {
   try {
-    const restaurants = await db.insert(restaurant).values(data).returning()
+    const newRestaurant = await db.transaction(async (tx) => {
+      const [newRestaurant] = await tx
+        .insert(restaurant)
+        .values(data)
+        .returning()
 
+      await tx
+        .insert(postsToRestaurants)
+        .values({ postId, restaurantId: newRestaurant.id })
+        .returning()
+
+      return newRestaurant
+    })
     await Promise.all([
       redis.del('restaurants:filtered'),
       redis.del('restaurants:all'),
     ])
 
-    return restaurants
+    return newRestaurant
   } catch (error) {
-    console.error('Failed to insert restaurant in database')
+    console.error('Failed to link post to new restaurant in database')
     throw error
   }
 }
