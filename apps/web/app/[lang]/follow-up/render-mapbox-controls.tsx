@@ -45,21 +45,19 @@ const Clusters = React.memo(
           generateId: true,
           data: {
             type: 'FeatureCollection',
-            features: restaurants
-              .map(({ location, ai_summarize }) => {
-                const [lng, lat] = coordtransform.gcj02towgs84(...location!)
-                return {
-                  type: 'Feature' as const,
-                  properties: {
-                    ...ai_summarize,
-                  },
-                  geometry: {
-                    type: 'Point' as const,
-                    coordinates: [lng, lat],
-                  },
-                }
-              })
-              .filter(Boolean),
+            features: restaurants.map(({ location, ai_summarize }) => {
+              const [lng, lat] = coordtransform.gcj02towgs84(...location!)
+              return {
+                type: 'Feature' as const,
+                properties: {
+                  ...ai_summarize,
+                },
+                geometry: {
+                  type: 'Point' as const,
+                  coordinates: [lng, lat],
+                },
+              }
+            }),
           },
           cluster: true,
           clusterMaxZoom: 14,
@@ -117,6 +115,23 @@ const Clusters = React.memo(
           },
         })
 
+        const prefetchFeaturesInViewport = () => {
+          const features = map.queryRenderedFeatures({
+            layers: ['unclustered-point'],
+          })
+
+          for (const feature of features) {
+            router.prefetch(
+              `/${locale}/follow-up/${feature.properties!.restaurantName}`,
+              {
+                kind: PrefetchKind.FULL,
+              },
+            )
+          }
+        }
+        // Prefetch features in the viewport on map ready
+        prefetchFeaturesInViewport()
+
         const clustersClick = (e: mapboxgl.MapMouseEvent) => {
           const features = map.queryRenderedFeatures(e.point, {
             layers: ['clusters'],
@@ -141,16 +156,6 @@ const Clusters = React.memo(
             `/${locale}/follow-up/${e.features![0].properties?.restaurantName}`,
           )
         }
-        const prefetch = (
-          e: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent,
-        ) => {
-          router.prefetch(
-            `/${locale}/follow-up/${e.features![0].properties?.restaurantName}`,
-            {
-              kind: PrefetchKind.FULL,
-            },
-          )
-        }
         const changeMapCursorToPointer = () => {
           map.getCanvas().style.cursor = 'pointer'
         }
@@ -160,8 +165,7 @@ const Clusters = React.memo(
         // inspect a cluster on click
         map.on('click', 'clusters', clustersClick)
         map.on('click', 'unclustered-point', unclusteredPointClick)
-        map.on('mouseenter', 'unclustered-point', prefetch)
-        map.on('touchstart', 'unclustered-point', prefetch)
+        map.on('moveend', prefetchFeaturesInViewport)
         map.on(
           'mouseenter',
           ['clusters', 'unclustered-point'],
@@ -172,8 +176,7 @@ const Clusters = React.memo(
         return () => {
           map.off('click', 'clusters', clustersClick)
           map.off('click', 'unclustered-point', unclusteredPointClick)
-          map.off('mouseenter', 'unclustered-point', prefetch)
-          map.off('touchstart', 'unclustered-point', prefetch)
+          map.off('moveend', prefetchFeaturesInViewport)
           map.off(
             'mouseenter',
             ['clusters', 'unclustered-point'],
@@ -192,10 +195,6 @@ const Clusters = React.memo(
       },
       [resolvedTheme],
     )
-
-    React.useEffect(() => {
-      router.prefetch(`/${locale}/follow-up/[restaurantName]`)
-    }, [router, locale])
 
     return null
   },
