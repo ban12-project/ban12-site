@@ -83,7 +83,7 @@ export default function HomeLanding({ messages }: Props) {
   )
 
   return (
-    <section ref={container} className="h-dvh w-dvw">
+    <section ref={container} className="h-full w-full">
       <div className="flex h-full w-full items-center justify-center">
         <div className="px-safe-max-4 container relative mx-auto md:px-0">
           <h1 className="sr-only">{messages.description}</h1>
