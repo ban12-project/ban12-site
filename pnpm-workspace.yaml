@@ -60,11 +60,11 @@ catalog:
 
 catalogs:
   canary:
-    '@next/bundle-analyzer': 15.4.2-canary.19
-    '@next/eslint-plugin-next': 15.4.2-canary.19
-    '@next/third-parties': 15.4.2-canary.19
-    eslint-config-next: 15.4.2-canary.19
-    next: 15.4.2-canary.19
+    '@next/bundle-analyzer': 15.4.2-canary.21
+    '@next/eslint-plugin-next': 15.4.2-canary.21
+    '@next/third-parties': 15.4.2-canary.21
+    eslint-config-next: 15.4.2-canary.21
+    next: 15.4.2-canary.21
 
 onlyBuiltDependencies:
   - '@sentry/cli'
