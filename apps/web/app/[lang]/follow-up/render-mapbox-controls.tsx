@@ -129,9 +129,6 @@ const Clusters = React.memo(
             )
           }
         }
-        // Prefetch features in the viewport on map ready
-        prefetchFeaturesInViewport()
-
         const clustersClick = (e: mapboxgl.MapMouseEvent) => {
           const features = map.queryRenderedFeatures(e.point, {
             layers: ['clusters'],
@@ -166,6 +163,7 @@ const Clusters = React.memo(
         map.on('click', 'clusters', clustersClick)
         map.on('click', 'unclustered-point', unclusteredPointClick)
         map.on('moveend', prefetchFeaturesInViewport)
+        map.on('idle', prefetchFeaturesInViewport)
         map.on(
           'mouseenter',
           ['clusters', 'unclustered-point'],
@@ -177,6 +175,7 @@ const Clusters = React.memo(
           map.off('click', 'clusters', clustersClick)
           map.off('click', 'unclustered-point', unclusteredPointClick)
           map.off('moveend', prefetchFeaturesInViewport)
+          map.off('idle', prefetchFeaturesInViewport)
           map.off(
             'mouseenter',
             ['clusters', 'unclustered-point'],
