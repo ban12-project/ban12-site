@@ -57,7 +57,7 @@ export function Mapbox({
     setMap(newMap)
 
     return () => {
-      newMap.remove()
+      queueMicrotask(() => newMap.remove())
       setMap(null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,43 +109,41 @@ export function useMapReady(
 ) {
   const map = useMap()
 
-  const id = React.useRef(NaN)
-  const clean = React.useRef<ReturnType<typeof callback>>(undefined)
-  const emitMapLoadEvent = React.useCallback(() => {
-    map!.fire('load')
-  }, [map])
   const cb = React.useCallback(() => {
-    if (id.current) {
-      window.cancelAnimationFrame(id.current)
-      id.current = NaN
-    }
-    clean.current = callback(map!)
-
-    map!.off('style.load', emitMapLoadEvent)
-    map!.on('style.load', emitMapLoadEvent)
-  }, [callback, map, emitMapLoadEvent])
+    return callback(map!)
+  }, [callback, map])
 
   React.useEffect(() => {
     if (!map) return
 
+    let clean: ReturnType<typeof callback> | undefined
+    let rafId = 0
+
+    const listener = () => {
+      if (rafId) window.cancelAnimationFrame(rafId)
+      clean = cb()
+    }
     if (map.loaded()) {
-      cb()
+      clean = cb()
     } else {
-      map.once('load', cb)
+      map.on('load', listener)
 
       const loop = () => {
         if (map.loaded()) {
-          cb()
+          if (rafId) window.cancelAnimationFrame(rafId)
+          clean = cb()
         } else {
-          id.current = window.requestAnimationFrame(loop)
+          rafId = window.requestAnimationFrame(loop)
         }
       }
 
-      id.current = window.requestAnimationFrame(loop)
+      rafId = window.requestAnimationFrame(loop)
     }
 
     return () => {
-      clean.current?.()
+      map.off('load', listener)
+      if (rafId) window.cancelAnimationFrame(rafId)
+      clean?.()
     }
   }, [cb, map, ...deps])
 }
