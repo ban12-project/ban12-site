@@ -4,7 +4,7 @@ import { cache } from 'react'
 import { isHangingPromiseRejectionError } from 'next/dist/server/dynamic-rendering-utils'
 import { Redis } from '@upstash/redis'
 import { and, eq, isNotNull, sql } from 'drizzle-orm'
-import { drizzle } from 'drizzle-orm/neon-http'
+import { drizzle } from 'drizzle-orm/neon-serverless'
 
 import {
   authors,
