@@ -4,7 +4,8 @@ import { cache } from 'react'
 import { isHangingPromiseRejectionError } from 'next/dist/server/dynamic-rendering-utils'
 import { Redis } from '@upstash/redis'
 import { and, eq, isNotNull, sql } from 'drizzle-orm'
-import { drizzle } from 'drizzle-orm/neon-serverless'
+import { drizzle as drizzleHttp } from 'drizzle-orm/neon-http'
+import { drizzle as drizzleServerless } from 'drizzle-orm/neon-serverless'
 
 import {
   authors,
@@ -25,7 +26,8 @@ const CACHE_TTL = {
 const connectionString = process.env.DATABASE_URL
 if (!connectionString) throw new Error('Not valid database url')
 
-export const db = drizzle(connectionString)
+export const db = drizzleHttp(connectionString)
+export const dbServerless = drizzleServerless(connectionString)
 
 export const getRestaurants = cache(async (all = false) => {
   const cacheKey = `restaurants:${all ? 'all' : 'filtered'}`
@@ -228,7 +230,7 @@ export async function linkPostToNewRestaurantByPostId({
   data: typeof restaurant.$inferInsert
 }) {
   try {
-    const newRestaurant = await db.transaction(async (tx) => {
+    const newRestaurant = await dbServerless.transaction(async (tx) => {
       const [newRestaurant] = await tx
         .insert(restaurant)
         .values(data)
