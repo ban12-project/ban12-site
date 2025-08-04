@@ -23,7 +23,7 @@
     "node": ">=20",
     "pnpm": ">=10"
   },
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.14.0",
   "prettier": {
     "arrowParens": "always",
     "trailingComma": "all",
