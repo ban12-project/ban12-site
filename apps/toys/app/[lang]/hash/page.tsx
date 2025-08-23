@@ -3,13 +3,9 @@ import { Metadata } from 'next'
 import { getDictionary, type Locale } from '#/lib/i18n'
 import FileExplorer from '#/components/file-explorer'
 
-type Props = {
-  params: Promise<{ lang: Locale }>
-}
-
-export async function generateMetadata(props: Props): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<'/[lang]/hash'>): Promise<Metadata> {
   const params = await props.params
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
 
   return {
     title: messages['page-hash'].title,
@@ -17,9 +13,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 }
 
-export default async function HashPage(props: Props) {
+export default async function HashPage(props: PageProps<'/[lang]/hash'>) {
   const params = await props.params
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
 
   return <FileExplorer messages={messages} />
 }

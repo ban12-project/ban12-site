@@ -123,7 +123,7 @@ export async function call({ command, payload }: Call) {
           const buffer = js7z.FS.readFile('/out/' + file)
           out.push({
             filename: file,
-            blob: new Blob([buffer], { type: 'application/octet-stream' }),
+            blob: new Blob([buffer as Uint8Array<ArrayBuffer>], { type: 'application/octet-stream' }),
           })
         }
 

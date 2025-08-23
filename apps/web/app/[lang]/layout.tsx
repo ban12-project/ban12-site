@@ -10,14 +10,11 @@ import { ThemeProvider } from 'next-themes'
 import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import { WebVitals } from '#/components/web-vitals'
 
-type Props = Readonly<{
-  params: Promise<{ lang: Locale }>
-  children: React.ReactNode
-}>
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: LayoutProps<'/[lang]'>): Promise<Metadata> {
   const { lang } = await params
-  const messages = await getDictionary(lang)
+  const messages = await getDictionary(lang as Locale)
 
   return {
     applicationName: 'Ban12',
@@ -84,7 +81,10 @@ export async function generateStaticParams() {
   return Object.keys(i18n.locales).map((lang) => ({ lang }))
 }
 
-export default async function RootLayout({ params, children }: Props) {
+export default async function RootLayout({
+  params,
+  children,
+}: LayoutProps<'/[lang]'>) {
   const { lang } = await params
 
   return (
@@ -96,7 +96,7 @@ export default async function RootLayout({ params, children }: Props) {
           enableSystem
           disableTransitionOnChange
         >
-          <LocaleProvider locale={lang} i18n={i18n}>
+          <LocaleProvider locale={lang as Locale} i18n={i18n}>
             {children}
           </LocaleProvider>
         </ThemeProvider>

@@ -2,16 +2,17 @@ import { Suspense, unstable_ViewTransition as ViewTransition } from 'react'
 import { notFound } from 'next/navigation'
 import { LoaderCircle } from 'lucide-react'
 
-import { getDictionary, type Messages } from '#/lib/i18n'
+import { getDictionary, type Locale, type Messages } from '#/lib/i18n'
 
-import { type Props } from '../../[restaurantName]/page'
 import RestaurantDetail from '../../[restaurantName]/restaurant-detail'
 import { getCachedRestaurantWithPostsByName } from '../../actions'
 import Drawer from './drawer'
 
-export default async function Page({ params }: Props) {
+export default async function Page({
+  params,
+}: PageProps<'/[lang]/follow-up/[restaurantName]'>) {
   const { restaurantName, lang } = await params
-  const messages = await getDictionary(lang)
+  const messages = await getDictionary(lang as Locale)
 
   return (
     <Drawer>

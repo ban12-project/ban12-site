@@ -3,10 +3,9 @@ import ShortcutPost from '#/components/shortcut-post'
 
 import Drawer from './drawer'
 
-export default async function PostPage(props: {
-  params: Promise<{ lang: Locale }>
-}) {
-  const messages = await getDictionary((await props.params).lang)
+export default async function PostPage(props: PageProps<'/[lang]/post'>) {
+  const { lang } = await props.params
+  const messages = await getDictionary(lang as Locale)
 
   return (
     <Drawer messages={messages}>

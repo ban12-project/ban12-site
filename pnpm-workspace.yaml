@@ -3,13 +3,13 @@ packages:
   - packages/*
 
 catalog:
-  '@auth/drizzle-adapter': ^1.9.1
-  '@google/genai': ^1.12.0
+  '@auth/drizzle-adapter': ^1.10.0
+  '@google/genai': ^1.15.0
   '@gsap/react': ^2.1.2
-  '@hookform/resolvers': ^5.1.1
-  '@next/bundle-analyzer': ^15.4.4
-  '@next/eslint-plugin-next': ^15.4.4
-  '@next/third-parties': ^15.4.4
+  '@hookform/resolvers': ^5.2.1
+  '@next/bundle-analyzer': ^15.5.0
+  '@next/eslint-plugin-next': ^15.5.0
+  '@next/third-parties': ^15.5.0
   '@opennextjs/cloudflare': ^1.3.0
   '@radix-ui/react-icons': ^1.3.2
   '@radix-ui/react-label': ^2.1.2
@@ -21,8 +21,8 @@ catalog:
   '@sentry/nextjs': ^9.14.0
   '@simplewebauthn/browser': ^9.0.1
   '@simplewebauthn/server': ^9.0.3
-  '@types/node': ^24.1.0
-  '@types/react': ^19.1.9
+  '@types/node': ^24.3.0
+  '@types/react': ^19.1.11
   '@types/react-dom': ^19.1.7
   '@types/react-window': ^1.8.8
   '@types/react-window-infinite-loader': ^1.0.9
@@ -31,40 +31,40 @@ catalog:
   dotenv: ^16.5.0
   drizzle-kit: ^0.31.4
   drizzle-orm: ^0.44.4
-  eslint: ^9.29.0
-  eslint-config-next: ^15.4.4
+  eslint: ^9.34.0
+  eslint-config-next: ^15.5.0
   eslint-plugin-turbo: ^2.5.4
   gsap: ^3.13.0
   intl-messageformat: ^10.7.16
-  lucide-react: ^0.485.0
-  next: ^15.4.4
+  lucide-react: ^0.541.0
+  next: ^15.5.0
   next-auth: 5.0.0-beta.28
   next-themes: ^0.4.6
   postcss: ^8.5.6
   postcss-import: ^16.1.0
   react: ^19.1.1
   react-dom: ^19.1.1
-  react-hook-form: ^7.60.0
+  react-hook-form: ^7.62.0
   react-virtualized-auto-sizer: ^1.0.26
   react-window: ^1.8.11
   react-window-infinite-loader: ^1.0.10
   recharts: ^2.15.4
   server-only: ^0.0.1
-  sonner: ^2.0.6
-  turbo: ^2.5.4
-  typescript: ^5.8.3
+  sonner: ^2.0.7
+  turbo: ^2.5.6
+  typescript: ^5.9.2
   usehooks-ts: ^3.1.1
   vaul: ^1.1.2
   wrangler: ^4.20.0
-  zod: ^4.0.14
+  zod: ^4.0.17
 
 catalogs:
   canary:
-    '@next/bundle-analyzer': 15.4.2-canary.29
-    '@next/eslint-plugin-next': 15.4.2-canary.29
-    '@next/third-parties': 15.4.2-canary.29
-    eslint-config-next: 15.4.2-canary.29
-    next: 15.4.2-canary.29
+    '@next/bundle-analyzer': 15.5.1-canary.5
+    '@next/eslint-plugin-next': 15.5.1-canary.5
+    '@next/third-parties': 15.5.1-canary.5
+    eslint-config-next: 15.5.1-canary.5
+    next: 15.5.1-canary.5
 
 onlyBuiltDependencies:
   - '@sentry/cli'

@@ -7,12 +7,7 @@ import { SessionProvider } from 'next-auth/react'
 import { auth } from '#/lib/auth'
 import { i18n, type Locale } from '#/lib/i18n'
 
-type RootLayoutProps = {
-  params: Promise<{ lang: Locale }>
-  children: React.ReactNode
-}
-
-export default async function Layout(props: RootLayoutProps) {
+export default async function Layout(props: Omit<LayoutProps<'/[lang]'>, 'get' | 'post'>) {
   const params = await props.params
 
   const { children } = props
@@ -22,7 +17,7 @@ export default async function Layout(props: RootLayoutProps) {
   return (
     <html lang={params.lang}>
       <body>
-        <LocaleProvider locale={params.lang} i18n={i18n}>
+        <LocaleProvider locale={params.lang as Locale} i18n={i18n}>
           <SessionProvider session={session}>{children}</SessionProvider>
         </LocaleProvider>
 

@@ -3,14 +3,10 @@ import { notFound } from 'next/navigation'
 import { Link } from '@repo/i18n/client'
 
 import { getRestaurants } from '#/lib/db/queries'
-import { getDictionary, i18n, Locale } from '#/lib/i18n'
+import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 
 import { getCachedRestaurantWithPostsByName } from '../actions'
 import RestaurantDetail from './restaurant-detail'
-
-export type Props = Readonly<{
-  params: Promise<{ lang: Locale; restaurantName: string }>
-}>
 
 export async function generateStaticParams() {
   const restaurants = await getRestaurants()
@@ -19,11 +15,11 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page({ params }: PageProps<'/[lang]/follow-up/[restaurantName]'>) {
   const { restaurantName, lang } = await params
   const [{ restaurant, posts }, messages] = await Promise.all([
     getCachedRestaurantWithPostsByName(restaurantName),
-    getDictionary(lang),
+    getDictionary(lang as Locale),
   ])
 
   if (!restaurant || !restaurant.ai_summarize) {
@@ -71,7 +67,7 @@ export default async function Page({ params }: Props) {
   )
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<'/[lang]/follow-up/[restaurantName]'>): Promise<Metadata> {
   const { restaurantName } = await params
   const { restaurant } =
     await getCachedRestaurantWithPostsByName(restaurantName)

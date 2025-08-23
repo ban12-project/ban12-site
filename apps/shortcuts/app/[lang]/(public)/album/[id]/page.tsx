@@ -8,10 +8,6 @@ import { getAlbumByIdWithShortcuts, getAlbums } from '#/lib/db/queries'
 import { i18n, type Locale } from '#/lib/i18n'
 import ShortcutList from '#/components/shortcut-list'
 
-type ListPageProps = {
-  params: Promise<{ id: string; lang: Locale }>
-}
-
 const preload = (id: number) => {
   void getCachedAlbumByIdWithShortcuts(id)
 }
@@ -27,7 +23,7 @@ export async function generateStaticParams() {
   return albums.map((album) => ({ id: album.id.toString() }))
 }
 
-export default async function ListPage({ params }: ListPageProps) {
+export default async function ListPage({ params }: PageProps<'/[lang]/album/[id]'>) {
   const { id, lang } = await params
   const NumericId = Number.parseInt(id)
   preload(NumericId)
@@ -57,7 +53,7 @@ export default async function ListPage({ params }: ListPageProps) {
           </div>
         }
       >
-        <Album lang={lang} id={NumericId} />
+        <Album lang={lang as Locale} id={NumericId} />
       </Suspense>
     </main>
   )
@@ -78,15 +74,15 @@ async function Album({ lang, id }: { lang: Locale; id: number }) {
 
 export async function generateMetadata({
   params,
-}: ListPageProps): Promise<Metadata> {
+}: PageProps<'/[lang]/album/[id]'>): Promise<Metadata> {
   const { id, lang } = await params
   const album = await getCachedAlbumByIdWithShortcuts(Number.parseInt(id))
 
   if (!album) notFound()
 
   return {
-    title: album.title[lang],
-    description: album.description[lang],
+    title: album.title[lang as Locale],
+    description: album.description[lang as Locale],
     metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
     alternates: {
       canonical: `/album/${id}`,

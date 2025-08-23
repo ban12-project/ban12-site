@@ -9,10 +9,6 @@ import CollectionsSkeleton from '#/components/collections-skeleton'
 import ColorSchemeToggle from '#/components/color-scheme-toggle'
 import PostButton from '#/components/post-button'
 
-type HomePageProps = {
-  params: Promise<{ lang: Locale }>
-}
-
 const preload = () => {
   // void evaluates the given expression and returns undefined
   // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/void
@@ -20,12 +16,12 @@ const preload = () => {
   void getAlbumsWithShortcuts()
 }
 
-export default async function Home(props: HomePageProps) {
+export default async function Home(props: PageProps<'/[lang]'>) {
   const params = await props.params
   // starting load home page data
   preload()
 
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
 
   return (
     <>
@@ -37,12 +33,12 @@ export default async function Home(props: HomePageProps) {
         </div>
         <ViewTransition>
           <Suspense fallback={<CollectionsSkeleton />}>
-            <Collections lang={params.lang} />
+            <Collections lang={params.lang as Locale} />
           </Suspense>
         </ViewTransition>
         <ViewTransition>
           <Suspense fallback={<AlbumListSkeleton />}>
-            <AlbumList lang={params.lang} messages={messages} />
+            <AlbumList lang={params.lang as Locale} messages={messages} />
           </Suspense>
         </ViewTransition>
       </main>

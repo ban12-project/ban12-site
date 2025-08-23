@@ -5,13 +5,9 @@ import HomeAnimate from '#/components/home-animate'
 import HomeHero from '#/components/home-hero'
 import HomeIntro from '#/components/home-intro'
 
-type Props = {
-  params: Promise<{ lang: Locale }>
-}
-
-export async function generateMetadata(props: Props): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<'/[lang]'>): Promise<Metadata> {
   const params = await props.params
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
 
   return {
     title: messages.home.title,
@@ -19,9 +15,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 }
 
-export default async function Home({ params }: Props) {
+export default async function Home({ params }: PageProps<'/[lang]'>) {
   const { lang } = await params
-  const messages = await getDictionary(lang)
+  const messages = await getDictionary(lang as Locale)
 
   return (
     <main>

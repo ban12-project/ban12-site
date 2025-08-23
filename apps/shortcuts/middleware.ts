@@ -16,7 +16,6 @@ export function middleware(...args: Parameters<NextMiddleware>) {
     const { pathname } = request.nextUrl
 
     if (
-      pathname.startsWith('/api/auth') ||
       !protectedPaths
         .concat(withTokenConflictPaths)
         .some((url) => pathname.startsWith(url))

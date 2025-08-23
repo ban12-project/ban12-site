@@ -13,18 +13,11 @@ import { WebVitals } from '#/components/web-vitals'
 
 const SentryLoader = dynamic(() => import('#/components/sentry-loader'))
 
-type RootLayoutProps = {
-  params: Promise<{ lang: Locale }>
-  children: React.ReactNode
-  get: React.ReactNode
-  post: React.ReactNode
-}
-
 export async function generateMetadata(
-  props: RootLayoutProps,
+  props: LayoutProps<'/[lang]'>,
 ): Promise<Metadata> {
   const params = await props.params
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
 
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
@@ -76,7 +69,7 @@ export async function generateStaticParams() {
   return Object.keys(i18n.locales).map((lang) => ({ lang }))
 }
 
-export default async function RootLayout(props: RootLayoutProps) {
+export default async function RootLayout(props: LayoutProps<'/[lang]'>) {
   const params = await props.params
 
   const { children, get, post } = props
@@ -94,7 +87,7 @@ export default async function RootLayout(props: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <LocaleProvider locale={params.lang} i18n={i18n}>
+          <LocaleProvider locale={params.lang as Locale} i18n={i18n}>
             {children}
             {get}
             {post}

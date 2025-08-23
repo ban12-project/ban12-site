@@ -7,21 +7,11 @@ import { getDictionary, i18n, type Locale, type Messages } from '#/lib/i18n'
 import ShortcutList from '#/components/shortcut-list'
 import { searchShortcuts } from '#/app/[lang]/(public)/actions'
 
-type SearchPageProps = {
-  params: Promise<{
-    lang: Locale
-  }>
-  searchParams?: Promise<{
-    query?: string
-    page?: string
-  }>
-}
-
 const preload = async (query: string) => {
   void searchShortcuts(query)
 }
 
-export default async function SearchPage(props: SearchPageProps) {
+export default async function SearchPage(props: PageProps<'/[lang]/search'>) {
   const [searchParams, params] = await Promise.all([
     props.searchParams,
     props.params,
@@ -29,8 +19,8 @@ export default async function SearchPage(props: SearchPageProps) {
   const query = searchParams?.query || ''
   if (!query) notFound()
 
-  preload(query)
-  const messages = await getDictionary(params.lang)
+  preload(query as string)
+  const messages = await getDictionary(params.lang as Locale)
 
   return (
     <main className="container-full pt-safe-max-4">
@@ -42,7 +32,7 @@ export default async function SearchPage(props: SearchPageProps) {
           </div>
         }
       >
-        <SearchResults params={params} query={query} messages={messages} />
+        <SearchResults params={params as { lang: Locale }} query={query as string} messages={messages} />
       </Suspense>
     </main>
   )
@@ -75,12 +65,12 @@ async function SearchResults({
 }
 
 export async function generateMetadata(
-  props: SearchPageProps,
+  props: PageProps<'/[lang]/search'>,
 ): Promise<Metadata> {
   const searchParams = await props.searchParams
   const params = await props.params
   const query = searchParams?.query || ''
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
 
   return {
     title: `${messages.common.search} ${query}`,

@@ -4,15 +4,9 @@ import Script from 'next/script'
 import { getDictionary, type Locale } from '#/lib/i18n'
 import { QRCodeForm } from '#/components/qrcode-form'
 
-type Props = {
-  params: Promise<{
-    lang: Locale
-  }>
-}
-
-export async function generateMetadata(props: Props): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<'/[lang]/qr-code'>): Promise<Metadata> {
   const params = await props.params
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
 
   return {
     title: messages['page-hash'].title,
@@ -20,9 +14,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 }
 
-export default async function QRCodePage(props: Props) {
+export default async function QRCodePage(props: PageProps<'/[lang]/qr-code'>) {
   const params = await props.params
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
 
   return (
     <section className="flex h-screen w-screen justify-center align-middle">

@@ -12,18 +12,18 @@
     "ci:deploy": "node .github/scripts/deploy-to-vercel.mjs"
   },
   "devDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
+    "@ianvs/prettier-plugin-sort-imports": "^4.6.2",
     "husky": "^9.1.7",
-    "lint-staged": "^16.1.2",
+    "lint-staged": "^16.1.5",
     "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.13",
+    "prettier-plugin-tailwindcss": "^0.6.14",
     "turbo": "catalog:"
   },
   "engines": {
     "node": ">=20",
     "pnpm": ">=10"
   },
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.15.0",
   "prettier": {
     "arrowParens": "always",
     "trailingComma": "all",

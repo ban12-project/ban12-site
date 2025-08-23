@@ -4,13 +4,9 @@ import { Link } from '@repo/i18n/client'
 import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import ShortcutPost from '#/components/shortcut-post'
 
-type Props = {
-  params: Promise<{ lang: Locale }>
-}
-
-export async function generateMetadata(props: Props): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<'/[lang]/post'>): Promise<Metadata> {
   const params = await props.params
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
   return {
     title: messages.post.title,
     description: messages.post.description,
@@ -24,9 +20,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 }
 
-export default async function PostPage(props: Props) {
+export default async function PostPage(props: PageProps<'/[lang]/post'>) {
   const params = await props.params
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
 
   return (
     <>

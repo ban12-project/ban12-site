@@ -13,10 +13,6 @@ import AlbumList from '#/components/album-list'
 import AlbumListSkeleton from '#/components/album-list-skeleton'
 import ShortcutList from '#/components/shortcut-list'
 
-type CollectionsProps = {
-  params: Promise<{ id: string; lang: Locale }>
-}
-
 const preload = (id: number) => {
   void getCachedCollectionByIdWithAlbumsAndShortcuts(id)
 }
@@ -36,11 +32,11 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function CollectionsPage({ params }: CollectionsProps) {
+export default async function CollectionsPage({ params }: PageProps<'/[lang]/collection/[id]'>) {
   const { id, lang } = await params
   const NumericId = Number.parseInt(id)
   preload(NumericId)
-  const messages = await getDictionary(lang)
+  const messages = await getDictionary(lang as Locale)
 
   return (
     <main>
@@ -56,7 +52,7 @@ export default async function CollectionsPage({ params }: CollectionsProps) {
           </>
         }
       >
-        <Collections lang={lang} messages={messages} id={NumericId} />
+        <Collections lang={lang as Locale} messages={messages} id={NumericId} />
       </Suspense>
     </main>
   )
@@ -93,7 +89,7 @@ async function Collections({
 
 export async function generateMetadata({
   params,
-}: CollectionsProps): Promise<Metadata> {
+}: PageProps<'/[lang]/collection/[id]'>): Promise<Metadata> {
   const { id, lang } = await params
   const collection = await getCachedCollectionByIdWithAlbumsAndShortcuts(
     Number.parseInt(id),
@@ -102,8 +98,8 @@ export async function generateMetadata({
   if (!collection) notFound()
 
   return {
-    title: collection.title[lang],
-    description: collection.title[lang],
+    title: collection.title[lang as Locale],
+    description: collection.title[lang as Locale],
     metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
     alternates: {
       canonical: `/collection/${id}`,

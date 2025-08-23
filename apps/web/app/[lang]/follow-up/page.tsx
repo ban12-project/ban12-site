@@ -9,14 +9,6 @@ import { Mapbox, PreloadResources } from '#/components/mapbox'
 
 import RenderMapboxControls from './render-mapbox-controls'
 
-type Props = Readonly<{
-  params: Promise<{ lang: Locale }>
-  searchParams: Promise<{
-    location?: string
-    marker?: string
-  }>
-}>
-
 export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: dark)', color: '#292929' },
@@ -39,10 +31,10 @@ const preload = () => {
   void getRestaurants()
 }
 
-export default async function FollowUpPage(props: Props) {
+export default async function FollowUpPage(props: PageProps<'/[lang]/follow-up'>) {
   preload()
   const { lang } = await props.params
-  const messages = await getDictionary(lang)
+  const messages = await getDictionary(lang as Locale)
 
   const restaurants = getRestaurants()
 
@@ -70,7 +62,10 @@ async function SuspendedMapbox({
   searchParams,
   restaurants,
 }: {
-  searchParams: Props['searchParams']
+  searchParams: Promise<{
+    location?: string
+    marker?: string
+  }>
   restaurants: ReturnType<typeof getRestaurants>
 }) {
   const [headersList, awaitedSearchParams] = await Promise.all([

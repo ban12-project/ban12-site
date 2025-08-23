@@ -12,9 +12,9 @@ import Footer from '#/components/footer'
 
 export async function generateMetadata({
   params,
-}: RootLayoutProps): Promise<Metadata> {
+}: LayoutProps<'/[lang]'>): Promise<Metadata> {
   const { lang } = await params
-  const messages = await getDictionary(lang)
+  const messages = await getDictionary(lang as Locale)
 
   return {
     alternates: {
@@ -62,21 +62,16 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
-interface RootLayoutProps {
-  children: React.ReactNode
-  params: Promise<{ lang: Locale }>
-}
-
 export async function generateStaticParams() {
   return Object.keys(i18n.locales).map((lang) => ({ lang }))
 }
 
-export default async function RootLayout(props: RootLayoutProps) {
+export default async function RootLayout(props: LayoutProps<'/[lang]'>) {
   const params = await props.params
 
   const { children } = props
 
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
 
   return (
     <html suppressHydrationWarning lang={params.lang}>
@@ -87,7 +82,7 @@ export default async function RootLayout(props: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <LocaleProvider locale={params.lang} i18n={i18n}>
+          <LocaleProvider locale={params.lang as Locale} i18n={i18n}>
             {children}
             <Footer />
           </LocaleProvider>

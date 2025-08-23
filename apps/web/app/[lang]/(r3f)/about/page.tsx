@@ -3,11 +3,9 @@ import HomeHeader from '#/components/home-header'
 
 import R3f from './r3f'
 
-type Props = Readonly<{ params: Promise<{ lang: Locale }> }>
-
-export default async function Home(props: Props) {
+export default async function Home(props: PageProps<'/[lang]/about'>) {
   const params = await props.params
-  const messages = await getDictionary(params.lang)
+  const messages = await getDictionary(params.lang as Locale)
 
   return (
     <>

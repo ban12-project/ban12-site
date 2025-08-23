@@ -19,9 +19,7 @@ import { AppSidebar } from '#/components/app-sidebar'
 
 export default async function DashboardLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: LayoutProps<'/[lang]/dashboard'>) {
   const session = await auth()
 
   return (
