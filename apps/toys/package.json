@@ -24,7 +24,7 @@
     "@opennextjs/cloudflare": "catalog:",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
-    "@uswriting/exiftool": "^1.0.3",
+    "@uswriting/exiftool": "^1.0.5",
     "gsap": "catalog:",
     "intl-messageformat": "catalog:",
     "lucide-react": "catalog:",
