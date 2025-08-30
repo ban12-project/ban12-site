@@ -33,17 +33,25 @@ export async function middleware(...args: Parameters<NextMiddleware>) {
     secret: process.env.AUTH_SECRET,
     secureCookie: process.env.NODE_ENV !== 'development',
   })
+  const locale = Object.keys(i18n.locales).find(
+    (locale) => pathname.split('/')[1] === locale,
+  )
 
   if (!token && protectedPaths.some((url) => pathname.startsWith(url))) {
     const redirectUrl = encodeURIComponent(request.url)
 
     return NextResponse.redirect(
-      new URL(`/login?redirectUrl=${redirectUrl}`, request.url),
+      new URL(
+        `${locale ? `/${locale}` : ''}/login?redirectUrl=${redirectUrl}`,
+        request.url,
+      ),
     )
   }
 
   if (token && withTokenConflictPaths.some((url) => pathname.startsWith(url))) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+    return NextResponse.redirect(
+      new URL(`${locale ? `/${locale}` : ''}/dashboard`, request.url),
+    )
   }
 
   return i18nMiddleware(...args)
