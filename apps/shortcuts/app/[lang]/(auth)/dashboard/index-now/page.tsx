@@ -1,9 +1,21 @@
+import { Suspense } from 'react'
+import { connection } from 'next/server'
+
 import { submitURLs } from '#/lib/index-now'
 import sitemap from '#/app/sitemap'
 
 import Form from './Form'
 
 export default async function IndexNowPage() {
+  return (
+    <Suspense fallback="Loading">
+      <Suspended />
+    </Suspense>
+  )
+}
+
+async function Suspended() {
+  await connection()
   const sitemapUrls = await sitemap()
 
   const submit = async (prevState: string | undefined, formData: FormData) => {

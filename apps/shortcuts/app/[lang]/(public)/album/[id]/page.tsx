@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
-import { unstable_cache } from 'next/cache'
+import { cacheTag } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Skeleton } from '@repo/ui/components/skeleton'
 
@@ -12,18 +12,22 @@ const preload = (id: number) => {
   void getCachedAlbumByIdWithShortcuts(id)
 }
 
-const getCachedAlbumByIdWithShortcuts = unstable_cache(
-  getAlbumByIdWithShortcuts,
-  ['album', 'shortcut'],
-  { tags: ['album', 'shortcut'] },
-)
+const getCachedAlbumByIdWithShortcuts = async (id: number) => {
+  'use cache'
+  cacheTag('album')
+  cacheTag('shortcut')
+
+  return await getAlbumByIdWithShortcuts(id)
+}
 
 export async function generateStaticParams() {
   const albums = await getAlbums()
   return albums.map((album) => ({ id: album.id.toString() }))
 }
 
-export default async function ListPage({ params }: PageProps<'/[lang]/album/[id]'>) {
+export default async function ListPage({
+  params,
+}: PageProps<'/[lang]/album/[id]'>) {
   const { id, lang } = await params
   const NumericId = Number.parseInt(id)
   preload(NumericId)

@@ -1,5 +1,6 @@
 import '#/app/globals.css'
 
+import { Suspense } from 'react'
 import { LocaleProvider } from '@repo/i18n/client'
 import { Toaster } from '@repo/ui/components/sonner'
 import { SessionProvider } from 'next-auth/react'
@@ -7,22 +8,32 @@ import { SessionProvider } from 'next-auth/react'
 import { auth } from '#/lib/auth'
 import { i18n, type Locale } from '#/lib/i18n'
 
-export default async function Layout(props: Omit<LayoutProps<'/[lang]'>, 'get' | 'post'>) {
-  const params = await props.params
+export async function generateStaticParams() {
+  return Object.keys(i18n.locales).map((lang) => ({ lang }))
+}
 
-  const { children } = props
-
-  const session = await auth()
+export default async function Layout({
+  params,
+  children,
+}: Omit<LayoutProps<'/[lang]'>, 'get' | 'post'>) {
+  const { lang } = await params
 
   return (
-    <html lang={params.lang}>
+    <html lang={lang}>
       <body>
-        <LocaleProvider locale={params.lang as Locale} i18n={i18n}>
-          <SessionProvider session={session}>{children}</SessionProvider>
+        <LocaleProvider locale={lang as Locale} i18n={i18n}>
+          <Suspense fallback="Loading">
+            <Suspended>{children}</Suspended>
+          </Suspense>
         </LocaleProvider>
 
         <Toaster />
       </body>
     </html>
   )
+}
+
+async function Suspended({ children }: { children: React.ReactNode }) {
+  const session = await auth()
+  return <SessionProvider session={session}>{children}</SessionProvider>
 }

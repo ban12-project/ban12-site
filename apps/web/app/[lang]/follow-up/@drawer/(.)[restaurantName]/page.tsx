@@ -2,20 +2,17 @@ import { Suspense, ViewTransition } from 'react'
 import { notFound } from 'next/navigation'
 import { LoaderCircle } from 'lucide-react'
 
-import { getDictionary, type Locale, type Messages } from '#/lib/i18n'
+import { getDictionary, type Locale } from '#/lib/i18n'
 
 import RestaurantDetail from '../../[restaurantName]/restaurant-detail'
 import { getCachedRestaurantWithPostsByName } from '../../actions'
 import Drawer from './drawer'
 
-export default async function Page({
+export default function Page({
   params,
 }: PageProps<'/[lang]/follow-up/[restaurantName]'>) {
-  const { restaurantName, lang } = await params
-  const messages = await getDictionary(lang as Locale)
-
   return (
-    <Drawer title={restaurantName}>
+    <Drawer>
       <Suspense
         fallback={
           <ViewTransition exit="mapbox-fallback-exit">
@@ -26,7 +23,7 @@ export default async function Page({
         }
       >
         <ViewTransition enter="mapbox-enter">
-          <Suspended restaurantName={restaurantName} messages={messages} />
+          <Suspended params={params} />
         </ViewTransition>
       </Suspense>
     </Drawer>
@@ -34,16 +31,19 @@ export default async function Page({
 }
 
 async function Suspended({
-  restaurantName,
-  messages,
+  params,
 }: {
-  restaurantName: string
-  messages: Messages
+  params: PageProps<'/[lang]/follow-up/[restaurantName]'>['params']
 }) {
-  const { restaurant, posts } =
-    await getCachedRestaurantWithPostsByName(restaurantName)
+  const { restaurantName, lang } = await params
 
-  if (!restaurant || !restaurant.ai_summarize) {
+  // Next.js 16 incorrectly uses a route segment's literal value as a parameter for pre-rendering, causing unexpected database query issues. only
+  const [{ restaurant, posts } = {}, messages] = await Promise.all([
+    getCachedRestaurantWithPostsByName(restaurantName),
+    getDictionary(lang as Locale),
+  ])
+
+  if (!restaurant || !restaurant.ai_summarize || !posts) {
     notFound()
   }
 

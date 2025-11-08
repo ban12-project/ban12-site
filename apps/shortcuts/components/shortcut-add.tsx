@@ -1,9 +1,10 @@
-import { unstable_cache } from 'next/cache'
+import { cacheTag } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Button } from '@repo/ui/components/button'
-import { cn } from '@repo/ui/lib/utils'
 import SuperEllipse from '@repo/ui/components/super-ellipse'
+import { cn } from '@repo/ui/lib/utils'
 import { Plus, Share } from 'lucide-react'
+import * as z from 'zod'
 
 import { getShortcutByUuid } from '#/lib/db/queries'
 import type { Locale, Messages } from '#/lib/i18n'
@@ -17,14 +18,17 @@ export interface ShortcutAddProps extends React.ComponentProps<'div'> {
 }
 
 export const preload = (id: string) => {
+  if (!z.uuid().safeParse(id).success) return
+
   void getCachedShortcutByUuid(id)
 }
 
-export const getCachedShortcutByUuid = unstable_cache(
-  getShortcutByUuid,
-  ['shortcut'],
-  { tags: ['shortcut'] },
-)
+export const getCachedShortcutByUuid = async (id: string) => {
+  'use cache'
+  cacheTag('shortcut')
+
+  return await getShortcutByUuid(id)
+}
 
 export default async function ShortcutAdd({
   params: { id, lang },
@@ -32,6 +36,8 @@ export default async function ShortcutAdd({
   fromNormalRoute,
   ...props
 }: ShortcutAddProps) {
+  if (!z.uuid().safeParse(id).success) return notFound()
+
   const shortcut = await getCachedShortcutByUuid(id)
 
   if (!shortcut) notFound()

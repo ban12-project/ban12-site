@@ -65,7 +65,6 @@ onlyBuiltDependencies:
   - bufferutil
   - esbuild
   - protobufjs
-  - rclone.js
   - sharp
   - workerd
 
