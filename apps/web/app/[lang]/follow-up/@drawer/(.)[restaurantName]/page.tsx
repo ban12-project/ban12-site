@@ -15,7 +15,7 @@ export default async function Page({
   const messages = await getDictionary(lang as Locale)
 
   return (
-    <Drawer>
+    <Drawer title={restaurantName}>
       <Suspense
         fallback={
           <ViewTransition exit="mapbox-fallback-exit">
