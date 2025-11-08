@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, unstable_ViewTransition as ViewTransition } from 'react'
+import { useRef, ViewTransition } from 'react'
 import { useGSAP } from '@gsap/react'
 import { useLocale } from '@repo/i18n/client'
 import ScrambleText from '@repo/ui/components/scramble-text'
@@ -119,7 +119,7 @@ export default function HomeHero({ messages }: Props) {
 
         <Highlighter
           aria-hidden="true"
-          className="home-hero__heading-text invisible pb-10 text-[10vw] lg:text-[8vw] block"
+          className="home-hero__heading-text invisible block pb-10 text-[10vw] lg:text-[8vw]"
           searchWords={['WebAssembly']}
           textToHighlight={messages.hero.heading}
           highlightTag={({ children }) => (

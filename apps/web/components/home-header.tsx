@@ -24,7 +24,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@repo/ui/components/popover'
-import { cn } from '@repo/ui/lib/utils'
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -55,11 +54,13 @@ const components: { title: string; href: string; description: string }[] = [
 
 export default function HomeHeader() {
   return (
-    <header className="flex h-16 w-full items-center justify-between gap-8 border-b px-4 md:justify-start">
-      <Link href="/" className="text-lg font-bold">
-        Ban12
-      </Link>
-      <NavMenu />
+    <header className="border-b px-4">
+      <nav className="container mx-auto flex h-16 w-full gap-8 items-center justify-between md:justify-start">
+        <Link href="/" className="text-lg font-bold">
+          Ban12
+        </Link>
+        <NavMenu />
+      </nav>
     </header>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, unstable_ViewTransition as ViewTransition } from 'react'
+import { useRef, ViewTransition } from 'react'
 import { useGSAP } from '@gsap/react'
 import { Link, useLocale } from '@repo/i18n/client'
 import FlairFollower from '@repo/ui/components/flair-follower'

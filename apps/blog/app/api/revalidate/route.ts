@@ -20,7 +20,7 @@ export async function PUT(request: Request) {
     }
 
     if (tags && Array.isArray(tags) && tags.length > 0) {
-      tags.forEach((tag) => revalidateTag(tag))
+      tags.forEach((tag) => revalidateTag(tag, { expire: 0 }))
       console.log('Revalidated tags:', tags)
       revalidated = true
     }

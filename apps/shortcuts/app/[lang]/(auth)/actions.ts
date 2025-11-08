@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { AuthError } from 'next-auth'
 import * as z from 'zod'
@@ -151,7 +151,7 @@ export async function updateShortcut(
   revalidatePath('/dashboard')
   revalidatePath('/[lang]/(public)/(with-search)', 'page')
   revalidatePath(`/get/${uuid}`)
-  revalidateTag('shortcut')
+  updateTag('shortcut')
   redirect('/dashboard')
 }
 
@@ -170,7 +170,7 @@ export async function deleteShortcut(formData: FormData) {
 
   revalidatePath('/dashboard')
   revalidatePath('/[lang]/(public)/(with-search)', 'page')
-  revalidateTag('shortcut')
+  updateTag('shortcut')
   redirect('/dashboard')
 }
 
@@ -209,7 +209,7 @@ export async function createCollection(
 
   revalidatePath('/dashboard/collection')
   revalidatePath('/[lang]/(public)/(with-search)', 'page')
-  revalidateTag('collection')
+  updateTag('collection')
   redirect('/dashboard/collection')
 }
 
@@ -252,7 +252,7 @@ export async function updateCollection(
 
   revalidatePath('/dashboard/collection')
   revalidatePath(`/collection/${id}`)
-  revalidateTag('collection')
+  updateTag('collection')
   redirect('/dashboard/collection')
 }
 
@@ -271,7 +271,7 @@ export async function deleteCollection(formData: FormData) {
 
   revalidatePath('/dashboard/collection')
   revalidatePath('/[lang]/(public)/(with-search)', 'page')
-  revalidateTag('collection')
+  updateTag('collection')
   redirect('/dashboard/collection')
 }
 
@@ -316,7 +316,7 @@ export async function createAlbum(
 
   revalidatePath('/dashboard/album')
   revalidatePath('/[lang]/(public)/(with-search)', 'page')
-  revalidateTag('album')
+  updateTag('album')
   redirect('/dashboard/album')
 }
 
@@ -360,7 +360,7 @@ export async function updateAlbum(
   revalidatePath('/dashboard/album')
   revalidatePath(`/album/${id}`)
   revalidatePath('/[lang]/(public)/(with-search)', 'page')
-  revalidateTag('album')
+  updateTag('album')
   redirect('/dashboard/album')
 }
 
@@ -379,6 +379,6 @@ export async function deleteAlbum(formData: FormData) {
 
   revalidatePath('/dashboard/album')
   revalidatePath('/[lang]/(public)/(with-search)', 'page')
-  revalidateTag('album')
+  updateTag('album')
   redirect('/dashboard/album')
 }

@@ -74,11 +74,8 @@ const nextConfig: NextConfig = {
     },
   },
   transpilePackages: ['@repo/i18n', '@repo/ui'],
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  reactCompiler: true,
   experimental: {
-    reactCompiler: true,
     viewTransition: true,
   },
   async headers() {

@@ -1,4 +1,4 @@
-import { Fragment, unstable_ViewTransition as ViewTransition } from 'react'
+import { Fragment, ViewTransition } from 'react'
 import Link from 'next/link'
 
 import type { Post } from '#/lib/api'

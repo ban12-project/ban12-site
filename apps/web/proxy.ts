@@ -1,4 +1,4 @@
-import { NextResponse, type NextMiddleware } from 'next/server'
+import { NextResponse, type NextProxy } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
 import { i18n, middleware as i18nMiddleware } from './lib/i18n'
@@ -16,7 +16,7 @@ const withTokenConflictPaths: string[] = ['/login', '/register'].flatMap(
       .concat(path),
 )
 
-export async function middleware(...args: Parameters<NextMiddleware>) {
+export async function proxy(...args: Parameters<NextProxy>) {
   const [request] = args
   const { pathname } = request.nextUrl
 

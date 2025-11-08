@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import type { NextMiddleware, NextRequest } from 'next/server'
+import type { NextProxy, NextRequest } from 'next/server'
 import { match as matchLocale } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
 
@@ -24,7 +24,7 @@ export function createMiddleware(i18n: I18nConfig) {
   }
 
   return function middleware(
-    ...args: [...Parameters<NextMiddleware>, nextMiddleware?: NextMiddleware]
+    ...args: [...Parameters<NextProxy>, nextMiddleware?: NextProxy]
   ) {
     const [request, event, nextMiddleware] = args
     const { pathname, search } = request.nextUrl

@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "pnpm build-rust && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "build-rust": "wasm-pack build ../../crates/calculate-hash && wasm-pack build ../../crates/similar-wasm-wrapper",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",

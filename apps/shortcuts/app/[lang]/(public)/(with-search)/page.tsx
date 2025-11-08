@@ -1,4 +1,4 @@
-import { Suspense, unstable_ViewTransition as ViewTransition } from 'react'
+import { Suspense, ViewTransition } from 'react'
 
 import { getAlbumsWithShortcuts, getCollections } from '#/lib/db/queries'
 import { getDictionary, type Locale } from '#/lib/i18n'

@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 import * as z from 'zod'
 
@@ -39,7 +39,7 @@ export async function startVideoUnderstanding({
   })
 
   revalidatePath('/[lang]/dashboard/restaurants', 'page')
-  revalidateTag(`restaurant:${id}`)
+  updateTag(`restaurant:${id}`)
 }
 
 export type State = {
@@ -116,7 +116,7 @@ export async function updateLocation(prevState: State, formData: FormData) {
   }
 
   revalidatePath('/[lang]/dashboard/restaurants', 'page')
-  revalidateTag(`restaurant:${id}`)
+  updateTag(`restaurant:${id}`)
 
   return {
     message: 'success',
@@ -152,7 +152,7 @@ export async function updateInvisible(prevState: State, formData: FormData) {
   }
 
   revalidatePath('/[lang]/dashboard/restaurants', 'page')
-  revalidateTag(`restaurant:${id}`)
+  updateTag(`restaurant:${id}`)
 
   return {
     message: 'success',

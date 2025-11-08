@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  Suspense,
-  useDeferredValue,
-  useState,
-  unstable_ViewTransition as ViewTransition,
-} from 'react'
+import { Suspense, useDeferredValue, useState, ViewTransition } from 'react'
 import dynamic from 'next/dynamic'
 import { Textarea } from '@repo/ui/components/textarea'
 import { LoaderCircleIcon } from 'lucide-react'
