@@ -1,3 +1,6 @@
+import { readFile } from 'node:fs/promises'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { ImageResponse } from 'next/og'
 import { generateBase64 } from '@repo/ui/lib/utils'
 
@@ -28,9 +31,9 @@ export default async function Image(props: Props) {
     sizeFit,
   } = props
 
-  const interBold = fetch(
-    new URL('../fonts/Inter-Bold.ttf', import.meta.url),
-  ).then((res) => res.arrayBuffer())
+  const interBold = readFile(
+    join(dirname(fileURLToPath(import.meta.url)), '../fonts/Inter-Bold.ttf'),
+  )
 
   const size = scale(height, 48, 630, 48, title ? 160 : 630)
   const fontSize = scale(height, 48, 630, 26, title ? 36 : 100)
