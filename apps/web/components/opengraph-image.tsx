@@ -1,6 +1,3 @@
-import { readFile } from 'node:fs/promises'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { ImageResponse } from 'next/og'
 import { generateBase64 } from '@repo/ui/lib/utils'
 
@@ -21,6 +18,21 @@ function scale(value: number, n1: number, n2: number, n3: number, n4: number) {
 
 const PRIMARY_COLOR = 'rgb(249 115 22)'
 
+async function loadGoogleFont (font: string, weight: number[], text: string) {
+  const url = `https://fonts.googleapis.com/css2?family=${font}:wght@${weight.join(";")}&text=${encodeURIComponent(text)}`
+  const css = await (await fetch(url)).text()
+  const resource = css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/)
+ 
+  if (resource) {
+    const response = await fetch(resource[1])
+    if (response.status == 200) {
+      return await response.arrayBuffer()
+    }
+  }
+ 
+  throw new Error('failed to load font data')
+}
+
 export default async function Image(props: Props) {
   const {
     title,
@@ -30,10 +42,6 @@ export default async function Image(props: Props) {
     textColor,
     sizeFit,
   } = props
-
-  const interBold = readFile(
-    join(dirname(fileURLToPath(import.meta.url)), '../fonts/Inter-Bold.ttf'),
-  )
 
   const size = scale(height, 48, 630, 48, title ? 160 : 630)
   const fontSize = scale(height, 48, 630, 26, title ? 36 : 100)
@@ -76,7 +84,7 @@ export default async function Image(props: Props) {
       fonts: [
         {
           name: 'Inter',
-          data: await interBold,
+          data: await loadGoogleFont('Inter', [700], `${process.env.SITE_NAME} ${title}`),
           style: 'normal',
           weight: 700,
         },
