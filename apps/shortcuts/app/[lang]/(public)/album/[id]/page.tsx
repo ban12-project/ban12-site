@@ -8,10 +8,6 @@ import { getAlbumByIdWithShortcuts, getAlbums } from '#/lib/db/queries'
 import { i18n, type Locale } from '#/lib/i18n'
 import ShortcutList from '#/components/shortcut-list'
 
-const preload = (id: number) => {
-  void getCachedAlbumByIdWithShortcuts(id)
-}
-
 const getCachedAlbumByIdWithShortcuts = async (id: number) => {
   'use cache'
   cacheTag('album')
@@ -25,13 +21,9 @@ export async function generateStaticParams() {
   return albums.map((album) => ({ id: album.id.toString() }))
 }
 
-export default async function ListPage({
+export default function AlbumListPage({
   params,
 }: PageProps<'/[lang]/album/[id]'>) {
-  const { id, lang } = await params
-  const NumericId = Number.parseInt(id)
-  preload(NumericId)
-
   return (
     <main className="container-full py-safe-max-4">
       <Suspense
@@ -57,14 +49,21 @@ export default async function ListPage({
           </div>
         }
       >
-        <Album lang={lang as Locale} id={NumericId} />
+        <Album params={params} />
       </Suspense>
     </main>
   )
 }
 
-async function Album({ lang, id }: { lang: Locale; id: number }) {
-  const album = await getCachedAlbumByIdWithShortcuts(id)
+async function Album({
+  params,
+}: {
+  params: Promise<{ id: string; lang: string }>
+}) {
+  const { id, lang } = (await params) as { id: string; lang: Locale }
+  const NumericId = Number.parseInt(id)
+
+  const album = await getCachedAlbumByIdWithShortcuts(NumericId)
 
   if (!album) notFound()
 

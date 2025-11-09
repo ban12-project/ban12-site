@@ -8,14 +8,10 @@ import {
   getCollectionByIdWithAlbumsAndShortcuts,
   getCollections,
 } from '#/lib/db/queries'
-import { getDictionary, i18n, type Locale, type Messages } from '#/lib/i18n'
+import { getDictionary, i18n, type Locale } from '#/lib/i18n'
 import AlbumList from '#/components/album-list'
 import AlbumListSkeleton from '#/components/album-list-skeleton'
 import ShortcutList from '#/components/shortcut-list'
-
-const preload = (id: number) => {
-  void getCachedCollectionByIdWithAlbumsAndShortcuts(id)
-}
 
 const getCachedCollectionByIdWithAlbumsAndShortcuts = async (id: number) => {
   'use cache'
@@ -33,14 +29,9 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function CollectionsPage({
+export default function CollectionsPage({
   params,
 }: PageProps<'/[lang]/collection/[id]'>) {
-  const { id, lang } = await params
-  const NumericId = Number.parseInt(id)
-  preload(NumericId)
-  const messages = await getDictionary(lang as Locale)
-
   return (
     <main>
       <Suspense
@@ -55,22 +46,23 @@ export default async function CollectionsPage({
           </>
         }
       >
-        <Collections lang={lang as Locale} messages={messages} id={NumericId} />
+        <Collections params={params} />
       </Suspense>
     </main>
   )
 }
 
 async function Collections({
-  lang,
-  messages,
-  id,
+  params,
 }: {
-  lang: Locale
-  messages: Messages
-  id: number
+  params: PageProps<'/[lang]/collection/[id]'>['params']
 }) {
-  const collection = await getCachedCollectionByIdWithAlbumsAndShortcuts(id)
+  const { id, lang } = (await params) as { id: string; lang: Locale }
+  const NumericId = Number.parseInt(id)
+  const [messages, collection] = await Promise.all([
+    getDictionary(lang),
+    getCachedCollectionByIdWithAlbumsAndShortcuts(NumericId),
+  ])
 
   if (!collection) notFound()
 
