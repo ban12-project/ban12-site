@@ -38,7 +38,7 @@ export default function Footer() {
             <li>
               <Link
                 className="hover:underline"
-                href="https://github.com/NavOrange"
+                href="https://github.com/relkrahs"
               >
                 GitHub
               </Link>

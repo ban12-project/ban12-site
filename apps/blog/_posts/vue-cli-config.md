@@ -42,7 +42,7 @@ ogImage:
 
 ---
 
-## 我的实现(欢迎 [GitHub](https://github.com/NavOrange/blog/issues) 交流学习哈 这个是地址可以直接提交 `issues` [https://github.com/NavOrange/blog/issues](https://github.com/NavOrange/blog/issues) 如果有错误请友好指出 🙏 感谢大佬！
+## 我的实现(欢迎 [GitHub](https://github.com/ban12-project/ban12-site/issues/new?template=report-blog-link.yml) 交流学习哈 这个是地址可以直接提交 `issues` [https://github.com/ban12-project/ban12-site/issues/new?template=report-blog-link.yml](https://github.com/ban12-project/ban12-site/issues/new?template=report-blog-link.yml) 如果有错误请友好指出 🙏 感谢大佬！
 
 ---
 

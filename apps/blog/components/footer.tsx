@@ -38,7 +38,7 @@ export default function Footer() {
             <ul className="grid gap-4 md:mt-4">
               <li>
                 <Link
-                  href="https://github.com/NavOrange"
+                  href="https://github.com/relkrahs"
                   className="hover:underline"
                 >
                   GitHub
