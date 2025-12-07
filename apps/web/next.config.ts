@@ -7,7 +7,6 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   experimental: {
     viewTransition: true,
-    clientSegmentCache: true,
   },
   turbopack: {
     rules: {
