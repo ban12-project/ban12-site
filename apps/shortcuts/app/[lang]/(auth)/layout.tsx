@@ -8,7 +8,7 @@ import { SessionProvider } from 'next-auth/react'
 import { auth } from '#/lib/auth'
 import { i18n, type Locale } from '#/lib/i18n'
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return Object.keys(i18n.locales).map((lang) => ({ lang }))
 }
 

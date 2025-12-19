@@ -4,7 +4,6 @@ import { Button } from '@repo/ui/components/button'
 import SuperEllipse from '@repo/ui/components/super-ellipse'
 import { cn } from '@repo/ui/lib/utils'
 import { Plus, Share } from 'lucide-react'
-import * as z from 'zod'
 
 import { getShortcutByUuid } from '#/lib/db/queries'
 import type { Locale, Messages } from '#/lib/i18n'
@@ -15,12 +14,6 @@ export interface ShortcutAddProps extends React.ComponentProps<'div'> {
   messages: Messages
   /** tag from normal route or not because this component may be used in interceptor route */
   fromNormalRoute?: boolean
-}
-
-export const preload = (id: string) => {
-  if (!z.uuid().safeParse(id).success) return
-
-  void getCachedShortcutByUuid(id)
 }
 
 export const getCachedShortcutByUuid = async (id: string) => {
@@ -36,8 +29,6 @@ export default async function ShortcutAdd({
   fromNormalRoute,
   ...props
 }: ShortcutAddProps) {
-  if (!z.uuid().safeParse(id).success) return notFound()
-
   const shortcut = await getCachedShortcutByUuid(id)
 
   if (!shortcut) notFound()

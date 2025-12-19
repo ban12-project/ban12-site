@@ -5,9 +5,17 @@ import { getDictionary } from '#/lib/i18n'
 import PageDrawer from '#/components/page-drawer'
 import ShareButton from '#/components/share-button'
 import ShortcutAdd, { type ShortcutAddProps } from '#/components/shortcut-add'
+import { getShortcuts } from '#/lib/db/queries';
 
 type Props = {
   params: Promise<ShortcutAddProps['params']>
+}
+
+export async function generateStaticParams() {
+  const shortcuts = await getShortcuts()
+  return shortcuts.map((shortcut) => ({
+    id: shortcut.uuid,
+  }))
 }
 
 export default async function ShortcutPage(props: Props) {

@@ -8,7 +8,6 @@ import { getShortcuts } from '#/lib/db/queries'
 import { getDictionary, i18n } from '#/lib/i18n'
 import ShortcutAdd, {
   getCachedShortcutByUuid,
-  preload,
   type ShortcutAddProps,
 } from '#/components/shortcut-add'
 
@@ -25,8 +24,6 @@ export async function generateStaticParams() {
 
 export default async function ShortcutPage(props: Props) {
   const params = await props.params
-  preload(params.id)
-
   const messages = await getDictionary(params.lang)
 
   return (

@@ -27,14 +27,14 @@ const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })(nextConfig)
 
-export default withSentryConfig(withBundleAnalyzer, {
+const sentryConfig = withSentryConfig(withBundleAnalyzer, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
   // Suppresses source map uploading logs during build
   silent: true,
   org: 'ban12',
-  project: 'javascript-nextjs',
+  project: 'shortcuts',
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
@@ -56,3 +56,5 @@ export default withSentryConfig(withBundleAnalyzer, {
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
 })
+
+export default process.env.CI ? sentryConfig : withBundleAnalyzer
