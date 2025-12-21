@@ -36,7 +36,7 @@
     "gsap": "catalog:",
     "intl-messageformat": "catalog:",
     "lucide-react": "catalog:",
-    "next": "catalog:",
+    "next": "15.5.8",
     "next-auth": "catalog:",
     "next-themes": "catalog:",
     "postgres": "^3.4.5",

@@ -46,7 +46,7 @@
     "inngest": "^3.40.1",
     "lucide-react": "catalog:",
     "mapbox-gl": "^3.14.0",
-    "next": "catalog:",
+    "next": "15.5.8",
     "next-auth": "catalog:",
     "next-themes": "catalog:",
     "react": "catalog:",
