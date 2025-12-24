@@ -46,7 +46,7 @@ jobs:
           REVALIDATE_URL: 'https://blog.ban12.com/api/revalidate' # <-- Consider if localhost is correct for CI
         run: |
           # Initialize an empty JSON array string for paths
-          paths_json="["
+          paths_json="[\"/\","
           first=true
 
           # Loop through each changed file provided by the 'changed-files' action
