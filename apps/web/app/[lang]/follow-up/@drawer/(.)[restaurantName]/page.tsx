@@ -7,6 +7,14 @@ import { getDictionary, type Locale } from '#/lib/i18n'
 import RestaurantDetail from '../../[restaurantName]/restaurant-detail'
 import { getCachedRestaurantWithPostsByName } from '../../actions'
 import Drawer from './drawer'
+import { getRestaurants } from '#/lib/db/queries'
+
+export async function generateStaticParams() {
+  const restaurants = await getRestaurants()
+  return restaurants.map((restaurant) => ({
+    restaurantName: restaurant.ai_summarize?.restaurantName,
+  }))
+}
 
 export default function Page({
   params,
@@ -37,8 +45,7 @@ async function Suspended({
 }) {
   const { restaurantName, lang } = await params
 
-  // Next.js 16 incorrectly uses a route segment's literal value as a parameter for pre-rendering, causing unexpected database query issues. only
-  const [{ restaurant, posts } = {}, messages] = await Promise.all([
+  const [{ restaurant, posts }, messages] = await Promise.all([
     getCachedRestaurantWithPostsByName(restaurantName),
     getDictionary(lang as Locale),
   ])
