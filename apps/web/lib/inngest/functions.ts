@@ -1,5 +1,5 @@
 import { cleanRestaurantCacheById } from '#/lib/db/queries'
-
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { inngest } from './client'
 
 export const triggerRevalidation = inngest.createFunction(
@@ -13,29 +13,23 @@ export const triggerRevalidation = inngest.createFunction(
     })
 
     step.run('2. Trigger revalidation for restaurant', async () => {
-      const revalidateUrl = new URL(
-        '/api/revalidate',
-        process.env.NEXT_PUBLIC_HOST_URL!,
-      )
+      const tags = [`restaurant:${id}`]
+      const paths = [{ path: '/[lang]/dashboard/restaurants', type: 'page' }] as const
 
-      const response = await fetch(revalidateUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: process.env.REVALIDATE_TOKEN!,
-        },
-        body: JSON.stringify({
-          tags: [`restaurant:${id}`],
-          paths: [{ path: '/[lang]/dashboard/restaurants', type: 'page' }],
-        }),
-      })
-
-      if (!response.ok) {
-        // Log the error but don't let it fail the entire Inngest job
-        console.error(`Failed to revalidate: ${await response.text()}`)
+      if (paths && paths.length > 0) {
+        paths.forEach(({ path, type }) => revalidatePath(path, type))
       }
 
-      return await response.json()
+      if (tags && tags.length > 0) {
+        tags.forEach((tag) => revalidateTag(tag, { expire: 0 }))
+      }
+
+      return {
+        revalidated: true,
+        now: Date.now(),
+        paths,
+        tags,
+      }
     })
   },
 )
