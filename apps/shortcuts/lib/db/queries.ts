@@ -1,6 +1,6 @@
 import 'server-only'
 
-import { cache } from 'react'
+import { cacheTag } from 'next/cache'
 import { Redis } from '@upstash/redis'
 import { eq, or, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/postgres-js'
@@ -154,7 +154,10 @@ export async function deleteShortcutByUuid(uuid: string) {
   }
 }
 
-export const getShortcuts = cache(async () => {
+export const getShortcuts = async () => {
+  'use cache'
+  cacheTag('shortcut')
+
   try {
     const shortcuts = await db.query.shortcut.findMany()
     return shortcuts
@@ -162,13 +165,16 @@ export const getShortcuts = cache(async () => {
     console.error('Failed to get shortcuts from database')
     throw error
   }
-})
+}
 
-export const getShortcutByUuid = cache(async (uuid: string) => {
-  const cacheKey = `shortcut:uuid:${uuid}`
+export const getShortcutByUuid = async (uuid: string) => {
+  'use cache'
+  cacheTag('shortcut')
+
+  const redisCacheKey = `shortcut:uuid:${uuid}`
 
   try {
-    const cachedShortcut = await redis.get<SelectShortcut>(cacheKey)
+    const cachedShortcut = await redis.get<SelectShortcut>(redisCacheKey)
     if (cachedShortcut) return cachedShortcut
 
     const shortcut = await db.query.shortcut.findFirst({
@@ -176,7 +182,7 @@ export const getShortcutByUuid = cache(async (uuid: string) => {
     })
 
     if (shortcut) {
-      await redis.set(cacheKey, shortcut, { ex: CACHE_TTL.SHORTCUT })
+      await redis.set(redisCacheKey, shortcut, { ex: CACHE_TTL.SHORTCUT })
     }
 
     return shortcut
@@ -184,38 +190,43 @@ export const getShortcutByUuid = cache(async (uuid: string) => {
     console.error('Failed to get shortcut from database')
     throw error
   }
-})
+}
 
-export const getShortcutByAlbumId = cache(
-  async (albumId: number, pageSize: number, currentPage: number) => {
-    const cacheKey = `shortcuts:album:${albumId}:page:${currentPage}:size:${pageSize}`
+export const getShortcutByAlbumId = async (
+  albumId: number,
+  pageSize: number,
+  currentPage: number,
+) => {
+  'use cache'
+  cacheTag('shortcut')
 
-    try {
-      const cachedShortcuts = await redis.get<SelectShortcut[]>(cacheKey)
-      if (cachedShortcuts) {
-        return cachedShortcuts
-      }
+  const redisCacheKey = `shortcuts:album:${albumId}:page:${currentPage}:size:${pageSize}`
 
-      const shortcuts = await db.query.shortcut.findMany({
-        where: (shortcut, { eq }) => eq(shortcut.albumId, albumId),
-        limit: pageSize,
-        offset: (currentPage - 1) * pageSize,
-        orderBy: (shortcuts, { desc }) => desc(shortcuts.updatedAt),
-      })
-
-      if (shortcuts.length > 0) {
-        await redis.set(cacheKey, shortcuts, {
-          ex: CACHE_TTL.SHORTCUTS_BY_ALBUM,
-        })
-      }
-
-      return shortcuts
-    } catch (error) {
-      console.error('Failed to get shortcut from database')
-      throw error
+  try {
+    const cachedShortcuts = await redis.get<SelectShortcut[]>(redisCacheKey)
+    if (cachedShortcuts) {
+      return cachedShortcuts
     }
-  },
-)
+
+    const shortcuts = await db.query.shortcut.findMany({
+      where: (shortcut, { eq }) => eq(shortcut.albumId, albumId),
+      limit: pageSize,
+      offset: (currentPage - 1) * pageSize,
+      orderBy: (shortcuts, { desc }) => desc(shortcuts.updatedAt),
+    })
+
+    if (shortcuts.length > 0) {
+      await redis.set(redisCacheKey, shortcuts, {
+        ex: CACHE_TTL.SHORTCUTS_BY_ALBUM,
+      })
+    }
+
+    return shortcuts
+  } catch (error) {
+    console.error('Failed to get shortcut from database')
+    throw error
+  }
+}
 
 export async function searchShortcutsByQuery(query: string) {
   const cacheKey = `search:${query}`
@@ -306,7 +317,10 @@ export async function deleteCollectionById(id: number) {
   }
 }
 
-export const getCollections = cache(async () => {
+export const getCollections = async () => {
+  'use cache'
+  cacheTag('collection')
+
   try {
     const collections = await db.query.collection.findMany()
 
@@ -315,7 +329,7 @@ export const getCollections = cache(async () => {
     console.error('Failed to get collections from database')
     throw error
   }
-})
+}
 
 export async function getCollectionById(id: number) {
   try {
@@ -330,6 +344,11 @@ export async function getCollectionById(id: number) {
 }
 
 export async function getCollectionByIdWithAlbumsAndShortcuts(id: number) {
+  'use cache'
+  cacheTag('collection')
+  cacheTag('album')
+  cacheTag('shortcut')
+
   try {
     const collection = await db.query.collection.findFirst({
       where: (collection, { eq }) => eq(collection.id, id),
@@ -408,7 +427,10 @@ export async function deleteAlbumById(id: number) {
   }
 }
 
-export const getAlbums = cache(async () => {
+export const getAlbums = async () => {
+  'use cache'
+  cacheTag('album')
+
   try {
     const albums = await db.query.album.findMany()
 
@@ -417,7 +439,7 @@ export const getAlbums = cache(async () => {
     console.error('Failed to get albums from database')
     throw error
   }
-})
+}
 
 export async function getAlbumById(id: number) {
   try {
@@ -431,7 +453,11 @@ export async function getAlbumById(id: number) {
   }
 }
 
-export const getAlbumsWithShortcuts = cache(async (pageSize?: number) => {
+export const getAlbumsWithShortcuts = async (pageSize?: number) => {
+  'use cache'
+  cacheTag('album')
+  cacheTag('shortcut')
+
   try {
     const albums = await db.query.album.findMany({
       with: {
@@ -450,9 +476,13 @@ export const getAlbumsWithShortcuts = cache(async (pageSize?: number) => {
     console.error('Failed to get albums from database')
     throw error
   }
-})
+}
 
 export async function getAlbumByIdWithShortcuts(id: number) {
+  'use cache'
+  cacheTag('album')
+  cacheTag('shortcut')
+
   try {
     const album = await db.query.album.findFirst({
       with: {

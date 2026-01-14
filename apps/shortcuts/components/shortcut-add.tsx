@@ -1,4 +1,3 @@
-import { cacheTag } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Button } from '@repo/ui/components/button'
 import SuperEllipse from '@repo/ui/components/super-ellipse'
@@ -16,12 +15,6 @@ export interface ShortcutAddProps extends React.ComponentProps<'div'> {
   fromNormalRoute?: boolean
 }
 
-export const getCachedShortcutByUuid = async (id: string) => {
-  'use cache'
-  cacheTag('shortcut')
-
-  return await getShortcutByUuid(id)
-}
 
 export default async function ShortcutAdd({
   params: { id, lang },
@@ -29,7 +22,7 @@ export default async function ShortcutAdd({
   fromNormalRoute,
   ...props
 }: ShortcutAddProps) {
-  const shortcut = await getCachedShortcutByUuid(id)
+  const shortcut = await getShortcutByUuid(id)
 
   if (!shortcut) notFound()
 

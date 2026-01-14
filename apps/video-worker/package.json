@@ -10,11 +10,6 @@
   },
   "author": "google gemini",
   "license": "MIT",
-  "packageManager": "pnpm@10.13.1",
-  "engines": {
-    "node": ">=22",
-    "pnpm": ">=10"
-  },
   "dependencies": {
     "@google/genai": "catalog:",
     "dotenv": "catalog:",

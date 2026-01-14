@@ -1,6 +1,5 @@
 import { Suspense, ViewTransition } from 'react'
 
-import { getAlbumsWithShortcuts, getCollections } from '#/lib/db/queries'
 import { getDictionary, type Locale } from '#/lib/i18n'
 import AlbumList from '#/components/album-list'
 import AlbumListSkeleton from '#/components/album-list-skeleton'
@@ -9,18 +8,8 @@ import CollectionsSkeleton from '#/components/collections-skeleton'
 import ColorSchemeToggle from '#/components/color-scheme-toggle'
 import PostButton from '#/components/post-button'
 
-const preload = () => {
-  // void evaluates the given expression and returns undefined
-  // https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/void
-  void getCollections()
-  void getAlbumsWithShortcuts()
-}
-
 export default async function Home(props: PageProps<'/[lang]'>) {
   const params = await props.params
-  // starting load home page data
-  preload()
-
   const messages = await getDictionary(params.lang as Locale)
 
   return (

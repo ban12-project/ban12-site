@@ -1,20 +1,15 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
-import { cacheTag } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Skeleton } from '@repo/ui/components/skeleton'
 
-import { getAlbumByIdWithShortcuts, getAlbums } from '#/lib/db/queries'
+import {
+  getAlbumByIdWithShortcuts,
+  getAlbums,
+} from '#/lib/db/queries'
 import { i18n, type Locale } from '#/lib/i18n'
 import ShortcutList from '#/components/shortcut-list'
 
-const getCachedAlbumByIdWithShortcuts = async (id: number) => {
-  'use cache'
-  cacheTag('album')
-  cacheTag('shortcut')
-
-  return await getAlbumByIdWithShortcuts(id)
-}
 
 export async function generateStaticParams() {
   const albums = await getAlbums()
@@ -63,7 +58,7 @@ async function Album({
   const { id, lang } = (await params) as { id: string; lang: Locale }
   const NumericId = Number.parseInt(id)
 
-  const album = await getCachedAlbumByIdWithShortcuts(NumericId)
+  const album = await getAlbumByIdWithShortcuts(NumericId)
 
   if (!album) notFound()
 
@@ -79,7 +74,7 @@ export async function generateMetadata({
   params,
 }: PageProps<'/[lang]/album/[id]'>): Promise<Metadata> {
   const { id, lang } = await params
-  const album = await getCachedAlbumByIdWithShortcuts(Number.parseInt(id))
+  const album = await getAlbumByIdWithShortcuts(Number.parseInt(id))
 
   if (!album) notFound()
 

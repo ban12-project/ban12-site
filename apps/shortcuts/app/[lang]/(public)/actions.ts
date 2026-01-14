@@ -1,6 +1,5 @@
 'use server'
 
-import { cache } from 'react'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import * as z from 'zod'
@@ -207,22 +206,20 @@ export async function postShortcut(prevState: State, formData: FormData) {
   redirect('/')
 }
 
-export const fetchShortcutsByAlbumID = cache(
-  async (albumId: number, pageSize: number, currentPage: number) => {
-    try {
-      const shortcuts = await getShortcutByAlbumId(
-        albumId,
-        pageSize,
-        currentPage,
-      )
+export async function fetchShortcutsByAlbumID(
+  albumId: number,
+  pageSize: number,
+  currentPage: number,
+) {
+  try {
+    const shortcuts = await getShortcutByAlbumId(albumId, pageSize, currentPage)
 
-      return shortcuts
-    } catch (error) {
-      console.error('Failed to get shortcuts from database')
-      throw error
-    }
-  },
-)
+    return shortcuts
+  } catch (error) {
+    console.error('Failed to get shortcuts from database')
+    throw error
+  }
+}
 
 const searchSchema = z.object({
   query: z.string().min(1).max(64),

@@ -4,12 +4,9 @@ import { notFound } from 'next/navigation'
 import { Link } from '@repo/i18n/client'
 import { Loader } from 'lucide-react'
 
-import { getShortcuts } from '#/lib/db/queries'
+import { getShortcutByUuid, getShortcuts } from '#/lib/db/queries'
 import { getDictionary, i18n } from '#/lib/i18n'
-import ShortcutAdd, {
-  getCachedShortcutByUuid,
-  type ShortcutAddProps,
-} from '#/components/shortcut-add'
+import ShortcutAdd, { type ShortcutAddProps } from '#/components/shortcut-add'
 
 type Props = {
   params: Promise<ShortcutAddProps['params']>
@@ -50,7 +47,7 @@ export default async function ShortcutPage(props: Props) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id, lang } = await params
-  const shortcut = await getCachedShortcutByUuid(id)
+  const shortcut = await getShortcutByUuid(id)
 
   if (!shortcut) notFound()
 

@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
-import { cacheTag } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Skeleton } from '@repo/ui/components/skeleton'
 
@@ -13,14 +12,6 @@ import AlbumList from '#/components/album-list'
 import AlbumListSkeleton from '#/components/album-list-skeleton'
 import ShortcutList from '#/components/shortcut-list'
 
-const getCachedCollectionByIdWithAlbumsAndShortcuts = async (id: number) => {
-  'use cache'
-  cacheTag('collection')
-  cacheTag('album')
-  cacheTag('shortcut')
-
-  return await getCollectionByIdWithAlbumsAndShortcuts(id)
-}
 
 export async function generateStaticParams() {
   const collections = await getCollections()
@@ -61,7 +52,7 @@ async function Collections({
   const NumericId = Number.parseInt(id)
   const [messages, collection] = await Promise.all([
     getDictionary(lang),
-    getCachedCollectionByIdWithAlbumsAndShortcuts(NumericId),
+    getCollectionByIdWithAlbumsAndShortcuts(NumericId),
   ])
 
   if (!collection) notFound()
@@ -86,7 +77,7 @@ export async function generateMetadata({
   params,
 }: PageProps<'/[lang]/collection/[id]'>): Promise<Metadata> {
   const { id, lang } = await params
-  const collection = await getCachedCollectionByIdWithAlbumsAndShortcuts(
+  const collection = await getCollectionByIdWithAlbumsAndShortcuts(
     Number.parseInt(id),
   )
 
