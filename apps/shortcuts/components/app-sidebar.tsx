@@ -1,6 +1,5 @@
-'use client'
+'use client';
 
-import * as React from 'react'
 import {
   Sidebar,
   SidebarContent,
@@ -9,24 +8,23 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@repo/ui/components/sidebar'
+} from '@repo/ui/components/sidebar';
 import {
   BookOpen,
   Bot,
   Frame,
   Layers2,
   LifeBuoy,
-  Map,
+  MapIcon,
   PieChart,
   Send,
   Settings,
-} from 'lucide-react'
-import { User } from 'next-auth'
+} from 'lucide-react';
+import type { User } from 'next-auth';
+import type * as React from 'react';
 
-import { NavMain } from '#/components/nav-main'
-import { NavProjects } from '#/components/nav-projects'
-import { NavSecondary } from '#/components/nav-secondary'
-import { NavUser } from '#/components/nav-user'
+import { NavMain } from '#/components/nav-main';
+import { NavUser } from '#/components/nav-user';
 
 const data = {
   navMain: [
@@ -77,17 +75,17 @@ const data = {
     {
       name: 'Travel',
       url: '#',
-      icon: Map,
+      icon: MapIcon,
     },
   ],
-}
+};
 export function AppSidebar({
   user,
   signOut,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
-  user: NoNullFields<User>
-  signOut: () => void
+  user: NoNullFields<User>;
+  signOut: () => void;
 }) {
   return (
     <Sidebar variant="inset" {...props}>
@@ -95,7 +93,7 @@ export function AppSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <a href="/">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <Layers2 className="size-4" />
                 </div>
@@ -121,5 +119,5 @@ export function AppSidebar({
         <NavUser user={user} signOut={signOut} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

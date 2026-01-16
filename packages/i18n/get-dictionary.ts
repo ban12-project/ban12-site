@@ -1,6 +1,6 @@
-import 'server-only'
+import 'server-only';
 
-import type { Dictionaries } from './server'
+import type { Dictionaries } from './server';
 
 export const createGetDictionary = <T>(
   dictionaries: Dictionaries<T>,
@@ -9,5 +9,5 @@ export const createGetDictionary = <T>(
   return (locale: keyof T) =>
     (dictionaries[locale]?.() ?? dictionaries[defaultLocale]()) as ReturnType<
       Dictionaries<T>[keyof T]
-    >
-}
+    >;
+};

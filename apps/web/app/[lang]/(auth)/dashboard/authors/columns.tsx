@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef } from '@tanstack/react-table';
 
-import type { SelectAuthor } from '#/lib/db/schema'
+import type { SelectAuthor } from '#/lib/db/schema';
 
 export const columns: ColumnDef<SelectAuthor>[] = [
   {
@@ -49,4 +49,4 @@ export const columns: ColumnDef<SelectAuthor>[] = [
         hour12: false,
       }),
   },
-]
+];

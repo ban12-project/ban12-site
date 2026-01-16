@@ -1,4 +1,4 @@
-@import '@repo/ui/globals.css';
+@import "@repo/ui/globals.css";
 
 @theme {
   --animate-slide-down-and-fade: slideDownAndFade 400ms
@@ -179,10 +179,10 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  input[type='search']::-webkit-search-decoration,
-  input[type='search']::-webkit-search-cancel-button,
-  input[type='search']::-webkit-search-results-button,
-  input[type='search']::-webkit-search-results-decoration {
+  input[type="search"]::-webkit-search-decoration,
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-results-button,
+  input[type="search"]::-webkit-search-results-decoration {
     display: none;
   }
   :root {
@@ -207,11 +207,11 @@
   }
 
   :root {
-    &:not([dir='rtl']) {
+    &:not([dir="rtl"]) {
       --safe-area-inset-start: env(safe-area-inset-left);
       --safe-area-inset-end: env(safe-area-inset-right);
     }
-    &[dir='rtl'] {
+    &[dir="rtl"] {
       --safe-area-inset-start: env(safe-area-inset-right);
       --safe-area-inset-end: env(safe-area-inset-left);
     }
@@ -225,11 +225,13 @@
     a=?
     b=?
     */
+    /* biome-ignore lint/correctness/noUnknownFunction: https://tailwindcss.com/docs/upgrade-guide#using-the-theme-function */
     @media (width >= theme(--breakpoint-lg)) {
       --container-inset: calc(24.21875vw - 232px);
       --container-inset-start: calc(24.21875vw - 232px);
       --container-inset-end: calc(24.21875vw - 232px);
     }
+    /* biome-ignore lint/correctness/noUnknownFunction: https://tailwindcss.com/docs/upgrade-guide#using-the-theme-function */
     @media (width >= theme(--breakpoint-2xl)) {
       --container-inset: 140px;
       --container-inset-start: 140px;

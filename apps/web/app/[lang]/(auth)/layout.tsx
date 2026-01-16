@@ -1,22 +1,22 @@
-import { Suspense } from 'react'
-import { SessionProvider } from 'next-auth/react'
+import { SessionProvider } from 'next-auth/react';
+import { Suspense } from 'react';
 
-import { auth } from './auth'
+import { auth } from './auth';
 
 type Props = Readonly<{
-  children: React.ReactNode
-}>
+  children: React.ReactNode;
+}>;
 
 export default function AuthLayout({ children }: Props) {
   return (
     <Suspense>
       <Suspended>{children}</Suspended>
     </Suspense>
-  )
+  );
 }
 
 async function Suspended({ children }: { children: React.ReactNode }) {
-  const session = await auth()
+  const session = await auth();
 
-  return <SessionProvider session={session}>{children}</SessionProvider>
+  return <SessionProvider session={session}>{children}</SessionProvider>;
 }

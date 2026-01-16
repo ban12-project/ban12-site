@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { Suspense, useDeferredValue, useState, ViewTransition } from 'react'
-import dynamic from 'next/dynamic'
-import { Textarea } from '@repo/ui/components/textarea'
-import { LoaderCircleIcon } from 'lucide-react'
+import { Textarea } from '@repo/ui/components/textarea';
+import { LoaderCircleIcon } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { Suspense, useDeferredValue, useState, ViewTransition } from 'react';
 
-const DiffView = dynamic(() => import('./diff-view'), { ssr: false })
+const DiffView = dynamic(() => import('./diff-view'), { ssr: false });
 
 export default function TextDiff() {
-  const [old, setOld] = useState('')
-  const [newer, setNewer] = useState('')
-  const deferredOld = useDeferredValue(old)
-  const deferredNewer = useDeferredValue(newer)
+  const [old, setOld] = useState('');
+  const [newer, setNewer] = useState('');
+  const deferredOld = useDeferredValue(old);
+  const deferredNewer = useDeferredValue(newer);
 
   return (
     <main className="px-safe-max-4 container mx-auto flex min-h-screen flex-col gap-5">
@@ -53,5 +53,5 @@ export default function TextDiff() {
         </a>
       </p>
     </main>
-  )
+  );
 }

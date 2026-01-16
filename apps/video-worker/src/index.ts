@@ -1,68 +1,67 @@
-import { createServer } from 'http'
-import { ConnectionState } from 'inngest/components/connect/types'
-import { connect } from 'inngest/connect'
+import { createServer } from "node:http";
+import { ConnectionState, connect } from "inngest/connect";
 
-import 'dotenv/config'
+import "dotenv/config";
 
-import { serve } from 'inngest/node'
+import { serve } from "inngest/node";
 
-import { sql } from './db'
-import { functions, inngest } from './inngest'
+import { sql } from "./db";
+import { functions, inngest } from "./inngest";
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
-;(async () => {
+(async () => {
   const connection = await connect({
     apps: [{ client: inngest, functions }],
-  })
+  });
 
-  console.log('Worker: connected', connection)
+  console.log("Worker: connected", connection);
 
   const httpServer = createServer((req, res) => {
-    if (req.url?.startsWith('/api/inngest')) {
+    if (req.url?.startsWith("/api/inngest")) {
       return serve({
         client: inngest,
         functions,
-      })(req, res)
+      })(req, res);
     }
 
-    if (req.url === '/ready') {
-      res.setHeader('Access-Control-Allow-Origin', '*')
-      res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+    if (req.url === "/ready") {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+      res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-      if (req.method === 'OPTIONS') {
-        res.writeHead(204)
-        res.end()
-        return
+      if (req.method === "OPTIONS") {
+        res.writeHead(204);
+        res.end();
+        return;
       }
 
       if (connection.state === ConnectionState.ACTIVE) {
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        res.end(JSON.stringify({ status: 'ok' }))
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ status: "ok" }));
       } else {
-        res.writeHead(500, { 'Content-Type': 'application/json' })
-        res.end(JSON.stringify({ error: 'NOT OK' }))
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "NOT OK" }));
       }
-      return
+      return;
     }
 
-    res.writeHead(404, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ error: 'Not Found' }))
-  })
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Not Found" }));
+  });
 
   httpServer.listen(PORT, () => {
-    console.log(`Worker: HTTP server listening on port ${PORT}`)
-  })
+    console.log(`Worker: HTTP server listening on port ${PORT}`);
+  });
 
-  await connection.closed
-  console.log('Worker: Shut down')
+  await connection.closed;
+  console.log("Worker: Shut down");
 
   httpServer.close(() => {
-    console.log('HTTP server closed')
+    console.log("HTTP server closed");
     sql.end().then(() => {
-      console.log('Database connection closed')
-      process.exit(0)
-    })
-  })
-})()
+      console.log("Database connection closed");
+      process.exit(0);
+    });
+  });
+})();

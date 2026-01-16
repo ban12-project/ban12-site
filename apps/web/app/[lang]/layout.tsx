@@ -1,20 +1,19 @@
-import type { Metadata, Viewport } from 'next'
+import type { Metadata, Viewport } from 'next';
 
-import '#/app/globals.css'
+import '#/app/globals.css';
 
-import { GoogleAnalytics } from '@next/third-parties/google'
-import { LocaleProvider } from '@repo/i18n/client'
-import { Toaster } from '@repo/ui/components/sonner'
-import { ThemeProvider } from 'next-themes'
-
-import { getDictionary, i18n, type Locale } from '#/lib/i18n'
-import { WebVitals } from '#/components/web-vitals'
+import { GoogleAnalytics } from '@next/third-parties/google';
+import { LocaleProvider } from '@repo/i18n/client';
+import { Toaster } from '@repo/ui/components/sonner';
+import { ThemeProvider } from 'next-themes';
+import { WebVitals } from '#/components/web-vitals';
+import { getDictionary, i18n, type Locale } from '#/lib/i18n';
 
 export async function generateMetadata({
   params,
 }: LayoutProps<'/[lang]'>): Promise<Metadata> {
-  const { lang } = await params
-  const messages = await getDictionary(lang as Locale)
+  const { lang } = await params;
+  const messages = await getDictionary(lang as Locale);
 
   return {
     applicationName: 'Ban12',
@@ -62,7 +61,7 @@ export async function generateMetadata({
         },
       ],
     },
-  }
+  };
 }
 
 export const viewport: Viewport = {
@@ -75,17 +74,17 @@ export const viewport: Viewport = {
   userScalable: false,
   width: 'device-width',
   viewportFit: 'cover',
-}
+};
 
 export async function generateStaticParams() {
-  return Object.keys(i18n.locales).map((lang) => ({ lang }))
+  return Object.keys(i18n.locales).map((lang) => ({ lang }));
 }
 
 export default async function RootLayout({
   params,
   children,
 }: LayoutProps<'/[lang]'>) {
-  const { lang } = await params
+  const { lang } = await params;
 
   return (
     <html suppressHydrationWarning lang={lang}>
@@ -111,5 +110,5 @@ export default async function RootLayout({
         )}
       </body>
     </html>
-  )
+  );
 }

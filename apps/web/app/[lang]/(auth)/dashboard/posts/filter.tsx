@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { Input } from '@repo/ui/components/input'
-import { Table } from '@tanstack/react-table'
+import { Input } from '@repo/ui/components/input';
+import type { Table } from '@tanstack/react-table';
 
 export default function Filter<T>({ table }: { table: Table<T> }) {
-  'use no memo'
-  
+  'use no memo';
+
   return (
     <Input
       placeholder="Filter title..."
@@ -15,5 +15,5 @@ export default function Filter<T>({ table }: { table: Table<T> }) {
       }
       className="max-w-sm"
     />
-  )
+  );
 }

@@ -1,27 +1,26 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from '@repo/ui/components/table'
-import { cn } from '@repo/ui/lib/utils'
+} from '@repo/ui/components/table';
+import { cn } from '@repo/ui/lib/utils';
 
 export type Columns<T> = {
-  key: (keyof T extends string ? keyof T : never) | 'custom'
-  header: ((item: T, colIndex: number) => React.ReactNode) | string
-  cell: (item: T, colIndex: number, rowIndex: number) => React.ReactNode
-  className?: string
-}[]
+  key: (keyof T extends string ? keyof T : never) | 'custom';
+  header: ((item: T, colIndex: number) => React.ReactNode) | string;
+  cell: (item: T, colIndex: number, rowIndex: number) => React.ReactNode;
+  className?: string;
+}[];
 
 export function DashboardTable<T extends Record<string, unknown>>({
   columns,
   data,
 }: {
-  columns: Columns<T>
-  data: T[]
+  columns: Columns<T>;
+  data: T[];
 }) {
   return (
     <Table className="overscroll-x-contain [&_.sticky]:bg-white">
@@ -51,5 +50,5 @@ export function DashboardTable<T extends Record<string, unknown>>({
         ))}
       </TableBody>
     </Table>
-  )
+  );
 }

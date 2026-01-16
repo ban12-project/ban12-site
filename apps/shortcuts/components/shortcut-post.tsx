@@ -1,49 +1,48 @@
-'use client'
+'use client';
 
-import React, {
-  ReactEventHandler,
-  useActionState,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useLocale } from '@repo/i18n/client'
-import { Button } from '@repo/ui/components/button'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useLocale } from '@repo/i18n/client';
+import { Button } from '@repo/ui/components/button';
 import {
   Form,
   FormControl,
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
-} from '@repo/ui/components/form'
-import { Input } from '@repo/ui/components/input'
+} from '@repo/ui/components/form';
+import { Input } from '@repo/ui/components/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@repo/ui/components/select'
-import { Switch } from '@repo/ui/components/switch'
-import { Textarea } from '@repo/ui/components/textarea'
-import { Loader2 } from 'lucide-react'
-import { createPortal } from 'react-dom'
-import { useForm, useFormContext } from 'react-hook-form'
-import * as z from 'zod'
+} from '@repo/ui/components/select';
 
-import type { Messages } from '#/lib/i18n'
-import { RecordType } from '#/lib/shortcut'
-import { LocalizedHelper } from '#/lib/utils'
-import { postShortcut } from '#/app/[lang]/(public)/actions'
+import { Textarea } from '@repo/ui/components/textarea';
+import { Loader2 } from 'lucide-react';
+import type React from 'react';
+import {
+  type ReactEventHandler,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { createPortal } from 'react-dom';
+import { useForm, useFormContext } from 'react-hook-form';
+import * as z from 'zod';
+import { postShortcut } from '#/app/[lang]/(public)/actions';
+import type { Messages } from '#/lib/i18n';
+import { RecordType } from '#/lib/shortcut';
+import { LocalizedHelper } from '#/lib/utils';
 
-import CloudflareTurnstile from './cloudflare-turnstile'
-import { PAGE_DRAWER_HEADER_ID } from './page-drawer'
+import CloudflareTurnstile from './cloudflare-turnstile';
+import { PAGE_DRAWER_HEADER_ID } from './page-drawer';
 
 interface ShortcutPostProps {
-  messages: Messages
+  messages: Messages;
 }
 
 const icloudSchema = z.object({
@@ -54,7 +53,7 @@ const icloudSchema = z.object({
       'must be start with https://www.icloud.com/shortcuts/',
     )
     .regex(/\/[0-9a-f]{32}\/?$/, 'iCloud url is broken'),
-})
+});
 
 const shortcutSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -73,20 +72,20 @@ const shortcutSchema = z.object({
     )
     .nullable(),
   language: z.enum(['zh-CN', 'en']),
-})
+});
 
 const formSchema = z.object({
   ...icloudSchema.shape,
   ...shortcutSchema.shape,
-})
+});
 
-export type FormSchemaType = z.infer<typeof formSchema>
+export type FormSchemaType = z.infer<typeof formSchema>;
 
 export interface FormHandler {
-  submit: () => void
+  submit: () => void;
 }
 
-const details = [
+const _details = [
   {
     label: '',
     value: ['SHARE_SHEET'],
@@ -99,23 +98,23 @@ const details = [
     label: 'Mac',
     value: ['MENU_BAR_ON_MAC', 'RECEIVES_SCREEN', 'QUICK_ACTIONS_ON_MAC'],
   },
-] as const
+] as const;
 
 const SubmitButton = function SubmitButton({
   isPending,
   messages,
 }: {
-  isPending: boolean
-  messages: Messages
+  isPending: boolean;
+  messages: Messages;
 }) {
-  const [container, setContainer] = useState<Element | null>(null)
-  const { formState, getValues } = useFormContext<FormSchemaType>()
-  const innerButtonRef = useRef<React.ComponentRef<'button'>>(null)
+  const [container, setContainer] = useState<Element | null>(null);
+  const { formState, getValues } = useFormContext<FormSchemaType>();
+  const innerButtonRef = useRef<React.ComponentRef<'button'>>(null);
 
   useEffect(() => {
-    const container = document.querySelector(`#${PAGE_DRAWER_HEADER_ID}`)
-    setContainer(container)
-  }, [])
+    const container = document.querySelector(`#${PAGE_DRAWER_HEADER_ID}`);
+    setContainer(container);
+  }, []);
 
   const innerButton = (
     <button
@@ -126,11 +125,12 @@ const SubmitButton = function SubmitButton({
     >
       Submit
     </button>
-  )
+  );
 
-  if (!container) return innerButton
+  if (!container) return innerButton;
 
-  const isDone = getValues('icloud').length > 0 && !formState.dirtyFields.icloud
+  const isDone =
+    getValues('icloud').length > 0 && !formState.dirtyFields.icloud;
 
   return (
     <>
@@ -148,13 +148,13 @@ const SubmitButton = function SubmitButton({
       )}
       {innerButton}
     </>
-  )
-}
+  );
+};
 
-const initialState = { message: '', errors: {} }
+const initialState = { message: '', errors: {} };
 
 export default function ShortcutPost({ messages }: ShortcutPostProps) {
-  const { locale } = useLocale()
+  const { locale } = useLocale();
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
@@ -167,59 +167,57 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
       details: [],
       language: locale as FormSchemaType['language'],
     },
-  })
+  });
 
   const [state, dispatch, isPending] = useActionState(
     postShortcut,
     initialState,
-  )
+  );
   const otherFieldsVisibility =
-    !!state.data && !form.formState.dirtyFields.icloud
+    !!state.data && !form.formState.dirtyFields.icloud;
 
   const onSubmit: ReactEventHandler<HTMLFormElement> = async (e) => {
     // https://developer.mozilla.org/docs/Web/API/SubmitEvent/submitter
     // If the submitter is null(like e.currentTarget.requestSubmit), do nothing
-    if ((e.nativeEvent as SubmitEvent).submitter === null) return
+    if ((e.nativeEvent as SubmitEvent).submitter === null) return;
 
-    e.preventDefault()
+    e.preventDefault();
 
     // e.currentTarget is null after await, so we need save it to a variable
-    const currentTarget = e.currentTarget
+    const currentTarget = e.currentTarget;
 
     // undefined means triggers validation on all fields.
     const isValid = await form.trigger(
       otherFieldsVisibility ? undefined : 'icloud',
-    )
-    if (!isValid) return
+    );
+    if (!isValid) return;
 
-    currentTarget?.requestSubmit()
-  }
+    currentTarget?.requestSubmit();
+  };
 
   useEffect(() => {
     if (state.message)
-      return form.setError('icloud', { message: state.message })
+      return form.setError('icloud', { message: state.message });
 
-    if (!state.data) return
+    if (!state.data) return;
 
     // for check isDirty
-    form.resetField('icloud', { defaultValue: form.getValues().icloud })
+    form.resetField('icloud', { defaultValue: form.getValues().icloud });
 
     // fill the form with data from icloud
-    form.setValue('name', state.data.fields.name.value)
+    form.setValue('name', state.data.fields.name.value);
 
     if (state.data.recordType === RecordType.GalleryShortcut) {
-      form.setValue('description', state.data.fields.longDescription.value)
+      form.setValue('description', state.data.fields.longDescription.value);
       form.setValue(
         'language',
         state.data.fields.language.value.replace(
           '_',
           '-',
         ) as FormSchemaType['language'],
-      )
+      );
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state])
+  }, [state, form]);
 
   return (
     <Form {...form}>
@@ -404,5 +402,5 @@ export default function ShortcutPost({ messages }: ShortcutPostProps) {
         <SubmitButton isPending={isPending} messages={messages} />
       </form>
     </Form>
-  )
+  );
 }

@@ -9,24 +9,24 @@
     "nodejs_compat",
     // Allow to fetch URLs in your app
     // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#global-fetch-strictly-public
-    "global_fetch_strictly_public",
+    "global_fetch_strictly_public"
   ],
   "assets": {
     "directory": ".open-next/assets",
-    "binding": "ASSETS",
+    "binding": "ASSETS"
   },
   "kv_namespaces": [
     {
       "binding": "NEXT_INC_CACHE_KV",
-      "id": "09e2bb566e4648c3a7fb8e22ab8de8da",
-    },
+      "id": "09e2bb566e4648c3a7fb8e22ab8de8da"
+    }
   ],
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
       // The service should match the "name" of your worker
-      "service": "toys",
-    },
+      "service": "toys"
+    }
   ],
   "r2_buckets": [
     // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
@@ -36,5 +36,5 @@
     // },
   ],
   // https://github.com/pacocoursey/next-themes/issues/349
-  "keep_names": false,
+  "keep_names": false
 }

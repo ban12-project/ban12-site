@@ -1,33 +1,32 @@
-'use client'
+'use client';
 
-import { forwardRef, useRef, useState } from 'react'
-import { useLocale } from '@repo/i18n/client'
-import { Skeleton } from '@repo/ui/components/skeleton'
-import SuperEllipse from '@repo/ui/components/super-ellipse'
-import { useResponsive } from '@repo/ui/hooks/use-responsive'
-import { cn } from '@repo/ui/lib/utils'
-import AutoSizer from 'react-virtualized-auto-sizer'
-import { FixedSizeList, ListChildComponentProps } from 'react-window'
-import InfiniteLoader from 'react-window-infinite-loader'
-import { useIsomorphicLayoutEffect } from 'usehooks-ts'
+import { useLocale } from '@repo/i18n/client';
+import { Skeleton } from '@repo/ui/components/skeleton';
+import SuperEllipse from '@repo/ui/components/super-ellipse';
+import { useResponsive } from '@repo/ui/hooks/use-responsive';
+import { cn } from '@repo/ui/lib/utils';
+import { forwardRef, useRef, useState } from 'react';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { FixedSizeList, type ListChildComponentProps } from 'react-window';
+import InfiniteLoader from 'react-window-infinite-loader';
+import { useIsomorphicLayoutEffect } from 'usehooks-ts';
+import { fetchShortcutsByAlbumID } from '#/app/[lang]/(public)/actions';
+import useRootDirection from '#/hooks/use-root-direction';
+import type { SelectShortcut } from '#/lib/db/schema';
+import type { Locale } from '#/lib/i18n';
 
-import type { SelectShortcut } from '#/lib/db/schema'
-import { Locale } from '#/lib/i18n'
-import useRootDirection from '#/hooks/use-root-direction'
-import { fetchShortcutsByAlbumID } from '#/app/[lang]/(public)/actions'
-
-import ShortcutCard from './shortcut-card'
+import ShortcutCard from './shortcut-card';
 
 type AlbumsProps = {
-  shortcuts: SelectShortcut[]
-  pageSize: number
-  currentPage: number
-}
+  shortcuts: SelectShortcut[];
+  pageSize: number;
+  currentPage: number;
+};
 
 let PADDING_START: number = 0,
-  PADDING_END: number = 0
+  PADDING_END: number = 0;
 
-const GAP_SIZE = 12
+const GAP_SIZE = 12;
 
 const outerElementType = forwardRef<
   React.ComponentRef<'div'>,
@@ -39,8 +38,8 @@ const outerElementType = forwardRef<
       {...props}
       className={cn('hidden-scrollbar overscroll-x-contain', props.className)}
     ></div>
-  )
-})
+  );
+});
 
 const innerElementType = forwardRef<
   React.ComponentRef<'div'>,
@@ -61,8 +60,8 @@ const innerElementType = forwardRef<
       className="album-list__inner"
       {...rest}
     ></div>
-  )
-})
+  );
+});
 
 const Column = ({
   index,
@@ -72,11 +71,11 @@ const Column = ({
   width,
   height,
 }: ListChildComponentProps<SelectShortcut[]> & {
-  width: number
-  height: number
-  children?: React.ReactNode
+  width: number;
+  height: number;
+  children?: React.ReactNode;
 }) => {
-  const lang = useLocale().locale as Locale
+  const lang = useLocale().locale as Locale;
 
   return (
     <div
@@ -94,74 +93,70 @@ const Column = ({
           svgProps={{ width, height: height - 20 /* pb-5 */, n: 10 }}
         >
           <ShortcutCard
-            className="block h-full [box-shadow:2px_4px_12px_#00000014] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:[transform:scale3d(1.01,1.01,1.01)]"
+            className="block h-full [box-shadow:2px_4px_12px_#00000014] md:hover:[box-shadow:2px_4px_16px_#00000029] md:hover:transform-[scale3d(1.01,1.01,1.01)]"
             item={data[index]}
             lang={lang}
           />
         </SuperEllipse>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default function Albums({
-  shortcuts,
-  pageSize,
-  currentPage,
-}: AlbumsProps) {
-  const anchorRef = useRef<React.ComponentRef<'div'>>(null)
-  const direction = useRootDirection()
+export default function Albums({ shortcuts, pageSize }: AlbumsProps) {
+  const anchorRef = useRef<React.ComponentRef<'div'>>(null);
+  const direction = useRootDirection();
 
   useIsomorphicLayoutEffect(() => {
-    const anchor = anchorRef.current
-    if (!anchor) return
+    const anchor = anchorRef.current;
+    if (!anchor) return;
 
     const onResize = () => {
-      const { paddingLeft, paddingRight } = window.getComputedStyle(anchor)
-      PADDING_START = Number.parseFloat(paddingLeft)
-      PADDING_END = Number.parseFloat(paddingRight)
-    }
-    onResize()
-    window.addEventListener('resize', onResize, { passive: true })
+      const { paddingLeft, paddingRight } = window.getComputedStyle(anchor);
+      PADDING_START = Number.parseFloat(paddingLeft);
+      PADDING_END = Number.parseFloat(paddingRight);
+    };
+    onResize();
+    window.addEventListener('resize', onResize, { passive: true });
 
     return () => {
-      window.removeEventListener('resize', onResize)
-    }
-  }, [])
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
 
-  const { isReady, breakpoints } = useResponsive()
+  const { isReady, breakpoints } = useResponsive();
 
   const columnNumber = (() => {
-    if (breakpoints['2xl']) return 7
-    if (breakpoints.xl) return 6
-    if (breakpoints.lg) return 5
-    if (breakpoints.md) return 4
-    return 2
-  })()
+    if (breakpoints['2xl']) return 7;
+    if (breakpoints.xl) return 6;
+    if (breakpoints.lg) return 5;
+    if (breakpoints.md) return 4;
+    return 2;
+  })();
 
-  const [items, setItems] = useState<SelectShortcut[]>([...shortcuts])
-  const [hasNextPage, setHasNextPage] = useState(shortcuts.length >= pageSize)
+  const [items, setItems] = useState<SelectShortcut[]>([...shortcuts]);
+  const [hasNextPage, setHasNextPage] = useState(shortcuts.length >= pageSize);
 
   // Every items is loaded except for loading indicator
-  const isItemLoaded = (index: number) => !hasNextPage || index < items.length
+  const isItemLoaded = (index: number) => !hasNextPage || index < items.length;
 
   // If there are more items to be loaded then add an extra row to hold a loading indicator.
-  const itemCount = hasNextPage ? items.length + 1 : items.length
+  const itemCount = hasNextPage ? items.length + 1 : items.length;
 
-  const loadMoreItems = async (startIndex: number, stopIndex: number) => {
+  const loadMoreItems = async (startIndex: number, _stopIndex: number) => {
     const newItems = await fetchShortcutsByAlbumID(
       items[0].albumId!,
       pageSize,
       Math.floor(startIndex / pageSize) + 1,
-    )
-    setItems([...items, ...newItems])
-    setHasNextPage(newItems.length >= pageSize)
-  }
+    );
+    setItems([...items, ...newItems]);
+    setHasNextPage(newItems.length >= pageSize);
+  };
 
   return (
-    <div className="h-[148px]">
+    <div className="h-37">
       <div
-        className="px-safe-max-4 absolute lg:px-[var(--container-inset,0)]"
+        className="px-safe-max-4 absolute lg:px-(--container-inset,0)"
         ref={anchorRef}
       ></div>
       <AutoSizer defaultWidth={1440} defaultHeight={148}>
@@ -175,7 +170,7 @@ export default function Albums({
             {({ onItemsRendered, ref }) => {
               const itemSize =
                 (width - PADDING_START - PADDING_END) / columnNumber +
-                GAP_SIZE / columnNumber
+                GAP_SIZE / columnNumber;
               return (
                 <FixedSizeList
                   itemSize={itemSize}
@@ -203,11 +198,11 @@ export default function Albums({
                     </Column>
                   )}
                 </FixedSizeList>
-              )
+              );
             }}
           </InfiniteLoader>
         )}
       </AutoSizer>
     </div>
-  )
+  );
 }

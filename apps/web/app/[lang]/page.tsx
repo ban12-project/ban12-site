@@ -1,10 +1,10 @@
-import { getDictionary, type Locale } from '#/lib/i18n'
-import HomeHeader from '#/components/home-header'
-import HomeLanding from '#/components/home-landing'
+import HomeHeader from '#/components/home-header';
+import HomeLanding from '#/components/home-landing';
+import { getDictionary, type Locale } from '#/lib/i18n';
 
 export default async function HomePage({ params }: PageProps<'/[lang]'>) {
-  const { lang } = await params
-  const messages = await getDictionary(lang as Locale)
+  const { lang } = await params;
+  const messages = await getDictionary(lang as Locale);
 
   return (
     <>
@@ -13,5 +13,5 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
         <HomeLanding messages={messages} />
       </main>
     </>
-  )
+  );
 }

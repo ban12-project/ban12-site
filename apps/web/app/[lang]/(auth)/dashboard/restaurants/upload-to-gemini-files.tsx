@@ -1,14 +1,13 @@
-import * as React from 'react'
-import { GoogleGenAI } from '@google/genai'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@repo/ui/components/button'
+import { GoogleGenAI } from '@google/genai';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@repo/ui/components/button';
 import {
   DialogClose,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@repo/ui/components/dialog'
+} from '@repo/ui/components/dialog';
 import {
   Form,
   FormControl,
@@ -16,55 +15,56 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@repo/ui/components/form'
-import { Input } from '@repo/ui/components/input'
-import { LoaderCircleIcon } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import * as z from 'zod'
+} from '@repo/ui/components/form';
+import { Input } from '@repo/ui/components/input';
+import { LoaderCircleIcon } from 'lucide-react';
+import * as React from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import * as z from 'zod';
 
-import type { SelectRestaurant } from '#/lib/db/schema'
+import type { SelectRestaurant } from '#/lib/db/schema';
 
-import { startVideoUnderstanding } from '../../actions'
+import { startVideoUnderstanding } from '../../actions';
 
 const formSchema = z.object({
   key: z.string().nonempty('API key is required'),
   file: z.instanceof(File),
-})
+});
 
 export default function UploadToGeminiFiles({
   row,
   setOpen,
 }: {
-  row: SelectRestaurant
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  row: SelectRestaurant;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       key: '',
     },
-  })
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      const { key, file } = values
-      await uploadToGeminiFiles(key, file)
-      setOpen(false)
-    })
+      const { key, file } = values;
+      await uploadToGeminiFiles(key, file);
+      setOpen(false);
+    });
   }
 
-  const [pending, startTransition] = React.useTransition()
+  const [pending, startTransition] = React.useTransition();
 
   const uploadToGeminiFiles = async (apiKey: string, file: File) => {
-    const ai = new GoogleGenAI({ apiKey })
+    const ai = new GoogleGenAI({ apiKey });
 
     const myfile = await ai.files.upload({
       file,
       config: { mimeType: 'video/mp4' },
-    })
+    });
 
-    if (!myfile.uri || !myfile.mimeType) return toast.error('Upload failed')
+    if (!myfile.uri || !myfile.mimeType) return toast.error('Upload failed');
 
     toast.promise(
       startVideoUnderstanding({
@@ -74,12 +74,12 @@ export default function UploadToGeminiFiles({
       {
         loading: 'Processing',
         success: () => {
-          return `${row.id} already start processing`
+          return `${row.id} already start processing`;
         },
         error: 'Error',
       },
-    )
-  }
+    );
+  };
 
   return (
     <Form {...form}>
@@ -114,14 +114,12 @@ export default function UploadToGeminiFiles({
                   <Input
                     {...fieldProps}
                     type="file"
-                    onChange={(event) =>
-                      onChange(event.target.files && event.target.files[0])
-                    }
+                    onChange={(event) => onChange(event.target.files?.[0])}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
-            )
+            );
           }}
         />
 
@@ -144,5 +142,5 @@ export default function UploadToGeminiFiles({
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }

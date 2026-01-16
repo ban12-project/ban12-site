@@ -1,28 +1,32 @@
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export async function PUT(request: Request) {
-  const providedSecretKey = request.headers.get('Authorization')
+  const providedSecretKey = request.headers.get('Authorization');
   if (
     !providedSecretKey ||
     providedSecretKey !== process.env.REVALIDATE_TOKEN
   ) {
-    return new Response('Unauthorized', { status: 401 })
+    return new Response('Unauthorized', { status: 401 });
   }
 
-  const { paths = [], tags = [] } = await request.json()
-  let revalidated = false
+  const { paths = [], tags = [] } = await request.json();
+  let revalidated = false;
 
   try {
     if (paths && Array.isArray(paths) && paths.length > 0) {
-      paths.forEach(({ path, type }) => revalidatePath(path, type))
-      console.log('Revalidated paths:', paths)
-      revalidated = true
+      paths.forEach(({ path, type }) => {
+        revalidatePath(path, type);
+      });
+      console.log('Revalidated paths:', paths);
+      revalidated = true;
     }
 
     if (tags && Array.isArray(tags) && tags.length > 0) {
-      tags.forEach((tag) => revalidateTag(tag, { expire: 0 }))
-      console.log('Revalidated tags:', tags)
-      revalidated = true
+      tags.forEach((tag) => {
+        revalidateTag(tag, { expire: 0 });
+      });
+      console.log('Revalidated tags:', tags);
+      revalidated = true;
     }
 
     return new Response(
@@ -33,14 +37,14 @@ export async function PUT(request: Request) {
         tags,
       }),
       { status: 200 },
-    )
+    );
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return new Response(
       JSON.stringify({ message: 'Error revalidating paths or tags' }),
       {
         status: 500,
       },
-    )
+    );
   }
 }

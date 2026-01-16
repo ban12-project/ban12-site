@@ -1,21 +1,22 @@
-'use client'
+'use client';
 
-import { useMemo, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import {
   Line,
   MeshDistortMaterial,
   useCursor,
   useGLTF,
-} from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
+} from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { useRouter } from 'next/navigation';
+import { useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
 
 export const Blob = ({ route = '/', ...props }) => {
-  const router = useRouter()
-  const [hovered, hover] = useState(false)
-  useCursor(hovered)
+  const router = useRouter();
+  const [hovered, hover] = useState(false);
+  useCursor(hovered);
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: mesh
     <mesh
       onClick={() => router.push(route)}
       onPointerOver={() => hover(true)}
@@ -28,30 +29,30 @@ export const Blob = ({ route = '/', ...props }) => {
         color={hovered ? 'hotpink' : '#1fb2f5'}
       />
     </mesh>
-  )
-}
+  );
+};
 
 export const Logo = ({ route = '/blob', ...props }) => {
-  const mesh = useRef<THREE.Group>(null)
-  const router = useRouter()
+  const mesh = useRef<THREE.Group>(null);
+  const router = useRouter();
 
-  const [hovered, hover] = useState(false)
+  const [hovered, hover] = useState(false);
   const points = useMemo(
     () =>
       new THREE.EllipseCurve(0, 0, 3, 1.15, 0, 2 * Math.PI, false, 0).getPoints(
         100,
       ),
     [],
-  )
+  );
 
-  useCursor(hovered)
+  useCursor(hovered);
   useFrame((state, delta) => {
-    if (!mesh.current) return
-    const t = state.clock.getElapsedTime()
-    mesh.current.rotation.y = Math.sin(t) * (Math.PI / 8)
-    mesh.current.rotation.x = Math.cos(t) * (Math.PI / 8)
-    mesh.current.rotation.z -= delta / 4
-  })
+    if (!mesh.current) return;
+    const t = state.clock.getElapsedTime();
+    mesh.current.rotation.y = Math.sin(t) * (Math.PI / 8);
+    mesh.current.rotation.x = Math.cos(t) * (Math.PI / 8);
+    mesh.current.rotation.z -= delta / 4;
+  });
 
   return (
     <group ref={mesh} {...props}>
@@ -70,6 +71,7 @@ export const Logo = ({ route = '/blob', ...props }) => {
         lineWidth={0.15}
         rotation={[0, 0, -1]}
       />
+      {/** biome-ignore lint/a11y/noStaticElementInteractions: mesh */}
       <mesh
         onClick={() => router.push(route)}
         onPointerOver={() => hover(true)}
@@ -82,18 +84,20 @@ export const Logo = ({ route = '/blob', ...props }) => {
         />
       </mesh>
     </group>
-  )
-}
+  );
+};
 
 export function Duck(props: Omit<React.ComponentProps<'primitive'>, 'object'>) {
-  const { scene } = useGLTF('/duck.glb')
+  const { scene } = useGLTF('/duck.glb');
 
-  useFrame((state, delta) => (scene.rotation.y += delta))
+  useFrame((_state, delta) => {
+    scene.rotation.y += delta;
+  });
 
-  return <primitive object={scene} {...props} />
+  return <primitive object={scene} {...props} />;
 }
 export function Dog(props: Omit<React.ComponentProps<'primitive'>, 'object'>) {
-  const { scene } = useGLTF('/Orange.glb')
+  const { scene } = useGLTF('/Orange.glb');
 
-  return <primitive object={scene} {...props} />
+  return <primitive object={scene} {...props} />;
 }

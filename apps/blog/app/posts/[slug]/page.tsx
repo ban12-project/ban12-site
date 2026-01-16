@@ -1,22 +1,21 @@
-import { ViewTransition } from 'react'
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-
-import { getAllPosts, getPostBySlug } from '#/lib/api'
-import markdownToHtml from '#/lib/markdownToHtml'
-import { formatDate } from '#/lib/utils'
-import Avatar from '#/components/avatar'
-import GridContainer from '#/components/grid-container'
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { ViewTransition } from 'react';
+import Avatar from '#/components/avatar';
+import GridContainer from '#/components/grid-container';
+import { getAllPosts, getPostBySlug } from '#/lib/api';
+import markdownToHtml from '#/lib/markdownToHtml';
+import { formatDate } from '#/lib/utils';
 
 export default async function Post(props: Params) {
-  const params = await props.params
-  const post = await getPostBySlug(params.slug)
+  const params = await props.params;
+  const post = await getPostBySlug(params.slug);
 
   if (!post) {
-    return notFound()
+    return notFound();
   }
 
-  const content = await markdownToHtml(post.content || '')
+  const content = await markdownToHtml(post.content || '');
 
   return (
     <div className="xl:max-w-5/6 mx-auto grid grid-cols-1 xl:grid-cols-[22rem_2.5rem_auto] xl:grid-rows-[1fr_auto]">
@@ -55,6 +54,7 @@ export default async function Post(props: Params) {
         <GridContainer className="px-4 py-2 lg:px-2">
           <article
             className="prose prose-blog max-w-(--breakpoint-md)"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: markdownToHtml
             dangerouslySetInnerHTML={{ __html: content }}
           ></article>
         </GridContainer>
@@ -77,24 +77,24 @@ export default async function Post(props: Params) {
         referrerPolicy="no-referrer"
       />
     </div>
-  )
+  );
 }
 
 type Params = {
   params: Promise<{
-    slug: string
-  }>
-}
+    slug: string;
+  }>;
+};
 
 export async function generateMetadata(props: Params): Promise<Metadata> {
-  const params = await props.params
-  const post = await getPostBySlug(params.slug)
+  const params = await props.params;
+  const post = await getPostBySlug(params.slug);
 
   if (!post) {
-    return notFound()
+    return notFound();
   }
 
-  const title = `${post.title}`
+  const title = `${post.title}`;
 
   return {
     title,
@@ -103,13 +103,13 @@ export async function generateMetadata(props: Params): Promise<Metadata> {
       title,
       images: [post.ogImage.url],
     },
-  }
+  };
 }
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts()
+  const posts = await getAllPosts();
 
   return posts.map((post) => ({
     slug: post.slug,
-  }))
+  }));
 }

@@ -1,12 +1,11 @@
-import { DrizzleAdapter } from '@auth/drizzle-adapter'
-import NextAuth, { type Session, type User } from 'next-auth'
-import Passkey from 'next-auth/providers/passkey'
-
-import { authConfig } from './auth.config'
-import { db } from '#/lib/db/queries'
+import { DrizzleAdapter } from '@auth/drizzle-adapter';
+import NextAuth, { type Session, type User } from 'next-auth';
+import Passkey from 'next-auth/providers/passkey';
+import { db } from '#/lib/db/queries';
+import { authConfig } from './auth.config';
 
 interface ExtendedSession extends Session {
-  user: User
+  user: User;
 }
 
 export const {
@@ -22,18 +21,18 @@ export const {
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        token.id = user.id
+        token.id = user.id;
       }
 
-      return token
+      return token;
     },
     session({ session, token }: { session: ExtendedSession; token: unknown }) {
       if (session.user) {
-        session.user.id = (token as { id: string }).id
+        session.user.id = (token as { id: string }).id;
       }
 
-      return session
+      return session;
     },
   },
   experimental: { enableWebAuthn: true },
-})
+});

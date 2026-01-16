@@ -1,29 +1,29 @@
-import { Separator } from '@repo/ui/components/separator'
+import { Separator } from '@repo/ui/components/separator';
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from '@repo/ui/components/sidebar'
+} from '@repo/ui/components/sidebar';
 
-import { AppSidebar } from '#/components/app-sidebar'
-import Breadcrumb from '#/components/dashboard-breadcrumb'
+import { AppSidebar } from '#/components/app-sidebar';
+import Breadcrumb from '#/components/dashboard-breadcrumb';
 
-import { auth, signOut } from '../auth'
+import { auth, signOut } from '../auth';
 
 type Props = Readonly<{
-  children: React.ReactNode
-}>
+  children: React.ReactNode;
+}>;
 
 export default async function DashboardLayout({ children }: Props) {
-  const session = await auth()
+  const session = await auth();
 
   return (
     <SidebarProvider>
       <AppSidebar
         user={session!.user!}
         signOut={async () => {
-          'use server'
-          await signOut()
+          'use server';
+          await signOut();
         }}
       />
       <SidebarInset>
@@ -40,5 +40,5 @@ export default async function DashboardLayout({ children }: Props) {
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

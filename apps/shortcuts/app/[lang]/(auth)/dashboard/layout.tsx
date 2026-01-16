@@ -5,30 +5,29 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@repo/ui/components/breadcrumb'
-import { Separator } from '@repo/ui/components/separator'
+} from '@repo/ui/components/breadcrumb';
+import { Separator } from '@repo/ui/components/separator';
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from '@repo/ui/components/sidebar'
-import { User } from 'next-auth'
-
-import { auth, signOut } from '#/lib/auth'
-import { AppSidebar } from '#/components/app-sidebar'
+} from '@repo/ui/components/sidebar';
+import type { User } from 'next-auth';
+import { AppSidebar } from '#/components/app-sidebar';
+import { auth, signOut } from '#/lib/auth';
 
 export default async function DashboardLayout({
   children,
 }: LayoutProps<'/[lang]/dashboard'>) {
-  const session = await auth()
+  const session = await auth();
 
   return (
     <SidebarProvider>
       <AppSidebar
         user={session!.user as NoNullFields<User>}
         signOut={async () => {
-          'use server'
-          await signOut()
+          'use server';
+          await signOut();
         }}
       />
       <SidebarInset>
@@ -54,5 +53,5 @@ export default async function DashboardLayout({
         </div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

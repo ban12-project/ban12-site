@@ -1,27 +1,26 @@
-import { Suspense } from 'react'
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { Link } from '@repo/i18n/client'
-import { Loader } from 'lucide-react'
-
-import { getShortcutByUuid, getShortcuts } from '#/lib/db/queries'
-import { getDictionary, i18n } from '#/lib/i18n'
-import ShortcutAdd, { type ShortcutAddProps } from '#/components/shortcut-add'
+import { Link } from '@repo/i18n/client';
+import { Loader } from 'lucide-react';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+import ShortcutAdd, { type ShortcutAddProps } from '#/components/shortcut-add';
+import { getShortcutByUuid, getShortcuts } from '#/lib/db/queries';
+import { getDictionary, i18n } from '#/lib/i18n';
 
 type Props = {
-  params: Promise<ShortcutAddProps['params']>
-}
+  params: Promise<ShortcutAddProps['params']>;
+};
 
 export async function generateStaticParams() {
-  const shortcuts = await getShortcuts()
+  const shortcuts = await getShortcuts();
   return shortcuts.map((shortcut) => ({
     id: shortcut.uuid,
-  }))
+  }));
 }
 
 export default async function ShortcutPage(props: Props) {
-  const params = await props.params
-  const messages = await getDictionary(params.lang)
+  const params = await props.params;
+  const messages = await getDictionary(params.lang);
 
   return (
     <>
@@ -42,19 +41,23 @@ export default async function ShortcutPage(props: Props) {
         </Link>
       </div>
     </>
-  )
+  );
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id, lang } = await params
-  const shortcut = await getShortcutByUuid(id)
+  const { id, lang } = await params;
+  const shortcut = await getShortcutByUuid(id);
 
-  if (!shortcut) notFound()
+  if (!shortcut) notFound();
+
+  if (!process.env.NEXT_PUBLIC_HOST_URL) {
+    throw new Error('NEXT_PUBLIC_HOST_URL is not defined');
+  }
 
   return {
     title: shortcut.name[lang],
     description: shortcut.description[lang],
-    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL),
     alternates: {
       canonical: `/get/${id}`,
       languages: Object.fromEntries(
@@ -64,5 +67,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       images: `https://ban12.com/api/og?title=${shortcut.name[lang]}`,
     },
-  }
+  };
 }

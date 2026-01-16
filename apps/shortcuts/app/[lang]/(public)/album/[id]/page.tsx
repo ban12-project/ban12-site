@@ -1,19 +1,14 @@
-import { Suspense } from 'react'
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { Skeleton } from '@repo/ui/components/skeleton'
-
-import {
-  getAlbumByIdWithShortcuts,
-  getAlbums,
-} from '#/lib/db/queries'
-import { i18n, type Locale } from '#/lib/i18n'
-import ShortcutList from '#/components/shortcut-list'
-
+import { Skeleton } from '@repo/ui/components/skeleton';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+import ShortcutList from '#/components/shortcut-list';
+import { getAlbumByIdWithShortcuts, getAlbums } from '#/lib/db/queries';
+import { i18n, type Locale } from '#/lib/i18n';
 
 export async function generateStaticParams() {
-  const albums = await getAlbums()
-  return albums.map((album) => ({ id: album.id.toString() }))
+  const albums = await getAlbums();
+  return albums.map((album) => ({ id: album.id.toString() }));
 }
 
 export default function AlbumListPage({
@@ -47,36 +42,36 @@ export default function AlbumListPage({
         <Album params={params} />
       </Suspense>
     </main>
-  )
+  );
 }
 
 async function Album({
   params,
 }: {
-  params: Promise<{ id: string; lang: string }>
+  params: Promise<{ id: string; lang: string }>;
 }) {
-  const { id, lang } = (await params) as { id: string; lang: Locale }
-  const NumericId = Number.parseInt(id)
+  const { id, lang } = (await params) as { id: string; lang: Locale };
+  const NumericId = Number.parseInt(id, 10);
 
-  const album = await getAlbumByIdWithShortcuts(NumericId)
+  const album = await getAlbumByIdWithShortcuts(NumericId);
 
-  if (!album) notFound()
+  if (!album) notFound();
 
   return (
     <>
       <h2 className="text-3xl font-bold">{album.title[lang]}</h2>
       <ShortcutList lang={lang} shortcuts={album.shortcuts} />
     </>
-  )
+  );
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<'/[lang]/album/[id]'>): Promise<Metadata> {
-  const { id, lang } = await params
-  const album = await getAlbumByIdWithShortcuts(Number.parseInt(id))
+  const { id, lang } = await params;
+  const album = await getAlbumByIdWithShortcuts(Number.parseInt(id, 10));
 
-  if (!album) notFound()
+  if (!album) notFound();
 
   return {
     title: album.title[lang as Locale],
@@ -88,5 +83,5 @@ export async function generateMetadata({
         Object.keys(i18n.locales).map((lang) => [lang, `/${lang}/album/${id}`]),
       ),
     },
-  }
+  };
 }

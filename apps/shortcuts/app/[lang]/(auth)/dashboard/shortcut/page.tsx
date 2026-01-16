@@ -1,14 +1,13 @@
-import { Link } from '@repo/i18n/client'
-import { Button } from '@repo/ui/components/button'
+import { Link } from '@repo/i18n/client';
+import { Button } from '@repo/ui/components/button';
+import { type Columns, DashboardTable } from '#/components/dashboard-table';
+import { getShortcuts } from '#/lib/db/queries';
+import type { SelectShortcut } from '#/lib/db/schema';
+import { LocalizedHelper, negativeToHexColor } from '#/lib/utils';
 
-import { getShortcuts } from '#/lib/db/queries'
-import type { SelectShortcut } from '#/lib/db/schema'
-import { LocalizedHelper, negativeToHexColor } from '#/lib/utils'
-import { Columns, DashboardTable } from '#/components/dashboard-table'
+import { deleteShortcut } from '../../actions';
 
-import { deleteShortcut } from '../../actions'
-
-const localizedHelper = new LocalizedHelper()
+const localizedHelper = new LocalizedHelper();
 
 const shortcutsTableColumns: Columns<SelectShortcut> = [
   {
@@ -107,15 +106,15 @@ const shortcutsTableColumns: Columns<SelectShortcut> = [
     ),
     className: 'sticky right-0 text-right',
   },
-]
+];
 
 export default async function ShortcutsPage() {
-  const shortcuts = await getShortcuts()
+  const shortcuts = await getShortcuts();
 
   return (
     <>
       <div>total: {shortcuts.length}</div>
       <DashboardTable columns={shortcutsTableColumns} data={shortcuts} />
     </>
-  )
+  );
 }

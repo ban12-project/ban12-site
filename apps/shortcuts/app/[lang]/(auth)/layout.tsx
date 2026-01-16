@@ -1,22 +1,22 @@
-import '#/app/globals.css'
+import '#/app/globals.css';
 
-import { Suspense } from 'react'
-import { LocaleProvider } from '@repo/i18n/client'
-import { Toaster } from '@repo/ui/components/sonner'
-import { SessionProvider } from 'next-auth/react'
+import { LocaleProvider } from '@repo/i18n/client';
+import { Toaster } from '@repo/ui/components/sonner';
+import { SessionProvider } from 'next-auth/react';
+import { Suspense } from 'react';
 
-import { auth } from '#/lib/auth'
-import { i18n, type Locale } from '#/lib/i18n'
+import { auth } from '#/lib/auth';
+import { i18n, type Locale } from '#/lib/i18n';
 
 export function generateStaticParams() {
-  return Object.keys(i18n.locales).map((lang) => ({ lang }))
+  return Object.keys(i18n.locales).map((lang) => ({ lang }));
 }
 
 export default async function Layout({
   params,
   children,
 }: Omit<LayoutProps<'/[lang]'>, 'get' | 'post'>) {
-  const { lang } = await params
+  const { lang } = await params;
 
   return (
     <html lang={lang}>
@@ -30,10 +30,10 @@ export default async function Layout({
         <Toaster />
       </body>
     </html>
-  )
+  );
 }
 
 async function Suspended({ children }: { children: React.ReactNode }) {
-  const session = await auth()
-  return <SessionProvider session={session}>{children}</SessionProvider>
+  const session = await auth();
+  return <SessionProvider session={session}>{children}</SessionProvider>;
 }

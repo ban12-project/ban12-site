@@ -1,5 +1,5 @@
-import Exif from '#/components/exif'
+import Exif from '#/components/exif';
 
 export default function Page() {
-  return <Exif />
+  return <Exif />;
 }

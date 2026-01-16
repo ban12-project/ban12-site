@@ -4,9 +4,9 @@ export async function submitURLs(urlList: string[]) {
     !process.env.INDEX_NOW_HOST_URL ||
     !process.env.NEXT_PUBLIC_HOST_URL
   )
-    throw new Error('Missing environment variables')
+    throw new Error('Missing environment variables');
 
-  const { host } = new URL(process.env.NEXT_PUBLIC_HOST_URL)
+  const { host } = new URL(process.env.NEXT_PUBLIC_HOST_URL);
 
   try {
     const response = await fetch(process.env.INDEX_NOW_HOST_URL, {
@@ -18,15 +18,15 @@ export async function submitURLs(urlList: string[]) {
         host,
         key: process.env.INDEX_NOW_API_KEY,
         keyLocation: new URL(
-          process.env.INDEX_NOW_API_KEY + '.txt',
+          `${process.env.INDEX_NOW_API_KEY}.txt`,
           process.env.NEXT_PUBLIC_HOST_URL,
         ).href,
         urlList,
       }),
-    })
+    });
 
-    if (!response.ok) throw new Error(response.statusText)
+    if (!response.ok) throw new Error(response.statusText);
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
 }

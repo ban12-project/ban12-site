@@ -1,17 +1,8 @@
-'use client'
+'use client';
 
-import React, {
-  startTransition,
-  useActionState,
-  useEffect,
-  useOptimistic,
-  useRef,
-  useState,
-  useTransition,
-} from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Badge } from '@repo/ui/components/badge'
-import { Button } from '@repo/ui/components/button'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
 import {
   Dialog,
   DialogClose,
@@ -20,7 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@repo/ui/components/dialog'
+} from '@repo/ui/components/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,7 +19,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@repo/ui/components/dropdown-menu'
+} from '@repo/ui/components/dropdown-menu';
 import {
   Form,
   FormControl,
@@ -36,35 +27,45 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@repo/ui/components/form'
+} from '@repo/ui/components/form';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from '@repo/ui/components/hover-card'
-import { Input } from '@repo/ui/components/input'
-import { Switch } from '@repo/ui/components/switch'
-import { ColumnDef } from '@tanstack/react-table'
+} from '@repo/ui/components/hover-card';
+import { Input } from '@repo/ui/components/input';
+import { Switch } from '@repo/ui/components/switch';
+import type { ColumnDef } from '@tanstack/react-table';
 import {
   CircleCheck,
   CircleDot,
   CircleX,
   LoaderCircleIcon,
   MoreHorizontal,
-} from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import * as z from 'zod'
+} from 'lucide-react';
+import type React from 'react';
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useOptimistic,
+  useRef,
+  useState,
+  useTransition,
+} from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import * as z from 'zod';
 
-import type { SelectRestaurant } from '#/lib/db/schema'
+import type { SelectRestaurant } from '#/lib/db/schema';
 
 import {
   startVideoUnderstanding,
   updateInvisible,
   updateLocation,
   updateYoutubeLink,
-} from '../../actions'
-import UploadToGeminiFiles from './upload-to-gemini-files'
+} from '../../actions';
+import UploadToGeminiFiles from './upload-to-gemini-files';
 
 export const columns: ColumnDef<SelectRestaurant>[] = [
   {
@@ -158,17 +159,17 @@ export const columns: ColumnDef<SelectRestaurant>[] = [
     id: 'actions',
     cell: ({ row }) => <Actions row={row.original} />,
   },
-]
+];
 
 function Actions({ row }: { row: SelectRestaurant }) {
   const [dialogActive, setDialogActive] = useState<
     'linkYoutube' | 'location' | 'upload-to-gemini-files'
-  >('linkYoutube')
-  const [isPending, startTransition] = useTransition()
+  >('linkYoutube');
+  const [isPending, startTransition] = useTransition();
 
   const resolveYoutubeLink = () => {
-    if (!row.youtube) return toast.error('No youtube link')
-    if (row.status === 'processing') return toast.info('Processing')
+    if (!row.youtube) return toast.error('No youtube link');
+    if (row.status === 'processing') return toast.info('Processing');
     startTransition(async () => {
       await new Promise<void>((resolve) => {
         toast.promise(
@@ -179,17 +180,17 @@ function Actions({ row }: { row: SelectRestaurant }) {
           {
             loading: 'Processing',
             success: () => {
-              return `${row.id} already start processing`
+              return `${row.id} already start processing`;
             },
             error: 'Error',
             finally: resolve,
           },
-        )
-      })
-    })
-  }
+        );
+      });
+    });
+  };
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -204,8 +205,8 @@ function Actions({ row }: { row: SelectRestaurant }) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
             onClick={() => {
-              setOpen(true)
-              setDialogActive('linkYoutube')
+              setOpen(true);
+              setDialogActive('linkYoutube');
             }}
           >
             link youtube
@@ -220,8 +221,8 @@ function Actions({ row }: { row: SelectRestaurant }) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
-              setOpen(true)
-              setDialogActive('location')
+              setOpen(true);
+              setDialogActive('location');
             }}
           >
             latitude and longitude
@@ -229,8 +230,8 @@ function Actions({ row }: { row: SelectRestaurant }) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
-              setOpen(true)
-              setDialogActive('upload-to-gemini-files')
+              setOpen(true);
+              setDialogActive('upload-to-gemini-files');
             }}
           >
             upload video to gemini files
@@ -250,55 +251,55 @@ function Actions({ row }: { row: SelectRestaurant }) {
         )}
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 const formSchema = z.object({
   link: z
     .url()
     .startsWith('https://www.youtube.com/watch?v=', 'invalid youtube link'),
-})
+});
 
-const initialState = { message: '', errors: {} }
+const initialState = { message: '', errors: {} };
 
 function LinkYoutubeForm({
   row,
   setOpen,
 }: {
-  row: SelectRestaurant
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  row: SelectRestaurant;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [state, action, pending] = useActionState(
     updateYoutubeLink,
     initialState,
-  )
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       link: row.youtube || '',
     },
-  })
+  });
 
   const onSubmit: React.ReactEventHandler<
     React.ComponentRef<'button'>
   > = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const currentTarget = e.currentTarget
+    const currentTarget = e.currentTarget;
 
-    const isValid = await form.trigger()
-    if (!isValid) return
+    const isValid = await form.trigger();
+    if (!isValid) return;
 
-    currentTarget.form?.requestSubmit()
-  }
+    currentTarget.form?.requestSubmit();
+  };
 
   useEffect(() => {
-    if (state.message !== 'success') return
+    if (state.message !== 'success') return;
 
-    form.reset()
-    setOpen(false)
-  }, [form, setOpen, state.message])
+    form.reset();
+    setOpen(false);
+  }, [form, setOpen, state.message]);
 
   return (
     <Form {...form}>
@@ -345,60 +346,60 @@ function LinkYoutubeForm({
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 const locationSchema = z.object({
   location: z.tuple([z.string().nonempty(), z.string().nonempty()]),
-})
+});
 
 function LocationForm({
   row,
   setOpen,
 }: {
-  row: SelectRestaurant
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  row: SelectRestaurant;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [state, action, pending] = useActionState(updateLocation, initialState)
+  const [state, action, pending] = useActionState(updateLocation, initialState);
 
   const form = useForm<z.infer<typeof locationSchema>>({
     resolver: zodResolver(locationSchema),
     defaultValues: {
       location: (row.location?.map(String) as [string, string]) || ['', ''],
     },
-  })
+  });
 
   const onSubmit: React.ReactEventHandler<
     React.ComponentRef<'button'>
   > = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const currentTarget = e.currentTarget
+    const currentTarget = e.currentTarget;
 
-    const isValid = await form.trigger()
-    if (!isValid) return
+    const isValid = await form.trigger();
+    if (!isValid) return;
 
-    currentTarget.form?.requestSubmit()
-  }
+    currentTarget.form?.requestSubmit();
+  };
 
   useEffect(() => {
-    if (state.message !== 'success') return
-    form.reset()
-    setOpen(false)
-  }, [form, setOpen, state])
+    if (state.message !== 'success') return;
+    form.reset();
+    setOpen(false);
+  }, [form, setOpen, state]);
 
   const onPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    const text = e.clipboardData.getData('text/plain')
-    if (text.indexOf(',') === -1) return
-    const strings = text.split(',')
-    if (strings.length !== 2) return
+    e.preventDefault();
+    const text = e.clipboardData.getData('text/plain');
+    if (text.indexOf(',') === -1) return;
+    const strings = text.split(',');
+    if (strings.length !== 2) return;
     const location = strings.toSorted((a, b) => Number(b) - Number(a)) as [
       string,
       string,
-    ]
-    form.setValue('location', location)
-  }
+    ];
+    form.setValue('location', location);
+  };
 
   return (
     <Form {...form}>
@@ -462,26 +463,30 @@ function LocationForm({
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }
 
 function InvisibleForm({ row }: { row: SelectRestaurant }) {
-  const ref = useRef<React.ComponentRef<'form'>>(null)
-  const [invisible, setInvisible] = useState(row.invisible)
-  const [optimisticInvisible, setOptimisticInvisible] = useOptimistic(invisible)
-  const [state, action, pending] = useActionState(updateInvisible, initialState)
+  const ref = useRef<React.ComponentRef<'form'>>(null);
+  const [invisible, setInvisible] = useState(row.invisible);
+  const [optimisticInvisible, setOptimisticInvisible] =
+    useOptimistic(invisible);
+  const [state, action, pending] = useActionState(
+    updateInvisible,
+    initialState,
+  );
 
   const onCheckedChange = (checked: boolean) => {
     startTransition(() => {
-      setOptimisticInvisible(checked)
-    })
-    ref.current?.requestSubmit()
-  }
+      setOptimisticInvisible(checked);
+    });
+    ref.current?.requestSubmit();
+  };
 
   useEffect(() => {
-    if (state.message !== 'success') return
-    setInvisible(optimisticInvisible)
-  }, [optimisticInvisible, state])
+    if (state.message !== 'success') return;
+    setInvisible(optimisticInvisible);
+  }, [optimisticInvisible, state]);
 
   return (
     <form action={action} ref={ref}>
@@ -495,5 +500,5 @@ function InvisibleForm({ row }: { row: SelectRestaurant }) {
       />
       <input type="hidden" name="id" value={row.id} />
     </form>
-  )
+  );
 }

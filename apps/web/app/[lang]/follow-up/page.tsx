@@ -1,20 +1,18 @@
-import { Suspense } from 'react'
-import { Metadata, Viewport } from 'next'
-import { headers } from 'next/headers'
-
-import { getRestaurants } from '#/lib/db/queries'
-import { getDictionary, i18n, type Locale } from '#/lib/i18n'
-import { CommandMenu } from '#/components/command-menu'
-import { Mapbox, PreloadResources } from '#/components/mapbox'
-
-import RenderMapboxControls from './render-mapbox-controls'
+import type { Metadata, Viewport } from 'next';
+import { headers } from 'next/headers';
+import { Suspense } from 'react';
+import { CommandMenu } from '#/components/command-menu';
+import { Mapbox, PreloadResources } from '#/components/mapbox';
+import { getRestaurants } from '#/lib/db/queries';
+import { i18n } from '#/lib/i18n';
+import RenderMapboxControls from './render-mapbox-controls';
 
 export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: dark)', color: '#292929' },
     { media: '(prefers-color-scheme: light)', color: '#fcfcfd' },
   ],
-}
+};
 
 export const metadata: Metadata = {
   title: 'Follow up',
@@ -25,18 +23,18 @@ export const metadata: Metadata = {
       Object.keys(i18n.locales).map((lang) => [lang, `/${lang}/follow-up`]),
     ),
   },
-}
+};
 
 const preload = () => {
-  void getRestaurants()
-}
+  void getRestaurants();
+};
 
-export default async function FollowUpPage(props: PageProps<'/[lang]/follow-up'>) {
-  preload()
-  const { lang } = await props.params
-  const messages = await getDictionary(lang as Locale)
+export default async function FollowUpPage(
+  props: PageProps<'/[lang]/follow-up'>,
+) {
+  preload();
 
-  const restaurants = getRestaurants()
+  const restaurants = getRestaurants();
 
   return (
     <>
@@ -55,7 +53,7 @@ export default async function FollowUpPage(props: PageProps<'/[lang]/follow-up'>
         <PreloadResources />
       </main>
     </>
-  )
+  );
 }
 
 async function SuspendedMapbox({
@@ -63,25 +61,25 @@ async function SuspendedMapbox({
   restaurants,
 }: {
   searchParams: Promise<{
-    location?: string
-    marker?: string
-  }>
-  restaurants: ReturnType<typeof getRestaurants>
+    location?: string;
+    marker?: string;
+  }>;
+  restaurants: ReturnType<typeof getRestaurants>;
 }) {
   const [headersList, awaitedSearchParams] = await Promise.all([
     headers(),
     searchParams,
-  ])
+  ]);
 
   const locationFromHeader = [
     headersList.get('x-vercel-ip-longitude'),
     headersList.get('x-vercel-ip-latitude'),
   ]
     .filter(Boolean)
-    .map(Number) as [number, number]
+    .map(Number) as [number, number];
   const location = awaitedSearchParams.location?.split(',').map(Number) as
     | [number, number]
-    | undefined
+    | undefined;
 
   return (
     <Mapbox
@@ -100,5 +98,5 @@ async function SuspendedMapbox({
         />
       </Suspense>
     </Mapbox>
-  )
+  );
 }

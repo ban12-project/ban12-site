@@ -1,12 +1,7 @@
-import { getDictionary, type Locale } from '#/lib/i18n'
-import HomeHeader from '#/components/home-header'
+import HomeHeader from '#/components/home-header';
+import R3f from './r3f';
 
-import R3f from './r3f'
-
-export default async function Home(props: PageProps<'/[lang]/about'>) {
-  const params = await props.params
-  const messages = await getDictionary(params.lang as Locale)
-
+export default async function Home() {
   return (
     <>
       <HomeHeader />
@@ -14,5 +9,5 @@ export default async function Home(props: PageProps<'/[lang]/about'>) {
         <R3f />
       </main>
     </>
-  )
+  );
 }

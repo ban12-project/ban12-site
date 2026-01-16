@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import Script from 'next/script'
-import { SDK_VERSION } from '@sentry/nextjs'
+import { SDK_VERSION } from '@sentry/nextjs';
+import Script from 'next/script';
 
-declare const Sentry: typeof import('@sentry/nextjs')
+declare const Sentry: typeof import('@sentry/nextjs');
 
 export default function SentryLoader() {
   const onLoad = () => {
@@ -30,8 +30,8 @@ export default function SentryLoader() {
         //   blockAllMedia: true,
         // }),
       ],
-    })
-  }
+    });
+  };
 
   return (
     <Script
@@ -39,5 +39,5 @@ export default function SentryLoader() {
       async
       onLoad={onLoad}
     />
-  )
+  );
 }

@@ -1,29 +1,31 @@
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { Link } from '@repo/i18n/client'
+import { Link } from '@repo/i18n/client';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-import { getRestaurants } from '#/lib/db/queries'
-import { getDictionary, i18n, type Locale } from '#/lib/i18n'
+import { getRestaurants } from '#/lib/db/queries';
+import { getDictionary, i18n, type Locale } from '#/lib/i18n';
 
-import { getCachedRestaurantWithPostsByName } from '../actions'
-import RestaurantDetail from './restaurant-detail'
+import { getCachedRestaurantWithPostsByName } from '../actions';
+import RestaurantDetail from './restaurant-detail';
 
 export async function generateStaticParams() {
-  const restaurants = await getRestaurants()
+  const restaurants = await getRestaurants();
   return restaurants.map((restaurant) => ({
     restaurantName: restaurant.ai_summarize?.restaurantName,
-  }))
+  }));
 }
 
-export default async function Page({ params }: PageProps<'/[lang]/follow-up/[restaurantName]'>) {
-  const { restaurantName, lang } = await params
+export default async function Page({
+  params,
+}: PageProps<'/[lang]/follow-up/[restaurantName]'>) {
+  const { restaurantName, lang } = await params;
   const [{ restaurant, posts }, messages] = await Promise.all([
     getCachedRestaurantWithPostsByName(restaurantName),
     getDictionary(lang as Locale),
-  ])
+  ]);
 
   if (!restaurant || !restaurant.ai_summarize) {
-    notFound()
+    notFound();
   }
 
   const jsonLd = {
@@ -41,7 +43,7 @@ export default async function Page({ params }: PageProps<'/[lang]/follow-up/[res
       ratingCount: 5,
     },
     priceRange: restaurant.ai_summarize.price,
-  }
+  };
 
   return (
     <main className="container mx-auto px-4 py-12">
@@ -59,30 +61,37 @@ export default async function Page({ params }: PageProps<'/[lang]/follow-up/[res
 
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: ld json
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
         }}
       />
     </main>
-  )
+  );
 }
 
-export async function generateMetadata({ params }: PageProps<'/[lang]/follow-up/[restaurantName]'>): Promise<Metadata> {
-  const { restaurantName } = await params
+export async function generateMetadata({
+  params,
+}: PageProps<'/[lang]/follow-up/[restaurantName]'>): Promise<Metadata> {
+  const { restaurantName } = await params;
   const { restaurant } =
-    await getCachedRestaurantWithPostsByName(restaurantName)
+    await getCachedRestaurantWithPostsByName(restaurantName);
 
   if (!restaurant || !restaurant.ai_summarize) {
-    notFound()
+    notFound();
   }
 
-  const name = restaurant.ai_summarize.restaurantName
-  const title = `${name} - Restaurant Review`
+  const name = restaurant.ai_summarize.restaurantName;
+  const title = `${name} - Restaurant Review`;
+
+  if (!process.env.NEXT_PUBLIC_HOST_URL) {
+    throw new Error('NEXT_PUBLIC_HOST_URL is not defined');
+  }
 
   return {
     title,
     description: `Read reviews and information about ${name}, including dishes, service quality, and more.`,
-    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL),
     alternates: {
       canonical: `/follow-up/${name}`,
       languages: Object.fromEntries(
@@ -95,5 +104,5 @@ export async function generateMetadata({ params }: PageProps<'/[lang]/follow-up/
     openGraph: {
       title,
     },
-  }
+  };
 }

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
 export function useIntersectionObserver(
   callback: IntersectionObserverCallback,
@@ -6,13 +6,13 @@ export function useIntersectionObserver(
   options?: IntersectionObserverInit,
 ) {
   useEffect(() => {
-    if (!target.current) return
+    if (!target.current) return;
 
-    const observer = new IntersectionObserver(callback, options)
-    observer.observe(target.current)
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(target.current);
 
     return () => {
-      observer.disconnect()
-    }
-  }, [callback, options, target])
+      observer.disconnect();
+    };
+  }, [callback, options, target]);
 }

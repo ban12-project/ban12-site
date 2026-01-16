@@ -8,5 +8,5 @@ export default function SmoothCorners() {
         } as React.CSSProperties
       }
     ></div>
-  )
+  );
 }

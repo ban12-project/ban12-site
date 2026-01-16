@@ -1,18 +1,17 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import Lenis from '@repo/ui/components/lenis'
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
-import { ThemeProvider } from 'next-themes'
+import Lenis from '@repo/ui/components/lenis';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
+import Footer from '#/components/footer';
+import { CMS_NAME, HOME_OG_IMAGE_URL } from '#/lib/constants';
 
-import { CMS_NAME, HOME_OG_IMAGE_URL } from '#/lib/constants'
-import Footer from '#/components/footer'
+import './globals.css';
 
-import './globals.css'
+import { cn } from '@repo/ui/lib/utils';
 
-import { cn } from '@repo/ui/lib/utils'
-
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {
@@ -45,12 +44,12 @@ export const metadata: Metadata = {
       },
     ],
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="zh-CN" suppressHydrationWarning>
@@ -74,5 +73,5 @@ export default function RootLayout({
         <SpeedInsights />
       </body>
     </html>
-  )
+  );
 }

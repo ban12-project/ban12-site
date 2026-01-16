@@ -1,38 +1,38 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { useGSAP } from '@gsap/react'
-import { useLocale } from '@repo/i18n/client'
-import FlairFollower from '@repo/ui/components/flair-follower'
-import { gsap } from 'gsap'
-import { SplitText } from 'gsap/SplitText'
+import { useGSAP } from '@gsap/react';
+import { useLocale } from '@repo/i18n/client';
+import FlairFollower from '@repo/ui/components/flair-follower';
+import { gsap } from 'gsap';
+import { SplitText } from 'gsap/SplitText';
+import * as React from 'react';
 
-import { type Messages } from '#/lib/i18n'
+import type { Messages } from '#/lib/i18n';
 
-gsap.registerPlugin(useGSAP, SplitText)
+gsap.registerPlugin(useGSAP, SplitText);
 
 type Props = Readonly<{
-  messages: Messages
-}>
+  messages: Messages;
+}>;
 
 export default function HomeLanding({ messages }: Props) {
-  const container = React.useRef<React.ComponentRef<'section'>>(null!)
-  const { locale } = useLocale()
+  const container = React.useRef<React.ComponentRef<'section'>>(null!);
+  const { locale } = useLocale();
 
   useGSAP(
     () => {
-      const selector = gsap.utils.selector(container)
-      const heading = selector('.home-landing__heading-text')[0]
+      const selector = gsap.utils.selector(container);
+      const heading = selector('.home-landing__heading-text')[0];
 
       const defaults = {
         ease: 'power2.out',
         duration: 0.6,
-      }
+      };
 
       const splitText = () => {
-        const segmenter = new Intl.Segmenter(locale, { granularity: 'word' })
+        const segmenter = new Intl.Segmenter(locale, { granularity: 'word' });
 
-        const tl = gsap.timeline({ defaults })
+        const tl = gsap.timeline({ defaults });
 
         const split = new SplitText(heading, {
           type: 'words, lines',
@@ -41,11 +41,11 @@ export default function HomeLanding({ messages }: Props) {
           prepareText: (text) => {
             return [...segmenter.segment(text)]
               .map((s) => s.segment)
-              .join(String.fromCharCode(8204))
+              .join(String.fromCharCode(8204));
           },
           wordDelimiter: /\u200c/,
           autoSplit: true,
-        })
+        });
 
         tl.from(split.words, {
           yPercent: -100,
@@ -54,33 +54,33 @@ export default function HomeLanding({ messages }: Props) {
             amount: 0.5,
             from: 'random',
           },
-        })
+        });
 
         tl.eventCallback('onComplete', () => {
           // split.revert()
-        })
+        });
 
-        return tl
-      }
+        return tl;
+      };
 
       const createTimeline = () => {
         const tl = gsap.timeline({
           id: 'home-landing',
           defaults,
-        })
+        });
 
-        tl.set([heading], { autoAlpha: 1 })
+        tl.set([heading], { autoAlpha: 1 });
 
-        const mm = gsap.matchMedia()
+        const mm = gsap.matchMedia();
         mm.add('(prefers-reduced-motion: no-preference)', () => {
-          tl.add(splitText())
-        })
-      }
+          tl.add(splitText());
+        });
+      };
 
-      createTimeline()
+      createTimeline();
     },
     { scope: container },
-  )
+  );
 
   return (
     <section ref={container} className="h-full w-full">
@@ -104,5 +104,5 @@ export default function HomeLanding({ messages }: Props) {
         ))}
       </FlairFollower>
     </section>
-  )
+  );
 }

@@ -1,8 +1,7 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@repo/ui/components/button'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@repo/ui/components/button';
 import {
   Form,
   FormControl,
@@ -11,16 +10,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@repo/ui/components/form'
+} from '@repo/ui/components/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@repo/ui/components/select'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+} from '@repo/ui/components/select';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
 const FormSchema = z.object({
   email: z.email({
@@ -29,7 +29,7 @@ const FormSchema = z.object({
         ? 'Please select an email to display.'
         : 'Please enter a valid email.',
   }),
-})
+});
 
 const supportedDataTypes = [
   { 'data-type': 'URL', action: 'Open URL in browser or an app' },
@@ -40,15 +40,15 @@ const supportedDataTypes = [
   { 'data-type': 'Contact', action: 'Add to Contacts' },
   { 'data-type': 'Event', action: 'Add event to Calendar' },
   { 'data-type': 'WiFi Configuration', action: 'Join a WiFi network' },
-]
+];
 
 const QRCodeForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  })
+  });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data)
+    console.log(data);
   }
 
   return (
@@ -88,9 +88,9 @@ const QRCodeForm = () => {
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-  )
-}
+  );
+};
 
-QRCodeForm.displayName = 'QRCodeForm'
+QRCodeForm.displayName = 'QRCodeForm';
 
-export { QRCodeForm, supportedDataTypes }
+export { QRCodeForm, supportedDataTypes };

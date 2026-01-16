@@ -1,18 +1,18 @@
-import React from 'react'
-import { LinkProps } from 'next/link'
-import { Link } from '@repo/i18n/client'
-import { cn } from '@repo/ui/lib/utils'
-import { Layers2, Plus } from 'lucide-react'
+import { Link } from '@repo/i18n/client';
+import { cn } from '@repo/ui/lib/utils';
+import { Layers2, Plus } from 'lucide-react';
+import type { LinkProps } from 'next/link';
+import type React from 'react';
 
-import type { SelectShortcut } from '#/lib/db/schema'
-import { Locale } from '#/lib/i18n'
-import { negativeToHexColor } from '#/lib/utils'
+import type { SelectShortcut } from '#/lib/db/schema';
+import type { Locale } from '#/lib/i18n';
+import { negativeToHexColor } from '#/lib/utils';
 
 interface ShortcutCardProps
   extends Partial<LinkProps>,
     Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps> {
-  item: SelectShortcut
-  lang: Locale
+  item: SelectShortcut;
+  lang: Locale;
 }
 
 export default function ShortcutCard({
@@ -53,5 +53,5 @@ export default function ShortcutCard({
         <Plus />
       </button>
     </Link>
-  )
+  );
 }

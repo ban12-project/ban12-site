@@ -1,20 +1,18 @@
-import { notFound } from 'next/navigation'
-import { Button } from '@repo/ui/components/button'
-import SuperEllipse from '@repo/ui/components/super-ellipse'
-import { cn } from '@repo/ui/lib/utils'
-import { Plus, Share } from 'lucide-react'
-
-import { getShortcutByUuid } from '#/lib/db/queries'
-import type { Locale, Messages } from '#/lib/i18n'
-import ShortcutCard from '#/components/shortcut-card'
+import { Button } from '@repo/ui/components/button';
+import SuperEllipse from '@repo/ui/components/super-ellipse';
+import { cn } from '@repo/ui/lib/utils';
+import { Plus } from 'lucide-react';
+import { notFound } from 'next/navigation';
+import ShortcutCard from '#/components/shortcut-card';
+import { getShortcutByUuid } from '#/lib/db/queries';
+import type { Locale, Messages } from '#/lib/i18n';
 
 export interface ShortcutAddProps extends React.ComponentProps<'div'> {
-  params: { id: string; lang: Locale }
-  messages: Messages
+  params: { id: string; lang: Locale };
+  messages: Messages;
   /** tag from normal route or not because this component may be used in interceptor route */
-  fromNormalRoute?: boolean
+  fromNormalRoute?: boolean;
 }
-
 
 export default async function ShortcutAdd({
   params: { id, lang },
@@ -22,9 +20,9 @@ export default async function ShortcutAdd({
   fromNormalRoute,
   ...props
 }: ShortcutAddProps) {
-  const shortcut = await getShortcutByUuid(id)
+  const shortcut = await getShortcutByUuid(id);
 
-  if (!shortcut) notFound()
+  if (!shortcut) notFound();
 
   return (
     <>
@@ -40,6 +38,7 @@ export default async function ShortcutAdd({
           <h3 className="text-3xl font-bold">{shortcut.name[lang]}</h3>
 
           {shortcut.description[lang].split('\n').map((item, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: order is stable
             <p key={index} className="text-lg text-zinc-500/90">
               {item}
             </p>
@@ -144,5 +143,5 @@ export default async function ShortcutAdd({
         </div>
       </div>
     </>
-  )
+  );
 }

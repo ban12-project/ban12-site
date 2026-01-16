@@ -1,42 +1,41 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types'
-import { useRouter } from 'next/navigation'
-import { Link, useLocale } from '@repo/i18n/client'
-import coordtransform from 'coordtransform'
-import equal from 'fast-deep-equal'
-import { useTheme } from 'next-themes'
-
-import { SelectRestaurant } from '#/lib/db/schema'
-import { Marker, useMapReady } from '#/components/mapbox'
+import { useLocale } from '@repo/i18n/client';
+import coordtransform from 'coordtransform';
+import equal from 'fast-deep-equal';
+import { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types';
+import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
+import * as React from 'react';
+import { Marker, useMapReady } from '#/components/mapbox';
+import type { SelectRestaurant } from '#/lib/db/schema';
 
 export default function RenderMapboxControls({
   restaurants,
   location,
 }: {
-  restaurants: Promise<SelectRestaurant[]>
-  location?: [number, number]
+  restaurants: Promise<SelectRestaurant[]>;
+  location?: [number, number];
 }) {
-  const data = React.use(restaurants)
+  const data = React.use(restaurants);
 
   const validRestaurants = data.filter(({ location, invisible }) => {
-    return location && !invisible
-  })
+    return location && !invisible;
+  });
 
   return (
     <>
       <Clusters restaurants={validRestaurants} />
       {location && <Marker lnglat={location} />}
     </>
-  )
+  );
 }
 
 const Clusters = React.memo(
   function Clusters({ restaurants }: { restaurants: SelectRestaurant[] }) {
-    const router = useRouter()
-    const { resolvedTheme } = useTheme()
-    const { locale } = useLocale()
+    const router = useRouter();
+    const { resolvedTheme } = useTheme();
+    const { locale } = useLocale();
 
     useMapReady(
       (map) => {
@@ -46,7 +45,7 @@ const Clusters = React.memo(
           data: {
             type: 'FeatureCollection',
             features: restaurants.map(({ location, ai_summarize }) => {
-              const [lng, lat] = coordtransform.gcj02towgs84(...location!)
+              const [lng, lat] = coordtransform.gcj02towgs84(...location!);
               return {
                 type: 'Feature' as const,
                 properties: {
@@ -56,13 +55,13 @@ const Clusters = React.memo(
                   type: 'Point' as const,
                   coordinates: [lng, lat],
                 },
-              }
+              };
             }),
           },
           cluster: true,
           clusterMaxZoom: 14,
           clusterRadius: 50,
-        })
+        });
 
         map.addLayer({
           id: 'clusters',
@@ -90,7 +89,7 @@ const Clusters = React.memo(
             ],
             'circle-emissive-strength': 1,
           },
-        })
+        });
 
         map.addLayer({
           id: 'cluster-count',
@@ -100,7 +99,7 @@ const Clusters = React.memo(
             'text-field': '{point_count_abbreviated}',
             'text-size': 16,
           },
-        })
+        });
 
         map.addLayer({
           id: 'unclustered-point',
@@ -113,12 +112,12 @@ const Clusters = React.memo(
           paint: {
             'text-color': resolvedTheme === 'dark' ? '#7DD7BE' : '#004F3C',
           },
-        })
+        });
 
         const prefetchFeaturesInViewport = () => {
           const features = map.queryRenderedFeatures({
             layers: ['unclustered-point'],
-          })
+          });
 
           for (const feature of features) {
             router.prefetch(
@@ -126,18 +125,18 @@ const Clusters = React.memo(
               {
                 kind: PrefetchKind.FULL,
               },
-            )
+            );
           }
-        }
+        };
         const clustersClick = (e: mapboxgl.MapMouseEvent) => {
           const features = map.queryRenderedFeatures(e.point, {
             layers: ['clusters'],
-          })
-          const clusterId: number = features[0].properties!.cluster_id
+          });
+          const clusterId: number = features[0].properties!.cluster_id;
           map
             .getSource<mapboxgl.GeoJSONSource>('restaurants')!
             .getClusterExpansionZoom(clusterId, (err, zoom) => {
-              if (err || !zoom) return
+              if (err || !zoom) return;
 
               map.easeTo({
                 center: (features[0].geometry as GeoJSON.Point).coordinates as [
@@ -145,60 +144,60 @@ const Clusters = React.memo(
                   number,
                 ],
                 zoom,
-              })
-            })
-        }
+              });
+            });
+        };
         const unclusteredPointClick = (e: mapboxgl.MapMouseEvent) => {
           router.push(
             `/${locale}/follow-up/${e.features![0].properties?.restaurantName}`,
-          )
-        }
+          );
+        };
         const changeMapCursorToPointer = () => {
-          map.getCanvas().style.cursor = 'pointer'
-        }
+          map.getCanvas().style.cursor = 'pointer';
+        };
         const resetMapCursor = () => {
-          map.getCanvas().style.cursor = ''
-        }
+          map.getCanvas().style.cursor = '';
+        };
         // inspect a cluster on click
-        map.on('click', 'clusters', clustersClick)
-        map.on('click', 'unclustered-point', unclusteredPointClick)
-        map.on('moveend', prefetchFeaturesInViewport)
-        map.on('idle', prefetchFeaturesInViewport)
+        map.on('click', 'clusters', clustersClick);
+        map.on('click', 'unclustered-point', unclusteredPointClick);
+        map.on('moveend', prefetchFeaturesInViewport);
+        map.on('idle', prefetchFeaturesInViewport);
         map.on(
           'mouseenter',
           ['clusters', 'unclustered-point'],
           changeMapCursorToPointer,
-        )
-        map.on('mouseleave', ['clusters', 'unclustered-point'], resetMapCursor)
+        );
+        map.on('mouseleave', ['clusters', 'unclustered-point'], resetMapCursor);
 
         return () => {
-          map.off('click', 'clusters', clustersClick)
-          map.off('click', 'unclustered-point', unclusteredPointClick)
-          map.off('moveend', prefetchFeaturesInViewport)
-          map.off('idle', prefetchFeaturesInViewport)
+          map.off('click', 'clusters', clustersClick);
+          map.off('click', 'unclustered-point', unclusteredPointClick);
+          map.off('moveend', prefetchFeaturesInViewport);
+          map.off('idle', prefetchFeaturesInViewport);
           map.off(
             'mouseenter',
             ['clusters', 'unclustered-point'],
             changeMapCursorToPointer,
-          )
+          );
           map.off(
             'mouseleave',
             ['clusters', 'unclustered-point'],
             resetMapCursor,
-          )
-          map.removeLayer('clusters')
-          map.removeLayer('cluster-count')
-          map.removeLayer('unclustered-point')
-          map.removeSource('restaurants')
-        }
+          );
+          map.removeLayer('clusters');
+          map.removeLayer('cluster-count');
+          map.removeLayer('unclustered-point');
+          map.removeSource('restaurants');
+        };
       },
       [resolvedTheme],
-    )
+    );
 
-    return null
+    return null;
   },
   (prev, next) => {
-    if (!equal(prev.restaurants, next.restaurants)) return false
-    return true
+    if (!equal(prev.restaurants, next.restaurants)) return false;
+    return true;
   },
-)
+);

@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { useActionState } from 'react'
-import { Button } from '@repo/ui/components/button'
-import { Input } from '@repo/ui/components/input'
-import { Label } from '@repo/ui/components/label'
-import { toast } from 'sonner'
+import { Button } from '@repo/ui/components/button';
+import { Input } from '@repo/ui/components/input';
+import { Label } from '@repo/ui/components/label';
+import { useActionState } from 'react';
+import { toast } from 'sonner';
 
-import type { LocalizedString, SelectCollection } from '#/lib/db/schema'
-import { LocalizedHelper } from '#/lib/utils'
+import type { LocalizedString, SelectCollection } from '#/lib/db/schema';
+import { LocalizedHelper } from '#/lib/utils';
 
-import { createCollection, updateCollection } from '../../actions'
+import { createCollection, updateCollection } from '../../actions';
 
-const localizedHelper = new LocalizedHelper()
+const localizedHelper = new LocalizedHelper();
 
 type Props = {
   fields?:
     | Partial<SelectCollection>
     | (Pick<SelectCollection, 'image' | 'textColor'> & {
-        title: string
-        id?: undefined
-      })
-}
+        title: string;
+        id?: undefined;
+      });
+};
 
 export default function Form({
   fields = {
@@ -29,13 +29,13 @@ export default function Form({
     textColor: '',
   },
 }: Props) {
-  const isCreating = !fields.id
+  const isCreating = !fields.id;
 
   const handleAction = async (
     prevState: string | undefined,
     formData: FormData,
   ) => {
-    const file = formData.get('image') as File
+    const file = formData.get('image') as File;
 
     const response = await fetch(
       new URL('/api/upload', process.env.NEXT_PUBLIC_HOST_URL),
@@ -46,14 +46,14 @@ export default function Form({
         },
         body: JSON.stringify({ filename: file.name, contentType: file.type }),
       },
-    )
+    );
 
     if (!response.ok) {
-      toast('Failed to get pre-signed URL.')
-      throw new Error('Failed to get pre-signed URL.')
+      toast('Failed to get pre-signed URL.');
+      throw new Error('Failed to get pre-signed URL.');
     }
 
-    const { url } = (await response.json()) as { url: string }
+    const { url } = (await response.json()) as { url: string };
 
     const uploadResponse = await fetch(url, {
       method: 'PUT',
@@ -61,30 +61,30 @@ export default function Form({
         'Content-Type': file.type,
       },
       body: file,
-    })
+    });
 
     if (!uploadResponse.ok) {
-      toast('Upload failed.')
-      throw new Error('S3 Upload Error: ' + uploadResponse.status)
+      toast('Upload failed.');
+      throw new Error(`S3 Upload Error: ${uploadResponse.status}`);
     }
 
-    const { pathname } = new URL(url)
-    formData.set('image', pathname)
+    const { pathname } = new URL(url);
+    formData.set('image', pathname);
 
     if (!isCreating) {
-      const title = localizedHelper.resolveFormData(formData, 'title')
-      formData.append('title', JSON.stringify(title))
+      const title = localizedHelper.resolveFormData(formData, 'title');
+      formData.append('title', JSON.stringify(title));
     }
 
     return isCreating
       ? createCollection(prevState, formData)
-      : updateCollection(prevState, formData)
-  }
+      : updateCollection(prevState, formData);
+  };
 
   const [errorMessage, dispatch, pending] = useActionState(
     handleAction,
     undefined,
-  )
+  );
 
   return (
     <form action={dispatch} className="grid gap-4 py-4">
@@ -107,7 +107,7 @@ export default function Form({
         localizedHelper.render(
           'title',
           fields.title as LocalizedString,
-          (key, value, name) => (
+          (_key, value, name) => (
             <div className="grid grid-cols-4 items-center gap-4" key="title">
               <Label htmlFor="name" className="text-right">
                 title
@@ -151,5 +151,5 @@ export default function Form({
 
       <Button disabled={pending}>Submit</Button>
     </form>
-  )
+  );
 }

@@ -1,16 +1,15 @@
-import { Suspense, ViewTransition } from 'react'
-
-import { getDictionary, type Locale } from '#/lib/i18n'
-import AlbumList from '#/components/album-list'
-import AlbumListSkeleton from '#/components/album-list-skeleton'
-import Collections from '#/components/collections'
-import CollectionsSkeleton from '#/components/collections-skeleton'
-import ColorSchemeToggle from '#/components/color-scheme-toggle'
-import PostButton from '#/components/post-button'
+import { Suspense, ViewTransition } from 'react';
+import AlbumList from '#/components/album-list';
+import AlbumListSkeleton from '#/components/album-list-skeleton';
+import Collections from '#/components/collections';
+import CollectionsSkeleton from '#/components/collections-skeleton';
+import ColorSchemeToggle from '#/components/color-scheme-toggle';
+import PostButton from '#/components/post-button';
+import { getDictionary, type Locale } from '#/lib/i18n';
 
 export default async function Home(props: PageProps<'/[lang]'>) {
-  const params = await props.params
-  const messages = await getDictionary(params.lang as Locale)
+  const params = await props.params;
+  const messages = await getDictionary(params.lang as Locale);
 
   return (
     <>
@@ -36,5 +35,5 @@ export default async function Home(props: PageProps<'/[lang]'>) {
         <ColorSchemeToggle className="ms-auto" />
       </footer>
     </>
-  )
+  );
 }

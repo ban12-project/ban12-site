@@ -1,45 +1,41 @@
-'use client'
+'use client';
 
-import { useRef, ViewTransition } from 'react'
-import { useGSAP } from '@gsap/react'
-import { Link, useLocale } from '@repo/i18n/client'
-import FlairFollower from '@repo/ui/components/flair-follower'
-import OrganizingFiles from '#/public/organizing-files.svg'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { SplitText } from 'gsap/SplitText'
+import { useGSAP } from '@gsap/react';
+import { Link, useLocale } from '@repo/i18n/client';
+import FlairFollower from '@repo/ui/components/flair-follower';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+import { useRef, ViewTransition } from 'react';
+import OrganizingFiles from '#/public/organizing-files.svg';
 
-import { Messages } from '#/lib/i18n'
+gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText)
-
-type Props = {
-  messages: Messages['home']
-}
-
-export default function HomeAnimate({ messages }: Props) {
-  const container = useRef<React.ComponentRef<'div'>>(null)
-  const { locale } = useLocale()
+export default function HomeAnimate() {
+  const container = useRef<React.ComponentRef<'div'>>(null);
+  const { locale } = useLocale();
 
   useGSAP(
     () => {
       const selectors = {
         block: gsap.utils.selector(container),
-      }
+      };
       const DOM = {
         trigger: selectors.block('.home-animate__trigger')[0],
         textTrack: selectors.block('.home-animate__scroll'),
         intro: selectors.block('.home-animate__intro')[0],
-      }
+      };
 
       const triggerDefaults: ScrollTrigger.Vars = {
         start: 'left 70%',
         horizontal: true,
-      }
+      };
 
       const intro = () => {
-        const heading = DOM.intro.querySelector('.home-animate__intro-heading')
-        const text = DOM.intro.querySelector('.home-animate__intro-heading > *')
+        const heading = DOM.intro.querySelector('.home-animate__intro-heading');
+        const text = DOM.intro.querySelector(
+          '.home-animate__intro-heading > *',
+        );
 
         gsap.from(text, {
           rotateX: -95,
@@ -49,11 +45,11 @@ export default function HomeAnimate({ messages }: Props) {
             trigger: heading,
             start: 'top 70%',
           },
-        })
-      }
+        });
+      };
 
       const basicWords = () => {
-        const segmenter = new Intl.Segmenter(locale, { granularity: 'word' })
+        const segmenter = new Intl.Segmenter(locale, { granularity: 'word' });
 
         const split = new SplitText(DOM.textTrack, {
           type: 'words',
@@ -61,11 +57,11 @@ export default function HomeAnimate({ messages }: Props) {
           prepareText: (text) => {
             return [...segmenter.segment(text)]
               .map((s) => s.segment)
-              .join(String.fromCharCode(8204))
+              .join(String.fromCharCode(8204));
           },
           wordDelimiter: /\u200c/,
           autoSplit: true,
-        })
+        });
 
         split.words.forEach((word) => {
           gsap.from(word, {
@@ -78,16 +74,18 @@ export default function HomeAnimate({ messages }: Props) {
               ...triggerDefaults,
               start: 'left 80%',
             },
-          })
-        })
-      }
+          });
+        });
+      };
 
       const textGroup = () => {
-        const triggers = selectors.block('.home-animate__text-group')
+        const triggers = selectors.block('.home-animate__text-group');
 
         triggers.forEach((trigger) => {
-          const label = trigger.querySelector('.home-animate__text-group-label')
-          if (!label) return
+          const label = trigger.querySelector(
+            '.home-animate__text-group-label',
+          );
+          if (!label) return;
 
           gsap.to(label, {
             yPercent: -100,
@@ -99,7 +97,7 @@ export default function HomeAnimate({ messages }: Props) {
               scrub: 1,
               end: '+=0',
             },
-          })
+          });
 
           gsap.to(label, {
             x: () => trigger.clientWidth - label.clientWidth,
@@ -108,16 +106,16 @@ export default function HomeAnimate({ messages }: Props) {
               trigger,
               ...triggerDefaults,
               start: 'left center',
-              end: '+=' + (trigger.clientWidth - label.clientWidth),
+              end: `+=${trigger.clientWidth - label.clientWidth}`,
               scrub: 1,
             },
-          })
-        })
-      }
+          });
+        });
+      };
 
       const createTimelines = () => {
-        gsap.set(DOM.trigger, { autoAlpha: 1 })
-        const mm = gsap.matchMedia()
+        gsap.set(DOM.trigger, { autoAlpha: 1 });
+        const mm = gsap.matchMedia();
 
         mm.add(
           // and (min-width: 1280px)
@@ -132,24 +130,24 @@ export default function HomeAnimate({ messages }: Props) {
                 scrub: 1,
                 end: '+=3000px',
               },
-            })
+            });
 
-            triggerDefaults.containerAnimation = scrollTween
-            intro()
-            basicWords()
-            textGroup()
+            triggerDefaults.containerAnimation = scrollTween;
+            intro();
+            basicWords();
+            textGroup();
           },
-        )
-      }
+        );
+      };
 
-      createTimelines()
+      createTimelines();
     },
     { scope: container },
-  )
+  );
 
   return (
     <section ref={container} className="overflow-hidden">
-      <div className="home-animate__trigger invisible flex min-h-dvh w-fit [&>*]:flex-shrink-0">
+      <div className="home-animate__trigger invisible flex min-h-dvh w-fit *:shrink-0">
         <div className="home-animate__landing w-screen py-[18vh] pt-[20vh]">
           <div className="home-animate__intro px-safe-max-4 container relative mx-auto md:px-0">
             <div className="md:max-w-3/5">
@@ -219,5 +217,5 @@ export default function HomeAnimate({ messages }: Props) {
         ))}
       </FlairFollower>
     </section>
-  )
+  );
 }

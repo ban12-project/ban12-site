@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { ReactEventHandler, useActionState, useTransition } from 'react'
-import { Button } from '@repo/ui/components/button'
-import { Loader2 } from 'lucide-react'
-import { useSession } from 'next-auth/react'
-import { signIn } from 'next-auth/webauthn'
+import { Button } from '@repo/ui/components/button';
+import { Loader2 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/webauthn';
+import { type ReactEventHandler, useActionState, useTransition } from 'react';
 
-import { login } from '#/app/[lang]/(auth)/actions'
+import { login } from '#/app/[lang]/(auth)/actions';
 
-import CloudflareTurnstile from './cloudflare-turnstile'
+import CloudflareTurnstile from './cloudflare-turnstile';
 
 export default function LoginForm() {
-  const [errorMessage, dispatch, pending] = useActionState(login, undefined)
-  const { status } = useSession()
-  const [isPending, startTransition] = useTransition()
+  const [errorMessage, dispatch, pending] = useActionState(login, undefined);
+  const { status } = useSession();
+  const [isPending, startTransition] = useTransition();
 
   const onSubmit: ReactEventHandler = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const formData = new FormData(e.target as HTMLFormElement)
+    const formData = new FormData(e.target as HTMLFormElement);
     // const name = formData.get('name')
-    const email = formData.get('email')
+    const email = formData.get('email');
 
     startTransition(async () => {
       // if (status === 'authenticated') {
@@ -31,12 +31,12 @@ export default function LoginForm() {
       //   void signIn('passkey', { email })
       // }
       try {
-        await signIn('passkey', { action: 'authenticate', email })
+        await signIn('passkey', { action: 'authenticate', email });
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    })
-  }
+    });
+  };
 
   return (
     <div className="space-y-3 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -157,5 +157,5 @@ export default function LoginForm() {
         </Button>
       </form>
     </div>
-  )
+  );
 }

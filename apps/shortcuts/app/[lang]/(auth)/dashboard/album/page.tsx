@@ -1,14 +1,13 @@
-import { Link } from '@repo/i18n/client'
-import { Button } from '@repo/ui/components/button'
+import { Link } from '@repo/i18n/client';
+import { Button } from '@repo/ui/components/button';
+import { type Columns, DashboardTable } from '#/components/dashboard-table';
+import { getAlbums } from '#/lib/db/queries';
+import type { SelectAlbum } from '#/lib/db/schema';
+import { LocalizedHelper } from '#/lib/utils';
 
-import { getAlbums } from '#/lib/db/queries'
-import type { SelectAlbum } from '#/lib/db/schema'
-import { LocalizedHelper } from '#/lib/utils'
-import { Columns, DashboardTable } from '#/components/dashboard-table'
+import { deleteAlbum } from '../../actions';
 
-import { deleteAlbum } from '../../actions'
-
-const localizedHelper = new LocalizedHelper()
+const localizedHelper = new LocalizedHelper();
 
 const albumsTableColumns: Columns<SelectAlbum> = [
   {
@@ -63,10 +62,10 @@ const albumsTableColumns: Columns<SelectAlbum> = [
     ),
     className: 'sticky right-0 text-right',
   },
-]
+];
 
 export default async function AlbumPage() {
-  const albums = await getAlbums()
+  const albums = await getAlbums();
 
   return (
     <>
@@ -78,5 +77,5 @@ export default async function AlbumPage() {
       </div>
       <DashboardTable columns={albumsTableColumns} data={albums} />
     </>
-  )
+  );
 }

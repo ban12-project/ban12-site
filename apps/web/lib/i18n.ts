@@ -1,4 +1,4 @@
-import { createI18n } from '@repo/i18n/server'
+import { createI18n } from '@repo/i18n/server';
 
 export const i18n = {
   defaultLocale: 'en',
@@ -12,14 +12,14 @@ export const i18n = {
       label: '简体中文',
     },
   },
-} as const
+} as const;
 
-export type Locale = keyof (typeof i18n)['locales']
+export type Locale = keyof (typeof i18n)['locales'];
 
-export type Messages = Awaited<ReturnType<typeof getDictionary>>
+export type Messages = Awaited<ReturnType<typeof getDictionary>>;
 
 export const { middleware, getDictionary } = createI18n(i18n, {
   en: () => import('../dictionaries/en.json').then((module) => module.default),
   'zh-CN': () =>
     import('../dictionaries/zh-CN.json').then((module) => module.default),
-})
+});

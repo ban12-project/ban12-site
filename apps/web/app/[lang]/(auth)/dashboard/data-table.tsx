@@ -1,22 +1,21 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { Button } from '@repo/ui/components/button'
+import { Button } from '@repo/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@repo/ui/components/dropdown-menu'
-import { Input } from '@repo/ui/components/input'
-import { Label } from '@repo/ui/components/label'
+} from '@repo/ui/components/dropdown-menu';
+import { Input } from '@repo/ui/components/input';
+import { Label } from '@repo/ui/components/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@repo/ui/components/select'
+} from '@repo/ui/components/select';
 import {
   Table,
   TableBody,
@@ -24,32 +23,33 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@repo/ui/components/table'
+} from '@repo/ui/components/table';
 import {
-  ColumnDef,
-  ColumnFiltersState,
+  type ColumnDef,
+  type ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  Table as PrimitiveTable,
-  SortingState,
+  type Table as PrimitiveTable,
+  type SortingState,
   useReactTable,
-  VisibilityState,
-} from '@tanstack/react-table'
+  type VisibilityState,
+} from '@tanstack/react-table';
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-} from 'lucide-react'
+} from 'lucide-react';
+import * as React from 'react';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  header?: React.ComponentType<{ table: PrimitiveTable<TData> }>
-  defaultSorting?: SortingState
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  header?: React.ComponentType<{ table: PrimitiveTable<TData> }>;
+  defaultSorting?: SortingState;
 }
 
 export function DataTable<TData, TValue>({
@@ -59,19 +59,19 @@ export function DataTable<TData, TValue>({
   defaultSorting = [],
 }: DataTableProps<TData, TValue>) {
   // https://github.com/TanStack/table/issues/5567
-  'use no memo'
+  'use no memo';
 
-  const [sorting, setSorting] = React.useState<SortingState>(defaultSorting)
+  const [sorting, setSorting] = React.useState<SortingState>(defaultSorting);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
-  )
-  const [globalFilter, setGlobalFilter] = React.useState('')
+  );
+  const [globalFilter, setGlobalFilter] = React.useState('');
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+    React.useState<VisibilityState>({});
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
-  })
+  });
 
   const table = useReactTable({
     data,
@@ -92,7 +92,7 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       pagination,
     },
-  })
+  });
 
   return (
     <>
@@ -126,7 +126,7 @@ export function DataTable<TData, TValue>({
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -146,7 +146,7 @@ export function DataTable<TData, TValue>({
                             header.getContext(),
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -190,7 +190,7 @@ export function DataTable<TData, TValue>({
             <Select
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value) => {
-                table.setPageSize(Number(value))
+                table.setPageSize(Number(value));
               }}
             >
               <SelectTrigger size="sm" className="w-20" id="rows-per-page">
@@ -255,5 +255,5 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
     </>
-  )
+  );
 }

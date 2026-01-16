@@ -1,25 +1,24 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Button } from '@repo/ui/components/button'
-import { cn } from '@repo/ui/lib/utils'
-import { Drawer } from 'vaul'
+import { Button } from '@repo/ui/components/button';
+import { useResponsive } from '@repo/ui/hooks/use-responsive';
+import { cn } from '@repo/ui/lib/utils';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Drawer } from 'vaul';
+import useRootDirection from '#/hooks/use-root-direction';
+import type { Messages } from '#/lib/i18n';
 
-import type { Messages } from '#/lib/i18n'
-import { useResponsive } from '@repo/ui/hooks/use-responsive'
-import useRootDirection from '#/hooks/use-root-direction'
-
-type RawDrawerProps = React.ComponentProps<typeof Drawer.Root>
+type RawDrawerProps = React.ComponentProps<typeof Drawer.Root>;
 
 export type PageDrawerProps = RawDrawerProps &
   React.InputHTMLAttributes<HTMLDivElement> & {
-    header?: React.ReactNode
-    children: React.ReactNode
-    messages: Messages
-  }
+    header?: React.ReactNode;
+    children: React.ReactNode;
+    messages: Messages;
+  };
 
-export const PAGE_DRAWER_HEADER_ID = 'PAGE_DRAWER_HEADER_ID'
+export const PAGE_DRAWER_HEADER_ID = 'PAGE_DRAWER_HEADER_ID';
 
 export default function PageDrawer({
   className,
@@ -28,17 +27,17 @@ export default function PageDrawer({
   messages,
   ...rest
 }: PageDrawerProps) {
-  const router = useRouter()
-  const [open, setOpen] = useState(true)
+  const router = useRouter();
+  const [open, setOpen] = useState(true);
 
-  const { breakpoints } = useResponsive()
+  const { breakpoints } = useResponsive();
   const direction = useRootDirection((dir) =>
     dir === 'ltr' ? 'right' : 'left',
-  )
+  );
 
   const onAnimationEnd: RawDrawerProps['onAnimationEnd'] = (open) => {
-    if (!open) router.back()
-  }
+    if (!open) router.back();
+  };
 
   return (
     <Drawer.Root
@@ -79,5 +78,5 @@ export default function PageDrawer({
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
-  )
+  );
 }

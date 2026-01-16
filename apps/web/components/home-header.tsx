@@ -1,14 +1,13 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { Link } from '@repo/i18n/client'
+import { Link } from '@repo/i18n/client';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@repo/ui/components/accordion'
-import { Button } from '@repo/ui/components/button'
+} from '@repo/ui/components/accordion';
+import { Button } from '@repo/ui/components/button';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -16,14 +15,15 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
   NavigationMenuViewport,
-} from '@repo/ui/components/navigation-menu'
+  navigationMenuTriggerStyle,
+} from '@repo/ui/components/navigation-menu';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@repo/ui/components/popover'
+} from '@repo/ui/components/popover';
+import * as React from 'react';
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -50,7 +50,7 @@ const components: { title: string; href: string; description: string }[] = [
     description:
       'Compare text differences quickly and efficiently in your browser with this WebAssembly-powered tool.',
   },
-]
+];
 
 export default function HomeHeader() {
   return (
@@ -62,11 +62,11 @@ export default function HomeHeader() {
         <NavMenu />
       </nav>
     </header>
-  )
+  );
 }
 
 function NavMenu() {
-  const ref = React.useRef<{ toggle: () => void }>(null)
+  const ref = React.useRef<{ toggle: () => void }>(null);
 
   return (
     <>
@@ -129,7 +129,7 @@ function NavMenu() {
               <Link href="https://toys.ban12.com">Toys</Link>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+              <ul className="grid w-100 gap-2 md:w-125 md:grid-cols-2 lg:w-150">
                 {components.map((component) => (
                   <ListItem
                     key={component.title}
@@ -162,7 +162,7 @@ function NavMenu() {
         <NavigationMenuViewport />
       </NavigationMenu>
     </>
-  )
+  );
 }
 
 function ListItem({
@@ -182,35 +182,36 @@ function ListItem({
         </Link>
       </NavigationMenuLink>
     </li>
-  )
+  );
 }
 
 function MenuTriggerBread({
   ref,
 }: {
-  ref?: React.Ref<{ toggle: () => void }>
+  ref?: React.Ref<{ toggle: () => void }>;
 }) {
-  const openTop = React.useRef<SVGAnimateElement>(null)
-  const openBottom = React.useRef<SVGAnimateElement>(null)
-  const closeTop = React.useRef<SVGAnimateElement>(null)
-  const closeBottom = React.useRef<SVGAnimateElement>(null)
-  const isOpen = React.useRef(false)
+  const openTop = React.useRef<SVGAnimateElement>(null);
+  const openBottom = React.useRef<SVGAnimateElement>(null);
+  const closeTop = React.useRef<SVGAnimateElement>(null);
+  const closeBottom = React.useRef<SVGAnimateElement>(null);
+  const isOpen = React.useRef(false);
 
-  const toggle = () => {
+  const toggle = React.useCallback(() => {
     if (isOpen.current) {
-      closeTop.current?.beginElement()
-      closeBottom.current?.beginElement()
+      closeTop.current?.beginElement();
+      closeBottom.current?.beginElement();
     } else {
-      openTop.current?.beginElement()
-      openBottom.current?.beginElement()
+      openTop.current?.beginElement();
+      openBottom.current?.beginElement();
     }
-    isOpen.current = !isOpen.current
-  }
+    isOpen.current = !isOpen.current;
+  }, []);
 
-  React.useImperativeHandle(ref, () => ({ toggle }), [])
+  React.useImperativeHandle(ref, () => ({ toggle }), [toggle]);
 
   return (
     <svg width="18" height="18" viewBox="0 0 18 18">
+      <title>Menu</title>
       <polyline
         fill="none"
         stroke="currentColor"
@@ -274,5 +275,5 @@ function MenuTriggerBread({
         ></animate>
       </polyline>
     </svg>
-  )
+  );
 }

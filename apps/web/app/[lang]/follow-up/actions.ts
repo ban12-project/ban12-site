@@ -1,30 +1,30 @@
-'use server'
+'use server';
 
-import { cacheTag } from 'next/cache'
+import { cacheTag } from 'next/cache';
 
 import {
   getRestaurantById,
   getRestaurantWithPostsByName,
-} from '#/lib/db/queries'
+} from '#/lib/db/queries';
 
 export async function getCachedRestaurantById(id: string) {
-  'use cache'
-  cacheTag(`restaurant:${id}`)
+  'use cache';
+  cacheTag(`restaurant:${id}`);
 
-  const restaurant = await getRestaurantById(id)
-  return restaurant
+  const restaurant = await getRestaurantById(id);
+  return restaurant;
 }
 
 export async function getCachedRestaurantWithPostsByName(name: string) {
-  'use cache'
-  cacheTag(`restaurant:${name}`)
+  'use cache';
+  cacheTag(`restaurant:${name}`);
 
   const restaurant = await getRestaurantWithPostsByName(
     decodeURIComponent(name),
-  )
-  return restaurant
+  );
+  return restaurant;
 }
 
 export type RestaurantWithPosts = Awaited<
   ReturnType<typeof getCachedRestaurantWithPostsByName>
->
+>;

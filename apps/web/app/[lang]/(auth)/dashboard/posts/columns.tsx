@@ -1,8 +1,7 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@repo/ui/components/button'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@repo/ui/components/button';
 import {
   Dialog,
   DialogClose,
@@ -11,7 +10,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@repo/ui/components/dialog'
+} from '@repo/ui/components/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,53 +18,53 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@repo/ui/components/dropdown-menu'
+} from '@repo/ui/components/dropdown-menu';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
-} from '@repo/ui/components/form'
+} from '@repo/ui/components/form';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from '@repo/ui/components/hover-card'
-import { Input } from '@repo/ui/components/input'
-import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown, LoaderCircleIcon, MoreHorizontal } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import * as z from 'zod'
+} from '@repo/ui/components/hover-card';
+import { Input } from '@repo/ui/components/input';
+import type { ColumnDef } from '@tanstack/react-table';
+import { ArrowUpDown, LoaderCircleIcon, MoreHorizontal } from 'lucide-react';
+import * as React from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import * as z from 'zod';
 
-import type { SelectPost, SelectPostsToRestaurants } from '#/lib/db/schema'
+import type { SelectPost, SelectPostsToRestaurants } from '#/lib/db/schema';
 
-import { linkPostToNewRestaurant, linkPostToRestaurant } from '../../actions'
+import { linkPostToNewRestaurant, linkPostToRestaurant } from '../../actions';
 
-type Row = SelectPost & { postsToRestaurants: SelectPostsToRestaurants | null }
+type Row = SelectPost & { postsToRestaurants: SelectPostsToRestaurants | null };
 
 const parseLengthToSeconds = (lengthStr: string | undefined | null): number => {
-  if (!lengthStr || typeof lengthStr !== 'string') return 0
-  const parts = lengthStr.split(':').map(Number)
-  let seconds = 0
-  if (parts.some(isNaN)) return 0 // Handle cases like "N/A" or malformed strings
+  if (!lengthStr || typeof lengthStr !== 'string') return 0;
+  const parts = lengthStr.split(':').map(Number);
+  let seconds = 0;
+  if (parts.some(Number.isNaN)) return 0; // Handle cases like "N/A" or malformed strings
 
   if (parts.length === 1) {
     // ss
-    seconds = parts[0]
+    seconds = parts[0];
   } else if (parts.length === 2) {
     // mm:ss
-    seconds = parts[0] * 60 + parts[1]
+    seconds = parts[0] * 60 + parts[1];
   } else if (parts.length === 3) {
     // hh:mm:ss
-    seconds = parts[0] * 3600 + parts[1] * 60 + parts[2]
+    seconds = parts[0] * 3600 + parts[1] * 60 + parts[2];
   } else {
-    return 0 // Invalid format
+    return 0; // Invalid format
   }
-  return seconds
-}
+  return seconds;
+};
 
 export const columns: ColumnDef<Row>[] = [
   {
@@ -126,12 +125,12 @@ export const columns: ColumnDef<Row>[] = [
           Length
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     sortingFn: (rowA, rowB) => {
-      const a = parseLengthToSeconds(rowA.original.metadata.length)
-      const b = parseLengthToSeconds(rowB.original.metadata.length)
-      return a - b
+      const a = parseLengthToSeconds(rowA.original.metadata.length);
+      const b = parseLengthToSeconds(rowB.original.metadata.length);
+      return a - b;
     },
   },
   {
@@ -170,12 +169,12 @@ export const columns: ColumnDef<Row>[] = [
     header: 'Actions',
     cell: ({ row }) => <Actions row={row.original} />,
   },
-]
+];
 
 function Actions({ row }: { row: Row }) {
   const [dialogActive, setDialogActive] =
-    React.useState<'linkRestaurant'>('linkRestaurant')
-  const [open, setOpen] = React.useState(false)
+    React.useState<'linkRestaurant'>('linkRestaurant');
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -196,8 +195,8 @@ function Actions({ row }: { row: Row }) {
           )}
           <DropdownMenuItem
             onClick={() => {
-              setOpen(true)
-              setDialogActive('linkRestaurant')
+              setOpen(true);
+              setDialogActive('linkRestaurant');
             }}
           >
             link restaurant
@@ -211,22 +210,22 @@ function Actions({ row }: { row: Row }) {
         )}
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
-const initialState = { message: '', errors: {} }
+const initialState = { message: '', errors: {} };
 
 function LinkNewRestaurantForm({ row }: { row: Row }) {
   const [state, action, pending] = React.useActionState(
     linkPostToNewRestaurant,
     initialState,
-  )
+  );
 
   React.useEffect(() => {
     if (state.message) {
-      toast.error(state.message)
+      toast.error(state.message);
     }
-  }, [state.message])
+  }, [state.message]);
 
   return (
     <form action={action}>
@@ -240,25 +239,25 @@ function LinkNewRestaurantForm({ row }: { row: Row }) {
       </Button>
       <input type="hidden" name="postId" value={row.id} />
     </form>
-  )
+  );
 }
 
 const formSchema = z.object({
   postId: z.string().min(1, 'Post ID is required'),
   restaurantId: z.string().min(1, 'Restaurant ID is required'),
-})
+});
 
 function LinkRestaurantForm({
   row,
   setOpen,
 }: {
-  row: Row
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  row: Row;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [state, action, pending] = React.useActionState(
     linkPostToRestaurant,
     initialState,
-  )
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -266,27 +265,27 @@ function LinkRestaurantForm({
       postId: row.id.toString(),
       restaurantId: '',
     },
-  })
+  });
 
   const onSubmit: React.ReactEventHandler<
     React.ComponentRef<'button'>
   > = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const currentTarget = e.currentTarget
+    const currentTarget = e.currentTarget;
 
-    const isValid = await form.trigger()
-    if (!isValid) return
+    const isValid = await form.trigger();
+    if (!isValid) return;
 
-    currentTarget.form?.requestSubmit()
-  }
+    currentTarget.form?.requestSubmit();
+  };
 
   React.useEffect(() => {
-    if (state.message !== 'success') return
+    if (state.message !== 'success') return;
 
-    form.reset()
-    setOpen(false)
-  }, [form, setOpen, state.message])
+    form.reset();
+    setOpen(false);
+  }, [form, setOpen, state.message]);
 
   return (
     <Form {...form}>
@@ -333,5 +332,5 @@ function LinkRestaurantForm({
         </DialogFooter>
       </form>
     </Form>
-  )
+  );
 }

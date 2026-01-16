@@ -8,7 +8,7 @@
     "./server": "./server.ts"
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0"
+    "lint": "biome check --write"
   },
   "peerDependencies": {
     "next": "catalog:",
@@ -20,12 +20,11 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
+    "@repo/biome-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/negotiator": "^0.6.3",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
-    "eslint": "catalog:",
     "typescript": "catalog:"
   }
 }

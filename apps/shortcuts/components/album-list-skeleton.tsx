@@ -1,14 +1,14 @@
-import { Skeleton } from '@repo/ui/components/skeleton'
+import { Skeleton } from '@repo/ui/components/skeleton';
 
 type AlbumListSkeletonProps = {
-  num?: number
-}
+  num?: number;
+};
 
 export default function AlbumListSkeleton({ num = 2 }: AlbumListSkeletonProps) {
   return (
     <div className="container-full">
-      {[...Array<unknown>(num)].map((_, index) => (
-        <div className="lg:pb-10" key={index}>
+      {[...Array<number>(num)].map((_) => (
+        <div className="lg:pb-10" key={_}>
           <div className="pb-1.5">
             <div className="pb-2 pt-5 lg:hidden">
               <Skeleton className="h-6" />
@@ -24,5 +24,5 @@ export default function AlbumListSkeleton({ num = 2 }: AlbumListSkeletonProps) {
         </div>
       ))}
     </div>
-  )
+  );
 }

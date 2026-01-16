@@ -1,25 +1,25 @@
-import 'server-only'
+import 'server-only';
 
-import { cacheTag } from 'next/cache'
-import { Redis } from '@upstash/redis'
-import { eq, or, sql } from 'drizzle-orm'
-import { drizzle } from 'drizzle-orm/postgres-js'
+import { Redis } from '@upstash/redis';
+import { eq, or, sql } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import { cacheTag } from 'next/cache';
 
-import * as schema from './schema'
+import * as schema from './schema';
 import {
   album,
   collection,
-  shortcut,
   type LocalizedString,
   type SelectShortcut,
-} from './schema'
+  shortcut,
+} from './schema';
 
-const redis = Redis.fromEnv()
+const redis = Redis.fromEnv();
 
-const connectionString = process.env.DATABASE_URL
-if (!connectionString) throw new Error('Not valid database url')
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) throw new Error('Not valid database url');
 
-export const db = drizzle(connectionString, { schema })
+export const db = drizzle(connectionString, { schema });
 
 const CACHE_TTL = {
   SHORTCUT: 3600, // 1小时
@@ -28,17 +28,17 @@ const CACHE_TTL = {
   COLLECTIONS: 3600, // 1小时
   ALBUMS_WITH_SHORTCUTS: 1800, // 30分钟
   SEARCH: 900, // 15分钟
-}
+};
 
 export async function getUser(email: string) {
   try {
     const user = await db.query.users.findFirst({
       where: (user, { eq }) => eq(user.email, email),
-    })
-    return user
+    });
+    return user;
   } catch (error) {
-    console.error('Failed to get user from database')
-    throw error
+    console.error('Failed to get user from database');
+    throw error;
   }
 }
 
@@ -56,16 +56,16 @@ export async function saveShortcut({
   collectionId = null,
   albumId,
 }: {
-  uuid: string
-  icloud: string
-  name: LocalizedString
-  description: LocalizedString
-  icon: string
-  backgroundColor: string
-  details: string | null
-  language: string
-  collectionId: number | null
-  albumId: number | null
+  uuid: string;
+  icloud: string;
+  name: LocalizedString;
+  description: LocalizedString;
+  icon: string;
+  backgroundColor: string;
+  details: string | null;
+  language: string;
+  collectionId: number | null;
+  albumId: number | null;
 }) {
   try {
     await db.insert(shortcut).values({
@@ -80,15 +80,15 @@ export async function saveShortcut({
       language,
       collectionId,
       albumId,
-    })
+    });
 
-    await redis.del(`shortcut:uuid:${uuid}`)
+    await redis.del(`shortcut:uuid:${uuid}`);
     if (albumId) {
-      await redis.del(`shortcuts:album:${albumId}:*`)
+      await redis.del(`shortcuts:album:${albumId}:*`);
     }
   } catch (error) {
-    console.error('Failed to save shortcut in database')
-    throw error
+    console.error('Failed to save shortcut in database');
+    throw error;
   }
 }
 
@@ -104,16 +104,16 @@ export async function updateShortcutByUuid({
   collectionId = null,
   albumId,
 }: {
-  uuid: string
-  icloud: string
-  name: LocalizedString
-  description?: LocalizedString
-  icon: string
-  backgroundColor: string
-  details: string | null
-  language: string
-  collectionId: number | null
-  albumId: number | null
+  uuid: string;
+  icloud: string;
+  name: LocalizedString;
+  description?: LocalizedString;
+  icon: string;
+  backgroundColor: string;
+  details: string | null;
+  language: string;
+  collectionId: number | null;
+  albumId: number | null;
 }) {
   try {
     await db
@@ -131,81 +131,81 @@ export async function updateShortcutByUuid({
         collectionId,
         albumId,
       })
-      .where(eq(shortcut.uuid, uuid))
+      .where(eq(shortcut.uuid, uuid));
 
-    await redis.del(`shortcut:uuid:${uuid}`)
+    await redis.del(`shortcut:uuid:${uuid}`);
     if (albumId) {
-      await redis.del(`shortcuts:album:${albumId}:*`)
+      await redis.del(`shortcuts:album:${albumId}:*`);
     }
   } catch (error) {
-    console.error('Failed to update shortcut in database')
-    throw error
+    console.error('Failed to update shortcut in database');
+    throw error;
   }
 }
 
 export async function deleteShortcutByUuid(uuid: string) {
   try {
-    await db.delete(shortcut).where(eq(shortcut.uuid, uuid))
+    await db.delete(shortcut).where(eq(shortcut.uuid, uuid));
 
-    await redis.del(`shortcut:uuid:${uuid}`)
+    await redis.del(`shortcut:uuid:${uuid}`);
   } catch (error) {
-    console.error('Failed to delete shortcut in database')
-    throw error
+    console.error('Failed to delete shortcut in database');
+    throw error;
   }
 }
 
 export const getShortcuts = async () => {
-  'use cache'
-  cacheTag('shortcut')
+  'use cache';
+  cacheTag('shortcut');
 
   try {
-    const shortcuts = await db.query.shortcut.findMany()
-    return shortcuts
+    const shortcuts = await db.query.shortcut.findMany();
+    return shortcuts;
   } catch (error) {
-    console.error('Failed to get shortcuts from database')
-    throw error
+    console.error('Failed to get shortcuts from database');
+    throw error;
   }
-}
+};
 
 export const getShortcutByUuid = async (uuid: string) => {
-  'use cache'
-  cacheTag('shortcut')
+  'use cache';
+  cacheTag('shortcut');
 
-  const redisCacheKey = `shortcut:uuid:${uuid}`
+  const redisCacheKey = `shortcut:uuid:${uuid}`;
 
   try {
-    const cachedShortcut = await redis.get<SelectShortcut>(redisCacheKey)
-    if (cachedShortcut) return cachedShortcut
+    const cachedShortcut = await redis.get<SelectShortcut>(redisCacheKey);
+    if (cachedShortcut) return cachedShortcut;
 
     const shortcut = await db.query.shortcut.findFirst({
       where: (shortcut, { eq }) => eq(shortcut.uuid, uuid),
-    })
+    });
 
     if (shortcut) {
-      await redis.set(redisCacheKey, shortcut, { ex: CACHE_TTL.SHORTCUT })
+      await redis.set(redisCacheKey, shortcut, { ex: CACHE_TTL.SHORTCUT });
     }
 
-    return shortcut
+    return shortcut;
   } catch (error) {
-    console.error('Failed to get shortcut from database')
-    throw error
+    console.error('Failed to get shortcut from database');
+    throw error;
   }
-}
+};
 
 export const getShortcutByAlbumId = async (
   albumId: number,
   pageSize: number,
   currentPage: number,
 ) => {
-  'use cache'
-  cacheTag('shortcut')
+  'use cache';
+  cacheTag('shortcut');
 
-  const redisCacheKey = `shortcuts:album:${albumId}:page:${currentPage}:size:${pageSize}`
+  const redisCacheKey = `shortcuts:album:${albumId}:page:${currentPage}:size:${pageSize}`;
 
   try {
-    const cachedShortcuts = await redis.get<SelectShortcut[]>(redisCacheKey)
+    const cachedShortcuts = await redis.get<SelectShortcut[]>(redisCacheKey);
     if (cachedShortcuts) {
-      return cachedShortcuts
+      return cachedShortcuts;
     }
 
     const shortcuts = await db.query.shortcut.findMany({
@@ -213,28 +213,28 @@ export const getShortcutByAlbumId = async (
       limit: pageSize,
       offset: (currentPage - 1) * pageSize,
       orderBy: (shortcuts, { desc }) => desc(shortcuts.updatedAt),
-    })
+    });
 
     if (shortcuts.length > 0) {
       await redis.set(redisCacheKey, shortcuts, {
         ex: CACHE_TTL.SHORTCUTS_BY_ALBUM,
-      })
+      });
     }
 
-    return shortcuts
+    return shortcuts;
   } catch (error) {
-    console.error('Failed to get shortcut from database')
-    throw error
+    console.error('Failed to get shortcut from database');
+    throw error;
   }
-}
+};
 
 export async function searchShortcutsByQuery(query: string) {
-  const cacheKey = `search:${query}`
+  const cacheKey = `search:${query}`;
 
   try {
-    const cachedResults = await redis.get<SelectShortcut[]>(cacheKey)
+    const cachedResults = await redis.get<SelectShortcut[]>(cacheKey);
     if (cachedResults) {
-      return cachedResults
+      return cachedResults;
     }
 
     const shortcuts = await db
@@ -245,16 +245,16 @@ export async function searchShortcutsByQuery(query: string) {
           sql`${shortcut.name}::text ILIKE ${`%${query}%`}`,
           sql`${shortcut.description}::text ILIKE ${`%${query}%`}`,
         ),
-      )
+      );
 
     if (shortcuts.length > 0) {
-      await redis.set(cacheKey, shortcuts, { ex: CACHE_TTL.SEARCH })
+      await redis.set(cacheKey, shortcuts, { ex: CACHE_TTL.SEARCH });
     }
 
-    return shortcuts
+    return shortcuts;
   } catch (error) {
-    console.error('Failed to get shortcut from database')
-    throw error
+    console.error('Failed to get shortcut from database');
+    throw error;
   }
 }
 
@@ -264,9 +264,9 @@ export async function saveCollection({
   image,
   textColor,
 }: {
-  title: LocalizedString
-  image: string
-  textColor: string
+  title: LocalizedString;
+  image: string;
+  textColor: string;
 }) {
   try {
     await db.insert(collection).values({
@@ -274,10 +274,10 @@ export async function saveCollection({
       title,
       image,
       textColor,
-    })
+    });
   } catch (error) {
-    console.error('Failed to save collection in database')
-    throw error
+    console.error('Failed to save collection in database');
+    throw error;
   }
 }
 
@@ -287,10 +287,10 @@ export async function updateCollectionById({
   image,
   textColor,
 }: {
-  id: number
-  title: LocalizedString
-  image: string
-  textColor: string
+  id: number;
+  title: LocalizedString;
+  image: string;
+  textColor: string;
 }) {
   try {
     await db
@@ -301,53 +301,53 @@ export async function updateCollectionById({
         image,
         textColor,
       })
-      .where(eq(collection.id, id))
+      .where(eq(collection.id, id));
   } catch (error) {
-    console.error('Failed to update collection in database')
-    throw error
+    console.error('Failed to update collection in database');
+    throw error;
   }
 }
 
 export async function deleteCollectionById(id: number) {
   try {
-    await db.delete(collection).where(eq(collection.id, id))
+    await db.delete(collection).where(eq(collection.id, id));
   } catch (error) {
-    console.error('Failed to delete collection in database')
-    throw error
+    console.error('Failed to delete collection in database');
+    throw error;
   }
 }
 
 export const getCollections = async () => {
-  'use cache'
-  cacheTag('collection')
+  'use cache';
+  cacheTag('collection');
 
   try {
-    const collections = await db.query.collection.findMany()
+    const collections = await db.query.collection.findMany();
 
-    return collections
+    return collections;
   } catch (error) {
-    console.error('Failed to get collections from database')
-    throw error
+    console.error('Failed to get collections from database');
+    throw error;
   }
-}
+};
 
 export async function getCollectionById(id: number) {
   try {
     const collection = await db.query.collection.findFirst({
       where: (collection, { eq }) => eq(collection.id, id),
-    })
-    return collection
+    });
+    return collection;
   } catch (error) {
-    console.error('Failed to get collection from database')
-    throw error
+    console.error('Failed to get collection from database');
+    throw error;
   }
 }
 
 export async function getCollectionByIdWithAlbumsAndShortcuts(id: number) {
-  'use cache'
-  cacheTag('collection')
-  cacheTag('album')
-  cacheTag('shortcut')
+  'use cache';
+  cacheTag('collection');
+  cacheTag('album');
+  cacheTag('shortcut');
 
   try {
     const collection = await db.query.collection.findFirst({
@@ -360,11 +360,11 @@ export async function getCollectionByIdWithAlbumsAndShortcuts(id: number) {
         },
         shortcuts: true,
       },
-    })
-    return collection
+    });
+    return collection;
   } catch (error) {
-    console.error('Failed to get collection from database')
-    throw error
+    console.error('Failed to get collection from database');
+    throw error;
   }
 }
 
@@ -374,9 +374,9 @@ export async function saveAlbum({
   description,
   collectionId,
 }: {
-  title: LocalizedString
-  description: LocalizedString
-  collectionId: number | null
+  title: LocalizedString;
+  description: LocalizedString;
+  collectionId: number | null;
 }) {
   try {
     await db.insert(album).values({
@@ -384,10 +384,10 @@ export async function saveAlbum({
       title,
       description,
       collectionId,
-    })
+    });
   } catch (error) {
-    console.error('Failed to save album in database')
-    throw error
+    console.error('Failed to save album in database');
+    throw error;
   }
 }
 
@@ -397,10 +397,10 @@ export async function updateAlbumById({
   description,
   collectionId,
 }: {
-  id: number
-  title: LocalizedString
-  description: LocalizedString
-  collectionId: number | null
+  id: number;
+  title: LocalizedString;
+  description: LocalizedString;
+  collectionId: number | null;
 }) {
   try {
     await db
@@ -411,52 +411,52 @@ export async function updateAlbumById({
         description,
         collectionId,
       })
-      .where(eq(album.id, id))
+      .where(eq(album.id, id));
   } catch (error) {
-    console.error('Failed to update album in database')
-    throw error
+    console.error('Failed to update album in database');
+    throw error;
   }
 }
 
 export async function deleteAlbumById(id: number) {
   try {
-    await db.delete(album).where(eq(album.id, id))
+    await db.delete(album).where(eq(album.id, id));
   } catch (error) {
-    console.error('Failed to delete album in database')
-    throw error
+    console.error('Failed to delete album in database');
+    throw error;
   }
 }
 
 export const getAlbums = async () => {
-  'use cache'
-  cacheTag('album')
+  'use cache';
+  cacheTag('album');
 
   try {
-    const albums = await db.query.album.findMany()
+    const albums = await db.query.album.findMany();
 
-    return albums
+    return albums;
   } catch (error) {
-    console.error('Failed to get albums from database')
-    throw error
+    console.error('Failed to get albums from database');
+    throw error;
   }
-}
+};
 
 export async function getAlbumById(id: number) {
   try {
     const album = await db.query.album.findFirst({
       where: (album, { eq }) => eq(album.id, id),
-    })
-    return album
+    });
+    return album;
   } catch (error) {
-    console.error('Failed to get album from database')
-    throw error
+    console.error('Failed to get album from database');
+    throw error;
   }
 }
 
 export const getAlbumsWithShortcuts = async (pageSize?: number) => {
-  'use cache'
-  cacheTag('album')
-  cacheTag('shortcut')
+  'use cache';
+  cacheTag('album');
+  cacheTag('shortcut');
 
   try {
     const albums = await db.query.album.findMany({
@@ -469,19 +469,19 @@ export const getAlbumsWithShortcuts = async (pageSize?: number) => {
             }
           : true,
       },
-    })
+    });
 
-    return albums
+    return albums;
   } catch (error) {
-    console.error('Failed to get albums from database')
-    throw error
+    console.error('Failed to get albums from database');
+    throw error;
   }
-}
+};
 
 export async function getAlbumByIdWithShortcuts(id: number) {
-  'use cache'
-  cacheTag('album')
-  cacheTag('shortcut')
+  'use cache';
+  cacheTag('album');
+  cacheTag('shortcut');
 
   try {
     const album = await db.query.album.findFirst({
@@ -489,10 +489,10 @@ export async function getAlbumByIdWithShortcuts(id: number) {
         shortcuts: true,
       },
       where: (album, { eq }) => eq(album.id, id),
-    })
-    return album
+    });
+    return album;
   } catch (error) {
-    console.error('Failed to get album from database')
-    throw error
+    console.error('Failed to get album from database');
+    throw error;
   }
 }

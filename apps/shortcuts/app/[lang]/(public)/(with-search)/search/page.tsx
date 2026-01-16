@@ -1,11 +1,10 @@
-import { Suspense } from 'react'
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { Loader } from 'lucide-react'
-
-import { getDictionary, i18n, type Locale } from '#/lib/i18n'
-import ShortcutList from '#/components/shortcut-list'
-import { searchShortcuts } from '#/app/[lang]/(public)/actions'
+import { Loader } from 'lucide-react';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+import { searchShortcuts } from '#/app/[lang]/(public)/actions';
+import ShortcutList from '#/components/shortcut-list';
+import { getDictionary, i18n, type Locale } from '#/lib/i18n';
 
 export default function SearchPage({
   params,
@@ -24,20 +23,20 @@ export default function SearchPage({
         <SearchResults params={params} searchParams={searchParams} />
       </Suspense>
     </main>
-  )
+  );
 }
 
 async function SearchResults(props: PageProps<'/[lang]/search'>) {
   const [{ lang }, searchParams] = await Promise.all([
     props.params as Promise<{ lang: Locale }>,
     props.searchParams,
-  ])
+  ]);
 
-  const messages = await getDictionary(lang)
-  const query = searchParams?.query || ''
-  if (!query) notFound()
+  const messages = await getDictionary(lang);
+  const query = searchParams?.query || '';
+  if (!query) notFound();
 
-  const result = await searchShortcuts(query as string)
+  const result = await searchShortcuts(query as string);
 
   return Array.isArray(result) ? (
     result.length === 0 ? (
@@ -51,16 +50,16 @@ async function SearchResults(props: PageProps<'/[lang]/search'>) {
     <p className="flex h-96 flex-col items-center justify-center text-zinc-500/90">
       {result.message}
     </p>
-  )
+  );
 }
 
 export async function generateMetadata(
   props: PageProps<'/[lang]/search'>,
 ): Promise<Metadata> {
-  const searchParams = await props.searchParams
-  const params = await props.params
-  const query = searchParams?.query || ''
-  const messages = await getDictionary(params.lang as Locale)
+  const searchParams = await props.searchParams;
+  const params = await props.params;
+  const query = searchParams?.query || '';
+  const messages = await getDictionary(params.lang as Locale);
 
   return {
     title: `${messages.common.search} ${query}`,
@@ -72,5 +71,5 @@ export async function generateMetadata(
         Object.keys(i18n.locales).map((lang) => [lang, `/${lang}/search`]),
       ),
     },
-  }
+  };
 }

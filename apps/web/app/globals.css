@@ -1,4 +1,4 @@
-@import '@repo/ui/globals.css';
+@import "@repo/ui/globals.css";
 
 @layer base {
   ::view-transition-old(.mapbox-fallback-exit) {
