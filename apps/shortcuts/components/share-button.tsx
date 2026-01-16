@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { Button } from '@repo/ui/components/button'
-import { Share } from 'lucide-react'
+import { Button } from '@repo/ui/components/button';
+import { Share } from 'lucide-react';
 
-import useWebShare from '#/hooks/use-web-share'
+import useWebShare from '#/hooks/use-web-share';
 
 export default function ShareButton() {
-  const { share } = useWebShare()
+  const { share } = useWebShare();
 
   return (
     <Button
@@ -17,5 +17,5 @@ export default function ShareButton() {
     >
       <Share />
     </Button>
-  )
+  );
 }

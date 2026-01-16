@@ -1,61 +1,61 @@
-'use client'
+'use client';
 
-import { useRef } from 'react'
-import { useGSAP } from '@gsap/react'
-import { useLocale } from '@repo/i18n/client'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { SplitText } from 'gsap/SplitText'
-import Highlighter from 'react-highlight-words'
+import { useGSAP } from '@gsap/react';
+import { useLocale } from '@repo/i18n/client';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+import { useRef } from 'react';
+import Highlighter from 'react-highlight-words';
 
-import { Messages } from '#/lib/i18n'
+import type { Messages } from '#/lib/i18n';
 
-gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger)
+gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger);
 
 type Props = {
-  messages: Messages['home']
-}
+  messages: Messages['home'];
+};
 
 export default function HomeIntro({ messages }: Props) {
-  const container = useRef<React.ComponentRef<'div'>>(null)
-  const { locale } = useLocale()
+  const container = useRef<React.ComponentRef<'div'>>(null);
+  const { locale } = useLocale();
 
   useGSAP(
     () => {
-      const selector = gsap.utils.selector(container)
-      const highlight = selector('.home-intro__highlight')
-      const subtitle = selector('.home-intro__subtitle')[0]
-      const body = selector('.home-intro__body')[0]
+      const selector = gsap.utils.selector(container);
+      const highlight = selector('.home-intro__highlight');
+      const subtitle = selector('.home-intro__subtitle')[0];
+      const body = selector('.home-intro__body')[0];
 
       const subtitleIn = () => {
         return gsap.from(subtitle, {
           yPercent: -100,
           autoAlpha: 0,
-        })
-      }
+        });
+      };
 
       const bodyIn = () => {
         return gsap.from(body, {
           y: -50,
           autoAlpha: 0,
-        })
-      }
+        });
+      };
 
       const createHighlight = () => {
-        const tl = gsap.timeline()
+        const tl = gsap.timeline();
 
-        const segmenter = new Intl.Segmenter(locale, { granularity: 'word' })
+        const segmenter = new Intl.Segmenter(locale, { granularity: 'word' });
         const split = new SplitText(highlight, {
           type: 'chars, words',
           wordsClass: 'home-intro__highlight-word',
           prepareText: (text) => {
             return [...segmenter.segment(text)]
               .map((s) => s.segment)
-              .join(String.fromCharCode(8204))
+              .join(String.fromCharCode(8204));
           },
           wordDelimiter: /\u200c/,
           autoSplit: true,
-        })
+        });
 
         tl.fromTo(
           split.chars,
@@ -79,10 +79,10 @@ export default function HomeIntro({ messages }: Props) {
         ).to(split.words[split.words.length - 1].children, {
           rotateX: '360deg',
           stagger: 0.2,
-        })
+        });
 
-        return tl
-      }
+        return tl;
+      };
 
       const createTimeline = () => {
         const tl = gsap.timeline({
@@ -91,23 +91,23 @@ export default function HomeIntro({ messages }: Props) {
             start: 'top 60%',
             once: true,
           },
-        })
+        });
 
-        tl.set(container.current, { autoAlpha: 1 })
+        tl.set(container.current, { autoAlpha: 1 });
 
-        const mm = gsap.matchMedia()
+        const mm = gsap.matchMedia();
 
         mm.add('(prefers-reduced-motion: no-preference)', () => {
-          tl.add(subtitleIn())
-          tl.add(bodyIn(), '>')
-          tl.add(createHighlight(), '-=.5')
-        })
-      }
+          tl.add(subtitleIn());
+          tl.add(bodyIn(), '>');
+          tl.add(createHighlight(), '-=.5');
+        });
+      };
 
-      createTimeline()
+      createTimeline();
     },
     { scope: container },
-  )
+  );
 
   return (
     <section>
@@ -135,5 +135,5 @@ export default function HomeIntro({ messages }: Props) {
         </div>
       </div>
     </section>
-  )
+  );
 }

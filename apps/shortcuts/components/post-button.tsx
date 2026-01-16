@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { useRef } from 'react'
-import { Link } from '@repo/i18n/client'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
-import { useGSAP } from '@gsap/react'
-import { Plus } from 'lucide-react'
+import { useGSAP } from '@gsap/react';
+import { Link } from '@repo/i18n/client';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+import { Plus } from 'lucide-react';
+import { useRef } from 'react';
 
 // Register GSAP plugins globally once
 if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger, useGSAP)
+  gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
 export default function PostButton(
   props: Partial<React.ComponentProps<typeof Link>>,
 ) {
-  const containerRef = useRef<HTMLAnchorElement>(null)
+  const containerRef = useRef<HTMLAnchorElement>(null);
 
   // Use useGSAP for automatic cleanup and scoped selectors
   useGSAP(
     () => {
-      if (!containerRef.current) return
+      if (!containerRef.current) return;
 
       // Entrance animation timeline tied to scroll position
       const tl = gsap.timeline({
@@ -29,7 +29,7 @@ export default function PostButton(
           start: '20px top',
           toggleActions: 'play none none reverse',
         },
-      })
+      });
 
       // Slide up from hidden state with a smooth elastic bounce
       tl.to(containerRef.current, {
@@ -37,7 +37,7 @@ export default function PostButton(
         opacity: 1,
         duration: 0.8,
         ease: 'elastic.out(1, 0.6)',
-      })
+      });
 
       // Pop the icon in after the container starts moving
       tl.from(
@@ -50,13 +50,13 @@ export default function PostButton(
           ease: 'back.out(2)',
         },
         '-=0.6',
-      )
+      );
     },
     { scope: containerRef },
-  )
+  );
 
   // Interaction-based animations using contextSafe for performance and hygiene
-  const { contextSafe } = useGSAP({ scope: containerRef })
+  const { contextSafe } = useGSAP({ scope: containerRef });
 
   const handleMouseEnter = contextSafe(() => {
     gsap.to(containerRef.current, {
@@ -65,8 +65,8 @@ export default function PostButton(
       duration: 0.3,
       ease: 'power3.out',
       overwrite: 'auto',
-    })
-  })
+    });
+  });
 
   const handleMouseLeave = contextSafe(() => {
     gsap.to(containerRef.current, {
@@ -75,24 +75,24 @@ export default function PostButton(
       duration: 0.3,
       ease: 'power3.out',
       overwrite: 'auto',
-    })
-  })
+    });
+  });
 
   const handleMouseDown = contextSafe(() => {
     gsap.to(containerRef.current, {
       scale: 0.95,
       duration: 0.1,
       ease: 'power3.out',
-    })
-  })
+    });
+  });
 
   const handleMouseUp = contextSafe(() => {
     gsap.to(containerRef.current, {
       scale: 1.15,
       duration: 0.2,
       ease: 'power3.out',
-    })
-  })
+    });
+  });
 
   return (
     <Link
@@ -111,6 +111,5 @@ export default function PostButton(
         strokeWidth={3}
       />
     </Link>
-  )
+  );
 }
-

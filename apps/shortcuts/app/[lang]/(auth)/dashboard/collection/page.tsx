@@ -1,14 +1,13 @@
-import { Link } from '@repo/i18n/client'
-import { Button } from '@repo/ui/components/button'
+import { Link } from '@repo/i18n/client';
+import { Button } from '@repo/ui/components/button';
+import { type Columns, DashboardTable } from '#/components/dashboard-table';
+import { getCollections } from '#/lib/db/queries';
+import type { SelectCollection } from '#/lib/db/schema';
+import { LocalizedHelper } from '#/lib/utils';
 
-import { getCollections } from '#/lib/db/queries'
-import type { SelectCollection } from '#/lib/db/schema'
-import { LocalizedHelper } from '#/lib/utils'
-import { Columns, DashboardTable } from '#/components/dashboard-table'
+import { deleteCollection } from '../../actions';
 
-import { deleteCollection } from '../../actions'
-
-const localizedHelper = new LocalizedHelper()
+const localizedHelper = new LocalizedHelper();
 
 const collectionsTableColumns: Columns<SelectCollection> = [
   {
@@ -56,10 +55,10 @@ const collectionsTableColumns: Columns<SelectCollection> = [
     ),
     className: 'sticky right-0 text-right',
   },
-]
+];
 
 export default async function CollectionPage() {
-  const collections = await getCollections()
+  const collections = await getCollections();
 
   return (
     <>
@@ -71,5 +70,5 @@ export default async function CollectionPage() {
       </div>
       <DashboardTable columns={collectionsTableColumns} data={collections} />
     </>
-  )
+  );
 }

@@ -1,1 +1,1 @@
-export { GET, POST } from '#/app/[lang]/(auth)/auth'
+export { GET, POST } from '#/app/[lang]/(auth)/auth';

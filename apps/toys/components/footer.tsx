@@ -1,6 +1,6 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
-import Ban12 from './ban12'
+import Ban12 from './ban12';
 
 export default function Footer() {
   return (
@@ -52,5 +52,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

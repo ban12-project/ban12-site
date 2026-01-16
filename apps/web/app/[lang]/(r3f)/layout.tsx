@@ -1,8 +1,8 @@
-import R3fEntry from '#/components/r3f-entry'
+import R3fEntry from '#/components/r3f-entry';
 
 type Props = Readonly<{
-  children: React.ReactNode
-}>
+  children: React.ReactNode;
+}>;
 
 export default function R3fLayout({ children }: Props) {
   return (
@@ -10,5 +10,5 @@ export default function R3fLayout({ children }: Props) {
       {children}
       <R3fEntry />
     </>
-  )
+  );
 }

@@ -1,42 +1,41 @@
-'use client'
+'use client';
 
-import { useRef, ViewTransition } from 'react'
-import { useGSAP } from '@gsap/react'
-import { useLocale } from '@repo/i18n/client'
-import ScrambleText from '@repo/ui/components/scramble-text'
-import Webassembly from '#/public/webassembly.svg'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { SplitText } from 'gsap/SplitText'
-import Highlighter from 'react-highlight-words'
+import { useGSAP } from '@gsap/react';
+import { useLocale } from '@repo/i18n/client';
+import ScrambleText from '@repo/ui/components/scramble-text';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+import { useRef, ViewTransition } from 'react';
+import Highlighter from 'react-highlight-words';
+import type { Messages } from '#/lib/i18n';
+import Webassembly from '#/public/webassembly.svg';
 
-import { Messages } from '#/lib/i18n'
-
-gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger)
+gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger);
 
 type Props = {
-  messages: Messages['home']
-}
+  messages: Messages['home'];
+};
 
 export default function HomeHero({ messages }: Props) {
-  const container = useRef<React.ComponentRef<'div'>>(null)
-  const { locale } = useLocale()
+  const container = useRef<React.ComponentRef<'div'>>(null);
+  const { locale } = useLocale();
 
   useGSAP(
     () => {
-      const selector = gsap.utils.selector(container)
-      const heading = selector('.home-hero__heading-text')[0]
+      const selector = gsap.utils.selector(container);
+      const heading = selector('.home-hero__heading-text')[0];
 
       const defaults = {
         ease: 'power2.out',
         duration: 0.6,
-      }
+      };
 
       const splitText = () => {
-        const segmenter = new Intl.Segmenter(locale, { granularity: 'word' })
-        const highlight = selector('.home-hero__highlight')[0]
+        const segmenter = new Intl.Segmenter(locale, { granularity: 'word' });
+        const highlight = selector('.home-hero__highlight')[0];
 
-        const tl = gsap.timeline({ scrollTrigger: heading })
+        const tl = gsap.timeline({ scrollTrigger: heading });
 
         const split = new SplitText(heading, {
           type: 'words, lines',
@@ -46,11 +45,11 @@ export default function HomeHero({ messages }: Props) {
           prepareText: (text) => {
             return [...segmenter.segment(text)]
               .map((s) => s.segment)
-              .join(String.fromCharCode(8204))
+              .join(String.fromCharCode(8204));
           },
           wordDelimiter: /\u200c/,
           autoSplit: true,
-        })
+        });
 
         tl.from(split.words, {
           yPercent: 100,
@@ -59,51 +58,51 @@ export default function HomeHero({ messages }: Props) {
             amount: 0.5,
             from: 'random',
           },
-        })
+        });
 
         tl.from(
           highlight,
           { rotationX: 180, ease: 'back.out(1.7)', duration: 1 },
           '-=.4',
-        )
+        );
 
         tl.eventCallback('onComplete', () => {
-          split.revert()
-        })
+          split.revert();
+        });
 
-        return tl
-      }
+        return tl;
+      };
 
       const scrambleTextIn = () => {
-        const subtitleText = selector('.home-hero__subtitle-text')[0]
+        const subtitleText = selector('.home-hero__subtitle-text')[0];
 
         return gsap.from(subtitleText, {
           yPercent: -100,
           autoAlpha: 0,
-        })
-      }
+        });
+      };
 
       const createTimeline = () => {
         const tl = gsap.timeline({
           id: 'home-hero',
           defaults,
-        })
+        });
 
-        tl.set([heading], { autoAlpha: 1 })
+        tl.set([heading], { autoAlpha: 1 });
 
-        const mm = gsap.matchMedia()
+        const mm = gsap.matchMedia();
         mm.add('(prefers-reduced-motion: no-preference)', () => {
-          tl.add(splitText())
-          tl.add(scrambleTextIn(), '+=0.3')
-        })
-      }
+          tl.add(splitText());
+          tl.add(scrambleTextIn(), '+=0.3');
+        });
+      };
 
-      createTimeline()
+      createTimeline();
     },
     {
       scope: container,
     },
-  )
+  );
 
   return (
     <section className="pb-[20vh] pt-[30vh] xl:min-h-screen xl:pb-10">
@@ -138,15 +137,15 @@ export default function HomeHero({ messages }: Props) {
             defaultChars="01"
             trigger={['pointerenter', 'focus']}
           >
-            <h3
+            <div
               aria-hidden="true"
               className="home-hero__subtitle-text invisible font-mono text-base italic md:text-lg"
             >
               {messages.hero.subtitle}
-            </h3>
+            </div>
           </ScrambleText>
         </div>
       </div>
     </section>
-  )
+  );
 }

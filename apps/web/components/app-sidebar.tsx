@@ -1,33 +1,33 @@
-'use client'
+'use client';
 
-import * as React from 'react'
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from '@repo/ui/components/sidebar'
+  // SidebarHeader,
+  // SidebarMenu,
+  // SidebarMenuButton,
+  // SidebarMenuItem,
+} from '@repo/ui/components/sidebar';
 import {
-  BookOpen,
+  // BookOpen,
   Bot,
-  Command,
+  // Command,
   Frame,
   LifeBuoy,
-  Map,
+  MapIcon,
   PieChart,
   Send,
-  Settings2,
-  SquareTerminal,
-} from 'lucide-react'
-import type { User } from 'next-auth'
+  // Settings2,
+  // SquareTerminal,
+} from 'lucide-react';
+import type { User } from 'next-auth';
+import type * as React from 'react';
 
-import { NavMain } from '#/components/nav-main'
-import { NavProjects } from '#/components/nav-projects'
-import { NavSecondary } from '#/components/nav-secondary'
-import { NavUser } from '#/components/nav-user'
+import { NavMain } from '#/components/nav-main';
+// import { NavProjects } from '#/components/nav-projects';
+// import { NavSecondary } from '#/components/nav-secondary';
+import { NavUser } from '#/components/nav-user';
 
 const data = {
   navMain: [
@@ -163,18 +163,18 @@ const data = {
     {
       name: 'Travel',
       url: '#',
-      icon: Map,
+      icon: MapIcon,
     },
   ],
-}
+};
 
 export function AppSidebar({
   user,
   signOut,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
-  user: User
-  signOut: () => void
+  user: User;
+  signOut: () => void;
 }) {
   return (
     <Sidebar variant="inset" {...props}>
@@ -204,5 +204,5 @@ export function AppSidebar({
         <NavUser user={user} signOut={signOut} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

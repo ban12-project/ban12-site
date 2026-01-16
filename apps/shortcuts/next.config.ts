@@ -1,6 +1,6 @@
-import type { NextConfig } from 'next'
-import bundleAnalyzer from '@next/bundle-analyzer'
-import { withSentryConfig } from '@sentry/nextjs'
+import bundleAnalyzer from '@next/bundle-analyzer';
+import { withSentryConfig } from '@sentry/nextjs';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
@@ -21,11 +21,11 @@ const nextConfig: NextConfig = {
   experimental: {
     viewTransition: true,
   },
-}
+};
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
-})(nextConfig)
+})(nextConfig);
 
 const sentryConfig = withSentryConfig(withBundleAnalyzer, {
   // For all available options, see:
@@ -47,14 +47,17 @@ const sentryConfig = withSentryConfig(withBundleAnalyzer, {
   // side errors will fail.
   // tunnelRoute: "/monitoring",
 
-  // Automatically tree-shake Sentry logger statements to reduce bundle size
-  disableLogger: true,
+  webpack: {
+    treeshake: {
+      // Automatically tree-shake Sentry logger statements to reduce bundle size
+      removeDebugLogging: true,
+    },
+    // Enables automatic instrumentation of Vercel Cron Monitors.
+    // See the following for more information:
+    // https://docs.sentry.io/product/crons/
+    // https://vercel.com/docs/cron-jobs
+    automaticVercelMonitors: true,
+  },
+});
 
-  // Enables automatic instrumentation of Vercel Cron Monitors.
-  // See the following for more information:
-  // https://docs.sentry.io/product/crons/
-  // https://vercel.com/docs/cron-jobs
-  automaticVercelMonitors: true,
-})
-
-export default process.env.CI ? sentryConfig : withBundleAnalyzer
+export default process.env.CI ? sentryConfig : withBundleAnalyzer;

@@ -1,17 +1,17 @@
-import { config } from 'dotenv'
-import { desc, eq, sql } from 'drizzle-orm'
-import { drizzle } from 'drizzle-orm/postgres-js'
+import { config } from 'dotenv';
+import { eq } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/postgres-js';
 
-import { answerTranslate } from '#/lib/prompt'
+import { answerTranslate } from '#/lib/prompt';
 
-import { album, collection, LocalizedString, shortcut } from './schema'
+import { album, collection, type LocalizedString, shortcut } from './schema';
 
-config({ path: ['.env.production.local', '.env.local', '.env'] })
+config({ path: ['.env.production.local', '.env.local', '.env'] });
 
-const connectionString = process.env.DATABASE_URL
-if (!connectionString) throw new Error('Not valid database url')
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) throw new Error('Not valid database url');
 
-export const db = drizzle(connectionString)
+export const db = drizzle(connectionString);
 
 const fallback = (input = ''): LocalizedString => {
   return {
@@ -20,8 +20,8 @@ const fallback = (input = ''): LocalizedString => {
     ja: input,
     sv: input,
     ar: input,
-  }
-}
+  };
+};
 async function main() {
   // const data = await db.select({ name: shortcut.name, description: shortcut.description }).from(shortcut).where(eq(shortcut.uuid, '00ede1e9-5d1e-42a3-8555-6e7f2d0788e2'))
   // console.log(data[0].description)
@@ -47,10 +47,10 @@ async function main() {
   // await migrateShortcut()
   // await migrateCollection()
 
-  console.log('done')
+  console.log('done');
 }
 
-async function migrateAlbum() {
+async function _migrateAlbum() {
   const data = (
     await db
       .select({
@@ -62,34 +62,34 @@ async function migrateAlbum() {
   ).filter(
     (item) =>
       typeof item.title === 'string' || typeof item.description === 'string',
-  )
+  );
 
   for (const { title, description, id } of data) {
-    console.log(JSON.stringify({ id, title, description }))
+    console.log(JSON.stringify({ id, title, description }));
 
     const [p1, p2] = await Promise.allSettled([
       answerTranslate(title as unknown as string),
       answerTranslate(description as unknown as string),
-    ])
+    ]);
 
     const data: { title: LocalizedString; description: LocalizedString } = {
       title: fallback(typeof title === 'string' ? title : ''),
       description: fallback(typeof description === 'string' ? description : ''),
-    }
+    };
 
-    if (p1.status === 'fulfilled') data.title = p1.value
-    if (p2.status === 'fulfilled') data.description = p2.value
+    if (p1.status === 'fulfilled') data.title = p1.value;
+    if (p2.status === 'fulfilled') data.description = p2.value;
 
-    console.log(JSON.stringify(data))
+    console.log(JSON.stringify(data));
 
     await db
       .update(album)
       .set({ title: data.title, description: data.description })
-      .where(eq(album.id, id))
+      .where(eq(album.id, id));
   }
 }
 
-async function migrateShortcut() {
+async function _migrateShortcut() {
   const data = (
     await db
       .select({
@@ -101,60 +101,60 @@ async function migrateShortcut() {
   ).filter(
     (item) =>
       typeof item.name === 'string' || typeof item.description === 'string',
-  )
+  );
 
   for (const { name, description, uuid } of data) {
-    console.log(JSON.stringify({ uuid, name, description }))
+    console.log(JSON.stringify({ uuid, name, description }));
 
     const [p1, p2] = await Promise.allSettled([
       answerTranslate(name as unknown as string),
       answerTranslate(description as unknown as string),
-    ])
+    ]);
 
     const data: { name: LocalizedString; description: LocalizedString } = {
       name: fallback(typeof name === 'string' ? name : ''),
       description: fallback(typeof description === 'string' ? description : ''),
-    }
+    };
 
-    if (p1.status === 'fulfilled') data.name = p1.value
-    if (p2.status === 'fulfilled') data.description = p2.value
+    if (p1.status === 'fulfilled') data.name = p1.value;
+    if (p2.status === 'fulfilled') data.description = p2.value;
 
-    console.log(JSON.stringify(data))
+    console.log(JSON.stringify(data));
 
     await db
       .update(shortcut)
       .set({ name: data.name, description: data.description })
-      .where(eq(shortcut.uuid, uuid))
+      .where(eq(shortcut.uuid, uuid));
   }
 }
 
-async function migrateCollection() {
+async function _migrateCollection() {
   const data = (
     await db
       .select({ title: collection.title, id: collection.id })
       .from(collection)
-  ).filter((item) => typeof item.title === 'string')
+  ).filter((item) => typeof item.title === 'string');
 
   for (const { title, id } of data) {
-    console.log(JSON.stringify({ id, title }))
+    console.log(JSON.stringify({ id, title }));
 
     const [p1] = await Promise.allSettled([
       answerTranslate(title as unknown as string),
-    ])
+    ]);
 
     const data: { title: LocalizedString } = {
       title: fallback(typeof title === 'string' ? title : ''),
-    }
+    };
 
-    if (p1.status === 'fulfilled') data.title = p1.value
+    if (p1.status === 'fulfilled') data.title = p1.value;
 
-    console.log(JSON.stringify(data))
+    console.log(JSON.stringify(data));
 
     await db
       .update(collection)
       .set({ title: data.title })
-      .where(eq(collection.id, id))
+      .where(eq(collection.id, id));
   }
 }
 
-main()
+main();

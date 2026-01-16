@@ -18,7 +18,7 @@
   "license": "MIT",
   "scripts": {
     "build": "pnpm dlx @tailwindcss/cli -i ./src/styles/globals.css -o ./dist/index.css",
-    "lint": "eslint .",
+    "lint": "biome check --write",
     "dev": "pnpm dlx @tailwindcss/cli -i ./src/styles/globals.css -o ./dist/index.css --watch",
     "type-check": "tsc --noEmit"
   },
@@ -35,13 +35,12 @@
   "devDependencies": {
     "@gsap/react": "catalog:",
     "@hookform/resolvers": "catalog:",
-    "@repo/eslint-config": "workspace:*",
+    "@repo/biome-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "eslint": "catalog:",
     "gsap": "catalog:",
     "next-themes": "catalog:",
     "postcss": "catalog:",

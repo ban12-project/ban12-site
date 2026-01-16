@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { cn } from '@repo/ui/lib/utils'
-import { useTheme } from 'next-themes'
+import { cn } from '@repo/ui/lib/utils';
+import { useTheme } from 'next-themes';
 
-type Props = React.ButtonHTMLAttributes<React.ComponentRef<'div'>>
+type Props = React.ButtonHTMLAttributes<React.ComponentRef<'div'>>;
 
 const themes = [
   { label: 'light', value: 'light' },
   { label: 'dark', value: 'dark' },
   { label: 'auto', value: 'system' },
-]
+];
 
 export default function ColorSchemeToggle({ className }: Props) {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
 
   return (
     <div
@@ -40,5 +40,5 @@ export default function ColorSchemeToggle({ className }: Props) {
         </label>
       ))}
     </div>
-  )
+  );
 }

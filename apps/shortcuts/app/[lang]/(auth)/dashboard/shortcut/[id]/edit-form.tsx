@@ -1,35 +1,34 @@
-'use client'
+'use client';
 
-import { useActionState } from 'react'
-import { Button } from '@repo/ui/components/button'
-import { Input } from '@repo/ui/components/input'
-import { Label } from '@repo/ui/components/label'
-
-import type { LocalizedString, SelectShortcut } from '#/lib/db/schema'
-import { LocalizedHelper } from '#/lib/utils'
-import { updateShortcut } from '#/app/[lang]/(auth)/actions'
+import { Button } from '@repo/ui/components/button';
+import { Input } from '@repo/ui/components/input';
+import { Label } from '@repo/ui/components/label';
+import { useActionState } from 'react';
+import { updateShortcut } from '#/app/[lang]/(auth)/actions';
+import type { LocalizedString, SelectShortcut } from '#/lib/db/schema';
+import { LocalizedHelper } from '#/lib/utils';
 
 type Props = {
-  shortcut: SelectShortcut
-}
+  shortcut: SelectShortcut;
+};
 
-const localizedHelper = new LocalizedHelper()
+const localizedHelper = new LocalizedHelper();
 
 export default function EditForm({ shortcut }: Props) {
   const [errorMessage, dispatch, pending] = useActionState(
     (prevState: string | undefined, formData: FormData) => {
-      const name = localizedHelper.resolveFormData(formData, 'name')
-      formData.append('name', JSON.stringify(name))
+      const name = localizedHelper.resolveFormData(formData, 'name');
+      formData.append('name', JSON.stringify(name));
       const description = localizedHelper.resolveFormData(
         formData,
         'description',
-      )
-      formData.append('description', JSON.stringify(description))
+      );
+      formData.append('description', JSON.stringify(description));
 
-      return updateShortcut(prevState, formData)
+      return updateShortcut(prevState, formData);
     },
     undefined,
-  )
+  );
 
   return (
     <form action={dispatch} className="grid gap-4 py-4">
@@ -38,7 +37,7 @@ export default function EditForm({ shortcut }: Props) {
           localizedHelper.render(
             key,
             value as LocalizedString,
-            (key, value, name) => (
+            (_key, value, name) => (
               <FormItem key={name} name={name} value={value} />
             ),
           )
@@ -57,7 +56,7 @@ export default function EditForm({ shortcut }: Props) {
 
       <Button disabled={pending}>Submit</Button>
     </form>
-  )
+  );
 }
 
 function FormItem({ name, value }: { name: string; value: string | number }) {
@@ -72,5 +71,5 @@ function FormItem({ name, value }: { name: string; value: string | number }) {
         name={name}
       />
     </div>
-  )
+  );
 }

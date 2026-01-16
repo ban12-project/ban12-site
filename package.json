@@ -7,53 +7,23 @@
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "clean": "turbo clean",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "biome format --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky || true"
   },
+  "lint-staged": {
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
+  },
   "devDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.6.2",
+    "@biomejs/biome": "^2.3.11",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.5",
-    "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.14",
     "turbo": "catalog:"
   },
   "engines": {
     "node": ">=20",
     "pnpm": ">=10"
   },
-  "packageManager": "pnpm@10.28.0",
-  "prettier": {
-    "arrowParens": "always",
-    "trailingComma": "all",
-    "singleQuote": true,
-    "semi": false,
-    "importOrder": [
-      "<BUILTIN_MODULES>",
-      "^(react/(.*)$)|^(react$)",
-      "^(next/(.*)$)|^(next$)",
-      "<THIRD_PARTY_MODULES>",
-      "",
-      "^types$",
-      "^#/types/(.*)$",
-      "^#/config/(.*)$",
-      "^#/lib/(.*)$",
-      "^#/hooks/(.*)$",
-      "^#/components/ui/(.*)$",
-      "^#/components/(.*)$",
-      "^#/styles/(.*)$",
-      "^#/app/(.*)$",
-      "",
-      "^[./]"
-    ],
-    "importOrderParserPlugins": [
-      "typescript",
-      "jsx",
-      "decorators-legacy"
-    ],
-    "plugins": [
-      "@ianvs/prettier-plugin-sort-imports",
-      "prettier-plugin-tailwindcss"
-    ]
-  }
+  "packageManager": "pnpm@10.28.0"
 }

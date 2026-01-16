@@ -1,24 +1,24 @@
-import { Link } from '@repo/i18n/client'
+import { Link } from '@repo/i18n/client';
 
-import { getAlbumsWithShortcuts } from '#/lib/db/queries'
-import type { Locale, Messages } from '#/lib/i18n'
+import { getAlbumsWithShortcuts } from '#/lib/db/queries';
+import type { Locale, Messages } from '#/lib/i18n';
 
-import Album from './album'
+import Album from './album';
 
 type AlbumListProps = {
-  messages: Messages
-  albums?: Awaited<ReturnType<typeof getAlbumsWithShortcuts>>
-  lang: Locale
-}
+  messages: Messages;
+  albums?: Awaited<ReturnType<typeof getAlbumsWithShortcuts>>;
+  lang: Locale;
+};
 
-const pageSize = 10
+const pageSize = 10;
 
 export default async function AlbumList({
   messages,
   albums,
   lang,
 }: AlbumListProps) {
-  albums ||= await getAlbumsWithShortcuts(pageSize)
+  albums ||= await getAlbumsWithShortcuts(pageSize);
 
   return (
     <ul className="[&>li+li_.custom-border]:border-t [@media_only_screen_and_(min-resolution:192dpi)]:[&>li+li_.custom-border]:border-t-[.5px]">
@@ -51,5 +51,5 @@ export default async function AlbumList({
         </li>
       ))}
     </ul>
-  )
+  );
 }

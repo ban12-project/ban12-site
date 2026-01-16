@@ -1,32 +1,30 @@
-import { useEffect } from 'react'
-import { ToggleGroup, ToggleGroupItem } from '@repo/ui/components/toggle-group'
-import { cn } from '@repo/ui/lib/utils'
-import { useTheme } from 'next-themes'
+import { ToggleGroup, ToggleGroupItem } from '@repo/ui/components/toggle-group';
+import { cn } from '@repo/ui/lib/utils';
+import { useTheme } from 'next-themes';
+import { useEffect } from 'react';
 
-import type { Messages } from '#/lib/i18n'
-
-type Props = { className?: string; messages: Messages }
+type Props = { className?: string };
 
 const Icons: Record<string, typeof SunIcon> = {
   light: SunIcon,
   dark: MoonIcon,
   system: PcIcon,
-}
+};
 
-export function ThemeToggle({ className, messages }: Props) {
-  const { theme, setTheme, resolvedTheme, themes } = useTheme()
+export function ThemeToggle({ className }: Props) {
+  const { theme, setTheme, resolvedTheme, themes } = useTheme();
 
   useEffect(() => {
     if (resolvedTheme === 'dark') {
       document
         .querySelector('meta[name="theme-color"]')!
-        .setAttribute('content', '#0B1120')
+        .setAttribute('content', '#0B1120');
     } else {
       document
         .querySelector('meta[name="theme-color"]')!
-        .setAttribute('content', '#f8fafc')
+        .setAttribute('content', '#f8fafc');
     }
-  }, [resolvedTheme])
+  }, [resolvedTheme]);
 
   return (
     <ToggleGroup
@@ -36,20 +34,20 @@ export function ThemeToggle({ className, messages }: Props) {
       onValueChange={setTheme}
     >
       {themes.map((value) => {
-        const Icon = Icons[value]
+        const Icon = Icons[value];
 
         return (
           <ToggleGroupItem key={value} value={value}>
             <Icon selected={theme === value} className="h-6 w-6" />
           </ToggleGroupItem>
-        )
+        );
       })}
     </ToggleGroup>
-  )
+  );
 }
 
 interface Icon extends React.SVGAttributes<SVGElement> {
-  selected?: boolean
+  selected?: boolean;
 }
 
 function SunIcon({ selected, ...props }: Icon) {
@@ -62,6 +60,7 @@ function SunIcon({ selected, ...props }: Icon) {
       strokeLinejoin="round"
       {...props}
     >
+      <title>Sun</title>
       <path
         d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
         className={
@@ -77,12 +76,13 @@ function SunIcon({ selected, ...props }: Icon) {
         }
       />
     </svg>
-  )
+  );
 }
 
 function MoonIcon({ selected, ...props }: Icon) {
   return (
     <svg viewBox="0 0 24 24" fill="none" {...props}>
+      <title>Moon</title>
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -104,12 +104,13 @@ function MoonIcon({ selected, ...props }: Icon) {
         }
       />
     </svg>
-  )
+  );
 }
 
 function PcIcon({ selected, ...props }: Icon) {
   return (
     <svg viewBox="0 0 24 24" fill="none" {...props}>
+      <title>PC</title>
       <path
         d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z"
         strokeWidth="2"
@@ -130,5 +131,5 @@ function PcIcon({ selected, ...props }: Icon) {
         }
       />
     </svg>
-  )
+  );
 }

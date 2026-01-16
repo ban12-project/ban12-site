@@ -1,25 +1,25 @@
-import { Suspense } from 'react'
-import { headers } from 'next/headers'
-import coordtransform from 'coordtransform'
-import { ExternalLink, Star } from 'lucide-react'
+import coordtransform from 'coordtransform';
+import { ExternalLink, Star } from 'lucide-react';
+import { headers } from 'next/headers';
+import { Suspense } from 'react';
 
-import { type Messages } from '#/lib/i18n'
-import { generateMapLink } from '#/lib/map-links'
+import type { Messages } from '#/lib/i18n';
+import { generateMapLink } from '#/lib/map-links';
 
-import type { RestaurantWithPosts } from '../actions'
+import type { RestaurantWithPosts } from '../actions';
 
 type Restaurant = WithNonNullableKey<
   NonNullable<RestaurantWithPosts['restaurant']>,
   'ai_summarize'
->
+>;
 
 export default function RestaurantDetail({
   restaurant,
   posts,
 }: {
-  restaurant: Restaurant
-  posts: RestaurantWithPosts['posts']
-  messages: Messages
+  restaurant: Restaurant;
+  posts: RestaurantWithPosts['posts'];
+  messages: Messages;
 }) {
   return (
     <div className="grid gap-8">
@@ -87,22 +87,22 @@ export default function RestaurantDetail({
           Precautions
         </h2>
         <ul className="mt-2 list-disc pl-5 text-gray-600 dark:text-gray-300">
-          {restaurant.ai_summarize.precautions.map((precaution, index) => (
-            <li key={index}>{precaution}</li>
+          {restaurant.ai_summarize.precautions.map((precaution) => (
+            <li key={precaution}>{precaution}</li>
           ))}
         </ul>
       </section>
     </div>
-  )
+  );
 }
 
 async function JumpToThirdPartyMap({ restaurant }: { restaurant: Restaurant }) {
-  const headersList = await headers()
-  const country = headersList.get('x-vercel-ip-country')
-  const inChina = country === 'CN'
-  const latlng = restaurant.location?.toReversed() as [number, number] | null
+  const headersList = await headers();
+  const country = headersList.get('x-vercel-ip-country');
+  const inChina = country === 'CN';
+  const latlng = restaurant.location?.toReversed() as [number, number] | null;
 
-  if (!latlng) return null
+  if (!latlng) return null;
 
   return (
     <>
@@ -176,5 +176,5 @@ async function JumpToThirdPartyMap({ restaurant }: { restaurant: Restaurant }) {
         </>
       )}
     </>
-  )
+  );
 }

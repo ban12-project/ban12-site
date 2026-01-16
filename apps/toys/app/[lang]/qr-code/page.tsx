@@ -1,22 +1,23 @@
-import { Metadata } from 'next'
-import Script from 'next/script'
+import type { Metadata } from 'next';
+import Script from 'next/script';
+import { QRCodeForm } from '#/components/qrcode-form';
+import { getDictionary, type Locale } from '#/lib/i18n';
 
-import { getDictionary, type Locale } from '#/lib/i18n'
-import { QRCodeForm } from '#/components/qrcode-form'
-
-export async function generateMetadata(props: PageProps<'/[lang]/qr-code'>): Promise<Metadata> {
-  const params = await props.params
-  const messages = await getDictionary(params.lang as Locale)
+export async function generateMetadata(
+  props: PageProps<'/[lang]/qr-code'>,
+): Promise<Metadata> {
+  const params = await props.params;
+  const messages = await getDictionary(params.lang as Locale);
 
   return {
     title: messages['page-hash'].title,
     description: messages['page-hash'].description,
-  }
+  };
 }
 
 export default async function QRCodePage(props: PageProps<'/[lang]/qr-code'>) {
-  const params = await props.params
-  const messages = await getDictionary(params.lang as Locale)
+  const params = await props.params;
+  const _messages = await getDictionary(params.lang as Locale);
 
   return (
     <section className="flex h-screen w-screen justify-center align-middle">
@@ -28,5 +29,5 @@ export default async function QRCodePage(props: PageProps<'/[lang]/qr-code'>) {
         src="https://cdn.babylonjs.com/babylon.js"
       />
     </section>
-  )
+  );
 }

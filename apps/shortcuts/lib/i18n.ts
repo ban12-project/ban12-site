@@ -1,4 +1,4 @@
-import { createI18n } from '@repo/i18n/server'
+import { createI18n } from '@repo/i18n/server';
 
 export const i18n = {
   defaultLocale: 'en',
@@ -24,10 +24,10 @@ export const i18n = {
       label: 'العربية',
     },
   },
-} as const
+} as const;
 
-export type Locale = keyof (typeof i18n)['locales']
-export type Messages = Awaited<ReturnType<typeof getDictionary>>
+export type Locale = keyof (typeof i18n)['locales'];
+export type Messages = Awaited<ReturnType<typeof getDictionary>>;
 
 export const { middleware, getDictionary } = createI18n(i18n, {
   en: () => import('../dictionaries/en.json').then((module) => module.default),
@@ -36,4 +36,4 @@ export const { middleware, getDictionary } = createI18n(i18n, {
   ja: () => import('../dictionaries/ja.json').then((module) => module.default),
   sv: () => import('../dictionaries/sv.json').then((module) => module.default),
   ar: () => import('../dictionaries/ar.json').then((module) => module.default),
-})
+});

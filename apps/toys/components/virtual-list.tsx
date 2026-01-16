@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
 import {
-  ComponentPropsWithoutRef,
-  ComponentRef,
+  type ComponentPropsWithoutRef,
+  type ComponentRef,
   createContext,
   forwardRef,
-} from 'react'
-import AutoSizer from 'react-virtualized-auto-sizer'
-import { FixedSizeList, FixedSizeListProps } from 'react-window'
+} from 'react';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { FixedSizeList, type FixedSizeListProps } from 'react-window';
 
 export const ListContext = createContext<
   Omit<Props<unknown>, 'data' | 'children'>
 >({
   itemSize: 0,
-})
+});
 
 const outerElementType = forwardRef<ComponentRef<'div'>>(
   function Outer(props, ref) {
-    return <div ref={ref} {...props} data-lenis-prevent></div>
+    return <div ref={ref} {...props} data-lenis-prevent></div>;
   },
-)
+);
 
 type Props<T> = {
-  data: T
-  children: ComponentPropsWithoutRef<typeof FixedSizeList<T>>['children']
-  itemSize: FixedSizeListProps['itemSize']
-}
+  data: T;
+  children: ComponentPropsWithoutRef<typeof FixedSizeList<T>>['children'];
+  itemSize: FixedSizeListProps['itemSize'];
+};
 
 export default function VirtualList<T extends unknown[]>({
   data,
@@ -53,5 +53,5 @@ export default function VirtualList<T extends unknown[]>({
         )}
       </AutoSizer>
     </ListContext.Provider>
-  )
+  );
 }

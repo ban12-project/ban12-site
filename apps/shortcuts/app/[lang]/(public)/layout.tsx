@@ -1,23 +1,22 @@
-import '#/app/globals.css'
+import '#/app/globals.css';
 
-import type { Metadata, Viewport } from 'next'
-import dynamic from 'next/dynamic'
-import { GoogleAnalytics } from '@next/third-parties/google'
-import { LocaleProvider } from '@repo/i18n/client'
-import { Toaster } from '@repo/ui/components/sonner'
-import { ThemeProvider } from 'next-themes'
-
-import { getDictionary, i18n, type Locale } from '#/lib/i18n'
+import { GoogleAnalytics } from '@next/third-parties/google';
+import { LocaleProvider } from '@repo/i18n/client';
+import { Toaster } from '@repo/ui/components/sonner';
+import type { Metadata, Viewport } from 'next';
+import dynamic from 'next/dynamic';
+import { ThemeProvider } from 'next-themes';
 // import CSSPaintPolyfill from '#/components/css-paint-polyfill'
-import { WebVitals } from '#/components/web-vitals'
+import { WebVitals } from '#/components/web-vitals';
+import { getDictionary, i18n, type Locale } from '#/lib/i18n';
 
-const SentryLoader = dynamic(() => import('#/components/sentry-loader'))
+const SentryLoader = dynamic(() => import('#/components/sentry-loader'));
 
 export async function generateMetadata(
   props: LayoutProps<'/[lang]'>,
 ): Promise<Metadata> {
-  const params = await props.params
-  const messages = await getDictionary(params.lang as Locale)
+  const params = await props.params;
+  const messages = await getDictionary(params.lang as Locale);
 
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL!),
@@ -56,23 +55,23 @@ export async function generateMetadata(
         },
       ],
     },
-  }
+  };
 }
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-}
+};
 
 export function generateStaticParams() {
-  return Object.keys(i18n.locales).map((lang) => ({ lang }))
+  return Object.keys(i18n.locales).map((lang) => ({ lang }));
 }
 
 export default async function RootLayout(props: LayoutProps<'/[lang]'>) {
-  const params = await props.params
+  const params = await props.params;
 
-  const { children, get, post } = props
+  const { children, get, post } = props;
 
   return (
     <html
@@ -108,5 +107,5 @@ export default async function RootLayout(props: LayoutProps<'/[lang]'>) {
         )}
       </body>
     </html>
-  )
+  );
 }

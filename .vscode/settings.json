@@ -13,10 +13,10 @@
   ],
   "deno.enablePaths": ["./supabase/functions"],
   "deno.importMap": "./supabase/functions/import_map.json",
-  "cSpell.words": [
-    "Mapbox",
-    "mapboxgl"
-  ],
+  "cSpell.words": ["Mapbox", "mapboxgl"],
   "tailwindCSS.experimental.configFile": "packages/ui/src/styles/globals.css",
-  "typescript.experimental.useTsgo": true
+  "typescript.experimental.useTsgo": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "explicit"
+  }
 }

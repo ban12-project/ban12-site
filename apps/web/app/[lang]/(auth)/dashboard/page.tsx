@@ -1,8 +1,7 @@
-import { Suspense } from 'react'
-
-import { getAuthors, getPosts, getRestaurants } from '#/lib/db/queries'
-import { FollowUpChart } from '#/components/dashboard-chart'
-import WorkerStatus from '#/components/dashboard-worker-status'
+import { Suspense } from 'react';
+import { FollowUpChart } from '#/components/dashboard-chart';
+import WorkerStatus from '#/components/dashboard-worker-status';
+import { getAuthors, getPosts, getRestaurants } from '#/lib/db/queries';
 
 export default function DashboardPage() {
   return (
@@ -13,7 +12,7 @@ export default function DashboardPage() {
         <SuspendedFollowUpChart />
       </Suspense>
     </main>
-  )
+  );
 }
 
 async function SuspendedFollowUpChart() {
@@ -21,7 +20,7 @@ async function SuspendedFollowUpChart() {
     getAuthors(),
     getPosts(),
     getRestaurants(),
-  ])
+  ]);
 
-  return <FollowUpChart dataSource={{ authors, posts, restaurants }} />
+  return <FollowUpChart dataSource={{ authors, posts, restaurants }} />;
 }

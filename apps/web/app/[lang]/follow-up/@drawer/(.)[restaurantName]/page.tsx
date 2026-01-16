@@ -1,19 +1,17 @@
-import { Suspense, ViewTransition } from 'react'
-import { notFound } from 'next/navigation'
-import { LoaderCircle } from 'lucide-react'
-
-import { getDictionary, type Locale } from '#/lib/i18n'
-
-import RestaurantDetail from '../../[restaurantName]/restaurant-detail'
-import { getCachedRestaurantWithPostsByName } from '../../actions'
-import Drawer from './drawer'
-import { getRestaurants } from '#/lib/db/queries'
+import { LoaderCircle } from 'lucide-react';
+import { notFound } from 'next/navigation';
+import { Suspense, ViewTransition } from 'react';
+import { getRestaurants } from '#/lib/db/queries';
+import { getDictionary, type Locale } from '#/lib/i18n';
+import RestaurantDetail from '../../[restaurantName]/restaurant-detail';
+import { getCachedRestaurantWithPostsByName } from '../../actions';
+import Drawer from './drawer';
 
 export async function generateStaticParams() {
-  const restaurants = await getRestaurants()
+  const restaurants = await getRestaurants();
   return restaurants.map((restaurant) => ({
     restaurantName: restaurant.ai_summarize?.restaurantName,
-  }))
+  }));
 }
 
 export default function Page({
@@ -35,23 +33,23 @@ export default function Page({
         </ViewTransition>
       </Suspense>
     </Drawer>
-  )
+  );
 }
 
 async function Suspended({
   params,
 }: {
-  params: PageProps<'/[lang]/follow-up/[restaurantName]'>['params']
+  params: PageProps<'/[lang]/follow-up/[restaurantName]'>['params'];
 }) {
-  const { restaurantName, lang } = await params
+  const { restaurantName, lang } = await params;
 
   const [{ restaurant, posts }, messages] = await Promise.all([
     getCachedRestaurantWithPostsByName(restaurantName),
     getDictionary(lang as Locale),
-  ])
+  ]);
 
   if (!restaurant || !restaurant.ai_summarize || !posts) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -64,5 +62,5 @@ async function Suspended({
         messages={messages}
       />
     </main>
-  )
+  );
 }

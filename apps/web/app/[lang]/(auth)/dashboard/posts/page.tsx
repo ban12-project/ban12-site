@@ -1,21 +1,21 @@
-import { Suspense } from 'react'
+import { Suspense } from 'react';
 
-import { getPosts } from '#/lib/db/queries'
+import { getPosts } from '#/lib/db/queries';
 
-import { DataTable } from '../data-table'
-import { columns } from './columns'
-import Filter from './filter'
+import { DataTable } from '../data-table';
+import { columns } from './columns';
+import Filter from './filter';
 
 export default function PostsPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Suspended />
     </Suspense>
-  )
+  );
 }
 
 async function Suspended() {
-  const data = await getPosts()
+  const data = await getPosts();
 
   return (
     <DataTable
@@ -24,5 +24,5 @@ async function Suspended() {
       header={Filter}
       defaultSorting={[{ id: 'created_at', desc: true }]}
     />
-  )
+  );
 }

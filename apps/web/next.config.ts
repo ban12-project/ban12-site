@@ -1,5 +1,5 @@
-import type { NextConfig } from 'next'
-import bundleAnalyzer from '@next/bundle-analyzer'
+import bundleAnalyzer from '@next/bundle-analyzer';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@repo/ui', '@repo/i18n', 'three'],
@@ -13,13 +13,13 @@ const nextConfig: NextConfig = {
       // shader support
       '*.{glsl,vs,fs,vert,frag}': {
         loaders: ['raw-loader', 'glslify-loader'],
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
-})(nextConfig)
+})(nextConfig);
 
-export default withBundleAnalyzer
+export default withBundleAnalyzer;

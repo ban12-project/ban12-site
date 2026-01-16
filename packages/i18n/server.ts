@@ -1,14 +1,14 @@
-import { createGetDictionary } from './get-dictionary'
-import { createMiddleware } from './middleware'
+import { createGetDictionary } from './get-dictionary';
+import { createMiddleware } from './middleware';
 
 export type Dictionaries<U> =
-  U extends Record<keyof U, () => unknown> ? U : never
+  U extends Record<keyof U, () => unknown> ? U : never;
 
-type Locales = Record<string, { [key: string]: string }>
+type Locales = Record<string, { [key: string]: string }>;
 
 export interface I18nConfig<T = Locales> {
-  defaultLocale: T extends Locales ? keyof T : never
-  locales: T
+  defaultLocale: T extends Locales ? keyof T : never;
+  locales: T;
 }
 
 export const createI18n = <
@@ -21,5 +21,5 @@ export const createI18n = <
   return {
     middleware: createMiddleware(i18nConfig),
     getDictionary: createGetDictionary(dictionaries, i18nConfig.defaultLocale),
-  }
-}
+  };
+};

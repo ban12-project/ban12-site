@@ -196,7 +196,7 @@
   code:where(:not(.not-prose, .not-prose *))::before,
   code:where(:not(.not-prose, .not-prose *))::after {
     display: inline;
-    content: '`';
+    content: "`";
   }
 
   pre:where(:not(.not-prose, .not-prose *)) {
@@ -346,6 +346,7 @@
 
 .prose-blog {
   img:where(:not(.not-prose, .not-prose *)) {
+    /* biome-ignore lint/correctness/noUnknownFunction: https://tailwindcss.com/docs/upgrade-guide#using-the-theme-function */
     @media (max-width: theme(--breakpoint-sm)) {
       margin-inline: calc(var(--spacing) * -4);
       max-width: calc(100% + calc(var(--spacing) * 8));

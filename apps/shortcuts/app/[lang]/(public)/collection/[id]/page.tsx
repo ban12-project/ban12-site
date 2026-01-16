@@ -1,23 +1,21 @@
-import { Suspense } from 'react'
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { Skeleton } from '@repo/ui/components/skeleton'
-
+import { Skeleton } from '@repo/ui/components/skeleton';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+import AlbumList from '#/components/album-list';
+import AlbumListSkeleton from '#/components/album-list-skeleton';
+import ShortcutList from '#/components/shortcut-list';
 import {
   getCollectionByIdWithAlbumsAndShortcuts,
   getCollections,
-} from '#/lib/db/queries'
-import { getDictionary, i18n, type Locale } from '#/lib/i18n'
-import AlbumList from '#/components/album-list'
-import AlbumListSkeleton from '#/components/album-list-skeleton'
-import ShortcutList from '#/components/shortcut-list'
-
+} from '#/lib/db/queries';
+import { getDictionary, i18n, type Locale } from '#/lib/i18n';
 
 export async function generateStaticParams() {
-  const collections = await getCollections()
+  const collections = await getCollections();
   return collections.map((collection) => ({
     id: collection.id.toString(),
-  }))
+  }));
 }
 
 export default function CollectionsPage({
@@ -40,22 +38,22 @@ export default function CollectionsPage({
         <Collections params={params} />
       </Suspense>
     </main>
-  )
+  );
 }
 
 async function Collections({
   params,
 }: {
-  params: PageProps<'/[lang]/collection/[id]'>['params']
+  params: PageProps<'/[lang]/collection/[id]'>['params'];
 }) {
-  const { id, lang } = (await params) as { id: string; lang: Locale }
-  const NumericId = Number.parseInt(id)
+  const { id, lang } = (await params) as { id: string; lang: Locale };
+  const NumericId = Number.parseInt(id, 10);
   const [messages, collection] = await Promise.all([
     getDictionary(lang),
     getCollectionByIdWithAlbumsAndShortcuts(NumericId),
-  ])
+  ]);
 
-  if (!collection) notFound()
+  if (!collection) notFound();
 
   return (
     <>
@@ -70,18 +68,18 @@ async function Collections({
         <ShortcutList lang={lang} shortcuts={collection.shortcuts} />
       </div>
     </>
-  )
+  );
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<'/[lang]/collection/[id]'>): Promise<Metadata> {
-  const { id, lang } = await params
+  const { id, lang } = await params;
   const collection = await getCollectionByIdWithAlbumsAndShortcuts(
-    Number.parseInt(id),
-  )
+    Number.parseInt(id, 10),
+  );
 
-  if (!collection) notFound()
+  if (!collection) notFound();
 
   return {
     title: collection.title[lang as Locale],
@@ -96,5 +94,5 @@ export async function generateMetadata({
         ]),
       ),
     },
-  }
+  };
 }

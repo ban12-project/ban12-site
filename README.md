@@ -13,7 +13,7 @@ This projects includes the following packages/apps:
 - `shortcuts`: the app for sharing [shortcuts](https://support.apple.com/guide/shortcuts/welcome/ios) access online [here](https://shortcuts.ban12.com/)
 - `@repo/i18n`: minimal i18n routing and translations
 - `@repo/ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `blog` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@repo/biome-config`: `biome` configurations
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
@@ -48,5 +48,4 @@ This Turborepo has some additional tools already setup for you:
 
 - [Tailwind CSS](https://tailwindcss.com/) for styles
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- [Biome](https://biomejs.dev/) for code linting

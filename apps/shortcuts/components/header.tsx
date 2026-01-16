@@ -1,48 +1,47 @@
-'use client'
+'use client';
 
-import { Suspense, useEffect, useRef, useState } from 'react'
-import { cn } from '@repo/ui/lib/utils'
-import { useOnClickOutside } from 'usehooks-ts'
-
-import type { Messages } from '#/lib/i18n'
-import SearchBar from '#/components/search-bar'
+import { cn } from '@repo/ui/lib/utils';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { useOnClickOutside } from 'usehooks-ts';
+import SearchBar from '#/components/search-bar';
+import type { Messages } from '#/lib/i18n';
 
 type HeaderProps = {
-  messages: Messages
-}
+  messages: Messages;
+};
 
 export function Header({ messages }: HeaderProps) {
-  const [sticky, setSticky] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const ref = useRef<React.ComponentRef<'header'>>(null)
-  const sentinelRef = useRef<React.ComponentRef<'div'>>(null)
+  const [sticky, setSticky] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const ref = useRef<React.ComponentRef<'header'>>(null);
+  const sentinelRef = useRef<React.ComponentRef<'div'>>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          setIsScrolled(!entry.isIntersecting)
-        })
+          setIsScrolled(!entry.isIntersecting);
+        });
       },
       {
         root: null,
         rootMargin: `0px 0px`,
         threshold: 0,
       },
-    )
-    observer.observe(sentinelRef.current!)
-    return () => observer.disconnect()
-  }, [])
+    );
+    observer.observe(sentinelRef.current!);
+    return () => observer.disconnect();
+  }, []);
 
   useOnClickOutside(
     // @ts-expect-error - https://github.com/juliencrn/usehooks-ts/issues/663
     ref,
     () => {
-      if (!sticky) return
-      ;(document.activeElement as HTMLElement).blur()
+      if (!sticky) return;
+      (document.activeElement as HTMLElement).blur();
     },
     'touchstart',
-  )
+  );
 
   return (
     <>
@@ -70,5 +69,5 @@ export function Header({ messages }: HeaderProps) {
         </Suspense>
       </header>
     </>
-  )
+  );
 }

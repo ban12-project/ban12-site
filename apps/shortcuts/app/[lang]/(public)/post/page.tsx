@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
-import { Link } from '@repo/i18n/client'
+import { Link } from '@repo/i18n/client';
+import type { Metadata } from 'next';
+import ShortcutPost from '#/components/shortcut-post';
+import { getDictionary, i18n, type Locale } from '#/lib/i18n';
 
-import { getDictionary, i18n, type Locale } from '#/lib/i18n'
-import ShortcutPost from '#/components/shortcut-post'
-
-export async function generateMetadata(props: PageProps<'/[lang]/post'>): Promise<Metadata> {
-  const params = await props.params
-  const messages = await getDictionary(params.lang as Locale)
+export async function generateMetadata(
+  props: PageProps<'/[lang]/post'>,
+): Promise<Metadata> {
+  const params = await props.params;
+  const messages = await getDictionary(params.lang as Locale);
   return {
     title: messages.post.title,
     description: messages.post.description,
@@ -17,12 +18,12 @@ export async function generateMetadata(props: PageProps<'/[lang]/post'>): Promis
         Object.keys(i18n.locales).map((lang) => [lang, `/${lang}/post`]),
       ),
     },
-  }
+  };
 }
 
 export default async function PostPage(props: PageProps<'/[lang]/post'>) {
-  const params = await props.params
-  const messages = await getDictionary(params.lang as Locale)
+  const params = await props.params;
+  const messages = await getDictionary(params.lang as Locale);
 
   return (
     <>
@@ -34,5 +35,5 @@ export default async function PostPage(props: PageProps<'/[lang]/post'>) {
         </Link>
       </div>
     </>
-  )
+  );
 }

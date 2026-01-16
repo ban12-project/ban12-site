@@ -1,20 +1,19 @@
-import '#/app/globals.css'
+import '#/app/globals.css';
 
-import { Metadata, Viewport } from 'next'
-import { GoogleAnalytics } from '@next/third-parties/google'
-import { LocaleProvider } from '@repo/i18n/client'
-import { Toaster } from '@repo/ui/components/sonner'
-import { ThemeProvider } from 'next-themes'
-
+import { GoogleAnalytics } from '@next/third-parties/google';
+import { LocaleProvider } from '@repo/i18n/client';
+import { Toaster } from '@repo/ui/components/sonner';
+import type { Metadata, Viewport } from 'next';
+import { ThemeProvider } from 'next-themes';
+import Footer from '#/components/footer';
 // import Lenis from '@repo/ui/components/lenis'
-import { getDictionary, i18n, type Locale } from '#/lib/i18n'
-import Footer from '#/components/footer'
+import { getDictionary, i18n, type Locale } from '#/lib/i18n';
 
 export async function generateMetadata({
   params,
 }: LayoutProps<'/[lang]'>): Promise<Metadata> {
-  const { lang } = await params
-  const messages = await getDictionary(lang as Locale)
+  const { lang } = await params;
+  const messages = await getDictionary(lang as Locale);
 
   return {
     alternates: {
@@ -52,7 +51,7 @@ export async function generateMetadata({
         },
       ],
     },
-  }
+  };
 }
 
 export const viewport: Viewport = {
@@ -60,18 +59,18 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-}
+};
 
 export async function generateStaticParams() {
-  return Object.keys(i18n.locales).map((lang) => ({ lang }))
+  return Object.keys(i18n.locales).map((lang) => ({ lang }));
 }
 
 export default async function RootLayout(props: LayoutProps<'/[lang]'>) {
-  const params = await props.params
+  const params = await props.params;
 
-  const { children } = props
+  const { children } = props;
 
-  const messages = await getDictionary(params.lang as Locale)
+  const _messages = await getDictionary(params.lang as Locale);
 
   return (
     <html suppressHydrationWarning lang={params.lang}>
@@ -97,5 +96,5 @@ export default async function RootLayout(props: LayoutProps<'/[lang]'>) {
         )}
       </body>
     </html>
-  )
+  );
 }

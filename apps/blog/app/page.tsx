@@ -1,9 +1,9 @@
-import Post from '#/components/post'
+import Post from '#/components/post';
 
-import { getAllPosts } from '../lib/api'
+import { getAllPosts } from '../lib/api';
 
 export default async function Index() {
-  const allPosts = await getAllPosts()
+  const allPosts = await getAllPosts();
 
-  return <Post posts={allPosts} />
+  return <Post posts={allPosts} />;
 }

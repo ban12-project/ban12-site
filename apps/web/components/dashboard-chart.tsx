@@ -1,29 +1,29 @@
-'use client'
+'use client';
 
-import * as React from 'react'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card'
+} from '@repo/ui/components/card';
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from '@repo/ui/components/chart'
+} from '@repo/ui/components/chart';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@repo/ui/components/select'
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
+} from '@repo/ui/components/select';
+import * as React from 'react';
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 const chartConfig = {
   author: {
@@ -38,7 +38,7 @@ const chartConfig = {
     label: 'Restaurant',
     color: 'var(--chart-3)',
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 const processData = <T extends { created_at: Date }>(
   items: T[],
@@ -46,81 +46,79 @@ const processData = <T extends { created_at: Date }>(
   map: Map<string, { author: number; post: number; restaurant: number }>,
 ) => {
   items.forEach((item) => {
-    const date = new Date(item.created_at).toISOString().split('T')[0]
-    const entry = map.get(date) || { author: 0, post: 0, restaurant: 0 }
-    entry[key]++
-    map.set(date, entry)
-  })
-}
+    const date = new Date(item.created_at).toISOString().split('T')[0];
+    const entry = map.get(date) || { author: 0, post: 0, restaurant: 0 };
+    entry[key]++;
+    map.set(date, entry);
+  });
+};
 
 export function FollowUpChart({
   dataSource,
 }: {
-  dataSource: Record<string, { created_at: Date }[]>
+  dataSource: Record<string, { created_at: Date }[]>;
 }) {
   const chartData = React.useMemo(() => {
     const chartDataMap = new Map<
       string,
       { author: number; post: number; restaurant: number }
-    >()
+    >();
 
-    processData(dataSource.authors, 'author', chartDataMap)
-    processData(dataSource.posts, 'post', chartDataMap)
-    processData(dataSource.restaurants, 'restaurant', chartDataMap)
+    processData(dataSource.authors, 'author', chartDataMap);
+    processData(dataSource.posts, 'post', chartDataMap);
+    processData(dataSource.restaurants, 'restaurant', chartDataMap);
 
     if (chartDataMap.size === 0) {
-      return []
+      return [];
     }
 
-    const sortedDates = Array.from(chartDataMap.keys()).sort()
-    const startDate = new Date(sortedDates[0])
-    const endDate = new Date()
+    const sortedDates = Array.from(chartDataMap.keys()).sort();
+    const startDate = new Date(sortedDates[0]);
+    const endDate = new Date();
 
-    const filledIncrements = []
+    const filledIncrements = [];
     for (
       let currentDate = new Date(startDate);
       currentDate <= endDate;
       currentDate.setDate(currentDate.getDate() + 1)
     ) {
-      const dateStr = currentDate.toISOString().split('T')[0]
+      const dateStr = currentDate.toISOString().split('T')[0];
       const counts = chartDataMap.get(dateStr) || {
         author: 0,
         post: 0,
         restaurant: 0,
-      }
-      filledIncrements.push({ date: dateStr, ...counts })
+      };
+      filledIncrements.push({ date: dateStr, ...counts });
     }
 
     return filledIncrements.reduce<
       { date: string; author: number; post: number; restaurant: number }[]
     >((acc, current, index) => {
       const prev =
-        index > 0 ? acc[index - 1] : { author: 0, post: 0, restaurant: 0 }
-      return [
-        ...acc,
-        {
-          ...current,
-          author: prev.author + current.author,
-          post: prev.post + current.post,
-          restaurant: prev.restaurant + current.restaurant,
-        },
-      ]
-    }, [])
-  }, [dataSource.authors, dataSource.posts, dataSource.restaurants])
+        index > 0 ? acc[index - 1] : { author: 0, post: 0, restaurant: 0 };
+      acc.push({
+        ...current,
+        author: prev.author + current.author,
+        post: prev.post + current.post,
+        restaurant: prev.restaurant + current.restaurant,
+      });
+      return acc;
+    }, []);
+  }, [dataSource.authors, dataSource.posts, dataSource.restaurants]);
 
-  const [timeRange, setTimeRange] = React.useState('90d')
+  const [timeRange, setTimeRange] = React.useState('90d');
   const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date)
-    let daysToSubtract = 90
+    const date = new Date(item.date);
+    let daysToSubtract = 90;
     if (timeRange === '30d') {
-      daysToSubtract = 30
+      daysToSubtract = 30;
     } else if (timeRange === '7d') {
-      daysToSubtract = 7
+      daysToSubtract = 7;
     }
-    const startDate = new Date()
-    startDate.setDate(startDate.getDate() - daysToSubtract)
-    return date >= startDate
-  })
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - daysToSubtract);
+    return date >= startDate;
+  });
 
   return (
     <Card className="pt-0">
@@ -203,11 +201,11 @@ export function FollowUpChart({
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                const date = new Date(value)
+                const date = new Date(value);
                 return date.toLocaleDateString(undefined, {
                   month: 'short',
                   day: 'numeric',
-                })
+                });
               }}
             />
             <ChartTooltip
@@ -218,7 +216,7 @@ export function FollowUpChart({
                     return new Date(value).toLocaleDateString(undefined, {
                       month: 'short',
                       day: 'numeric',
-                    })
+                    });
                   }}
                   indicator="dot"
                 />
@@ -250,5 +248,5 @@ export function FollowUpChart({
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,7 +1,6 @@
-'use client'
+'use client';
 
-import { usePathname } from 'next/navigation'
-import { Link } from '@repo/i18n/client'
+import { Link } from '@repo/i18n/client';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,13 +8,14 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@repo/ui/components/breadcrumb'
-import { cn } from '@repo/ui/lib/utils'
+} from '@repo/ui/components/breadcrumb';
+import { cn } from '@repo/ui/lib/utils';
+import { usePathname } from 'next/navigation';
 
 export default function DashboardBreadcrumb() {
-  const pathname = usePathname()
-  const paths = pathname.split('/').filter(Boolean)
-  const items = paths.slice(paths.findIndex((item) => item === 'dashboard') + 1)
+  const pathname = usePathname();
+  const paths = pathname.split('/').filter(Boolean);
+  const items = paths.slice(paths.indexOf('dashboard') + 1);
 
   return (
     <Breadcrumb>
@@ -45,5 +45,5 @@ export default function DashboardBreadcrumb() {
         )}
       </BreadcrumbList>
     </Breadcrumb>
-  )
+  );
 }

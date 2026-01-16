@@ -1,9 +1,9 @@
-import type { SelectShortcut } from '#/lib/db/schema'
-import { Locale } from '#/lib/i18n'
+import type { SelectShortcut } from '#/lib/db/schema';
+import type { Locale } from '#/lib/i18n';
 
-import ShortcutCard from './shortcut-card'
+import ShortcutCard from './shortcut-card';
 
-type ShortcutListProps = { shortcuts: SelectShortcut[]; lang: Locale }
+type ShortcutListProps = { shortcuts: SelectShortcut[]; lang: Locale };
 
 export default function ShortcutList({ shortcuts, lang }: ShortcutListProps) {
   return (
@@ -21,5 +21,5 @@ export default function ShortcutList({ shortcuts, lang }: ShortcutListProps) {
         </li>
       ))}
     </ul>
-  )
+  );
 }

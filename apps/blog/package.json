@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "biome check --write",
     "type-check": "next typegen && tsc --noEmit"
   },
   "dependencies": {
@@ -27,12 +27,11 @@
     "unified": "^11.0.4"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
+    "@repo/biome-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "eslint": "catalog:",
     "postcss": "catalog:",
     "typescript": "catalog:"
   }

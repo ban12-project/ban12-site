@@ -1,24 +1,24 @@
-'use client'
+'use client';
 
-import { forwardRef } from 'react'
-import NextLink from 'next/link'
+import NextLink from 'next/link';
+import { forwardRef } from 'react';
 
-import { useLocale } from './i18n'
+import { useLocale } from './i18n';
 
-type Props = React.ComponentPropsWithRef<typeof NextLink>
+type Props = React.ComponentPropsWithRef<typeof NextLink>;
 
 export const Link = forwardRef<React.ComponentRef<'a'>, Props>(function Link(
   { href, ...rest },
   forwardedRef,
 ) {
-  const { locale } = useLocale()
+  const { locale } = useLocale();
 
   const isExternal =
     typeof href === 'string'
       ? href.startsWith('http')
-      : Boolean(href.pathname?.startsWith('http'))
+      : Boolean(href.pathname?.startsWith('http'));
 
-  if (isExternal) return <NextLink {...rest} href={href} ref={forwardedRef} />
+  if (isExternal) return <NextLink {...rest} href={href} ref={forwardedRef} />;
 
   const hrefWithLocale =
     typeof href === 'string'
@@ -26,7 +26,7 @@ export const Link = forwardRef<React.ComponentRef<'a'>, Props>(function Link(
       : {
           ...href,
           pathname: `/${locale}${href.pathname ?? ''}`,
-        }
+        };
 
-  return <NextLink {...rest} href={hrefWithLocale} ref={forwardedRef} />
-})
+  return <NextLink {...rest} href={hrefWithLocale} ref={forwardedRef} />;
+});

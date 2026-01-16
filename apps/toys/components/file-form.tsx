@@ -1,27 +1,27 @@
-import { ReactEventHandler, useRef } from 'react'
+import { type ReactEventHandler, useRef } from 'react';
 
-import { useDragDrop } from '#/hooks/use-drag-drop'
+import { useDragDrop } from '#/hooks/use-drag-drop';
 
-import type { Append } from './file-explorer'
+import type { Append } from './file-explorer';
 
 interface FileFormProps {
-  append: Append
+  append: Append;
 }
 
 export default function Form({ append }: FileFormProps) {
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit: ReactEventHandler = (e) => {
-    e.preventDefault()
-    const files = inputRef.current?.files
-    if (!files) return
-    for (let i = 0, len = files.length; i < len; i++) append(files[i])
-  }
+    e.preventDefault();
+    const files = inputRef.current?.files;
+    if (!files) return;
+    for (let i = 0, len = files.length; i < len; i++) append(files[i]);
+  };
 
   const callback = useRef((files: File[]) => {
-    for (let i = 0, len = files.length; i < len; i++) append(files[i])
-  }).current
-  const { isHovering } = useDragDrop(() => window, callback)
+    for (let i = 0, len = files.length; i < len; i++) append(files[i]);
+  }).current;
+  const { isHovering } = useDragDrop(() => window, callback);
 
   return (
     <form onSubmit={onSubmit} className="h-[100px]">
@@ -41,7 +41,9 @@ export default function Form({ append }: FileFormProps) {
         multiple
         onChange={onSubmit}
       />
-      <button className="sr-only">submit</button>
+      <button type="submit" className="sr-only">
+        submit
+      </button>
     </form>
-  )
+  );
 }

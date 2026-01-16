@@ -1,32 +1,31 @@
-'use client'
+'use client';
 
-import { useMemo, useState } from 'react'
-import { cn } from '@repo/ui/lib/utils'
-
-import type { Messages } from '#/lib/i18n'
-import { useResponsive } from '@repo/ui/hooks/use-responsive'
-import PageDrawer, { PageDrawerProps } from '#/components/page-drawer'
+import { useResponsive } from '@repo/ui/hooks/use-responsive';
+import { cn } from '@repo/ui/lib/utils';
+import { useMemo, useState } from 'react';
+import PageDrawer, { type PageDrawerProps } from '#/components/page-drawer';
+import type { Messages } from '#/lib/i18n';
 
 type Drawer = {
-  messages: Messages
-  children?: React.ReactNode
-}
+  messages: Messages;
+  children?: React.ReactNode;
+};
 
-const snapPoints = [0.7, 1]
+const snapPoints = [0.7, 1];
 
 export default function Drawer({ messages, children }: Drawer) {
-  const [snap, setSnap] = useState<number | string | null>(snapPoints[0])
-  const { breakpoints } = useResponsive()
+  const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
+  const { breakpoints } = useResponsive();
 
   const props: PageDrawerProps = useMemo(() => {
     const props = {
       messages,
       className: 'flex h-full flex-col',
       children,
-    }
+    };
 
     // desktop
-    if (breakpoints.lg) return props
+    if (breakpoints.lg) return props;
 
     // mobile
     return {
@@ -36,8 +35,8 @@ export default function Drawer({ messages, children }: Drawer) {
       fadeFromIndex: 0,
       activeSnapPoint: snap,
       setActiveSnapPoint: setSnap,
-    }
-  }, [breakpoints.lg, children, messages, snap])
+    };
+  }, [breakpoints.lg, children, messages, snap]);
 
-  return <PageDrawer {...props} />
+  return <PageDrawer {...props} />;
 }

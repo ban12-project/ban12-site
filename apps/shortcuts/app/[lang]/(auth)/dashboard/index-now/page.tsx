@@ -1,35 +1,34 @@
-import { Suspense } from 'react'
-import { connection } from 'next/server'
+import { connection } from 'next/server';
+import { Suspense } from 'react';
+import sitemap from '#/app/sitemap';
+import { submitURLs } from '#/lib/index-now';
 
-import { submitURLs } from '#/lib/index-now'
-import sitemap from '#/app/sitemap'
-
-import Form from './Form'
+import Form from './Form';
 
 export default async function IndexNowPage() {
   return (
     <Suspense fallback="Loading">
       <Suspended />
     </Suspense>
-  )
+  );
 }
 
 async function Suspended() {
-  await connection()
-  const sitemapUrls = await sitemap()
+  await connection();
+  const sitemapUrls = await sitemap();
 
-  const submit = async (prevState: string | undefined, formData: FormData) => {
-    'use server'
+  const submit = async (_prevState: string | undefined, formData: FormData) => {
+    'use server';
 
-    const urls = (formData.get('urls') as string).split(/\s/g)
-    if (!urls.length) return 'No urls.'
+    const urls = (formData.get('urls') as string).split(/\s/g);
+    if (!urls.length) return 'No urls.';
 
     try {
-      await submitURLs(urls)
+      await submitURLs(urls);
     } catch {
-      return 'Failed to submit urls.'
+      return 'Failed to submit urls.';
     }
-  }
+  };
 
-  return <Form urls={sitemapUrls.map(({ url }) => url)} submit={submit} />
+  return <Form urls={sitemapUrls.map(({ url }) => url)} submit={submit} />;
 }

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useReportWebVitals } from 'next/web-vitals'
-import { sendGAEvent } from '@next/third-parties/google'
+import { sendGAEvent } from '@next/third-parties/google';
+import { useReportWebVitals } from 'next/web-vitals';
 
 export function WebVitals() {
   useReportWebVitals((metric) => {
@@ -11,8 +11,8 @@ export function WebVitals() {
       ),
       event_label: metric.id,
       non_interaction: true,
-    })
-  })
+    });
+  });
 
-  return null
+  return null;
 }

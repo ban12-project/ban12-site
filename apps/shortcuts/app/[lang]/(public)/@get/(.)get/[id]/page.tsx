@@ -1,26 +1,25 @@
-import { Suspense } from 'react'
-import { Loader } from 'lucide-react'
-
-import { getDictionary } from '#/lib/i18n'
-import PageDrawer from '#/components/page-drawer'
-import ShareButton from '#/components/share-button'
-import ShortcutAdd, { type ShortcutAddProps } from '#/components/shortcut-add'
+import { Loader } from 'lucide-react';
+import { Suspense } from 'react';
+import PageDrawer from '#/components/page-drawer';
+import ShareButton from '#/components/share-button';
+import ShortcutAdd, { type ShortcutAddProps } from '#/components/shortcut-add';
 import { getShortcuts } from '#/lib/db/queries';
+import { getDictionary } from '#/lib/i18n';
 
 type Props = {
-  params: Promise<ShortcutAddProps['params']>
-}
+  params: Promise<ShortcutAddProps['params']>;
+};
 
 export async function generateStaticParams() {
-  const shortcuts = await getShortcuts()
+  const shortcuts = await getShortcuts();
   return shortcuts.map((shortcut) => ({
     id: shortcut.uuid,
-  }))
+  }));
 }
 
 export default async function ShortcutPage(props: Props) {
-  const params = await props.params
-  const messages = await getDictionary(params.lang)
+  const params = await props.params;
+  const messages = await getDictionary(params.lang);
 
   return (
     <PageDrawer messages={messages} header={<ShareButton />}>
@@ -35,5 +34,5 @@ export default async function ShortcutPage(props: Props) {
         <ShortcutAdd className="flex-1" messages={messages} params={params} />
       </Suspense>
     </PageDrawer>
-  )
+  );
 }

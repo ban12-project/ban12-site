@@ -1,11 +1,11 @@
-import { Fragment, ViewTransition } from 'react'
-import Link from 'next/link'
+import Link from 'next/link';
+import { Fragment, ViewTransition } from 'react';
 
-import type { Post } from '#/lib/api'
-import { formatDate } from '#/lib/utils'
+import type { Post } from '#/lib/api';
+import { formatDate } from '#/lib/utils';
 
-import Avatar from './avatar'
-import GridContainer from './grid-container'
+import Avatar from './avatar';
+import GridContainer from './grid-container';
 
 export default function Post({ posts }: { posts: Post[] }) {
   return (
@@ -57,5 +57,5 @@ export default function Post({ posts }: { posts: Post[] }) {
         </Fragment>
       ))}
     </div>
-  )
+  );
 }

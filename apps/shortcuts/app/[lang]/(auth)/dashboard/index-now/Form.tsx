@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { useActionState } from 'react'
-import { Button } from '@repo/ui/components/button'
+import { Button } from '@repo/ui/components/button';
+import { useActionState } from 'react';
 
 type Props = {
-  urls: string[]
+  urls: string[];
   submit: (
     prevState: string | undefined,
     formData: FormData,
-  ) => Promise<string | undefined>
-}
+  ) => Promise<string | undefined>;
+};
 
 export default function Form({ submit, urls }: Props) {
-  const [errorMessage, dispatch, pending] = useActionState(submit, undefined)
+  const [errorMessage, dispatch, pending] = useActionState(submit, undefined);
 
   return (
     <form action={dispatch}>
@@ -33,5 +33,5 @@ export default function Form({ submit, urls }: Props) {
         Submit
       </Button>
     </form>
-  )
+  );
 }

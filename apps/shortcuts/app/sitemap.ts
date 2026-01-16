@@ -1,10 +1,10 @@
-import type { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next';
 
-import { getAlbums, getCollections, getShortcuts } from '#/lib/db/queries'
-import { i18n } from '#/lib/i18n'
+import { getAlbums, getCollections, getShortcuts } from '#/lib/db/queries';
+import { i18n } from '#/lib/i18n';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const locales = Object.keys(i18n.locales)
+  const locales = Object.keys(i18n.locales);
 
   const routesMap: MetadataRoute.Sitemap = [''].map((route) => ({
     url: `${process.env.NEXT_PUBLIC_HOST_URL}${route}`,
@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ]),
       ),
     },
-  }))
+  }));
 
   const shortcutsPromise = getShortcuts().then((shortcuts) =>
     shortcuts.map((shortcut) => ({
@@ -32,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ),
       },
     })),
-  )
+  );
 
   const collectionsPromise = getCollections().then((collections) =>
     collections.map((collection) => ({
@@ -47,7 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ),
       },
     })),
-  )
+  );
 
   const albumsPromise = getAlbums().then((albums) =>
     albums.map((album) => ({
@@ -62,17 +62,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ),
       },
     })),
-  )
+  );
 
-  let fetchedRoutes: MetadataRoute.Sitemap = []
+  let fetchedRoutes: MetadataRoute.Sitemap = [];
 
   try {
     fetchedRoutes = (
       await Promise.all([shortcutsPromise, collectionsPromise, albumsPromise])
-    ).flat()
+    ).flat();
   } catch (error) {
-    throw error as Error
+    throw error as Error;
   }
 
-  return [...routesMap, ...fetchedRoutes]
+  return [...routesMap, ...fetchedRoutes];
 }

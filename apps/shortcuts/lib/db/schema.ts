@@ -1,4 +1,4 @@
-import { relations } from 'drizzle-orm'
+import { relations } from 'drizzle-orm';
 import {
   boolean,
   foreignKey,
@@ -12,10 +12,10 @@ import {
   unique,
   uniqueIndex,
   uuid,
-} from 'drizzle-orm/pg-core'
-import type { AdapterAccountType } from 'next-auth/adapters'
+} from 'drizzle-orm/pg-core';
+import type { AdapterAccountType } from 'next-auth/adapters';
 
-import type { Locale } from '#/lib/i18n'
+import type { Locale } from '#/lib/i18n';
 
 export const users = pgTable('user', {
   id: text('id')
@@ -26,7 +26,7 @@ export const users = pgTable('user', {
   emailVerified: timestamp('emailVerified', { mode: 'date' }),
   image: text('image'),
   password: text('password'),
-})
+});
 
 export const accounts = pgTable(
   'account',
@@ -50,7 +50,7 @@ export const accounts = pgTable(
       columns: [account.provider, account.providerAccountId],
     }),
   ],
-)
+);
 
 export const sessions = pgTable('session', {
   sessionToken: text('sessionToken').primaryKey(),
@@ -58,7 +58,7 @@ export const sessions = pgTable('session', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   expires: timestamp('expires', { mode: 'date' }).notNull(),
-})
+});
 
 export const verificationTokens = pgTable(
   'verificationToken',
@@ -72,7 +72,7 @@ export const verificationTokens = pgTable(
       columns: [verificationToken.identifier, verificationToken.token],
     }),
   ],
-)
+);
 
 export const authenticator = pgTable(
   'authenticator',
@@ -96,9 +96,9 @@ export const authenticator = pgTable(
       .onDelete('cascade')
       .onUpdate('cascade'),
   ],
-)
+);
 
-export type LocalizedString = { [key in Locale]: string }
+export type LocalizedString = { [key in Locale]: string };
 
 export const shortcut = pgTable(
   'shortcut',
@@ -131,7 +131,7 @@ export const shortcut = pgTable(
     uniqueIndex('Shortcut_uuid_key').using('btree', table.uuid),
     unique('shortcut_uuid_key').on(table.uuid),
   ],
-)
+);
 
 export const album = pgTable('album', {
   id: serial('id').primaryKey().notNull(),
@@ -145,7 +145,7 @@ export const album = pgTable('album', {
     onDelete: 'set null',
     onUpdate: 'cascade',
   }),
-})
+});
 
 export const collection = pgTable('collection', {
   id: serial('id').primaryKey().notNull(),
@@ -156,7 +156,7 @@ export const collection = pgTable('collection', {
   title: jsonb('title').notNull().$type<LocalizedString>(),
   image: text('image').notNull(),
   textColor: text('textColor').default(''),
-})
+});
 
 export const shortcutRelations = relations(shortcut, ({ one }) => ({
   album: one(album, { fields: [shortcut.albumId], references: [album.id] }),
@@ -164,7 +164,7 @@ export const shortcutRelations = relations(shortcut, ({ one }) => ({
     fields: [shortcut.collectionId],
     references: [collection.id],
   }),
-}))
+}));
 
 export const albumRelations = relations(album, ({ many, one }) => ({
   shortcuts: many(shortcut),
@@ -172,16 +172,16 @@ export const albumRelations = relations(album, ({ many, one }) => ({
     fields: [album.collectionId],
     references: [collection.id],
   }),
-}))
+}));
 
 export const collectionsRelations = relations(collection, ({ many }) => ({
   albums: many(album),
   shortcuts: many(shortcut),
-}))
+}));
 
-export type SelectShortcut = typeof shortcut.$inferSelect
-export type InsertShortcut = typeof shortcut.$inferInsert
-export type SelectAlbum = typeof album.$inferSelect
-export type InsertAlbum = typeof album.$inferInsert
-export type SelectCollection = typeof collection.$inferSelect
-export type InsertCollection = typeof collection.$inferInsert
+export type SelectShortcut = typeof shortcut.$inferSelect;
+export type InsertShortcut = typeof shortcut.$inferInsert;
+export type SelectAlbum = typeof album.$inferSelect;
+export type InsertAlbum = typeof album.$inferInsert;
+export type SelectCollection = typeof collection.$inferSelect;
+export type InsertCollection = typeof collection.$inferInsert;

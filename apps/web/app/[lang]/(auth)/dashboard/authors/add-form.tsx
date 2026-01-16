@@ -1,8 +1,7 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@repo/ui/components/button'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@repo/ui/components/button';
 import {
   Dialog,
   DialogClose,
@@ -12,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@repo/ui/components/dialog'
+} from '@repo/ui/components/dialog';
 import {
   Form,
   FormControl,
@@ -20,24 +19,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@repo/ui/components/form'
-import { Input } from '@repo/ui/components/input'
-import { LoaderCircleIcon } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import * as z from 'zod'
+} from '@repo/ui/components/form';
+import { Input } from '@repo/ui/components/input';
+import { LoaderCircleIcon } from 'lucide-react';
+import * as React from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import * as z from 'zod';
 
-import { addAuthor } from '../../actions'
+import { addAuthor } from '../../actions';
 
-const initialState = { message: '', errors: {} }
+const initialState = { message: '', errors: {} };
 const formSchema = z.object({
   platform: z.enum(['bilibili']),
   platformId: z.string().nonempty(),
-})
+});
 
 export default function AddForm() {
-  const [open, setOpen] = React.useState(false)
-  const [state, action, pending] = React.useActionState(addAuthor, initialState)
+  const [open, setOpen] = React.useState(false);
+  const [state, action, pending] = React.useActionState(
+    addAuthor,
+    initialState,
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,27 +48,27 @@ export default function AddForm() {
       platform: 'bilibili',
       platformId: '',
     },
-  })
+  });
 
   const onSubmit: React.ReactEventHandler<
     React.ComponentRef<'button'>
   > = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const currentTarget = e.currentTarget
+    const currentTarget = e.currentTarget;
 
-    const isValid = await form.trigger()
-    if (!isValid) return
+    const isValid = await form.trigger();
+    if (!isValid) return;
 
-    currentTarget.form?.requestSubmit()
-  }
+    currentTarget.form?.requestSubmit();
+  };
 
   React.useEffect(() => {
-    if (state.message !== 'success') return
-    form.reset()
-    setOpen(false)
-    toast.success('Author added successfully')
-  }, [form, setOpen, state])
+    if (state.message !== 'success') return;
+    form.reset();
+    setOpen(false);
+    toast.success('Author added successfully');
+  }, [form, state]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -136,5 +139,5 @@ export default function AddForm() {
         </form>
       </Form>
     </Dialog>
-  )
+  );
 }

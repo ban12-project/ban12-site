@@ -1,4 +1,4 @@
-@import '@repo/ui/globals.css';
+@import "@repo/ui/globals.css";
 
 @theme {
   --animate-slide-down-and-fade: slideDownAndFade 400ms

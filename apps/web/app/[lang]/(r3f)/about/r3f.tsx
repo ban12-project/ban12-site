@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { Suspense } from 'react'
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 
 const View = dynamic(
   () =>
@@ -17,6 +17,7 @@ const View = dynamic(
           fill="none"
           viewBox="0 0 24 24"
         >
+          <title>Loading...</title>
           <circle
             className="opacity-25"
             cx="12"
@@ -34,7 +35,7 @@ const View = dynamic(
       </div>
     ),
   },
-)
+);
 const Voxel = dynamic(
   () =>
     import('#/components/voxel').then((mod) => ({
@@ -43,7 +44,7 @@ const Voxel = dynamic(
   {
     ssr: false,
   },
-)
+);
 
 export default function R3f() {
   return (
@@ -52,5 +53,5 @@ export default function R3f() {
         <Voxel />
       </Suspense>
     </View>
-  )
+  );
 }

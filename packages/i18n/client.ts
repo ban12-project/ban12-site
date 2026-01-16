@@ -1,2 +1,2 @@
-export * from './i18n'
-export * from './link'
+export * from './i18n';
+export * from './link';
