@@ -25,15 +25,10 @@ export const metadata: Metadata = {
   },
 };
 
-const preload = () => {
-  void getRestaurants();
-};
-
 export default async function FollowUpPage(
   props: PageProps<'/[lang]/follow-up'>,
 ) {
-  preload();
-
+  // Start fetch immediately, pass promise to children
   const restaurants = getRestaurants();
 
   return (

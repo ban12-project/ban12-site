@@ -5,12 +5,19 @@ import { LocaleProvider } from '@repo/i18n/client';
 import { Toaster } from '@repo/ui/components/sonner';
 import type { Metadata, Viewport } from 'next';
 import dynamic from 'next/dynamic';
+import { Inter } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 // import CSSPaintPolyfill from '#/components/css-paint-polyfill'
 import { WebVitals } from '#/components/web-vitals';
 import { getDictionary, i18n, type Locale } from '#/lib/i18n';
 
 const SentryLoader = dynamic(() => import('#/components/sentry-loader'));
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 export async function generateMetadata(
   props: LayoutProps<'/[lang]'>,
@@ -78,6 +85,7 @@ export default async function RootLayout(props: LayoutProps<'/[lang]'>) {
       lang={params.lang}
       dir={params.lang === 'ar' ? 'rtl' : 'ltr'}
       suppressHydrationWarning
+      className={`${inter.variable}`}
     >
       <body className="bg-white font-sans text-black antialiased dark:bg-black dark:text-white">
         <ThemeProvider

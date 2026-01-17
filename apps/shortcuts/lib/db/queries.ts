@@ -1,36 +1,20 @@
 import 'server-only';
 
-import { Redis } from '@upstash/redis';
 import { eq, or, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { cacheTag } from 'next/cache';
 
 import * as schema from './schema';
-import {
-  album,
-  collection,
-  type LocalizedString,
-  type SelectShortcut,
-  shortcut,
-} from './schema';
-
-const redis = Redis.fromEnv();
+import { album, collection, type LocalizedString, shortcut } from './schema';
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) throw new Error('Not valid database url');
 
 export const db = drizzle(connectionString, { schema });
 
-const CACHE_TTL = {
-  SHORTCUT: 3600, // 1小时
-  SHORTCUTS_BY_ALBUM: 1800, // 30分钟
-  ALBUMS: 3600, // 1小时
-  COLLECTIONS: 3600, // 1小时
-  ALBUMS_WITH_SHORTCUTS: 1800, // 30分钟
-  SEARCH: 900, // 15分钟
-};
-
 export async function getUser(email: string) {
+  'use cache';
+  cacheTag('user');
   try {
     const user = await db.query.users.findFirst({
       where: (user, { eq }) => eq(user.email, email),
@@ -81,11 +65,6 @@ export async function saveShortcut({
       collectionId,
       albumId,
     });
-
-    await redis.del(`shortcut:uuid:${uuid}`);
-    if (albumId) {
-      await redis.del(`shortcuts:album:${albumId}:*`);
-    }
   } catch (error) {
     console.error('Failed to save shortcut in database');
     throw error;
@@ -132,11 +111,6 @@ export async function updateShortcutByUuid({
         albumId,
       })
       .where(eq(shortcut.uuid, uuid));
-
-    await redis.del(`shortcut:uuid:${uuid}`);
-    if (albumId) {
-      await redis.del(`shortcuts:album:${albumId}:*`);
-    }
   } catch (error) {
     console.error('Failed to update shortcut in database');
     throw error;
@@ -146,8 +120,6 @@ export async function updateShortcutByUuid({
 export async function deleteShortcutByUuid(uuid: string) {
   try {
     await db.delete(shortcut).where(eq(shortcut.uuid, uuid));
-
-    await redis.del(`shortcut:uuid:${uuid}`);
   } catch (error) {
     console.error('Failed to delete shortcut in database');
     throw error;
@@ -171,19 +143,10 @@ export const getShortcutByUuid = async (uuid: string) => {
   'use cache';
   cacheTag('shortcut');
 
-  const redisCacheKey = `shortcut:uuid:${uuid}`;
-
   try {
-    const cachedShortcut = await redis.get<SelectShortcut>(redisCacheKey);
-    if (cachedShortcut) return cachedShortcut;
-
     const shortcut = await db.query.shortcut.findFirst({
       where: (shortcut, { eq }) => eq(shortcut.uuid, uuid),
     });
-
-    if (shortcut) {
-      await redis.set(redisCacheKey, shortcut, { ex: CACHE_TTL.SHORTCUT });
-    }
 
     return shortcut;
   } catch (error) {
@@ -200,26 +163,13 @@ export const getShortcutByAlbumId = async (
   'use cache';
   cacheTag('shortcut');
 
-  const redisCacheKey = `shortcuts:album:${albumId}:page:${currentPage}:size:${pageSize}`;
-
   try {
-    const cachedShortcuts = await redis.get<SelectShortcut[]>(redisCacheKey);
-    if (cachedShortcuts) {
-      return cachedShortcuts;
-    }
-
     const shortcuts = await db.query.shortcut.findMany({
       where: (shortcut, { eq }) => eq(shortcut.albumId, albumId),
       limit: pageSize,
       offset: (currentPage - 1) * pageSize,
       orderBy: (shortcuts, { desc }) => desc(shortcuts.updatedAt),
     });
-
-    if (shortcuts.length > 0) {
-      await redis.set(redisCacheKey, shortcuts, {
-        ex: CACHE_TTL.SHORTCUTS_BY_ALBUM,
-      });
-    }
 
     return shortcuts;
   } catch (error) {
@@ -229,14 +179,10 @@ export const getShortcutByAlbumId = async (
 };
 
 export async function searchShortcutsByQuery(query: string) {
-  const cacheKey = `search:${query}`;
+  'use cache';
+  cacheTag('shortcut');
 
   try {
-    const cachedResults = await redis.get<SelectShortcut[]>(cacheKey);
-    if (cachedResults) {
-      return cachedResults;
-    }
-
     const shortcuts = await db
       .select()
       .from(shortcut)
@@ -246,10 +192,6 @@ export async function searchShortcutsByQuery(query: string) {
           sql`${shortcut.description}::text ILIKE ${`%${query}%`}`,
         ),
       );
-
-    if (shortcuts.length > 0) {
-      await redis.set(cacheKey, shortcuts, { ex: CACHE_TTL.SEARCH });
-    }
 
     return shortcuts;
   } catch (error) {

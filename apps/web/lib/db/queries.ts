@@ -1,11 +1,10 @@
 import 'server-only';
 
-import { Redis } from '@upstash/redis';
 import { and, eq, isNotNull, sql } from 'drizzle-orm';
 import { drizzle as drizzleHttp } from 'drizzle-orm/neon-http';
 import { drizzle as drizzleServerless } from 'drizzle-orm/neon-serverless';
+import { cacheTag, revalidateTag } from 'next/cache';
 import { isHangingPromiseRejectionError } from 'next/dist/server/dynamic-rendering-utils';
-import { cache } from 'react';
 
 import {
   authors,
@@ -15,27 +14,17 @@ import {
   type SelectRestaurant,
 } from './schema';
 
-const redis = Redis.fromEnv();
-
-const CACHE_TTL = {
-  AUTHORS: 3600,
-  POSTS: 3600,
-  RESTAURANTS: 3600, // 1小时
-};
-
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) throw new Error('Not valid database url');
 
 export const db = drizzleHttp(connectionString);
 export const dbServerless = drizzleServerless(connectionString);
 
-export const getRestaurants = cache(async (all = false) => {
-  const cacheKey = `restaurants:${all ? 'all' : 'filtered'}`;
+export async function getRestaurants(all = false) {
+  'use cache';
+  cacheTag('restaurants', all ? 'restaurants:all' : 'restaurants:filtered');
 
   try {
-    const cachedRestaurants = await redis.get<SelectRestaurant[]>(cacheKey);
-    if (cachedRestaurants) return cachedRestaurants;
-
     const restaurants = await db
       .select()
       .from(restaurant)
@@ -47,10 +36,6 @@ export const getRestaurants = cache(async (all = false) => {
               isNotNull(restaurant.ai_summarize),
             ),
       );
-
-    if (restaurants.length > 0) {
-      await redis.set(cacheKey, restaurants, { ex: CACHE_TTL.RESTAURANTS });
-    }
 
     return restaurants;
   } catch (error) {
@@ -64,7 +49,7 @@ export const getRestaurants = cache(async (all = false) => {
     console.error('Failed to get restaurants from database');
     throw error;
   }
-});
+}
 
 export async function updateYoutubeLinkById({
   link,
@@ -79,11 +64,9 @@ export async function updateYoutubeLinkById({
       .set({ youtube: link, status: 'pending' })
       .where(eq(restaurant.id, id));
 
-    await Promise.all([
-      redis.del(`restaurant:id:${id}`),
-      redis.del('restaurants:filtered'),
-      redis.del('restaurants:all'),
-    ]);
+    revalidateTag(`restaurant:id:${id}`, { expire: 0 });
+    revalidateTag('restaurants:filtered', { expire: 0 });
+    revalidateTag('restaurants:all', { expire: 0 });
   } catch (error) {
     console.error('Failed to update link in database');
     throw error;
@@ -100,11 +83,9 @@ export async function updateStatusById({
   try {
     await db.update(restaurant).set({ status }).where(eq(restaurant.id, id));
 
-    await Promise.all([
-      redis.del(`restaurant:id:${id}`),
-      redis.del('restaurants:filtered'),
-      redis.del('restaurants:all'),
-    ]);
+    revalidateTag(`restaurant:id:${id}`, { expire: 0 });
+    revalidateTag('restaurants:filtered', { expire: 0 });
+    revalidateTag('restaurants:all', { expire: 0 });
   } catch (error) {
     console.error('Failed to update status in database');
     throw error;
@@ -113,11 +94,9 @@ export async function updateStatusById({
 
 export async function cleanRestaurantCacheById(id: SelectRestaurant['id']) {
   try {
-    await Promise.all([
-      redis.del(`restaurant:id:${id}`),
-      redis.del('restaurants:filtered'),
-      redis.del('restaurants:all'),
-    ]);
+    revalidateTag(`restaurant:id:${id}`, { expire: 0 });
+    revalidateTag('restaurants:filtered', { expire: 0 });
+    revalidateTag('restaurants:all', { expire: 0 });
   } catch (error) {
     console.error('Failed to clean restaurant cache by id');
     throw error;
@@ -125,21 +104,15 @@ export async function cleanRestaurantCacheById(id: SelectRestaurant['id']) {
 }
 
 export async function getRestaurantById(id: string) {
-  const cacheKey = `restaurant:id:${id}`;
+  'use cache';
+  cacheTag(`restaurant:id:${id}`);
 
   try {
-    const cachedRestaurant = await redis.get<SelectRestaurant>(cacheKey);
-    if (cachedRestaurant) return cachedRestaurant;
-
     const [item] = await db
       .select()
       .from(restaurant)
       .where(eq(restaurant.id, id))
       .limit(1);
-
-    if (item) {
-      await redis.set(cacheKey, item, { ex: CACHE_TTL.RESTAURANTS });
-    }
 
     return item;
   } catch (error) {
@@ -149,12 +122,10 @@ export async function getRestaurantById(id: string) {
 }
 
 export async function getRestaurantWithPostsByName(name: string) {
-  const cacheKey = `restaurant:name:${name}`;
+  'use cache';
+  cacheTag(`restaurant:name:${name}`);
 
   try {
-    const cachedRestaurant = await redis.get<typeof item>(cacheKey);
-    if (cachedRestaurant) return cachedRestaurant;
-
     const [item] = await db
       .select({
         restaurant: restaurant,
@@ -168,10 +139,6 @@ export async function getRestaurantWithPostsByName(name: string) {
       .leftJoin(posts, eq(postsToRestaurants.postId, posts.id))
       .where(sql`${restaurant.ai_summarize}->>'restaurantName' = ${name}`)
       .limit(1);
-
-    if (item) {
-      await redis.set(cacheKey, item, { ex: CACHE_TTL.RESTAURANTS });
-    }
 
     return item;
   } catch (error) {
@@ -190,11 +157,9 @@ export async function updateLocationById({
   try {
     await db.update(restaurant).set({ location }).where(eq(restaurant.id, id));
 
-    await Promise.all([
-      redis.del(`restaurant:id:${id}`),
-      redis.del('restaurants:filtered'),
-      redis.del('restaurants:all'),
-    ]);
+    revalidateTag(`restaurant:id:${id}`, { expire: 0 });
+    revalidateTag('restaurants:filtered', { expire: 0 });
+    revalidateTag('restaurants:all', { expire: 0 });
   } catch (error) {
     console.error('Failed to update location in database');
     throw error;
@@ -211,11 +176,9 @@ export async function updateInvisibleById({
   try {
     await db.update(restaurant).set({ invisible }).where(eq(restaurant.id, id));
 
-    await Promise.all([
-      redis.del(`restaurant:id:${id}`),
-      redis.del('restaurants:filtered'),
-      redis.del('restaurants:all'),
-    ]);
+    revalidateTag(`restaurant:id:${id}`, { expire: 0 });
+    revalidateTag('restaurants:filtered', { expire: 0 });
+    revalidateTag('restaurants:all', { expire: 0 });
   } catch (error) {
     console.error('Failed to update invisible in database');
     throw error;
@@ -242,10 +205,9 @@ export async function linkPostToNewRestaurantByPostId({
 
       return newRestaurant;
     });
-    await Promise.all([
-      redis.del('restaurants:filtered'),
-      redis.del('restaurants:all'),
-    ]);
+
+    revalidateTag('restaurants:filtered', { expire: 0 });
+    revalidateTag('restaurants:all', { expire: 0 });
 
     return newRestaurant;
   } catch (error) {
@@ -285,6 +247,9 @@ export async function insertAuthor({
 }
 
 export async function getAuthors() {
+  'use cache';
+  cacheTag('authors');
+
   try {
     return await db.select().from(authors);
   } catch (error) {
@@ -301,6 +266,9 @@ export async function getAuthors() {
 }
 
 export async function getPosts() {
+  'use cache';
+  cacheTag('posts');
+
   try {
     return await db
       .select({
