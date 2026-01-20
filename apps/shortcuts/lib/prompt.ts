@@ -1,4 +1,5 @@
-import { GoogleGenAI } from '@google/genai';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { generateText } from 'ai';
 
 import type { LocalizedString } from './db/schema';
 import { LocalizedHelper } from './utils';
@@ -12,19 +13,24 @@ export async function answerAlbumId(
     if (!process.env.GOOGLE_GEMINI_KEY || !process.env.GOOGLE_GEMINI_MODEL)
       throw new Error('Google Gemini API key or model not set');
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GEMINI_KEY });
-    const contents = `
+    const google = createGoogleGenerativeAI({
+      apiKey: process.env.GOOGLE_GEMINI_KEY,
+    });
+
+    const prompt = `
       Which of the following options describes "${source}" Answer with numbers:
       Options:
       ${options}
       The answer is:
     `;
-    const response = await ai.models.generateContent({
-      model: process.env.GOOGLE_GEMINI_MODEL,
-      contents,
+
+    const { text } = await generateText({
+      model: google(process.env.GOOGLE_GEMINI_MODEL),
+      prompt,
     });
-    if (!response.text) throw new Error('Failed to get response.text');
-    const id = Number.parseInt(response.text, 10);
+
+    if (!text) throw new Error('Failed to get response text');
+    const id = Number.parseInt(text, 10);
     if (Number.isNaN(id)) throw new Error('Failed to get album id');
     return id;
   } catch {
@@ -38,9 +44,11 @@ export async function answerTranslate(input: string): Promise<LocalizedString> {
     if (!process.env.GOOGLE_GEMINI_KEY || !process.env.GOOGLE_GEMINI_MODEL)
       throw new Error('Google Gemini API key or model not set');
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GEMINI_KEY });
+    const google = createGoogleGenerativeAI({
+      apiKey: process.env.GOOGLE_GEMINI_KEY,
+    });
 
-    const contents = `
+    const prompt = `
         Objective: Automatically detect the language of user input and translate it into several other languages.
         Languages: ${LocalizedHelper.locales.join(', ')}
   
@@ -51,12 +59,14 @@ export async function answerTranslate(input: string): Promise<LocalizedString> {
         input: ${input}
         output:
       `;
-    const response = await ai.models.generateContent({
-      model: process.env.GOOGLE_GEMINI_MODEL,
-      contents,
+
+    const { text } = await generateText({
+      model: google(process.env.GOOGLE_GEMINI_MODEL),
+      prompt,
     });
-    if (!response.text) throw new Error('Failed to get response.text');
-    return JSON.parse(response.text.replace(/```json|\n|```/g, ''));
+
+    if (!text) throw new Error('Failed to get response text');
+    return JSON.parse(text.replace(/```json|\n|```/g, ''));
   } catch {
     return LocalizedHelper.locales.reduce((result, locale) => {
       result[locale] = input;

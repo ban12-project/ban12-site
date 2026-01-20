@@ -18,11 +18,12 @@
     "db:up": "drizzle-kit up"
   },
   "dependencies": {
+    "@ai-sdk/google": "catalog:",
     "@auth/drizzle-adapter": "catalog:",
     "@aws-sdk/client-s3": "^3.717.0",
     "@aws-sdk/s3-request-presigner": "^3.717.0",
-    "@google/genai": "catalog:",
     "@gsap/react": "catalog:",
+    "ai": "catalog:",
     "@hookform/resolvers": "catalog:",
     "@next/third-parties": "catalog:",
     "@repo/i18n": "workspace:*",
