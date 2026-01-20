@@ -11,10 +11,13 @@
   "author": "google gemini",
   "license": "MIT",
   "dependencies": {
+    "@ai-sdk/google": "catalog:",
     "@google/genai": "catalog:",
+    "ai": "catalog:",
     "dotenv": "catalog:",
     "inngest": "^3.40.1",
-    "postgres": "^3.4.5"
+    "postgres": "^3.4.5",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.1",
