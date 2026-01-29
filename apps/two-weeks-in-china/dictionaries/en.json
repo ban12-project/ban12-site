@@ -1,0 +1,208 @@
+{
+  "common": {
+    "title": "2026 Two Weeks in China (240h Visa Free)",
+    "description": "In-depth analysis and operation guide for 240-hour (10-day) visa-free transit policy, covering visa, transportation, payment, and itinerary planning.",
+    "latest_policy": "2026 Latest Policy",
+    "cta_plan": "Start Planning",
+    "cta_check": "Eligibility Tool",
+    "footer_note": "This guide is based on the latest policy announced in January 2026.",
+    "footer_copyright": "© 2026 Two Weeks in China"
+  },
+  "nav": {
+    "policy": "Policy",
+    "destinations": "Destinations",
+    "essentials": "Essentials",
+    "itinerary": "Itinerary",
+    "transport": "Transport",
+    "faq": "FAQ",
+    "check_eligibility": "Check Eligibility"
+  },
+  "hero": {
+    "title_line1": "Two Weeks in China",
+    "title_line2": "240-Hour Visa Free",
+    "subtitle": "In-depth analysis and operation guide for the 240-hour (10-day) visa-free transit policy, covering essentials for your trip."
+  },
+  "sections": {
+    "policy": {
+      "num": "01",
+      "title": "Policy Core",
+      "card_twov_title": "240 Hours (10 Days)",
+      "card_twov_p1": "As of Jan 2026, the Transit Without Visa (TWOV) policy has been unified and extended to 240 hours.",
+      "card_twov_p2": "This is a strategic shift from simple transit to in-depth tourism.",
+      "card_twov_list1": "Applicable to citizens of 55 countries",
+      "card_twov_list2": "Must hold connecting tickets to a third country/region",
+      "card_unilateral_badge": "Visa-Free Entry",
+      "card_unilateral_desc": "More flexible unilateral visa-free policies for countries like FR, DE, IT, SG, MY, TH.",
+      "card_unilateral_stat1_val": "15/30",
+      "card_unilateral_stat1_label": "Days of Stay",
+      "card_unilateral_stat2_val": "0",
+      "card_unilateral_stat2_label": "No transit tickets needed"
+    },
+    "rules": {
+      "num": "02",
+      "title": "Compliance Redline",
+      "abc_title": "The \"A → B → C\" Rule",
+      "abc_a": "Origin",
+      "abc_b": "China",
+      "abc_c": "Third Country",
+      "abc_alert_title": "Key Rule: A ≠ C",
+      "abc_alert_desc": "Origin A and Destination C cannot be the same. E.g., \"NYC → SHA → NYC\" is invalid.",
+      "countries_title": "Eligible Countries (55)",
+      "countries_schengen": "EU Schengen (25)",
+      "countries_schengen_list": "Austria, Belgium, Czech, Denmark, France, Germany, Greece, Hungary, Italy, Netherlands, Portugal, Spain, Sweden, Switzerland...",
+      "countries_americas": "Americas (6)",
+      "countries_americas_list": "USA, Canada, Brazil, Mexico, Argentina, Chile",
+      "countries_asia": "Asia-Pacific (9)",
+      "countries_asia_list": "Australia, New Zealand, Korea, Japan, Singapore..."
+    },
+    "survival": {
+      "num": "03",
+      "title": "Survival Guide",
+      "items": {
+        "accommodation": {
+          "title": "Accommodation",
+          "subtitle": "Must register within 24 hours",
+          "content": "Hotels register you automatically. If staying at Airbnb or with friends, you must register online with local police."
+        },
+        "payment": {
+          "title": "Payment Guide",
+          "subtitle": "Link cards to Alipay/WeChat",
+          "content": "Highly recommend downloading Alipay International. Supports Visa/Mastercard. Free for transactions under 200 RMB."
+        },
+        "internet": {
+          "title": "Network Access",
+          "subtitle": "eSIM Roaming for firewall",
+          "content": "Use eSIMs like Airalo for roaming data. It bypasses the firewall, allowing access to Google/Instagram."
+        },
+        "transport": {
+          "title": "Transportation",
+          "subtitle": "12306 & DiDi Apps",
+          "content": "Official Rail App is 12306. For local rides, use DiDi Greater China (English version available)."
+        }
+      }
+    },
+    "itinerary": {
+      "num": "04",
+      "title": "Recommended Trips",
+      "plans": {
+        "a": {
+          "badge": "Plan A",
+          "title": "Cultural Icons",
+          "desc": "Beijing - Xi'an - Shanghai",
+          "day1": "Days 1-4",
+          "loc1": "Beijing",
+          "day2": "Days 5-6",
+          "loc2": "Xi'an",
+          "day3": "Days 7-10",
+          "loc3": "Shanghai"
+        },
+        "b": {
+          "badge": "Plan B",
+          "title": "GBA Vitality",
+          "desc": "Guangzhou - Shenzhen - Hong Kong",
+          "day1": "Days 1-3",
+          "loc1": "Guangzhou",
+          "day2": "Day 4",
+          "loc2": "Foshan",
+          "day3": "Days 5-9",
+          "loc3": "GBA/HK"
+        },
+        "more": {
+          "title": "More Routes",
+          "desc": "Chengdu Pandas / Yunnan Views"
+        }
+      }
+    }
+  },
+  "nav_sections": {
+    "plan_trip": {
+      "title": "Plan Your Trip",
+      "visa_policy": "Visa Policy Guide",
+      "visa_policy_desc": "Rules for 240/144/72h transit",
+      "best_time": "Best Time to Visit",
+      "best_time_desc": "Weather & seasons by region",
+      "cost": "Travel Cost & Budget",
+      "cost_desc": "Budgeting for food & travel",
+      "safety": "Safety & Scams",
+      "safety_desc": "Emergency numbers & scams"
+    },
+    "destinations": {
+      "title": "Destinations",
+      "beijing_north": "Beijing & North",
+      "beijing_north_desc": "Great Wall, Forbidden City",
+      "shanghai_east": "Shanghai & East",
+      "shanghai_east_desc": "The Bund, Hangzhou, Suzhou",
+      "guangdong_gba": "Guangdong & GBA",
+      "guangdong_gba_desc": "HK, Shenzhen & Canton",
+      "chengdu_west": "Chengdu & West",
+      "chengdu_west_desc": "Pandas, Spicy Food, Yunnan"
+    },
+    "digital_survival": {
+      "title": "Digital Survival",
+      "esim_vpn": "eSIM & VPNs",
+      "esim_vpn_desc": "Stay connected past the GFW",
+      "payment_setup": "Alipay & WeChat Setup",
+      "payment_setup_desc": "Pay like a local without cash",
+      "train_booking": "Train Booking",
+      "train_booking_desc": "Official railway app guide",
+      "apps": "Essential Apps",
+      "apps_desc": "Maps, Translation, Rides"
+    },
+    "itineraries": {
+      "title": "Itineraries",
+      "routes_240h": "240-Hour Routes",
+      "routes_240h_desc": "Max out your 10-day stay",
+      "routes_72h": "72-Hour Layover",
+      "routes_72h_desc": "Quick layover highlights",
+      "family_trips": "Family Trips",
+      "family_trips_desc": "Kids-friendly spots & tips",
+      "train_tours": "High-Speed Train Tours",
+      "train_tours_desc": "Cross-country by High Speed Rail"
+    },
+    "entry_logistics": {
+      "title": "Entry & Logistics",
+      "arrival_card": "Arrival Card",
+      "arrival_card_desc": "How to fill correctly",
+      "health_decl": "Health Declaration",
+      "health_decl_desc": "QR code generation steps",
+      "accommodation": "Accommodation Registration",
+      "accommodation_desc": "Police registration rules",
+      "flights": "Flights",
+      "flights_desc": "Booking strategy & deals"
+    },
+    "k_visa_business": {
+      "title": "K-Visa & Business",
+      "k_visa": "STEM K-Visa Guide",
+      "k_visa_desc": "Expat talent visa details",
+      "business_travel": "Business Travel",
+      "business_travel_desc": "Etiquette & networking",
+      "trade_fairs": "Trade Fairs",
+      "trade_fairs_desc": "Canton Fair & others"
+    }
+  },
+  "eligibility": {
+    "title": "China Visa Eligibility Checker (2026)",
+    "description": "Check if you are eligible for the 240-hour visa-free transit or 15/30-day visa-free entry.",
+    "heading": "Check Your Eligibility",
+    "subheading": "Find out if you can travel to China visa-free with the latest 2026 policies.",
+    "form": {
+      "country_label": "Select your country/region of passport",
+      "country_placeholder": "Select a country...",
+      "check_btn": "Check Eligibility",
+      "reset_btn": "Check Another",
+      "result": {
+        "eligible_15d": "Visa-Free Entry (15 Days)",
+        "eligible_30d": "Visa-Free Entry (30 Days)",
+        "eligible_240h": "240-Hour Visa-Free Transit",
+        "eligible_144h": "144-Hour Visa-Free Transit",
+        "visa_required": "Visa Required",
+        "desc_15d": "You can enter China without a visa for up to 15 days for business, tourism, family visit and transit.",
+        "desc_30d": "You can enter China without a visa for up to 30 days for business, tourism, family visit and transit.",
+        "desc_240h": "You are eligible for the 240-hour (10-day) visa-free transit policy. Please ensure you meet the A → B → C transit rule.",
+        "desc_visa": "You likely need a visa to enter China. Please check with your local Chinese embassy.",
+        "abc_reminder": "Remember the A → B → C rule: You must have a confirmed ticket to a third country (C) different from your origin (A).",
+        "disclaimer": "This tool is for reference only. Please consult official sources for the most accurate information."
+      }
+    }
+  }
+}
