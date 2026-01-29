@@ -74,7 +74,7 @@ export function EligibilityForm({ dict }: { dict: Messages }) {
 
   return (
     <div className="w-full max-w-lg mx-auto">
-      <Card className="border-2 shadow-xl">
+      <Card className="shadow-[0px_5px_0px_0px_#191A23] border border-dark">
         <CardHeader>
           <CardTitle className="text-2xl text-center">
             {dict.eligibility.heading}

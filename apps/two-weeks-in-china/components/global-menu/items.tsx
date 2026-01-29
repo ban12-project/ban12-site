@@ -93,20 +93,20 @@ export const MENUS = [
     children: [
       {
         title: 'arrival_card',
-        href: '/entry-logistics/arrival-card',
+        href: '/itineraries/arrival-card',
         icon: ClipboardPen,
       },
       {
         title: 'health_decl',
-        href: '/entry-logistics/health-decl',
+        href: '/itineraries/health-declaration',
         icon: QrCode,
       },
       {
         title: 'accommodation',
-        href: '/entry-logistics/accommodation',
+        href: '/itineraries/accommodation-registration',
         icon: BedDouble,
       },
-      { title: 'flights', href: '/entry-logistics/flights', icon: Plane },
+      { title: 'flights', href: '/itineraries/flights-tickets', icon: Plane },
     ],
   },
   {

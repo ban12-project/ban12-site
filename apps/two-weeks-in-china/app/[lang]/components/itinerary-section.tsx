@@ -16,7 +16,7 @@ export function ItinerarySection({ dict }: { dict: Messages }) {
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Plan A */}
-        <Card className="bg-white border-2 border-dark rounded-[30px] overflow-hidden hover:-translate-y-2 transition-transform duration-300 shadow-[8px_8px_0px_0px_#191A23]">
+        <Card className="bg-white border border-dark rounded-[30px] overflow-hidden hover:-translate-y-2 transition-transform duration-300 shadow-[0px_5px_0px_0px_#191A23]">
           <div className="bg-dark/5 p-8">
             <Badge className="bg-dark text-white hover:bg-dark border-none px-3 py-1 text-md mb-4">
               {dict.sections.itinerary.plans.a.badge}
@@ -57,7 +57,7 @@ export function ItinerarySection({ dict }: { dict: Messages }) {
         </Card>
 
         {/* Plan B */}
-        <Card className="bg-dark text-white border-2 border-dark rounded-[30px] overflow-hidden hover:-translate-y-2 transition-transform duration-300 shadow-[8px_8px_0px_0px_#191A23]">
+        <Card className="bg-dark text-white border border-dark rounded-[30px] overflow-hidden hover:-translate-y-2 transition-transform duration-300 shadow-[0px_5px_0px_0px_#191A23]">
           <div className="bg-white/10 p-8">
             <Badge className="bg-primary text-dark hover:bg-primary border-none px-3 py-1 text-md mb-4">
               {dict.sections.itinerary.plans.b.badge}
@@ -98,7 +98,7 @@ export function ItinerarySection({ dict }: { dict: Messages }) {
         </Card>
 
         {/* More */}
-        <Card className="bg-primary border-2 border-primary rounded-[30px] flex flex-col items-center justify-center p-8 hover:-translate-y-2 transition-transform duration-300 cursor-pointer group shadow-[8px_8px_0px_0px_#191A23]">
+        <Card className="bg-primary border border-dark rounded-[30px] flex flex-col items-center justify-center p-8 hover:-translate-y-2 transition-transform duration-300 cursor-pointer group shadow-[0px_5px_0px_0px_#191A23]">
           <div className="w-16 h-16 bg-dark text-primary rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
             <MapPin className="w-8 h-8" />
           </div>

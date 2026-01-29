@@ -4,20 +4,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@repo/ui/components/accordion';
-import { CreditCard, MapPin, Train, Wifi } from 'lucide-react';
+import { AppWindow, CreditCard, MapPin, Wifi } from 'lucide-react';
 import type { Messages } from '#/lib/i18n';
 
 export function SurvivalSection({ dict }: { dict: Messages }) {
   const survivalItems = [
     {
-      name: 'accommodation',
-      icon: MapPin,
-      title: dict.sections.survival.items.accommodation.title,
-      subtitle: dict.sections.survival.items.accommodation.subtitle,
-      content: dict.sections.survival.items.accommodation.content,
-    },
-    {
-      name: 'payment',
+      name: 'items',
       icon: CreditCard,
       title: dict.sections.survival.items.payment.title,
       subtitle: dict.sections.survival.items.payment.subtitle,
@@ -31,11 +24,18 @@ export function SurvivalSection({ dict }: { dict: Messages }) {
       content: dict.sections.survival.items.internet.content,
     },
     {
-      name: 'transport',
-      icon: Train,
-      title: dict.sections.survival.items.transport.title,
-      subtitle: dict.sections.survival.items.transport.subtitle,
-      content: dict.sections.survival.items.transport.content,
+      name: 'apps',
+      icon: AppWindow,
+      title: dict.sections.survival.items.apps.title,
+      subtitle: dict.sections.survival.items.apps.subtitle,
+      content: dict.sections.survival.items.apps.content,
+    },
+    {
+      name: 'accommodation',
+      icon: MapPin,
+      title: dict.sections.survival.items.accommodation.title,
+      subtitle: dict.sections.survival.items.accommodation.subtitle,
+      content: dict.sections.survival.items.accommodation.content,
     },
   ];
 

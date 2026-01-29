@@ -1,7 +1,7 @@
 {
   "common": {
     "title": "2026 Two Weeks in China (240h Visa Free)",
-    "description": "In-depth analysis and operation guide for 240-hour (10-day) visa-free transit policy, covering visa, transportation, payment, and itinerary planning.",
+    "description": "The Ultimate China Visa-Free Guide 2026: 240-hour (10-day) transit policy, digital survival kit, and 10-day itineraries.",
     "latest_policy": "2026 Latest Policy",
     "cta_plan": "Start Planning",
     "cta_check": "Eligibility Tool",
@@ -9,109 +9,123 @@
     "footer_copyright": "© 2026 Two Weeks in China"
   },
   "nav": {
-    "policy": "Policy",
+    "policy": "Visa Guide",
     "destinations": "Destinations",
-    "essentials": "Essentials",
-    "itinerary": "Itinerary",
+    "essentials": "Survival Kit",
+    "itinerary": "10-Day Plans",
     "transport": "Transport",
-    "faq": "FAQ",
+    "faq": "Entry Rules",
+    "k_visa": "K-Visa",
     "check_eligibility": "Check Eligibility"
   },
   "hero": {
-    "title_line1": "Two Weeks in China",
-    "title_line2": "240-Hour Visa Free",
-    "subtitle": "In-depth analysis and operation guide for the 240-hour (10-day) visa-free transit policy, covering essentials for your trip."
+    "title_line1": "The Ultimate China",
+    "title_line2": "Visa-Free Guide 2026",
+    "subtitle": "Maximize the 240-hour (10-day) transit policy. Everything you need: Policies, Digital Survival Kit, and Perfect Itineraries."
   },
   "sections": {
     "policy": {
       "num": "01",
-      "title": "Policy Core",
+      "title": "The Ultimate China Visa-Free Guide 2026",
       "card_twov_title": "240 Hours (10 Days)",
-      "card_twov_p1": "As of Jan 2026, the Transit Without Visa (TWOV) policy has been unified and extended to 240 hours.",
-      "card_twov_p2": "This is a strategic shift from simple transit to in-depth tourism.",
-      "card_twov_list1": "Applicable to citizens of 55 countries",
-      "card_twov_list2": "Must hold connecting tickets to a third country/region",
-      "card_unilateral_badge": "Visa-Free Entry",
-      "card_unilateral_desc": "More flexible unilateral visa-free policies for countries like FR, DE, IT, SG, MY, TH.",
+      "card_twov_p1": "As of Jan 2026, the Transit Without Visa (TWOV) policy has been extended to 240 hours (10 days) at 65 ports including Beijing, Shanghai, and GBA.",
+      "card_twov_p2": "The A -> China -> C rule determines eligibility.",
+      "card_twov_list1": "Unified & Extended: 144h -> 240h",
+      "card_twov_list2": "Valid at 65 major ports",
+      "card_unilateral_badge": "Visa-Free Entry extended to 2026",
+      "card_unilateral_desc": "Unilateral visa-free entry for citizens of France, Germany, Italy, Spain, Australia, New Zealand, etc. New additions include Sweden.",
       "card_unilateral_stat1_val": "15/30",
-      "card_unilateral_stat1_label": "Days of Stay",
-      "card_unilateral_stat2_val": "0",
-      "card_unilateral_stat2_label": "No transit tickets needed"
+      "card_unilateral_stat1_label": "Days Visa-Free",
+      "card_unilateral_stat2_val": "No",
+      "card_unilateral_stat2_label": "Third-country ticket needed"
     },
     "rules": {
-      "num": "02",
-      "title": "Compliance Redline",
-      "abc_title": "The \"A → B → C\" Rule",
-      "abc_a": "Origin",
-      "abc_b": "China",
-      "abc_c": "Third Country",
-      "abc_alert_title": "Key Rule: A ≠ C",
-      "abc_alert_desc": "Origin A and Destination C cannot be the same. E.g., \"NYC → SHA → NYC\" is invalid.",
-      "countries_title": "Eligible Countries (55)",
-      "countries_schengen": "EU Schengen (25)",
-      "countries_schengen_list": "Austria, Belgium, Czech, Denmark, France, Germany, Greece, Hungary, Italy, Netherlands, Portugal, Spain, Sweden, Switzerland...",
-      "countries_americas": "Americas (6)",
-      "countries_americas_list": "USA, Canada, Brazil, Mexico, Argentina, Chile",
-      "countries_asia": "Asia-Pacific (9)",
-      "countries_asia_list": "Australia, New Zealand, Korea, Japan, Singapore..."
+      "num": "04",
+      "title": "China Entry Requirements & Digital Arrival Card",
+      "arrival_card_title": "Digital Arrival Card (New 2025)",
+      "arrival_card_desc": "Replace paper forms with the new Digital Arrival Card available since Nov 2025.",
+      "arrival_card_cta": "Generate QR",
+      "fingerprint_title": "Fingerprint Exemption",
+      "fingerprint_desc": "Exemption until end of 2026 for short-term visas (<180 days).",
+      "police_reg_title": "Accommodation Registration",
+      "police_reg_desc": "Mandatory 'Police Registration' within 24h. Hotels do it for you; Airbnb/friends require online self-declaration.",
+      "abc_title": "The Golden Rule: A -> B -> C",
+      "abc_a": "Country A (Departure)",
+      "abc_b": "China (Transit)",
+      "abc_c": "Country C (Dest.)",
+      "abc_alert_title": "Crucial Compliance",
+      "abc_alert_desc": "You must hold a confirmed ticket to Country C. Country A and Country C cannot be the same.",
+      "countries_title": "54 Eligible Countries"
     },
     "survival": {
-      "num": "03",
-      "title": "Survival Guide",
+      "num": "02",
+      "title": "China Digital Survival Kit",
       "items": {
-        "accommodation": {
-          "title": "Accommodation",
-          "subtitle": "Must register within 24 hours",
-          "content": "Hotels register you automatically. If staying at Airbnb or with friends, you must register online with local police."
-        },
         "payment": {
-          "title": "Payment Guide",
-          "subtitle": "Link cards to Alipay/WeChat",
-          "content": "Highly recommend downloading Alipay International. Supports Visa/Mastercard. Free for transactions under 200 RMB."
+          "title": "Payment Guide: Alipay & WeChat",
+          "subtitle": "Link Visa/Mastercard",
+          "content": "Link your foreign cards to Alipay/WeChat Pay. Transactions under 200 RMB are fee-free. No cash needed."
         },
         "internet": {
-          "title": "Network Access",
-          "subtitle": "eSIM Roaming for firewall",
-          "content": "Use eSIMs like Airalo for roaming data. It bypasses the firewall, allowing access to Google/Instagram."
+          "title": "Internet: eSIM vs VPN",
+          "subtitle": "Bypass the firewall",
+          "content": "eSIM (e.g., Airalo) is recommended as it bypasses the GFW automatically. VPNs can be unstable."
         },
-        "transport": {
-          "title": "Transportation",
-          "subtitle": "12306 & DiDi Apps",
-          "content": "Official Rail App is 12306. For local rides, use DiDi Greater China (English version available)."
+        "apps": {
+          "title": "Essential Apps",
+          "subtitle": "Trip.com, DiDi, 12306",
+          "content": "Trip.com for bookings, DiDi (English) for rides, 12306 for official train tickets, and a translation app."
+        },
+        "accommodation": {
+          "title": "Booking Hotels",
+          "subtitle": "Foreigner friendly",
+          "content": "Ensure your hotel accepts foreigners (search via Trip.com filters)."
         }
       }
     },
     "itinerary": {
-      "num": "04",
-      "title": "Recommended Trips",
+      "num": "03",
+      "title": "10 Days in China: Perfect Visa-Free Itinerary",
       "plans": {
         "a": {
-          "badge": "Plan A",
-          "title": "Cultural Icons",
-          "desc": "Beijing - Xi'an - Shanghai",
+          "badge": "Classic Triangle",
+          "title": "Beijing - Xi'an - Shanghai",
+          "desc": "The ultimate golden triangle tour utilizing the 240-hour window.",
           "day1": "Days 1-4",
-          "loc1": "Beijing",
+          "loc1": "Beijing (Great Wall, Forbidden City)",
           "day2": "Days 5-6",
-          "loc2": "Xi'an",
+          "loc2": "Xi'an (Terracotta Warriors)",
           "day3": "Days 7-10",
-          "loc3": "Shanghai"
+          "loc3": "Shanghai (The Bund, Disney)"
         },
         "b": {
-          "badge": "Plan B",
-          "title": "GBA Vitality",
-          "desc": "Guangzhou - Shenzhen - Hong Kong",
+          "badge": "GBA Route",
+          "title": "HK - Shenzhen - Guangzhou",
+          "desc": "Explore the Greater Bay Area with seamless high-speed connections.",
           "day1": "Days 1-3",
-          "loc1": "Guangzhou",
-          "day2": "Day 4",
-          "loc2": "Foshan",
-          "day3": "Days 5-9",
-          "loc3": "GBA/HK"
+          "loc1": "Hong Kong",
+          "day2": "Days 4-6",
+          "loc2": "Shenzhen",
+          "day3": "Days 7-10",
+          "loc3": "Guangzhou & Zhuhai"
         },
         "more": {
-          "title": "More Routes",
-          "desc": "Chengdu Pandas / Yunnan Views"
+          "title": "Compliance Note",
+          "desc": "240 hours start from 00:00 the day after entry. Actual stay can be nearly 11 days."
         }
       }
+    },
+    "k_visa": {
+      "num": "05",
+      "title": "China K-Visa Guide for STEM Talent",
+      "subtitle": "New Oct 2025 Policy",
+      "desc": "The K-Visa allows young STEM talents to enter China for job hunting or entrepreneurship without a pre-secured employer sponsor.",
+      "feature1_title": "Target Audience",
+      "feature1_desc": "STEM graduates & professionals",
+      "feature2_title": "Benefit",
+      "feature2_desc": "No employer sponsorship needed",
+      "feature3_title": "Purpose",
+      "feature3_desc": "Job seeking & Startup"
     }
   },
   "nav_sections": {
@@ -198,11 +212,76 @@
         "visa_required": "Visa Required",
         "desc_15d": "You can enter China without a visa for up to 15 days for business, tourism, family visit and transit.",
         "desc_30d": "You can enter China without a visa for up to 30 days for business, tourism, family visit and transit.",
-        "desc_240h": "You are eligible for the 240-hour (10-day) visa-free transit policy. Please ensure you meet the A → B → C transit rule.",
+        "desc_240h": "You are eligible for the 240-hour (10-day) visa-free transit policy. Please ensure you meet the A -> China -> C transit rule.",
         "desc_visa": "You likely need a visa to enter China. Please check with your local Chinese embassy.",
-        "abc_reminder": "Remember the A → B → C rule: You must have a confirmed ticket to a third country (C) different from your origin (A).",
+        "abc_reminder": "Remember the A -> China -> C rule: You must have a confirmed ticket to a third country (C) different from your origin (A).",
         "disclaimer": "This tool is for reference only. Please consult official sources for the most accurate information."
       }
+    }
+  },
+  "plan_trip": {
+    "visa_policy": {
+      "title": "Visa Policy Guide",
+      "twov_title": "240-Hour Visa-Free Transit (The Game Changer)",
+      "twov_intro": "The 240-hour (10-day) visa-free transit is the highlight of 2026 policies.",
+      "twov_rule_title": "The 'A-B-C' Rule",
+      "twov_rule_desc": "You must fly from Country A (Origin) to Country C (Third Country) via Country B (China). A and C cannot be the same country.",
+      "twov_rule_example_valid": "✅ Valid: USA -> Shanghai -> South Korea",
+      "twov_rule_example_invalid": "❌ Invalid: USA -> Shanghai -> USA",
+      "twov_region_title": "Eligible Regions (24 Provinces)",
+      "twov_region_desc": "Includes Beijing-Tianjin-Hebei, Shanghai-Jiangsu-Zhejiang, and the GBA (Guangdong).",
+      "unilateral_title": "Unilateral Visa-Free Entry",
+      "unilateral_desc": "Visa-free entry for citizens of 48 countries (France, Germany, Italy, etc.) extended to Dec 31, 2026. No third-country ticket required.",
+      "arrival_card_title": "Digital Arrival Card",
+      "arrival_card_desc": "Since Nov 20, 2025, fill out the arrival card online 24-72 hours in advance via 'NIA 12367' APP."
+    },
+    "best_time": {
+      "title": "Best Time to Visit",
+      "spring_title": "Spring (Apr - May)",
+      "spring_desc": "Great weather. Ideal for Beijing, Xi'an and Shanghai.",
+      "autumn_title": "Autumn (Sep - Oct)",
+      "autumn_desc": "Golden season. Best scenery in Sichuan and Yunnan.",
+      "avoid_title": "Dates to Avoid (Red Alert)",
+      "avoid_cny": "Chinese New Year (Jan/Feb): Transport chaos.",
+      "avoid_labor": "Labor Day (May 1-5): Crowded spots.",
+      "avoid_national": "National Day (Oct 1-7): Massive crowds.",
+      "rec_2026": "2026 Special: Harbin Ice Festival (Jan-Feb) or Canton Fair (Apr/Oct)."
+    },
+    "cost": {
+      "title": "Travel Cost & Budget",
+      "visa_fee_title": "Visa Fees (2026)",
+      "visa_fee_msg": "25% fee reduction extended to Dec 2026.",
+      "visa_fee_us": "USA Citizens: ~$140 USD",
+      "visa_fee_ca": "Canada Citizens: ~$137 CAD",
+      "payment_title": "Payment Fees",
+      "payment_desc": "Alipay/WeChat: Fee-free for transactions under 200 RMB. 3% fee for amounts above.",
+      "budget_title": "Daily Budget Estimates",
+      "budget_eco": "Backpacker: ¥300-500/day",
+      "budget_mid": "Mid-Range: ¥800-1200/day",
+      "budget_lux": "Luxury: ¥2000+/day"
+    },
+    "safety": {
+      "title": "Safety & Scams",
+      "general_title": "General Safety",
+      "general_desc": "China is very safe. Low violent crime rates. Extensive surveillance coverage.",
+      "scam_tea_title": "Tea House Scam",
+      "scam_tea_desc": "Friendly strangers inviting you to tea/karaoke. Result: Astronomical bill. Solution: Decline and pick your own place.",
+      "scam_taxi_title": "Unlicensed Taxis",
+      "scam_taxi_desc": "Ignore touts at airports. Use DiDi app or official taxi queues.",
+      "health_title": "Health & Water",
+      "health_water": "Tap water is NOT potable. Drink bottled or boiled water.",
+      "digital_title": "Digital Safety",
+      "digital_vpn": "Google/WhatsApp blocked. Use eSIM (recommended) or VPN."
+    }
+  },
+  "destinations_content": {
+    "common": {
+      "policy_badge": "2026 Policy: 240-Hour Visa-Free",
+      "entry_ports_title": "Key Entry Ports",
+      "allowed_area_title": "Permitted Stay Area",
+      "rules_title": "Regional Rules & Tips",
+      "itinerary_title": "Recommended Itinerary",
+      "back_home": "Back to Home"
     }
   }
 }

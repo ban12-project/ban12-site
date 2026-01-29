@@ -1,208 +1,287 @@
 {
   "common": {
-    "title": "2026 Two Weeks in China (240小时免签)",
-    "description": "240小时（10天）免签过境政策深度解析与操作指南，涵盖签证、交通、支付及行程规划。",
-    "latest_policy": "2026年最新政策",
-    "cta_plan": "开始规划行程",
-    "cta_check": "资格自测工具",
-    "footer_note": "本指南基于 2026年1月 最新发布政策编写。",
+    "title": "2026 两周中国游 (240小时免签)",
+    "description": "中国免签终极指南 2026：240小时（10天）过境免签政策、数字生存套件及10天行程规划。",
+    "latest_policy": "2026 最新政策",
+    "cta_plan": "开始规划",
+    "cta_check": "资格自测",
+    "footer_note": "本指南基于2026年1月发布的最新政策。",
     "footer_copyright": "© 2026 Two Weeks in China"
   },
   "nav": {
-    "policy": "政策解析",
-    "destinations": "开放区域",
-    "essentials": "生存指南",
-    "itinerary": "推荐行程",
-    "transport": "交通出行",
-    "faq": "常见问题",
+    "policy": "免签指南",
+    "destinations": "目的地",
+    "essentials": "生存套件",
+    "itinerary": "10天行程",
+    "transport": "交通",
+    "faq": "入境规则",
+    "k_visa": "K签证",
     "check_eligibility": "资格自测"
   },
   "hero": {
-    "title_line1": "Two Weeks in China",
-    "title_line2": "240-Hour Visa Free",
-    "subtitle": "240小时（10天）免签过境政策深度解析与操作指南，涵盖签证、交通、支付及行程规划。"
+    "title_line1": "中国免签",
+    "title_line2": "终极指南 2026",
+    "subtitle": "充分利用240小时（10天）过境免签政策。政策解读、数字生存套件及完美行程推荐。"
   },
   "sections": {
     "policy": {
       "num": "01",
-      "title": "政策核心",
-      "card_twov_title": "240小时 (10天)",
-      "card_twov_p1": "截至 2026 年 1 月，原有的过境免签（TWOV）政策全面统一并延长至 240 小时。",
-      "card_twov_p2": "这不是简单的延期，而是从“过境中转”向“深度游览”的战略转变。",
-      "card_twov_list1": "适用 55 个国家公民",
-      "card_twov_list2": "必须持有前往第三国/地区的联程机票",
-      "card_unilateral_badge": "免签直入",
-      "card_unilateral_desc": "针对法、德、意、新、马、泰等少数国家，提供更灵活的单方面免签政策。",
+      "title": "中国免签终极指南 2026",
+      "card_twov_title": "240 小时 (10 天)",
+      "card_twov_p1": "截至2026年1月，过境免签 (TWOV) 政策已延长至240小时（10天），覆盖北京、上海、大湾区等65个口岸。",
+      "card_twov_p2": "A -> 中国 -> C 的行程逻辑决定了您是否符合资格。",
+      "card_twov_list1": "统一并延长：144小时 -> 240小时",
+      "card_twov_list2": "适用于65个主要口岸",
+      "card_unilateral_badge": "免签入境延长至2026",
+      "card_unilateral_desc": "针对法国、德国、意大利、西班牙、澳大利亚、新西兰等国的单方面免签政策。新增加瑞典等国。",
       "card_unilateral_stat1_val": "15/30",
-      "card_unilateral_stat1_label": "天停留时长",
-      "card_unilateral_stat2_val": "0",
+      "card_unilateral_stat1_label": "免签天数",
+      "card_unilateral_stat2_val": "否",
       "card_unilateral_stat2_label": "无需第三国机票"
     },
     "rules": {
-      "num": "02",
-      "title": "合规红线",
-      "abc_title": "\"A → B → C\" 行程规则",
-      "abc_a": "出发国",
-      "abc_b": "中国",
-      "abc_c": "第三国",
-      "abc_alert_title": "关键判定：A ≠ C",
-      "abc_alert_desc": "出发国 A 和 目的国 C 不能相同。例如 “纽约 → 上海 → 纽约” 是违规的。",
-      "countries_title": "适用国家 (55国)",
-      "countries_schengen": "欧洲申根 (25)",
-      "countries_schengen_list": "奥地利、比利时、捷克、丹麦、法国、德国、希腊、匈牙利、意大利、荷兰、葡萄牙、西班牙、瑞典、瑞士...",
-      "countries_americas": "美洲 (6)",
-      "countries_americas_list": "美国、加拿大、巴西、墨西哥、阿根廷、智利",
-      "countries_asia": "亚太 (9)",
-      "countries_asia_list": "澳大利亚、新西兰、韩国、日本、新加坡..."
+      "num": "04",
+      "title": "入境要求与电子入境卡",
+      "arrival_card_title": "电子入境卡 (2025新政)",
+      "arrival_card_desc": "2025年11月起，新的电子入境卡取代纸质表格。",
+      "arrival_card_cta": "生成二维码",
+      "fingerprint_title": "指纹豁免",
+      "fingerprint_desc": "2026年底前，短期签证（<180天）申请人免采指纹。",
+      "police_reg_title": "住宿登记",
+      "police_reg_desc": "入境24小时内必须完成“住宿登记”。酒店会自动办理；住在Airbnb或朋友家需在线申报。",
+      "abc_title": "黄金法则：A -> B -> C",
+      "abc_a": "A国 (出发地)",
+      "abc_b": "中国 (过境)",
+      "abc_c": "C国 (目的地)",
+      "abc_alert_title": "关键合规提示",
+      "abc_alert_desc": "您必须持有前往C国的联程机票。A国和C国不能相同。",
+      "countries_title": "54个适用国家"
     },
     "survival": {
-      "num": "03",
-      "title": "生存指南",
+      "num": "02",
+      "title": "中国数字生存套件",
       "items": {
-        "accommodation": {
-          "title": "住宿登记",
-          "subtitle": "24 小时内必须申报",
-          "content": "入住酒店由前台申报。若住民宿或亲友家，需前往各市公安局网站自助申报。"
-        },
         "payment": {
-          "title": "支付指南",
-          "subtitle": "Alipay / WeChat 绑定外卡",
-          "content": "强烈建议出发前下载 Alipay 国际版，支持 Visa/Mastercard。单笔200元以下免手续费。"
+          "title": "支付指南：支付宝与微信",
+          "subtitle": "绑定 Visa/Mastercard",
+          "content": "将您的海外银行卡绑定到支付宝/微信支付。200元以下交易免手续费。无需现金。"
         },
         "internet": {
-          "title": "网络访问",
-          "subtitle": "eSIM 漫游自带翻墙",
-          "content": "推荐使用 Airalo 等 eSIM 服务，流量漫游回原属地，可直接访问 Google/Instagram。"
+          "title": "网络：eSIM vs VPN",
+          "subtitle": "绕过防火墙",
+          "content": "推荐使用 eSIM (如 Airalo) 漫游数据，自动绕过防火墙访问 Google/Instagram。VPN可能不稳定。"
         },
-        "transport": {
-          "title": "交通出行",
-          "subtitle": "12306 与 DiDi 打车",
-          "content": "高铁官方 App 12306，打车使用 DiDi Greater China (滴滴英文版)。"
+        "apps": {
+          "title": "必备 APP",
+          "subtitle": "携程, 滴滴, 12306",
+          "content": "Trip.com 订房订票，DiDi (英文版) 打车，12306 官方火车票，以及翻译软件。"
+        },
+        "accommodation": {
+          "title": "预订酒店",
+          "subtitle": "接待外宾",
+          "content": "确保您的酒店具备“接待外宾”资格（在 Trip.com 筛选）。"
         }
       }
     },
     "itinerary": {
-      "num": "04",
-      "title": "推荐行程",
+      "num": "03",
+      "title": "10天中国游：完美免签行程",
       "plans": {
         "a": {
-          "badge": "Plan A",
-          "title": "文明经典",
-          "desc": "北京-西安-上海",
-          "day1": "Days 1-4",
-          "loc1": "北京",
-          "day2": "Days 5-6",
-          "loc2": "西安",
-          "day3": "Days 7-10",
-          "loc3": "上海"
+          "badge": "经典三角",
+          "title": "北京 - 西安 - 上海",
+          "desc": "利用240小时窗口期的终极黄金三角之旅。",
+          "day1": "第 1-4 天",
+          "loc1": "北京 (长城, 故宫)",
+          "day2": "第 5-6 天",
+          "loc2": "西安 (兵马俑)",
+          "day3": "第 7-10 天",
+          "loc3": "上海 (外滩, 迪士尼)"
         },
         "b": {
-          "badge": "Plan B",
-          "title": "大湾区活力",
-          "desc": "广州-深圳-香港",
-          "day1": "Days 1-3",
-          "loc1": "广州",
-          "day2": "Day 4",
-          "loc2": "佛山",
-          "day3": "Days 5-9",
-          "loc3": "深港"
+          "badge": "大湾区路线",
+          "title": "香港 - 深圳 - 广州",
+          "desc": "通过高铁无缝连接，深度探索大湾区。",
+          "day1": "第 1-3 天",
+          "loc1": "香港",
+          "day2": "第 4-6 天",
+          "loc2": "深圳",
+          "day3": "第 7-10 天",
+          "loc3": "广州 & 珠海"
         },
         "more": {
-          "title": "更多路线",
-          "desc": "成渝熊猫线 / 云南山水线"
+          "title": "合规提示",
+          "desc": "240小时从入境次日00:00开始计算，实际可停留近11天。"
         }
       }
+    },
+    "k_visa": {
+      "num": "05",
+      "title": "STEM 人才 K 签证指南",
+      "subtitle": "2025年10月新政",
+      "desc": "K签证允许年轻 STEM 人才在没有雇主担保的情况下入境中国求职或创业。",
+      "feature1_title": "适用人群",
+      "feature1_desc": "STEM 毕业生及专业人士",
+      "feature2_title": "核心优势",
+      "feature2_desc": "无需雇主担保",
+      "feature3_title": "主要目的",
+      "feature3_desc": "求职 & 创业"
     }
   },
   "nav_sections": {
     "plan_trip": {
       "title": "行程规划",
-      "visa_policy": "免签政策指南",
-      "visa_policy_desc": "240/144/72小时过境免签规则",
+      "visa_policy": "签证政策指南",
+      "visa_policy_desc": "240/144/72小时过境规则",
       "best_time": "最佳旅行时间",
-      "best_time_desc": "各地气候、季节与最佳时段",
-      "cost": "旅行花费预算",
-      "cost_desc": "餐饮、交通与住宿预算参考",
+      "best_time_desc": "各地天气与季节",
+      "cost": "旅行成本与预算",
+      "cost_desc": "餐饮与交通预算",
       "safety": "安全与防骗",
-      "safety_desc": "紧急电话与常见旅游骗局"
+      "safety_desc": "紧急电话与防骗指南"
     },
     "destinations": {
-      "title": "目的地",
-      "beijing_north": "京津冀免签圈",
-      "beijing_north_desc": "长城、故宫与北方文化",
-      "shanghai_east": "江浙沪免签圈",
-      "shanghai_east_desc": "外滩、杭州西湖与江南水乡",
-      "guangdong_gba": "大湾区/港澳",
-      "guangdong_gba_desc": "香港、深圳与广交会",
-      "chengdu_west": "四川/云南",
-      "chengdu_west_desc": "大熊猫、火锅与云南风光"
+      "title": "热门目的地",
+      "beijing_north": "北京与北方",
+      "beijing_north_desc": "长城，故宫",
+      "shanghai_east": "上海与华东",
+      "shanghai_east_desc": "外滩，杭州，苏州",
+      "guangdong_gba": "广东与大湾区",
+      "guangdong_gba_desc": "香港，深圳，广州",
+      "chengdu_west": "成都与西部",
+      "chengdu_west_desc": "熊猫，火锅，云南"
     },
     "digital_survival": {
       "title": "数字生存",
       "esim_vpn": "eSIM 与 VPN",
-      "esim_vpn_desc": "翻墙上网与保持联络",
+      "esim_vpn_desc": "突破网络防火墙",
       "payment_setup": "支付宝与微信设置",
-      "payment_setup_desc": "像本地人一样无现金支付",
+      "payment_setup_desc": "像当地人一样无现金支付",
       "train_booking": "火车票预订",
-      "train_booking_desc": "12306 官方购票指南",
+      "train_booking_desc": "12306 官方指南",
       "apps": "必备 APP",
-      "apps_desc": "地图、翻译与打车软件"
+      "apps_desc": "地图，翻译，打车"
     },
     "itineraries": {
-      "title": "行程推荐",
+      "title": "推荐行程",
       "routes_240h": "240小时路线",
-      "routes_240h_desc": "充分利用10条经典路线",
+      "routes_240h_desc": "充分利用10天停留期",
       "routes_72h": "72小时过境",
-      "routes_72h_desc": "短暂停留的精华打卡",
-      "family_trips": "家庭游",
-      "family_trips_desc": "亲子游景点与注意事项",
-      "train_tours": "高铁游",
-      "train_tours_desc": "乘坐高铁跨省旅行"
+      "routes_72h_desc": "快速过境精华游",
+      "family_trips": "家庭亲子游",
+      "family_trips_desc": "适合儿童的景点与贴士",
+      "train_tours": "高铁游中国",
+      "train_tours_desc": "乘坐高铁跨越中国"
     },
     "entry_logistics": {
       "title": "入境与后勤",
-      "arrival_card": "电子入境卡",
-      "arrival_card_desc": "入境卡填写指南",
+      "arrival_card": "入境卡",
+      "arrival_card_desc": "如何正确填写",
       "health_decl": "健康申报",
-      "health_decl_desc": "健康申报二维码生成步骤",
+      "health_decl_desc": "二维码生成步骤",
       "accommodation": "住宿登记",
-      "accommodation_desc": "派出所住宿登记规定",
-      "flights": "航班",
-      "flights_desc": "机票预订攻略"
+      "accommodation_desc": "警察局登记规则",
+      "flights": "机票攻略",
+      "flights_desc": "订票策略与优惠"
     },
     "k_visa_business": {
-      "title": "商务与人才",
-      "k_visa": "STEM K签指南",
-      "k_visa_desc": "高端人才签证申请详情",
-      "business_travel": "商务出行",
-      "business_travel_desc": "商务礼仪与社交",
-      "trade_fairs": "展会",
-      "trade_fairs_desc": "广交会与各大展会"
+      "title": "K签证与商务",
+      "k_visa": "STEM K签证指南",
+      "k_visa_desc": "海外人才签证详情",
+      "business_travel": "商务旅行",
+      "business_travel_desc": "礼仪与社交",
+      "trade_fairs": "贸易展会",
+      "trade_fairs_desc": "广交会及其他"
     }
   },
   "eligibility": {
-    "title": "访华签证资格自测 (2026)",
+    "title": "中国签证资格自测 (2026)",
     "description": "检查您是否符合240小时过境免签或15/30天免签入境资格。",
-    "heading": "查询您的签证资格",
+    "heading": "检查您的入境资格",
     "subheading": "根据2026年最新政策，查询您是否可以免签前往中国。",
     "form": {
-      "country_label": "选择您的护照签发国/地区",
+      "country_label": "选择您的护照签发国家/地区",
       "country_placeholder": "选择国家...",
-      "check_btn": "查询资格",
-      "reset_btn": "重新查询",
+      "check_btn": "检查资格",
+      "reset_btn": "重新检查",
       "result": {
         "eligible_15d": "免签入境 (15天)",
         "eligible_30d": "免签入境 (30天)",
-        "eligible_240h": "240小时 (10天) 过境免签",
-        "eligible_144h": "144小时 过境免签",
-        "visa_required": "需要办理签证",
-        "desc_15d": "您可以免签入境中国停留不超过15天，适用于经商、旅游观光、探亲访友和过境。",
-        "desc_30d": "您可以免签入境中国停留不超过30天，适用于经商、旅游观光、探亲访友和过境。",
-        "desc_240h": "您符合240小时（10天）过境免签政策。请确保您满足 A → B → C 的过境规则。",
-        "desc_visa": "您可能需要提前办理中国签证。请咨询当地中国使领馆。",
-        "abc_reminder": "请谨记 A → B → C 规则：您必须持有前往第三国（C）的联程机票，且 C 国不能与出发国（A）相同。",
-        "disclaimer": "本工具仅供参考。请以官方发布的最新信息为准。"
+        "eligible_240h": "240小时过境免签",
+        "eligible_144h": "144小时过境免签",
+        "visa_required": "需要签证",
+        "desc_15d": "您可以免签进入中国，停留不超过15天，适用于商务、旅游、探亲及过境。",
+        "desc_30d": "您可以免签进入中国，停留不超过30天，适用于商务、旅游、探亲及过境。",
+        "desc_240h": "您符合240小时（10天）过境免签政策。请确保您符合 A -> 中国 -> C 的过境规则。",
+        "desc_visa": "您可能需要签证才能进入中国。请咨询当地中国大使馆。",
+        "abc_reminder": "请记住 A -> 中国 -> C 规则：您必须持有前往第三国（C）的联程机票，且C国不能是您的出发国（A）。",
+        "disclaimer": "本工具仅供参考。请以官方发布的最准确信息为准。"
       }
+    }
+  },
+  "plan_trip": {
+    "visa_policy": {
+      "title": "签证政策指南",
+      "twov_title": "240小时（10天）过境免签",
+      "twov_intro": "2026年政策红利：原72/144小时过境免签政策已升级为240小时，有效期覆盖全年。",
+      "twov_rule_title": "A-B-C 原则",
+      "twov_rule_desc": "申请人必须持有从A国（出发地）前往C国（第三国/地区）的联程机票，并在B地（中国）中转。",
+      "twov_rule_example_valid": "✅ 合规：美国 -> 上海 -> 韩国",
+      "twov_rule_example_invalid": "❌ 违规：美国 -> 上海 -> 美国",
+      "twov_region_title": "适用范围（24省市）",
+      "twov_region_desc": "涵盖京津冀、江浙沪、大湾区等主要区域。",
+      "unilateral_title": "单方面免签",
+      "unilateral_desc": "法德意等48国免签政策延长至2026年底。无需第三国机票，可直接往返。",
+      "arrival_card_title": "数字入境卡",
+      "arrival_card_desc": "2025年11月20日起，通过“NIA 12367”APP提前24-72小时填写电子入境卡。"
+    },
+    "best_time": {
+      "title": "最佳旅行时间",
+      "spring_title": "春季 (4-5月)",
+      "spring_desc": "气温适宜，适合游览北京、西安及江浙沪。",
+      "autumn_title": "秋季 (9-10月)",
+      "autumn_desc": "金秋时节，气候凉爽，是四川和云南最美的时候。",
+      "avoid_title": "红色预警日期（尽量避开）",
+      "avoid_cny": "春节 (1-2月)：春运拥挤。",
+      "avoid_labor": "劳动节 (5月1-5日)：人流高峰。",
+      "avoid_national": "国庆节 (10月1-7日)：主要景点人满为患。",
+      "rec_2026": "2026特色：哈尔滨冰雪节（1-2月）或广交会（4月/10月）。"
+    },
+    "cost": {
+      "title": "旅行成本与预算",
+      "visa_fee_title": "签证费用 (2026)",
+      "visa_fee_msg": "驻外使领馆签证费减免25%政策延长至2026年底。",
+      "visa_fee_us": "美国公民：约 $140 USD",
+      "visa_fee_ca": "加拿大公民：约 $137 CAD",
+      "payment_title": "支付手续费",
+      "payment_desc": "支付宝/微信：单笔200元以下免手续费；超过200元收3%。",
+      "budget_title": "每日预算参考",
+      "budget_eco": "经济型：¥300-500/天",
+      "budget_mid": "中端：¥800-1200/天",
+      "budget_lux": "高端：¥2000+/天"
+    },
+    "safety": {
+      "title": "安全与防骗",
+      "general_title": "治安概况",
+      "general_desc": "中国治安良好，暴力犯罪率极低，监控覆盖率高。",
+      "scam_tea_title": "茶馆骗局",
+      "scam_tea_desc": "警惕热情陌生人邀请喝茶/练英语，可能导致高额账单。坚持自己选餐厅。",
+      "scam_taxi_title": "黑车陷阱",
+      "scam_taxi_desc": "机场车站请勿理会拉客司机。使用滴滴或正规出租车排队。",
+      "health_title": "健康饮水",
+      "health_water": "自来水不可直接饮用。请饮用瓶装水或煮沸水。",
+      "digital_title": "数字安全",
+      "digital_vpn": "需使用eSIM或VPN访问Google/WhatsApp等应用。"
+    }
+  },
+  "destinations_content": {
+    "common": {
+      "policy_badge": "2026新政：240小时免签",
+      "entry_ports_title": "主要口岸",
+      "allowed_area_title": "允许停留区域",
+      "rules_title": "区域规则与贴士",
+      "itinerary_title": "推荐行程",
+      "back_home": "返回首页"
     }
   }
 }

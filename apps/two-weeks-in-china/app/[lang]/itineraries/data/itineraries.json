@@ -1,0 +1,347 @@
+{
+  "classic-triangle": {
+    "en": {
+      "title": "The Classic Triangle",
+      "subtitle": "240-Hour (10 Days) • Beijing - Xi'an - Shanghai",
+      "description": "The golden route for first-timers. Experience 3,000 years of history, from the Great Wall to the futuristic skyline of Shanghai.",
+      "category": "240-Hour Visa-Free",
+      "duration": "10 Days",
+      "tags": ["History", "Must-See", "Culture"],
+      "days": [
+        {
+          "day": "Day 1-4",
+          "city": "Beijing",
+          "title": "The Imperial Capital",
+          "highlights": [
+            "Forbidden City",
+            "Tiananmen Square",
+            "Mutianyu Great Wall",
+            "Temple of Heaven",
+            "Summer Palace"
+          ],
+          "activity": "Peking Duck dinner, Hutong exploration",
+          "note": "Arrive PEK/PKX. Use 240h visa-free entry."
+        },
+        {
+          "day": "Day 5-6",
+          "city": "Xi'an",
+          "title": "The First Capital",
+          "highlights": [
+            "Terracotta Warriors",
+            "Ancient City Wall",
+            "Muslim Quarter",
+            "Big Wild Goose Pagoda"
+          ],
+          "activity": "Dumpling Banquet, Cycling on City Wall",
+          "note": "High-speed train from Beijing (4h)."
+        },
+        {
+          "day": "Day 7-10",
+          "city": "Shanghai",
+          "title": "The Future City",
+          "highlights": [
+            "The Bund",
+            "Lujiazui Skyline",
+            "Yu Garden",
+            "French Concession"
+          ],
+          "activity": "Suzhou Day Trip (Gardens), Maglev Train",
+          "note": "Depart from PVG airport."
+        }
+      ],
+      "tips": [
+        "Open Jaw flight recommended (Into Beijing, Out of Shanghai).",
+        "Book Forbidden City tickets 7 days in advance.",
+        "Install Alipay and WeChat for payments."
+      ]
+    }
+  },
+  "gba-innovation": {
+    "en": {
+      "title": "GBA Innovation & Food",
+      "subtitle": "240-Hour (10 Days) • HK - Shenzhen - Guangzhou - Zhuhai",
+      "description": "Explore the Greater Bay Area—high-tech hubs, legendary Cantonese food, and coastal charm.",
+      "category": "240-Hour Visa-Free",
+      "duration": "10 Days",
+      "tags": ["Tech", "Foodie", "Modern"],
+      "days": [
+        {
+          "day": "Day 1-3",
+          "city": "Shenzhen",
+          "title": "Silicon Valley of Hardware",
+          "highlights": [
+            "Huaqiangbei Electronics Market",
+            "DJI Flagship Store",
+            "Shenzhen Bay Park"
+          ],
+          "activity": "Explore tech gadgets, Light show",
+          "note": "Enter via Hong Kong or Shenzhen ports."
+        },
+        {
+          "day": "Day 4-7",
+          "city": "Guangzhou",
+          "title": "Cantonese Culture Center",
+          "highlights": [
+            "Chen Clan Ancestral Hall",
+            "Pearl River Night Cruise",
+            "Shamian Island"
+          ],
+          "activity": "Morning Dim Sum (Yum Cha), Canton Tower",
+          "note": "Short train ride from Shenzhen."
+        },
+        {
+          "day": "Day 8-10",
+          "city": "Zhuhai & Foshan",
+          "title": "Kung Fu & Ocean",
+          "highlights": [
+            "Foshan Ancestral Temple",
+            "Zhuhai Chimelong Ocean Kingdom"
+          ],
+          "activity": "Watch Lion Dance, Theme Park",
+          "note": "Exit via HZMB bridge to Macau/HK."
+        }
+      ],
+      "tips": [
+        "Best for winter/spring travel.",
+        "GBA has excellent inter-city transport."
+      ]
+    }
+  },
+  "beijing-stopover": {
+    "en": {
+      "title": "Imperial Capital Express",
+      "subtitle": "72-Hour Layover • Beijing",
+      "description": "The essential Beijing experience for short stopovers. Covers the Great Wall and Forbidden City.",
+      "category": "72-Hour Layover",
+      "duration": "3 Days",
+      "tags": ["Layover", "History", "Express"],
+      "days": [
+        {
+          "day": "Day 1",
+          "city": "Beijing",
+          "title": "Arrival & Atmosphere",
+          "highlights": ["Qianmen Street", "Sanlitun"],
+          "activity": "Hotel Check-in (Must register within 24h)",
+          "note": "Apply for 72/144h TWOV at airport."
+        },
+        {
+          "day": "Day 2",
+          "city": "Beijing",
+          "title": "The Great Wall",
+          "highlights": ["Mutianyu Great Wall (Cable Car)"],
+          "activity": "Roast Duck Dinner",
+          "note": "Book a driver or tour for efficiency."
+        },
+        {
+          "day": "Day 3",
+          "city": "Beijing",
+          "title": "Imperial Core",
+          "highlights": ["Forbidden City", "Jingshan Park"],
+          "activity": "Overview of city from Jingshan",
+          "note": "Depart in the afternoon."
+        }
+      ],
+      "tips": [
+        "Traffic in Beijing can be heavy; use subway.",
+        "Pre-book Forbidden City."
+      ]
+    }
+  },
+  "shanghai-stopover": {
+    "en": {
+      "title": "Shanghai Skyline Dash",
+      "subtitle": "72-Hour Layover • Shanghai",
+      "description": "Experience the blend of East and West in China's most cosmopolitan city.",
+      "category": "72-Hour Layover",
+      "duration": "3 Days",
+      "tags": ["Layover", "City", "Luxury"],
+      "days": [
+        {
+          "day": "Day 1",
+          "city": "Shanghai",
+          "title": "The Bund & Arrival",
+          "highlights": ["Maglev Train", "The Bund Night View"],
+          "activity": "River promenade walk",
+          "note": "Maglev takes 8 mins to city."
+        },
+        {
+          "day": "Day 2",
+          "city": "Shanghai",
+          "title": "Gardens & Shopping",
+          "highlights": ["Yu Garden", "Nanjing Road", "French Concession"],
+          "activity": "Coffee walk in Wukang Road",
+          "note": "Mix of traditional and modern."
+        },
+        {
+          "day": "Day 3",
+          "city": "Shanghai",
+          "title": "Above the Clouds",
+          "highlights": ["Shanghai Tower"],
+          "activity": "World's high observation deck",
+          "note": "Depart from PVG/SHA."
+        }
+      ],
+      "tips": ["Download Metro app.", "French Concession is great for brunch."]
+    }
+  },
+  "chengdu-family": {
+    "en": {
+      "title": "Pandas & Cuisine",
+      "subtitle": "Family Trip • Chengdu",
+      "description": "The ultimate family adventure with giant pandas, mild spicy food, and relaxed vibes.",
+      "category": "Family Friendly",
+      "duration": "5 Days",
+      "tags": ["Pandas", "Family", "Food"],
+      "days": [
+        {
+          "day": "Day 1-2",
+          "city": "Chengdu",
+          "title": "Panda Base",
+          "highlights": ["Panda Breeding Research Base", "Kuanzhai Alley"],
+          "activity": "Watch pandas eating breakfast (Go early!)",
+          "note": "Chengdu is 144h visa-free eligible."
+        },
+        {
+          "day": "Day 3",
+          "city": "Leshan",
+          "title": "Giant Buddha",
+          "highlights": ["Leshan Giant Buddha"],
+          "activity": "Short HSR trip",
+          "note": "See the massive stone carving."
+        },
+        {
+          "day": "Day 4-5",
+          "city": "Chengdu",
+          "title": "City Vibes & Depart",
+          "highlights": ["Jinli Ancient Street", "Hot Pot"],
+          "activity": "Ear cleaning, Face changing show",
+          "note": "Enjoy mild 'tomato broth' hotpot for kids."
+        }
+      ],
+      "tips": [
+        "Book Panda base tickets online.",
+        "Chengdu pace is slow and relaxing."
+      ]
+    }
+  },
+  "shanghai-family": {
+    "en": {
+      "title": "Disney & Science",
+      "subtitle": "Family Trip • Shanghai",
+      "description": "Magic meets modernity in Shanghai, featuring the newest Disney resort.",
+      "category": "Family Friendly",
+      "duration": "5 Days",
+      "tags": ["Theme Park", "Family", "City"],
+      "days": [
+        {
+          "day": "Day 1-2",
+          "city": "Shanghai",
+          "title": "Disney Magic",
+          "highlights": ["Shanghai Disney Resort"],
+          "activity": "Full days at the park",
+          "note": "Buy fast passes for top rides."
+        },
+        {
+          "day": "Day 3",
+          "city": "Shanghai",
+          "title": "Science & Nature",
+          "highlights": [
+            "Shanghai Science & Tech Museum",
+            "Natural History Museum"
+          ],
+          "activity": "Interactive exhibits for kids",
+          "note": "Great educational value."
+        },
+        {
+          "day": "Day 4-5",
+          "city": "Shanghai",
+          "title": "City Sightseeing",
+          "highlights": ["Huangpu River Cruise", "The Bund"],
+          "activity": "Easy city walks",
+          "note": "Stroller friendly city."
+        }
+      ],
+      "tips": ["Download Disney Shanghai app.", "Avoid public holidays."]
+    }
+  },
+  "yangtze-delta-loop": {
+    "en": {
+      "title": "Yangtze Delta Loop",
+      "subtitle": "High-Speed Train • Shanghai - Suzhou - Hangzhou",
+      "description": "Experience the '1-hour life circle' of the rich Jiangnan region via high-speed rail.",
+      "category": "High-Speed Train Tour",
+      "duration": "3-5 Days",
+      "tags": ["Train", "Scenery", "Gardens"],
+      "days": [
+        {
+          "day": "Stop 1",
+          "city": "Shanghai",
+          "title": "Start Point",
+          "highlights": ["Departure"],
+          "activity": "Take train to Suzhou (25 mins)",
+          "note": "Trains run every few minutes."
+        },
+        {
+          "day": "Stop 2",
+          "city": "Suzhou",
+          "title": "Venice of the East",
+          "highlights": ["Humble Administrator's Garden", "Canals"],
+          "activity": "Boat ride",
+          "note": "Classic Chinese gardens."
+        },
+        {
+          "day": "Stop 3",
+          "city": "Hangzhou",
+          "title": "Heaven on Earth",
+          "highlights": ["West Lake", "Longjing Tea Fields", "Lingyin Temple"],
+          "activity": "Cycling around West Lake",
+          "note": "1.5h train from Suzhou."
+        },
+        {
+          "day": "Stop 4",
+          "city": "Shanghai",
+          "title": "Return",
+          "highlights": ["Back to Shanghai"],
+          "activity": "45 min train from Hangzhou",
+          "note": "Complete the loop."
+        }
+      ],
+      "tips": [
+        "Use Trip.com for train tickets.",
+        "No paper tickets needed, use passport."
+      ]
+    }
+  },
+  "hk-cross-border": {
+    "en": {
+      "title": "HK Cross-Border Dash",
+      "subtitle": "High-Speed Train • HK - Shenzhen/Guangzhou",
+      "description": "A quick taste of mainland China from Hong Kong using the ultra-fast cross-border rail.",
+      "category": "High-Speed Train Tour",
+      "duration": "1-2 Days",
+      "tags": ["Train", "Border", "Short Trip"],
+      "days": [
+        {
+          "day": "Day 1",
+          "city": "Hong Kong -> Shenzhen",
+          "title": "15 Minute Journey",
+          "highlights": ["West Kowloon Station", "Futian CBD"],
+          "activity": "High speed rail experience",
+          "note": "West Kowloon has immigration checks."
+        },
+        {
+          "day": "Day 2",
+          "city": "Guangzhou",
+          "title": "Capital of the South",
+          "highlights": ["Canton Tower"],
+          "activity": "48 mins from HK",
+          "note": "Easy day trip return."
+        }
+      ],
+      "tips": [
+        "Arrive at West Kowloon 45 mins early for immigration.",
+        "Ensure visa/entry permit."
+      ]
+    }
+  }
+}

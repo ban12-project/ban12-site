@@ -1,0 +1,202 @@
+{
+  "arrival-card": {
+    "en": {
+      "title": "Electronic Arrival Card",
+      "subtitle": "Mandatory digital registration for all travelers",
+      "updatedAt": "2025-11-20",
+      "sections": [
+        {
+          "title": "What Changed?",
+          "content": "Since November 20, 2025, China has fully adopted an online arrival card system, replacing traditional paper forms. Note: Airports still retain kiosks and paper forms as backups, but digital is preferred."
+        },
+        {
+          "title": "Who Needs It?",
+          "content": "Required for all foreign travelers entering China, including those on visa-free entry or transit. \n\nExemptions include:\n• Holders of China Permanent Residence ID\n• Hong Kong/Macau residents with Home Return Permits\n• Group Visa holders\n• 24-hour direct transit passengers not leaving the port restriction area\n• Crew members arriving/departing on the same vessel"
+        },
+        {
+          "title": "When & How to Fill",
+          "content": "• Timing: Recommended to complete 24-72 hours before arrival.\n• Official Channels: NIA Official Website, 'Immigration 12367' APP, or 'Arrival Card' miniprogram on WeChat/Alipay.\n• Process: Fill personal info, passport, flight, address in China -> Submit -> Save the generated QR Code."
+        },
+        {
+          "title": "Entry Inspection",
+          "content": "Upon arriving at the immigration counter, present the QR code and your passport. \n\nPro Tip: Screenshot the QR code. Airport Wi-Fi can be spotty, and you don't want to be stuck loading the page."
+        },
+        {
+          "title": "Required Information",
+          "content": "Ensure your Personal Info matches your passport exactly. You will need your flight number, detailed address in China (Hotel or Residence), and intended dates."
+        }
+      ]
+    },
+    "zh": {
+      "title": "电子入境卡",
+      "subtitle": "所有入境旅客必须完成的数字申报",
+      "updatedAt": "2025-11-20",
+      "sections": [
+        {
+          "title": "政策更新",
+          "content": "自2025年11月20日起，中国全面启用在线填写入境卡系统，取代传统的纸质表格。（机场仍保留自助终端和纸质表格作为备用）。"
+        },
+        {
+          "title": "适用对象",
+          "content": "除特定豁免人群外，所有入境的外国旅客（包括免签和过境旅客）都必须填写。\n\n豁免人群包括：\n• 持中国永久居留证者\n• 持回乡证的港澳居民\n• 持团签者\n• 24小时直接过境且不离开口岸限定区域的旅客\n• 随原船出入境的船员等"
+        },
+        {
+          "title": "填写时间与方式",
+          "content": "• 建议时间：抵达前 24至72小时 在线填写。\n• 官方渠道：国家移民管理局（NIA）官网、“移民局12367”APP、或微信/支付宝搜索“入境卡”小程序。\n• 流程：填写个人信息、护照号、航班号、在华住址及联系方式 → 提交 → 保存生成的二维码 (QR Code)。"
+        },
+        {
+          "title": "入境查验",
+          "content": "抵达移民检查柜台时，需出示该二维码及护照。建议截图保存二维码，以免机场Wi-Fi连接不畅导致无法加载。"
+        },
+        {
+          "title": "填写内容",
+          "content": "个人基本信息（需与护照一致）、往返日期、航班号、在华详细住址（酒店或私人住宅）、旅行目的等。"
+        }
+      ]
+    }
+  },
+  "health-declaration": {
+    "en": {
+      "title": "Health Declaration",
+      "subtitle": "The 'Black Code' required by Customs",
+      "updatedAt": "2026-01",
+      "sections": [
+        {
+          "title": "Current Status",
+          "content": "Strict pandemic 'Health Codes' are gone, but the Customs Health Declaration is still required for all entry/exit."
+        },
+        {
+          "title": "How to Declare",
+          "content": "• Use WeChat or Alipay to search for 'Customs Pocket Declaration' (海关旅客指尖服务), or use the web version.\n• Timing: Must be filled within 24 hours of entry/exit."
+        },
+        {
+          "title": "The 'Black Code'",
+          "content": "After submission, you will get a QR code (commonly called the Black Code). \n• Validity: 24 Hours only.\n• Usage: Single use. \n• Important: Take a screenshot immediately."
+        },
+        {
+          "title": "Quarantine & Testing",
+          "content": "• PCR tests are NO longer required before boarding.\n• Embassy health codes are NO longer checked.\n• On-site antigen testing may be requested if you declare symptoms (fever, etc.) or if the declaration is abnormal."
+        }
+      ]
+    },
+    "zh": {
+      "title": "健康申报",
+      "subtitle": "海关入境必备的“黑码”",
+      "updatedAt": "2026-01",
+      "sections": [
+        {
+          "title": "当前状态",
+          "content": "虽然疫情期间严格的“健康码”已取消，但入境人员仍需完成海关健康申报。"
+        },
+        {
+          "title": "操作流程",
+          "content": "• 通过微信或支付宝搜索“海关旅客指尖服务” (Customs Pocket Declaration) 小程序，或使用网页版。\n• 申报时间：必须在出入境前24小时内填写。"
+        },
+        {
+          "title": "凭证（黑码）",
+          "content": "提交后会生成一个健康申报码（通常称为黑码）。\n• 有效期：24小时内有效。\n• 使用限制：单次使用。\n• 提示：务必截图保存。"
+        },
+        {
+          "title": "检疫要求",
+          "content": "• 不再强制要求登机前进行核酸检测（PCR）。\n• 不再查验使馆健康码。\n• 如果申报异常或在口岸出现发热等症状，可能会被要求进行抗原检测。"
+        }
+      ]
+    }
+  },
+  "accommodation-registration": {
+    "en": {
+      "title": "Accommodation Registration",
+      "subtitle": "Crucial legal requirement within 24 hours",
+      "updatedAt": "2026-01",
+      "sections": [
+        {
+          "title": "The 24-Hour Rule",
+          "content": "Chinese law requires all foreigners to register their accommodation with the Public Security Bureau (police) within 24 hours of arrival."
+        },
+        {
+          "title": "staying in Hotels",
+          "content": "If you stay in a hotel with a license to host foreigners:\n• The hotel front desk will complete this registration for you automatically upon check-in.\n• You do not need to do anything extra, but ensure the hotel is 'authorized for foreign guests' before booking."
+        },
+        {
+          "title": "Private Residences & Airbnb",
+          "content": "If staying with friends/family or in a private rental:\n• You (or the host) MUST register at the local police station within 24 hours.\n• Online Systems: Cities like Beijing, Shanghai, and Shenzhen have launched self-service online systems (e.g., 'Beijing Public Security' WeChat, 'Overseas Personnel Accommodation Registration'). You can upload passport/visa photos to generate an electronic receipt without visiting the station."
+        },
+        {
+          "title": "Consequences",
+          "content": "Failure to register can result in a fine of up to 2000 RMB. More importantly, it can negatively impact future visa applications or entry into China."
+        }
+      ]
+    },
+    "zh": {
+      "title": "住宿登记",
+      "subtitle": "抵达后24小时内的重要法律义务",
+      "updatedAt": "2026-01",
+      "sections": [
+        {
+          "title": "24小时规定",
+          "content": "中国法律规定，外国人在中国境内住宿必须在24小时内向公安机关申报登记。"
+        },
+        {
+          "title": "酒店住宿",
+          "content": "如果入住持有涉外接待资质的酒店：\n• 前台会在办理入住时自动通过系统完成登记，游客无需额外操作。\n• 建议预订时确认酒店是否“可接待外宾”。"
+        },
+        {
+          "title": "民宿/私宅",
+          "content": "如果住在亲友家中或通过Airbnb等平台预订的民宿：\n• 游客或房主必须在抵达后24小时内向当地派出所申报。\n• 在线申报：北京、上海、深圳等一线城市已推出在线自助申报系统（如“北京公安出入境”公众号、“境外人员住宿登记自助申报系统”），无需亲自前往派出所，上传护照和签证页即可生成电子回执。"
+        },
+        {
+          "title": "后果",
+          "content": "未按规定登记可能面临最高2000元人民币的罚款，并可能影响未来的签证申请或入境。"
+        }
+      ]
+    }
+  },
+  "flights-tickets": {
+    "en": {
+      "title": "Flights & Tickets",
+      "subtitle": "Navigating Transit Rules and Domestic Travel",
+      "updatedAt": "2026-01",
+      "sections": [
+        {
+          "title": "Transit Visa-Free (144/240h) Rules",
+          "content": "• Confirmed Ticket: You MUST hold a confirmed seat on a connecting ticket to a third country/region (Country C).\n• A-B-C Principle: Your itinerary must be Country A (Origin) -> Country B (China) -> Country C (3rd Country). \n• Examples:\n  - Allowed: USA -> Shanghai -> Hong Kong\n  - Allowed: USA -> Beijing -> Japan\n  - NOT Allowed: USA -> Shanghai -> USA (Round trip is NOT transit)."
+        },
+        {
+          "title": "Pre-flight Checks",
+          "content": "Airlines will verify your onward ticket to Country C at your departure point. If you only have a one-way ticket into China without proof of exit to a third country, you may be denied boarding."
+        },
+        {
+          "title": "Regular Entry / 30-Day Visa Free",
+          "content": "It is highly recommended to have a return or onward ticket. Immigration officers may ask to see proof of your intended departure."
+        },
+        {
+          "title": "Domestic Travel in China",
+          "content": "• Real-Name System: China's High-Speed Rail (12306) and flights require strict ID checks.\n• Booking: Foreigners can use Trip.com (easiest) or the 12306 English App (requires manual passport verification, takes time).\n• Station Entry: Use the Manual Channel (staffed counter) or new Passport-Scanning Gates where available."
+        }
+      ]
+    },
+    "zh": {
+      "title": "航班与机票",
+      "subtitle": "过境免签规则与国内交通指南",
+      "updatedAt": "2026-01",
+      "sections": [
+        {
+          "title": "过境免签 (144/240小时) 特殊要求",
+          "content": "• 联程客票：必须持有已确定日期和座位的联程机票（或船票、列车票），前往第三国或地区。\n• A-B-C 原则：行程必须是 A国（出发地）→ B区（中国）→ C国（第三国/地区）。\n  - 允许：美国 → 上海 → 香港；美国 → 北京 → 日本。\n  - 不允许：美国 → 上海 → 美国（即往返行程不适用过境免签）。"
+        },
+        {
+          "title": "事前查验",
+          "content": "在出发地登机时，航空公司会检查旅客是否持有前往第三国的联程机票。如果只有单程入境机票而无离境证明，可能会被拒绝登机。"
+        },
+        {
+          "title": "普通入境/30天免签",
+          "content": "建议持有返程或离境机票证明，边检可能会要求出示以确认行程。"
+        },
+        {
+          "title": "国内段交通",
+          "content": "• 实名制：中国的高铁（12306）和飞机实名制严格。\n• 预订：外国游客可通过 Trip.com 预订，或下载 12306 英文版 APP（需人工核验护照，耗时较长）。\n• 进站：进站时走人工通道或使用支持护照识别的自助闸机。"
+        }
+      ]
+    }
+  }
+}

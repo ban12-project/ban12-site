@@ -1,0 +1,334 @@
+[
+  {
+    "slug": "esim-vpn",
+    "en": {
+      "title": "Internet Access: eSIM & VPNs",
+      "subtitle": "Crossing the 'Great Firewall' and staying connected",
+      "pain_point": {
+        "title": "The Core Challenge: The Great Firewall",
+        "content": "China's 'Great Firewall' blocks access to Google, WhatsApp, Instagram, YouTube, and many other Western services. Securing reliable internet access is your #1 survival priority upon arrival."
+      },
+      "solutions": [
+        {
+          "type": "recommended",
+          "title": "eSIM (Highly Recommended)",
+          "description": "The most stable and hassle-free solution for travelers.",
+          "pros": [
+            "Data routed via HK/Singapore, bypassing the GFW automatically.",
+            "No VPN configuration required.",
+            "Works immediately upon landing."
+          ],
+          "providers": ["Airalo", "Nomad", "Holafly", "MobiMatter"],
+          "advice": "Set this up on your phone before you board your flight."
+        },
+        {
+          "type": "alternative",
+          "title": "VPN + Local SIM",
+          "description": "Traditional method, but becoming less reliable.",
+          "cons": [
+            "Requires purchasing a local Chinese SIM (China Unicom/Mobile).",
+            "VPNs are actively blocked during sensitive periods.",
+            "Connections can be unstable and drain battery life."
+          ],
+          "advice": "Not recommended for short trips (e.g. 10-day visa-free transit)."
+        }
+      ],
+      "warning": {
+        "title": "The Public Wi-Fi Trap",
+        "content": "Airport and public Wi-Fi networks usually require SMS Verification to log in. If you don't have a working roaming number or local SIM yet, you will be unable to connect, leading to 'digital isolation' immediately after landing."
+      }
+    },
+    "zh": {
+      "title": "网络连接：eSIM 与 VPN",
+      "subtitle": "穿越'防火墙'，保持时刻在线",
+      "pain_point": {
+        "title": "核心痛点：防火墙 (Great Firewall)",
+        "content": "中国大陆存在'防火墙'，导致 Google, WhatsApp, Instagram, YouTube 等服务无法直接访问。解决网络连接是入境后的首要生存任务。"
+      },
+      "solutions": [
+        {
+          "type": "recommended",
+          "title": "eSIM (推荐方案)",
+          "description": "目前最稳定、最省心的方案。",
+          "pros": [
+            "漫游数据通过香港或新加坡路由，自带'翻墙'效果。",
+            "无需额外配置 VPN 即可直接访问外网应用。",
+            "落地即用，无缝衔接。"
+          ],
+          "providers": ["Airalo", "Nomad", "Holafly", "MobiMatter"],
+          "advice": "建议在出发前设置好。"
+        },
+        {
+          "type": "alternative",
+          "title": "VPN (虚拟专用网)",
+          "description": "传统方案，但稳定性较差。",
+          "cons": [
+            "如果购买中国本地 SIM 卡（联通/移动），必须配合 VPN 使用。",
+            "VPN 在敏感时期常受干扰，连接不稳定。",
+            "耗电量大，配置繁琐。"
+          ],
+          "advice": "如果是短期旅行（如10天过境免签），不建议作为首选。"
+        }
+      ],
+      "warning": {
+        "title": "Wi-Fi 陷阱",
+        "content": "机场和公共场所的 Wi-Fi 通常需要短信验证码 (SMS Verification) 才能登录。如果没有能漫游的手机号或本地 SIM 卡，这一步会卡住，导致落地即失联。"
+      }
+    }
+  },
+  {
+    "slug": "payment-setup",
+    "en": {
+      "title": "Mobile Payment: Alipay & WeChat",
+      "subtitle": "Surviving China's Cashless Society",
+      "pain_point": {
+        "title": "Core Context: A Cashless Society",
+        "content": "China has largely moved away from cash. Physical credit cards (Visa/Mastercard) are only accepted in high-end hotels and malls. Without mobile payment, daily life—from buying water to taking the subway—is nearly impossible."
+      },
+      "steps": [
+        {
+          "title": "Download & Register",
+          "content": "Download the international version of Alipay or WeChat. Register using your overseas phone number."
+        },
+        {
+          "title": "Link International Cards",
+          "content": "Link your Visa, Mastercard, or JCB card directly in the app's 'Wallet' section. (The complex 'TourCard' is no longer needed—direct binding works well now)."
+        },
+        {
+          "title": "Verify Identity",
+          "content": "Complete the 'Real-name Authentication' by uploading your passport photo. Do this BEFORE arrival to avoid network issues."
+        }
+      ],
+      "fees": {
+        "title": "Transaction Fees",
+        "items": ["Under 200 CNY: Free", "Over 200 CNY: ~3% Service Fee"]
+      },
+      "tips": [
+        "WeChat and Alipay are 'Super Apps'—use them for ride-hailing, food delivery, and metro tickets, not just paying.",
+        "Always carry a small amount of cash (RMB) and a physical card as a backup."
+      ]
+    },
+    "zh": {
+      "title": "移动支付：支付宝与微信",
+      "subtitle": "无现金社会的生存指南",
+      "pain_point": {
+        "title": "核心背景：无现金社会",
+        "content": "中国现金使用场景大幅萎缩，信用卡（Visa/Mastercard）直接刷卡仅限于高档酒店和商场。没有移动支付几乎寸步难行。"
+      },
+      "steps": [
+        {
+          "title": "下载与注册",
+          "content": "下载国际版 Alipay 或 WeChat，使用海外手机号注册。"
+        },
+        {
+          "title": "绑定外卡",
+          "content": "直接在 APP 钱包 (Wallet) 中添加 Visa, Mastercard, JCB 等国际信用卡。无需再使用复杂的 'TourCard'，直接绑定更稳定。"
+        },
+        {
+          "title": "实名认证",
+          "content": "需要上传护照照片进行身份验证。建议在抵达中国前完成，以免受限于网络环境。"
+        }
+      ],
+      "fees": {
+        "title": "手续费规则",
+        "items": [
+          "单笔消费 200元人民币以下：免收手续费。",
+          "单笔消费 200元人民币以上：通常收取约 3% 的服务费。"
+        ]
+      },
+      "tips": [
+        "支付宝和微信不仅仅是支付工具，它们是'超级应用'，内置了打车、外卖、地铁卡等功能。",
+        "虽然普及，但仍建议携带少量人民币现金和实体卡作为应急备份。"
+      ]
+    }
+  },
+  {
+    "slug": "train-booking",
+    "en": {
+      "title": "Train Booking: 12306 vs Trip.com",
+      "subtitle": "Mastering High-Speed Rail Travel",
+      "pain_point": {
+        "title": "Paperless Travel",
+        "content": "China's High-Speed Rail (HSR) is the backbone of inter-city travel. The system is entirely paperless—your passport is your ticket."
+      },
+      "platforms": [
+        {
+          "name": "Trip.com",
+          "badge": "Recommended for Travelers",
+          "pros": [
+            "Friendly English interface.",
+            "Supports international credit cards directly.",
+            "24/7 English customer support (crucial for changes/cancellations)."
+          ],
+          "cons": ["Charges a small service fee per ticket."]
+        },
+        {
+          "name": "12306 (Official App)",
+          "badge": "For Experts / Residents",
+          "pros": ["Official ticket source.", "No service fees."],
+          "cons": [
+            "Requires 'Identity Verification' which involves manual review.",
+            "Process can take hours or verify fail for foreigners.",
+            "Interface and support are less foreigner-friendly."
+          ]
+        }
+      ],
+      "boarding_tip": {
+        "title": "Boarding the Train",
+        "content": "Look for the 'Manual Lane' (Staff Lane) at the station gates. Show your passport to the staff or scan the photo page at supported automated gates."
+      }
+    },
+    "zh": {
+      "title": "火车票预订：12306 vs Trip.com",
+      "subtitle": "搞定高铁出行",
+      "pain_point": {
+        "title": "无纸化通关",
+        "content": "高铁 (High-Speed Rail) 是跨城旅行的首选。目前实行'无纸化'通关，护照就是车票。"
+      },
+      "platforms": [
+        {
+          "name": "Trip.com (携程国际版)",
+          "badge": "强烈推荐给外国游客",
+          "pros": [
+            "全英文界面友好。",
+            "支持国际信用卡直接支付。",
+            "提供 24/7 英文客服，解决改签和抢票沟通问题。"
+          ],
+          "cons": ["每张票会收取少量服务费。"]
+        },
+        {
+          "name": "12306 (铁路官方APP)",
+          "badge": "适合长期居住者",
+          "pros": ["官方票源。", "无手续费。"],
+          "cons": [
+            "外国用户注册需要进行'实名核验'。",
+            "通常需要上传护照页照片等待人工审核，耗时较长，未通过前无法购票。"
+          ]
+        }
+      ],
+      "boarding_tip": {
+        "title": "乘车提示",
+        "content": "进站时需走 人工通道 (Manual Lane) 或使用支持护照识别的自助闸机，直接扫描护照信息页进站。"
+      }
+    }
+  },
+  {
+    "slug": "apps",
+    "en": {
+      "title": "Essential Apps Checklist",
+      "subtitle": "The Digital Toolkit for Survival",
+      "pain_point": {
+        "title": "The App Ecosystem",
+        "content": "Western apps often don't work or lack local data. You need the local equivalents to navigate, communicate, and travel."
+      },
+      "categories": [
+        {
+          "name": "Navigation",
+          "apps": [
+            {
+              "name": "Apple Maps",
+              "desc": "Best for iOS users. Works without VPN and data is highly accurate."
+            },
+            {
+              "name": "Amap (Gaode) / Baidu Maps",
+              "desc": "Most complete data (even public toilets), but interface is Chinese-only. Good if you can read some characters."
+            }
+          ]
+        },
+        {
+          "name": "Ride-Hailing",
+          "apps": [
+            {
+              "name": "DiDi (Greater China)",
+              "desc": "China's Uber. The 'Greater China' version has an English interface and in-app realtime chat translation. Crucial for avoiding scams."
+            }
+          ]
+        },
+        {
+          "name": "Translation",
+          "apps": [
+            {
+              "name": "DeepL / Google Translate",
+              "desc": "Download offline language packs before you arrive."
+            },
+            {
+              "name": "Alipay",
+              "desc": "Use the built-in 'Scan' -> 'Translate' feature for restaurant menus."
+            }
+          ]
+        },
+        {
+          "name": "Entry",
+          "apps": [
+            {
+              "name": "Digital Arrival Card",
+              "desc": "New from Nov 2025. Fill out online to generate a QR code for entry, replacing paper forms."
+            }
+          ]
+        }
+      ],
+      "advice": {
+        "title": "Strategic Advice",
+        "content": "Don't book your entire trip, but DO book your first night's hotel. Save the hotel name/address in Chinese (screenshot) to show taxi drivers."
+      }
+    },
+    "zh": {
+      "title": "必备应用清单",
+      "subtitle": "数字生存工具包",
+      "pain_point": {
+        "title": "应用生态",
+        "content": "西方主流应用在中国通常无法使用或缺乏数据。你需要本地应用来导航、交流和出行。"
+      },
+      "categories": [
+        {
+          "name": "导航 (Navigation)",
+          "apps": [
+            {
+              "name": "Apple Maps",
+              "desc": "iOS 用户首选。无需 VPN 即可使用，数据准确度高。"
+            },
+            {
+              "name": "高德地图 / 百度地图",
+              "desc": "数据最全、定位最准（甚至能找到公共厕所），但仅有中文界面。"
+            }
+          ]
+        },
+        {
+          "name": "出行 (Ride-Hailing)",
+          "apps": [
+            {
+              "name": "DiDi (滴滴出行)",
+              "desc": "中国版 Uber。国际版支持全英文界面和实时翻译。使用网约车可避免遭遇'黑车'宰客。"
+            }
+          ]
+        },
+        {
+          "name": "翻译 (Translation)",
+          "apps": [
+            {
+              "name": "DeepL / Google Translate",
+              "desc": "建议下载离线语言包。"
+            },
+            {
+              "name": "Alipay 翻译",
+              "desc": "扫描餐厅菜单二维码时，Alipay 提供一键翻译功能。"
+            }
+          ]
+        },
+        {
+          "name": "入境申报",
+          "apps": [
+            {
+              "name": "电子入境卡",
+              "desc": "2025年11月起，可通过网络提前填写，生成二维码扫码入境，取代纸质填表。"
+            }
+          ]
+        }
+      ],
+      "advice": {
+        "title": "实用建议",
+        "content": "不要预订所有行程，但必须预订第一晚的酒店。将酒店名称、地址（中文版）截图保存在手机相册中，打车或问路时直接展示给司机看。"
+      }
+    }
+  }
+]

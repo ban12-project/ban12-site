@@ -2,9 +2,9 @@
 
 @theme inline {
   --font-sans: var(--font-space-grotesk);
-  --color-dark: #191A23;
-  --color-light: #FFFFFF;
-  --color-grey: #F3F3F3;
+  --color-dark: #191a23;
+  --color-light: #ffffff;
+  --color-grey: #f3f3f3;
 }
 
 :root {
