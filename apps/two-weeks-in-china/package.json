@@ -1,0 +1,52 @@
+{
+  "name": "two-weeks-in-china",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "biome check --write",
+    "type-check": "next typegen && tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "npx tsx lib/db/migrate.ts",
+    "db:studio": "drizzle-kit studio",
+    "db:push": "drizzle-kit push",
+    "db:pull": "drizzle-kit pull",
+    "db:check": "drizzle-kit check",
+    "db:up": "drizzle-kit up"
+  },
+  "lint-staged": {
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^3.1.1",
+    "@mdx-js/react": "^3.1.1",
+    "@neondatabase/serverless": "^1.0.2",
+    "@next/mdx": "^16.1.6",
+    "@repo/i18n": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "@types/mdx": "^2.0.13",
+    "drizzle-orm": "catalog:",
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "next-mdx-remote-client": "^2.1.7",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "remark-gfm": "^4.0.1",
+    "server-only": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/biome-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "babel-plugin-react-compiler": "catalog:",
+    "drizzle-kit": "catalog:",
+    "postcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}

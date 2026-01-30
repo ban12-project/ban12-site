@@ -1,0 +1,146 @@
+[
+  {
+    "slug": "beijing-north",
+    "en": {
+      "title": "Beijing & North (Jing-Jin-Ji)",
+      "subtitle": "The Imperial Core: History & Culture",
+      "description": "The Beijing-Tianjin-Hebei integration area allows seamless travel across three administrative regions. Perfect for deep dives into Chinese history.",
+      "allowed_cities": "Beijing, Tianjin, and Hebei Province",
+      "entry_ports": [
+        "Air: Beijing Capital (PEK), Beijing Daxing (PKX)",
+        "Air: Tianjin Binhai (TSN), Shijiazhuang Zhengding (SJW)",
+        "Sea/Rail: Tianjin Int'l Cruise Port, Qinhuangdao Port"
+      ],
+      "rules": [
+        "Seamless Travel: Move freely between Beijing, Tianjin, and Hebei (e.g., Beijing -> High-speed train to Tianjin -> Qinhuangdao).",
+        "Duration: 240 Hours (10 Days) is enough for the Great Wall, Forbidden City, and Chengde Mountain Resort.",
+        "Restriction: You cannot travel directly to Shanghai or Xi'an from here unless you have a visa or exit/re-enter."
+      ],
+      "itinerary_highlight": "Beijing (4 days) + Tianjin (2 days) + Chengde/Qinhuangdao (3 days)"
+    },
+    "zh": {
+      "title": "北京与北方 (京津冀)",
+      "subtitle": "帝都核心：历史与文化",
+      "description": "京津冀一体化政策允许在三个行政区内无缝旅行。深入体验中国历史的绝佳选择。",
+      "allowed_cities": "北京, 天津, 河北省",
+      "entry_ports": [
+        "航空：北京首都 (PEK), 北京大兴 (PKX)",
+        "航空：天津滨海 (TSN), 石家庄正定 (SJW)",
+        "海港/铁路：天津国际邮轮母港, 秦皇岛港"
+      ],
+      "rules": [
+        "无缝畅行：在北京、天津和河北之间自由移动（例如：北京 -> 高铁去天津 -> 秦皇岛）。",
+        "时长：240小时（10天）足以游览长城、故宫和承德避暑山庄。",
+        "限制：除非持有签证，否则不能直接前往上海或西安。"
+      ],
+      "itinerary_highlight": "北京 (4天) + 天津 (2天) + 承德/秦皇岛 (3天)"
+    }
+  },
+  {
+    "slug": "shanghai-east",
+    "en": {
+      "title": "Shanghai & East (Jiang-Zhe-Hu)",
+      "subtitle": "The Economic Engine: Modernity & Water Towns",
+      "description": "The Yangtze River Delta. China's most developed region with the densest high-speed rail network. Ideal for mixing business with leisure.",
+      "allowed_cities": "Shanghai, Jiangsu Province, Zhejiang Province",
+      "entry_ports": [
+        "Shanghai: Pudong (PVG), Hongqiao (SHA), Port of Shanghai",
+        "Jiangsu: Nanjing Lukou (NKG), Wuxi Shuofang (WUX)",
+        "Zhejiang: Hangzhou Xiaoshan (HGH), Ningbo Lishe (NGB)"
+      ],
+      "rules": [
+        "High-Speed Hub: The best region for train travel. Shanghai -> Suzhou -> Hangzhou loop is fully legal.",
+        "Open Jaw: You can enter via Shanghai and exit via Hangzhou to a third country."
+      ],
+      "itinerary_highlight": "Shanghai (3 days) + Suzhou (2 days) + Hangzhou (3 days) + Wuzhen/Nanjing (2 days)"
+    },
+    "zh": {
+      "title": "上海与华东 (江浙沪)",
+      "subtitle": "经济引擎：现代与水乡",
+      "description": "长三角地区。中国最发达的区域，高铁网络最密集。完美结合商务与休闲。",
+      "allowed_cities": "上海, 江苏省, 浙江省",
+      "entry_ports": [
+        "上海：浦东 (PVG), 虹桥 (SHA), 上海港",
+        "江苏：南京禄口 (NKG), 无锡硕放 (WUX)",
+        "浙江：杭州萧山 (HGH), 宁波栎社 (NGB)"
+      ],
+      "rules": [
+        "高铁枢纽：最适合高铁旅行的区域。上海 -> 苏州 -> 杭州闭环完全合法。",
+        "异地出境 (Open Jaw)：可以从上海入境，从杭州前往第三国出境。"
+      ],
+      "itinerary_highlight": "上海 (3天) + 苏州 (2天) + 杭州 (3天) + 乌镇/南京 (2天)"
+    }
+  },
+  {
+    "slug": "guangdong-gba",
+    "en": {
+      "title": "Guangdong & GBA",
+      "subtitle": "The Southern Powerhouse: Food & Tech",
+      "description": "Province-wide visa-free access in Guangdong, plus seamless links to Hong Kong and Macau.",
+      "allowed_cities": "Guangdong Province (All)",
+      "entry_ports": [
+        "Air: Guangzhou Baiyun (CAN), Shenzhen Bao'an (SZX), Jieyang Chaoshan (SWA)",
+        "Land/Sea: Shenzhen Shekou Port, Nansha Port, HK-Zhuhai-Macau Bridge"
+      ],
+      "rules": [
+        "Hong Kong/Macau Factor: HK/Macau are 'Third Regions'. USA -> Guangzhou -> Hong Kong is a valid transit route.",
+        "One Trip, Multiple Stops: Use HK as a springboard to explore Guangzhou, Shenzhen, and Foshan.",
+        "Warning: Once you enter HK/Macau, you have left the mainland visa-free zone."
+      ],
+      "itinerary_highlight": "Guangzhou (Morning Tea) -> Shenzhen (Tech) -> Foshan (Kung Fu) -> Exit to HK"
+    },
+    "zh": {
+      "title": "广东与大湾区",
+      "subtitle": "南方动力：美食与科技",
+      "description": "广东省全域免签，加上与香港、澳门的紧密连接。",
+      "allowed_cities": "广东省全境",
+      "entry_ports": [
+        "航空：广州白云 (CAN), 深圳宝安 (SZX), 揭阳潮汕 (SWA)",
+        "陆路/水路：深圳蛇口, 南沙港, 港珠澳大桥"
+      ],
+      "rules": [
+        "港澳因素：香港/澳门被视为'第三地'。美国 -> 广州 -> 香港 是合法的过境路线。",
+        "一程多站：利用香港作为跳板，游览广州、深圳和佛山。",
+        "警告：一旦进入香港或澳门，即视为离开了大陆免签区。"
+      ],
+      "itinerary_highlight": "广州 (早茶) -> 深圳 (科技) -> 佛山 (功夫) -> 出境至香港"
+    }
+  },
+  {
+    "slug": "chengdu-west",
+    "en": {
+      "title": "Chengdu & West",
+      "subtitle": "Pandas, Spice & Highlands",
+      "description": "The hub of Western China. Note that unlike the East, these regions are generally NOT interconnected for visa-free travel.",
+      "allowed_cities": "Sichuan (Chengdu + 10 cities), Chongqing, Yunnan (Kunming + 8 cities)",
+      "entry_ports": [
+        "Chengdu Tianfu (TFU), Chengdu Shuangliu (CTU)",
+        "Chongqing Jiangbei (CKG)",
+        "Kunming Changshui (KMG)"
+      ],
+      "rules": [
+        "Not Interconnected: You typically cannot use one transit permit to travel between Chengdu and Kunming.",
+        "Stay Local: Stick to the 11 administrative cities around Chengdu for the full 240 hours.",
+        "Highlights: Pandas, Sanxingdui, Leshan Giant Buddha."
+      ],
+      "itinerary_highlight": "Chengdu (Pandas) -> Leshan (Buddha) -> Dujiangyan -> Sanxingdui"
+    },
+    "zh": {
+      "title": "成都与西部",
+      "subtitle": "熊猫、美食与高地",
+      "description": "中国西部的枢纽。注意：与东部不同，这些免签区域通常不互通。",
+      "allowed_cities": "四川 (成都及周边10市), 重庆, 云南 (昆明及周边8市)",
+      "entry_ports": [
+        "成都天府 (TFU), 成都双流 (CTU)",
+        "重庆江北 (CKG)",
+        "昆明长水 (KMG)"
+      ],
+      "rules": [
+        "不互通：通常不能持同一张临时入境许可在成都和昆明之间旅行。",
+        "区域限制：须在成都市及周边11个行政区划内停留满240小时。",
+        "亮点：熊猫繁育基地, 三星堆, 乐山大佛。"
+      ],
+      "itinerary_highlight": "成都 (熊猫) -> 乐山 (大佛) -> 都江堰 -> 三星堆"
+    }
+  }
+]
