@@ -1,4 +1,3 @@
-import { Link } from '@repo/i18n/client';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -8,6 +7,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@repo/ui/components/navigation-menu';
+import Link from 'next/link';
 import * as React from 'react';
 import type { Messages } from '#/lib/i18n';
 import { IconMap, type IconName } from '../icon-map';

@@ -1,6 +1,5 @@
 'use client';
 
-import { Link } from '@repo/i18n/client';
 import { Button } from '@repo/ui/components/button';
 import {
   Popover,
@@ -8,6 +7,7 @@ import {
   PopoverTrigger,
 } from '@repo/ui/components/popover';
 import { Menu, X } from 'lucide-react';
+import Link from 'next/link';
 import * as React from 'react';
 import type { Messages } from '#/lib/i18n';
 

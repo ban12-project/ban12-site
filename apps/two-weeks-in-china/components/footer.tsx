@@ -1,4 +1,5 @@
 import { Link } from '@repo/i18n/client';
+import NextLink from 'next/link';
 import { getGlobalMenu } from '#/lib/db/queries';
 import type { Messages } from '#/lib/i18n';
 
@@ -51,12 +52,12 @@ export async function Footer({ dict, lang }: { dict: Messages; lang: string }) {
                   <ul className="space-y-4">
                     {menu.children.map((item) => (
                       <li key={item.title}>
-                        <Link
+                        <NextLink
                           href={item.href}
                           className="text-white/60 hover:text-white transition-colors block text-sm"
                         >
                           {item.title}
-                        </Link>
+                        </NextLink>
                       </li>
                     ))}
                   </ul>
