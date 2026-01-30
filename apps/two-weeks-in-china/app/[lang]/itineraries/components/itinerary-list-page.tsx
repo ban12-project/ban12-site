@@ -1,7 +1,7 @@
 'use client';
 
+import { Link } from '@repo/i18n/client';
 import { ArrowRight, Clock } from 'lucide-react';
-import Link from 'next/link';
 
 interface ItinerarySummary {
   slug: string;

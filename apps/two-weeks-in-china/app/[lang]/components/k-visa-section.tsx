@@ -22,7 +22,7 @@ export function KVisaSection({ dict }: { dict: Messages }) {
         </div>
       </div>
 
-      <Card className="bg-linear-to-br from-gray-900 to-gray-800 shadow-[0px_5px_0px_0px_#191A23] border border-dark rounded-[30px] overflow-hidden text-white">
+      <Card className="bg-dark shadow-[0px_5px_0px_0px_#191A23] border border-dark rounded-[30px] overflow-hidden text-white">
         <CardHeader className="p-8 pb-4">
           <div className="flex justify-between items-start">
             <div>

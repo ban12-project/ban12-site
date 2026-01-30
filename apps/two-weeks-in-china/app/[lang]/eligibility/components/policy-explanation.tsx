@@ -1,6 +1,6 @@
 import { AlertTriangle, Plane } from 'lucide-react';
 import type { Messages } from '#/lib/i18n';
-import { TRANSIT_240H_COUNTRIES } from './countries';
+import { TRANSIT_240H_COUNTRIES } from '../../components/countries';
 
 export function PolicyExplanation({ dict }: { dict: Messages }) {
   return (

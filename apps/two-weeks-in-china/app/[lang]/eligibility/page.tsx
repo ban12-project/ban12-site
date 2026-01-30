@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getDictionary, type Locale } from '#/lib/i18n';
-import { EligibilityForm } from './components/eligibility-form';
+import { EligibilityForm } from '../components/eligibility-form';
 import { PolicyExplanation } from './components/policy-explanation';
 
 export async function generateMetadata({

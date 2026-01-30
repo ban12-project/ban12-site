@@ -6,7 +6,7 @@ import {
 } from '@repo/ui/components/card';
 import { CheckCircle2 } from 'lucide-react';
 import type { Messages } from '#/lib/i18n';
-import { EligibilityChecker } from './eligibility-checker';
+import { EligibilityForm } from './eligibility-form';
 
 export function PolicySection({ dict }: { dict: Messages }) {
   return (
@@ -19,12 +19,12 @@ export function PolicySection({ dict }: { dict: Messages }) {
         </div>
       </div>
 
-      <EligibilityChecker dict={dict} />
+      <EligibilityForm dict={dict} className="rounded-[30px]" />
 
       <div className="grid md:grid-cols-2 gap-8">
         <Card className="bg-grey shadow-[0px_5px_0px_0px_#191A23] border border-dark rounded-[30px] p-8">
           <CardHeader className="p-0 mb-6">
-            <CardTitle className="text-3xl font-medium text-dark bg-primary w-fit px-2">
+            <CardTitle className="text-3xl font-medium text-dark bg-primary w-fit px-2 py-1 rounded">
               {dict.sections.policy.card_twov_title}
             </CardTitle>
           </CardHeader>
@@ -58,7 +58,7 @@ export function PolicySection({ dict }: { dict: Messages }) {
 
         <Card className="bg-dark text-white shadow-[0px_5px_0px_0px_#191A23] border border-dark rounded-[30px] p-8 flex flex-col justify-between">
           <CardHeader className="p-0 mb-6">
-            <CardTitle className="text-3xl font-medium text-white border border-white w-fit px-4 py-1 rounded-full">
+            <CardTitle className="text-3xl font-medium text-dark bg-primary w-fit px-2 py-1 rounded">
               {dict.sections.policy.card_unilateral_badge}
             </CardTitle>
           </CardHeader>

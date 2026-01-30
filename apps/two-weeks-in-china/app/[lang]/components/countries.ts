@@ -1,4 +1,5 @@
-export const VISA_FREE_COUNTRIES = [
+// Unilateral 15 days visa-free
+export const VISA_FREE_15_DAYS = [
   'France',
   'Germany',
   'Italy',
@@ -14,11 +15,17 @@ export const VISA_FREE_COUNTRIES = [
   'New Zealand',
   'Australia',
   'South Korea',
-  // Mutual visa exemption usually
+];
+
+// Mutual visa exemption (30 days)
+export const VISA_FREE_30_DAYS = [
   'Singapore',
   'Thailand',
   'Georgia',
+  'United Arab Emirates', // Added to match policy roughly, assuming mutual exemption
 ];
+
+export const VISA_FREE_COUNTRIES = [...VISA_FREE_15_DAYS, ...VISA_FREE_30_DAYS];
 
 // Based on the 55 countries list for 72/144 (now 240) hour transit
 export const TRANSIT_240H_COUNTRIES = [
@@ -79,7 +86,7 @@ export const TRANSIT_240H_COUNTRIES = [
   'Japan',
   'Singapore',
   'Brunei',
-  'United Arab Emirates',
+
   'Qatar',
   'Indonesia',
 ];

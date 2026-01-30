@@ -12,13 +12,13 @@ export function Footer({ dict }: { dict: Messages }) {
           <div className="lg:w-1/4 space-y-8">
             <Link href="/" className="block">
               <h2 className="text-3xl font-bold tracking-tighter">
-                China<span className="text-primary">Guide</span>
+                Two Weeks in <span className="text-primary">China</span>
               </h2>
             </Link>
             <p className="text-white/60 text-lg leading-relaxed">
               {dict.common.description}
             </p>
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <a
                 href="https://twitter.com"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors text-white"
@@ -33,7 +33,7 @@ export function Footer({ dict }: { dict: Messages }) {
                 <Github className="w-5 h-5" />
                 <span className="sr-only">GitHub</span>
               </a>
-            </div>
+            </div> */}
           </div>
 
           {/* Navigation Links */}
