@@ -1,5 +1,8 @@
+import { Skeleton } from '@repo/ui/components/skeleton';
 import type { Metadata } from 'next';
-import { getDictionary, type Locale } from '#/lib/i18n';
+import { Suspense } from 'react';
+import { getAllCountries } from '#/lib/db/queries';
+import { getDictionary, type Locale, type Messages } from '#/lib/i18n';
 import { EligibilityForm } from '../components/eligibility-form';
 import { PolicyExplanation } from './components/policy-explanation';
 
@@ -14,6 +17,44 @@ export async function generateMetadata({
     title: dict.eligibility.title,
     description: dict.eligibility.description,
   };
+}
+
+// Loading skeleton for the eligibility form
+function EligibilityFormSkeleton() {
+  return (
+    <div className="space-y-6">
+      <Skeleton className="h-12 rounded-xl w-full" />
+      <Skeleton className="h-14 rounded-xl w-48" />
+    </div>
+  );
+}
+
+// Async component for form content that fetches countries
+async function EligibilityFormContent({ dict }: { dict: Messages }) {
+  const countries = await getAllCountries();
+
+  return <EligibilityForm dict={dict} countries={countries} />;
+}
+
+// Loading skeleton for policy explanation
+function PolicyExplanationSkeleton() {
+  return (
+    <div className="space-y-16">
+      <Skeleton className="rounded-[30px] h-96" />
+      <div className="space-y-8">
+        <Skeleton className="h-10 rounded w-64" />
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <Skeleton
+              // biome-ignore lint/suspicious/noArrayIndexKey: skeleton
+              key={`skeleton-${i}`}
+              className="h-12 rounded-lg"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default async function EligibilityPage({
@@ -35,9 +76,13 @@ export default async function EligibilityPage({
         </p>
       </div>
 
-      <EligibilityForm dict={dict} />
+      <Suspense fallback={<EligibilityFormSkeleton />}>
+        <EligibilityFormContent dict={dict} />
+      </Suspense>
 
-      <PolicyExplanation dict={dict} />
+      <Suspense fallback={<PolicyExplanationSkeleton />}>
+        <PolicyExplanation dict={dict} />
+      </Suspense>
     </div>
   );
 }

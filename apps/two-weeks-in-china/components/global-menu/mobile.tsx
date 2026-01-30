@@ -10,9 +10,24 @@ import {
 import { Menu, X } from 'lucide-react';
 import * as React from 'react';
 import type { Messages } from '#/lib/i18n';
-import { MENUS } from './items';
 
-export function MobileNav({ dict }: { dict: Messages }) {
+type MenuItem = {
+  title: string;
+  children: {
+    title: string;
+    href: string;
+    icon: string;
+    description: string | null;
+  }[];
+};
+
+export function MobileNav({
+  dict,
+  menuItems,
+}: {
+  dict: Messages;
+  menuItems: MenuItem[];
+}) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -32,10 +47,12 @@ export function MobileNav({ dict }: { dict: Messages }) {
           align="end"
         >
           <div className="p-4 bg-white rounded-lg shadow-xl flex flex-col gap-6">
-            {MENUS.map((item) => (
+            {menuItems.map((item) => (
               <div key={item.title} className="space-y-3">
                 <h3 className="font-bold text-lg text-dark border-b pb-2">
-                  {dict.nav_sections[item.title].title}
+                  {dict.nav_sections[
+                    item.title as keyof typeof dict.nav_sections
+                  ]?.title || item.title}
                 </h3>
                 <div className="grid grid-cols-1 gap-2">
                   {item.children.map((child) => (
@@ -45,8 +62,7 @@ export function MobileNav({ dict }: { dict: Messages }) {
                       className="text-dark/70 hover:text-primary py-1 px-2 rounded hover:bg-black/5 transition-colors"
                       onClick={() => setOpen(false)}
                     >
-                      {/* @ts-expect-error */}
-                      {dict.nav_sections[item.title][child.title]}
+                      {child.title}
                     </Link>
                   ))}
                 </div>

@@ -24,55 +24,50 @@ import { cn } from '@repo/ui/lib/utils';
 import {
   AlertCircle,
   CheckCircle2,
+  Loader2,
   Plane,
   RefreshCw,
   XCircle,
 } from 'lucide-react';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useTransition } from 'react';
+import { checkEligibility, type EligibilityResult } from '#/lib/actions';
+import type { Country } from '#/lib/db/schema/countries';
 import type { Messages } from '#/lib/i18n';
-import {
-  ALL_COUNTRIES,
-  TRANSIT_240H_COUNTRIES,
-  VISA_FREE_15_DAYS,
-  VISA_FREE_30_DAYS,
-} from './countries';
 
 interface Props extends React.ComponentProps<typeof Card> {
   dict: Messages;
+  countries: Country[];
 }
 
-const groupedCountries = ALL_COUNTRIES.reduce(
-  (acc, country) => {
-    const letter = country[0].toUpperCase();
-    if (!acc[letter]) {
-      acc[letter] = [];
-    }
-    acc[letter].push(country);
-    return acc;
-  },
-  {} as Record<string, string[]>,
-);
+function groupCountriesByLetter(countries: Country[]) {
+  return countries.reduce(
+    (acc, country) => {
+      const letter = country.name[0].toUpperCase();
+      if (!acc[letter]) {
+        acc[letter] = [];
+      }
+      acc[letter].push(country);
+      return acc;
+    },
+    {} as Record<string, Country[]>,
+  );
+}
 
-const letters = Object.keys(groupedCountries).sort();
-
-export function EligibilityForm({ dict, ...props }: Props) {
+export function EligibilityForm({ dict, countries, ...props }: Props) {
   const [country, setCountry] = useState<string>('');
-  const [result, setResult] = useState<
-    'visa_free_15' | 'visa_free_30' | 'transit_240h' | 'visa_required' | null
-  >(null);
+  const [result, setResult] = useState<EligibilityResult | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  const groupedCountries = groupCountriesByLetter(countries);
+  const letters = Object.keys(groupedCountries).sort();
 
   const handleCheck = () => {
     if (!country) return;
 
-    if (VISA_FREE_30_DAYS.includes(country)) {
-      setResult('visa_free_30');
-    } else if (VISA_FREE_15_DAYS.includes(country)) {
-      setResult('visa_free_15');
-    } else if (TRANSIT_240H_COUNTRIES.includes(country)) {
-      setResult('transit_240h');
-    } else {
-      setResult('visa_required');
-    }
+    startTransition(async () => {
+      const eligibility = await checkEligibility(country);
+      setResult(eligibility);
+    });
   };
 
   const handleReset = () => {
@@ -117,8 +112,8 @@ export function EligibilityForm({ dict, ...props }: Props) {
                     <SelectGroup>
                       <SelectLabel className="sticky">{letter}</SelectLabel>
                       {groupedCountries[letter].map((c) => (
-                        <SelectItem key={c} value={c}>
-                          {c}
+                        <SelectItem key={c.id} value={c.name}>
+                          {c.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -132,14 +127,21 @@ export function EligibilityForm({ dict, ...props }: Props) {
             <Button
               className="w-full h-12 text-lg font-semibold bg-dark text-white hover:bg-dark/80"
               onClick={handleCheck}
-              disabled={!country}
+              disabled={!country || isPending}
             >
-              {dict.eligibility.form.check_btn}
+              {isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Checking...
+                </>
+              ) : (
+                dict.eligibility.form.check_btn
+              )}
             </Button>
           </div>
         ) : (
           <div className="space-y-6 animate-in fade-in zoom-in duration-300">
-            {result === 'visa_free_15' && (
+            {result.policy === 'visa_free_15' && (
               <div className="flex flex-col items-center text-center space-y-3 p-4 bg-white rounded-xl border border-dark text-dark shadow-[0px_3px_0px_0px_#191A23]">
                 <CheckCircle2 className="w-16 h-16 text-dark" />
                 <h3 className="text-xl font-bold">
@@ -151,7 +153,7 @@ export function EligibilityForm({ dict, ...props }: Props) {
               </div>
             )}
 
-            {result === 'visa_free_30' && (
+            {result.policy === 'visa_free_30' && (
               <div className="flex flex-col items-center text-center space-y-3 p-4 bg-white rounded-xl border border-dark text-dark shadow-[0px_3px_0px_0px_#191A23]">
                 <CheckCircle2 className="w-16 h-16 text-dark" />
                 <h3 className="text-xl font-bold">
@@ -163,7 +165,7 @@ export function EligibilityForm({ dict, ...props }: Props) {
               </div>
             )}
 
-            {result === 'transit_240h' && (
+            {result.policy === 'transit_240h' && (
               <div className="flex flex-col items-center text-center space-y-3 p-4 bg-white rounded-xl border border-dark text-dark shadow-[0px_3px_0px_0px_#191A23]">
                 <Plane className="w-16 h-16 text-dark" />
                 <h3 className="text-xl font-bold">
@@ -181,7 +183,7 @@ export function EligibilityForm({ dict, ...props }: Props) {
               </div>
             )}
 
-            {result === 'visa_required' && (
+            {result.policy === 'visa_required' && (
               <div className="flex flex-col items-center text-center space-y-3 p-4 bg-white rounded-xl border border-dark text-dark shadow-[0px_3px_0px_0px_#191A23]">
                 <XCircle className="w-16 h-16 text-dark" />
                 <h3 className="text-xl font-bold">

@@ -5,10 +5,13 @@ import {
   CardTitle,
 } from '@repo/ui/components/card';
 import { CheckCircle2 } from 'lucide-react';
+import { getAllCountries } from '#/lib/db/queries';
 import type { Messages } from '#/lib/i18n';
 import { EligibilityForm } from './eligibility-form';
 
-export function PolicySection({ dict }: { dict: Messages }) {
+export async function PolicySection({ dict }: { dict: Messages }) {
+  const countries = await getAllCountries();
+
   return (
     <section id="policy" className="grid gap-10 scroll-mt-24">
       <div className="flex items-center gap-4">
@@ -19,7 +22,11 @@ export function PolicySection({ dict }: { dict: Messages }) {
         </div>
       </div>
 
-      <EligibilityForm dict={dict} className="rounded-[30px]" />
+      <EligibilityForm
+        dict={dict}
+        countries={countries}
+        className="rounded-[30px]"
+      />
 
       <div className="grid md:grid-cols-2 gap-8">
         <Card className="bg-grey shadow-[0px_5px_0px_0px_#191A23] border border-dark rounded-[30px] p-8">

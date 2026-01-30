@@ -1,6 +1,7 @@
 import { Link } from '@repo/i18n/client';
 import { Button } from '@repo/ui/components/button';
 import { DesktopNav, MobileNav } from '#/components/global-menu';
+import { getGlobalMenu } from '#/lib/db/queries';
 import type { Messages } from '#/lib/i18n';
 
 function Logo() {
@@ -20,13 +21,15 @@ function Logo() {
   );
 }
 
-export function Header({ dict }: { dict: Messages }) {
+export async function Header({ dict, lang }: { dict: Messages; lang: string }) {
+  const menuItems = await getGlobalMenu(lang);
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-dark/10 transition-all duration-300">
       <div className="container mx-auto px-6 h-20 flex items-center gap-4">
         <Logo />
 
-        <DesktopNav dict={dict} />
+        <DesktopNav dict={dict} menuItems={menuItems} />
 
         {/* CTA & Mobile Menu */}
         <div className="flex items-center gap-4 ml-auto">
@@ -38,7 +41,7 @@ export function Header({ dict }: { dict: Messages }) {
             <Link href="/eligibility">{dict.nav.check_eligibility}</Link>
           </Button>
 
-          <MobileNav dict={dict} />
+          <MobileNav dict={dict} menuItems={menuItems} />
         </div>
       </div>
     </header>

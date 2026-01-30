@@ -10,35 +10,49 @@ import {
 } from '@repo/ui/components/navigation-menu';
 import * as React from 'react';
 import type { Messages } from '#/lib/i18n';
-import { MENUS } from './items';
+import { IconMap, type IconName } from '../icon-map';
+
+type MenuItem = {
+  title: string;
+  children: {
+    title: string;
+    href: string;
+    icon: string;
+    description: string | null;
+  }[];
+};
 
 export function DesktopNav({
   dict,
+  menuItems,
   children,
 }: {
   dict: Messages;
+  menuItems: MenuItem[];
   children?: React.ReactNode;
 }) {
   return (
     <NavigationMenu className="hidden lg:block">
       <NavigationMenuList>
-        {MENUS.map((item) => (
+        {menuItems.map((item) => (
           <NavigationMenuItem key={item.title}>
             <NavigationMenuTrigger className="bg-transparent text-dark/80 hover:text-dark hover:bg-black/5 px-3 [&:lang(en)]:tracking-tight">
-              {dict.nav_sections[item.title].title}
+              {(dict.nav_sections as Record<string, { title: string }>)[
+                item.title
+              ]?.title || item.title}
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150">
                 {item.children.map((child) => (
                   <ListItem
                     key={child.title}
-                    // @ts-expect-error
-                    title={dict.nav_sections[item.title][child.title]}
+                    title={child.title}
                     href={child.href}
-                    icon={child.icon}
+                    icon={
+                      IconMap[child.icon as IconName] || IconMap['file-text']
+                    }
                   >
-                    {/* @ts-expect-error */}
-                    {dict.nav_sections[item.title][`${child.title}_desc`]}
+                    {child.description}
                   </ListItem>
                 ))}
               </ul>

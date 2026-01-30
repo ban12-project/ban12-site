@@ -1,5 +1,3 @@
-'use client';
-
 import { Badge } from '@repo/ui/components/badge';
 import {
   Card,

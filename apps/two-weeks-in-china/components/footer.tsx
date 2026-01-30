@@ -1,9 +1,10 @@
 import { Link } from '@repo/i18n/client';
-import { Github, Twitter } from 'lucide-react';
+import { getGlobalMenu } from '#/lib/db/queries';
 import type { Messages } from '#/lib/i18n';
-import { MENUS } from './global-menu/items';
 
-export function Footer({ dict }: { dict: Messages }) {
+export async function Footer({ dict, lang }: { dict: Messages; lang: string }) {
+  const menuItems = await getGlobalMenu(lang);
+
   return (
     <footer className="bg-dark text-white rounded-t-[45px] mt-20 relative overflow-hidden">
       <div className="container mx-auto px-6 py-16 md:py-24">
@@ -38,7 +39,7 @@ export function Footer({ dict }: { dict: Messages }) {
 
           {/* Navigation Links */}
           <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-8">
-            {MENUS.map((menu) => {
+            {menuItems.map((menu) => {
               const section = (
                 dict.nav_sections as Record<string, Record<string, string>>
               )[menu.title];
@@ -54,7 +55,7 @@ export function Footer({ dict }: { dict: Messages }) {
                           href={item.href}
                           className="text-white/60 hover:text-white transition-colors block text-sm"
                         >
-                          {section?.[item.title] || item.title}
+                          {item.title}
                         </Link>
                       </li>
                     ))}

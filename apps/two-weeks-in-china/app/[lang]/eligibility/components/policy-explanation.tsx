@@ -1,8 +1,10 @@
 import { AlertTriangle, Plane } from 'lucide-react';
+import { getCountriesByPolicy } from '#/lib/db/queries';
 import type { Messages } from '#/lib/i18n';
-import { TRANSIT_240H_COUNTRIES } from '../../components/countries';
 
-export function PolicyExplanation({ dict }: { dict: Messages }) {
+export async function PolicyExplanation({ dict }: { dict: Messages }) {
+  const transitCountries = await getCountriesByPolicy('transit_240h');
+
   return (
     <div className="space-y-16">
       {/* 1. Visual A->B->C Rule */}
@@ -80,17 +82,17 @@ export function PolicyExplanation({ dict }: { dict: Messages }) {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {TRANSIT_240H_COUNTRIES.sort().map((c) => (
+          {transitCountries.map((country) => (
             <div
-              key={c}
+              key={country.id}
               className="flex items-center p-3 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="w-2 h-2 rounded-full bg-green-500 mr-2 shrink-0" />
               <span
                 className="text-sm font-medium text-slate-700 truncate"
-                title={c}
+                title={country.name}
               >
-                {c}
+                {country.name}
               </span>
             </div>
           ))}

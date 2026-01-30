@@ -23,6 +23,7 @@ export async function generateMetadata({
   return {
     title: dict.common.title,
     description: dict.common.description,
+    metadataBase: new URL('https://twoweeksinchina.com'),
   };
 }
 
@@ -44,9 +45,9 @@ export default async function RootLayout({
     <html lang={lang} className={`${spaceGrotesk.variable} antialiased`}>
       <body className="bg-light min-h-screen text-dark flex flex-col">
         <LocaleProvider i18n={i18n} locale={lang as Locale}>
-          <Header dict={dict} />
+          <Header dict={dict} lang={lang} />
           <main className="flex-1 pt-20">{children}</main>
-          <Footer dict={dict} />
+          <Footer dict={dict} lang={lang} />
         </LocaleProvider>
       </body>
     </html>
