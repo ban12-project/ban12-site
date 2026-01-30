@@ -3,8 +3,10 @@ import type { Metadata } from 'next';
 import { Space_Grotesk } from 'next/font/google';
 import { getDictionary, i18n, type Locale } from '#/lib/i18n';
 import '#/app/globals.css';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { Footer } from '#/components/footer';
 import { Header } from '#/components/header';
+import { WebVitals } from '#/components/web-vitals';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -49,6 +51,12 @@ export default async function RootLayout({
           <main className="flex-1 pt-20">{children}</main>
           <Footer dict={dict} lang={lang} />
         </LocaleProvider>
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+            <WebVitals />
+          </>
+        )}
       </body>
     </html>
   );

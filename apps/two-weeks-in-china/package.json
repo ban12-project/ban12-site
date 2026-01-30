@@ -26,6 +26,7 @@
     "@mdx-js/react": "^3.1.1",
     "@neondatabase/serverless": "^1.0.2",
     "@next/mdx": "^16.1.6",
+    "@next/third-parties": "catalog:",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
     "@types/mdx": "^2.0.13",
