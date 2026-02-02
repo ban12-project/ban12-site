@@ -1,5 +1,5 @@
 import { LocaleProvider } from '@repo/i18n/client';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Space_Grotesk } from 'next/font/google';
 import { getDictionary, i18n, type Locale } from '#/lib/i18n';
 import '#/app/globals.css';
@@ -23,11 +23,52 @@ export async function generateMetadata({
   const dict = await getDictionary(lang);
 
   return {
-    title: dict.common.title,
+    title: {
+      default: dict.common.title,
+      template: `%s | ${dict.common.title}`,
+    },
     description: dict.common.description,
     metadataBase: new URL('https://twoweeksinchina.com'),
+    applicationName: dict.common.title,
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'default',
+      title: dict.common.title,
+    },
+    openGraph: {
+      title: dict.common.title,
+      description: dict.common.description,
+      url: 'https://twoweeksinchina.com',
+      siteName: dict.common.title,
+      images: [
+        {
+          url: '/opengraph-image.png',
+          width: 512,
+          height: 512,
+          alt: dict.common.title,
+        },
+      ],
+      locale: lang,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: dict.common.title,
+      description: dict.common.description,
+      images: ['/opengraph-image.png'],
+    },
   };
 }
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#191a23' },
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+  ],
+  initialScale: 1,
+  width: 'device-width',
+  viewportFit: 'cover',
+};
 
 export async function generateStaticParams() {
   return Object.keys(i18n.locales).map((lang) => ({ lang }));

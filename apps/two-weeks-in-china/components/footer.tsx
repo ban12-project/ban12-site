@@ -70,7 +70,7 @@ export async function Footer({ dict, lang }: { dict: Messages; lang: string }) {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/40">
           <p>{dict.common.footer_copyright}</p>
-          <p>{dict.common.footer_note}</p>
+          <p className="text-center">{dict.common.footer_note}</p>
         </div>
       </div>
     </footer>
