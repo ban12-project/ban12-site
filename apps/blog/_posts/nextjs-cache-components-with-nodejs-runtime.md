@@ -1,5 +1,5 @@
 ---
-title: "Next.js 16 缓存组件回归 Node.js 运行时深度解析"
+title: "为什么 Next.js 16 的 Cache Components 不支持 Edge Runtime？"
 excerpt: "深入了解 Next.js 16 缓存组件的底层原理，以及为什么它目前仅支持 Node.js 运行时。"
 date: "2026-02-24T11:16:14.816Z"
 author:
