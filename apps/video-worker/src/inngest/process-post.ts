@@ -61,16 +61,13 @@ export default inngest.createFunction(
 
 async function bilibiliHandler({ bvid, restaurantId }: { bvid: string; restaurantId: string }) {
   // Fetch video URLs from Supabase function
-  const response = await fetch(
-    new URL(`/functions/v1/bilibili-get-video-urls/${bvid}`, process.env.SUPABASE_ENDPOINT),
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.SUPABASE_ANON_KEY}`,
-      },
-      method: "GET",
+  const response = await fetch(new URL(`/functions/v1/bilibili/video-urls/${bvid}`, process.env.SUPABASE_ENDPOINT), {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.SUPABASE_ANON_KEY}`,
     },
-  );
+    method: "GET",
+  });
   if (!response.ok) {
     throw new Error(`Failed to fetch video URLs for bvid ${bvid}: ${response.statusText}`);
   }

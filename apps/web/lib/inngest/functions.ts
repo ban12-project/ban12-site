@@ -8,11 +8,11 @@ export const triggerRevalidation = inngest.createFunction(
   async ({ event, step }) => {
     const { id } = event.data;
 
-    step.run('1. Clean restaurant redis cache', async () => {
+    await step.run('1. Clean restaurant redis cache', async () => {
       await cleanRestaurantCacheById(id);
     });
 
-    step.run('2. Trigger revalidation for restaurant', async () => {
+    await step.run('2. Trigger revalidation for restaurant', async () => {
       const tags = [`restaurant:${id}`];
       const paths = [
         { path: '/[lang]/dashboard/restaurants', type: 'page' },
