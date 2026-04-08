@@ -29,7 +29,7 @@ catalog:
   babel-plugin-react-compiler: ^1.0.0
   dotenv: ^16.5.0
   drizzle-kit: ^0.31.4
-  drizzle-orm: ^0.44.4
+  drizzle-orm: ^0.45.2
   gsap: ^3.13.0
   intl-messageformat: ^10.7.16
   lucide-react: ^0.541.0
