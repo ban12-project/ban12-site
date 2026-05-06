@@ -13,7 +13,7 @@
   "dependencies": {
     "@google/genai": "catalog:",
     "dotenv": "catalog:",
-    "inngest": "^3.40.1",
+    "inngest": "^3.54.0",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
