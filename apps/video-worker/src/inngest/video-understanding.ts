@@ -4,6 +4,32 @@ import { sql } from "../db";
 import { inngest } from "./client";
 import { triggerRevalidation, videoUnderstanding } from "./types";
 
+type JsonValue = null | string | number | boolean | JsonValue[] | { [key: string]: JsonValue };
+
+function extractJsonResponse(text: string) {
+  const trimmed = text.trim();
+  const fencedJson = trimmed.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+  if (fencedJson?.[1]) {
+    return fencedJson[1].trim();
+  }
+
+  const firstObjectBrace = trimmed.indexOf("{");
+  const lastObjectBrace = trimmed.lastIndexOf("}");
+  if (firstObjectBrace !== -1 && lastObjectBrace > firstObjectBrace) {
+    return trimmed.slice(firstObjectBrace, lastObjectBrace + 1);
+  }
+
+  return trimmed;
+}
+
+function parseJsonResponse(text: string): JsonValue {
+  try {
+    return JSON.parse(extractJsonResponse(text)) as JsonValue;
+  } catch (cause) {
+    throw new Error("Failed to parse Gemini JSON response", { cause });
+  }
+}
+
 export default inngest.createFunction(
   {
     id: "video-understanding",
@@ -95,13 +121,31 @@ export default inngest.createFunction(
       return { message: "No response text" };
     }
 
-    await step.run("2. Update database with AI summary and success status", async () => {
-      await sql`
+    let aiSummary: JsonValue;
+    try {
+      aiSummary = parseJsonResponse(text);
+    } catch (error) {
+      console.error(error);
+      await step.run("2a. Update status to failed", async () => {
+        await sql`
           UPDATE restaurant
-          SET ai_summarize = ${JSON.parse(text)},
-              status = 'success'
+          SET status = 'failed'
           WHERE id = ${id}
         `;
+      });
+      await step.run("2b. Trigger revalidation for parse failure", async () => {
+        await inngest.send(triggerRevalidation.create({ id }));
+      });
+      return { message: "Invalid JSON response" };
+    }
+
+    await step.run("2. Update database with AI summary and success status", async () => {
+      await sql`
+        UPDATE restaurant
+        SET ai_summarize = ${sql.json(aiSummary)},
+            status = 'success'
+        WHERE id = ${id}
+      `;
     });
 
     await step.run("3. Trigger revalidation for success", async () => {
