@@ -1,30 +1,17 @@
 'use client';
 
-import {
-  type ComponentPropsWithoutRef,
-  type ComponentRef,
-  createContext,
-  forwardRef,
-} from 'react';
-import AutoSizer from 'react-virtualized-auto-sizer';
-import { FixedSizeList, type FixedSizeListProps } from 'react-window';
+import { createContext } from 'react';
+import { AutoSizer } from 'react-virtualized-auto-sizer';
+import { List, type ListProps } from 'react-window';
 
-export const ListContext = createContext<
-  Omit<Props<unknown>, 'data' | 'children'>
->({
+export const ListContext = createContext<Pick<Props<unknown[]>, 'itemSize'>>({
   itemSize: 0,
 });
 
-const outerElementType = forwardRef<ComponentRef<'div'>>(
-  function Outer(props, ref) {
-    return <div ref={ref} {...props} data-lenis-prevent></div>;
-  },
-);
-
 type Props<T> = {
   data: T;
-  children: ComponentPropsWithoutRef<typeof FixedSizeList<T>>['children'];
-  itemSize: FixedSizeListProps['itemSize'];
+  children: ListProps<{ data: T }>['rowComponent'];
+  itemSize: number | string;
 };
 
 export default function VirtualList<T extends unknown[]>({
@@ -32,26 +19,30 @@ export default function VirtualList<T extends unknown[]>({
   children,
   ...rest
 }: Props<T>) {
+  const RowComponent = children;
+
   return (
     <ListContext.Provider value={rest}>
       {/**
        * https://github.com/bvaughn/react-virtualized-auto-sizer#documentation
        * defaultWidth defaultHeight useful for server-side rendering.
        */}
-      <AutoSizer disableWidth defaultHeight={1000}>
-        {({ height }) => (
-          <FixedSizeList
-            height={height}
-            itemCount={data.length}
-            itemSize={rest.itemSize}
-            width="100%"
-            outerElementType={outerElementType}
-            itemData={data}
-          >
-            {children}
-          </FixedSizeList>
+      <AutoSizer
+        style={{ width: '100%', height: '100%' }}
+        renderProp={({ height = 1000 }) => (
+          <div data-lenis-prevent style={{ height }}>
+            <List
+              rowComponent={RowComponent}
+              rowCount={data.length}
+              rowHeight={rest.itemSize}
+              rowProps={{ data }}
+              defaultHeight={height}
+              tagName="div"
+              style={{ height, width: '100%' }}
+            />
+          </div>
         )}
-      </AutoSizer>
+      />
     </ListContext.Provider>
   );
 }

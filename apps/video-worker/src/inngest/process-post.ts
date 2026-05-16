@@ -8,8 +8,7 @@ import { sql } from "../db";
 import { inngest } from "./client";
 
 export default inngest.createFunction(
-  { id: "video-process", concurrency: 3 },
-  { event: "video/process" },
+  { id: "video-process", concurrency: 3, triggers: [{ event: "video/process" }] },
   async ({ event, step }) => {
     const { postId, restaurantId } = event.data;
 

@@ -1,5 +1,5 @@
+import { getSessionCookie } from 'better-auth/cookies';
 import { type NextProxy, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
 
 import { i18n, middleware as i18nMiddleware } from './lib/i18n';
 
@@ -28,16 +28,15 @@ export async function proxy(...args: Parameters<NextProxy>) {
     return i18nMiddleware(...args);
   }
 
-  const token = await getToken({
-    req: request,
-    secret: process.env.AUTH_SECRET,
-    secureCookie: process.env.NODE_ENV !== 'development',
-  });
+  const sessionCookie = getSessionCookie(request);
   const locale = Object.keys(i18n.locales).find(
     (locale) => pathname.split('/')[1] === locale,
   );
 
-  if (!token && protectedPaths.some((url) => pathname.startsWith(url))) {
+  if (
+    !sessionCookie &&
+    protectedPaths.some((url) => pathname.startsWith(url))
+  ) {
     const redirectUrl = encodeURIComponent(request.url);
 
     return NextResponse.redirect(
@@ -48,7 +47,10 @@ export async function proxy(...args: Parameters<NextProxy>) {
     );
   }
 
-  if (token && withTokenConflictPaths.some((url) => pathname.startsWith(url))) {
+  if (
+    sessionCookie &&
+    withTokenConflictPaths.some((url) => pathname.startsWith(url))
+  ) {
     return NextResponse.redirect(
       new URL(`${locale ? `/${locale}` : ''}/dashboard`, request.url),
     );

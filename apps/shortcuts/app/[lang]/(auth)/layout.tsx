@@ -2,10 +2,8 @@ import '#/app/globals.css';
 
 import { LocaleProvider } from '@repo/i18n/client';
 import { Toaster } from '@repo/ui/components/sonner';
-import { SessionProvider } from 'next-auth/react';
 import { Suspense } from 'react';
 
-import { auth } from '#/lib/auth';
 import { i18n, type Locale } from '#/lib/i18n';
 
 export function generateStaticParams() {
@@ -34,6 +32,5 @@ export default async function Layout({
 }
 
 async function Suspended({ children }: { children: React.ReactNode }) {
-  const session = await auth();
-  return <SessionProvider session={session}>{children}</SessionProvider>;
+  return children;
 }
