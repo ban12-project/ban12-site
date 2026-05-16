@@ -26,7 +26,22 @@ export async function migrateAuthPasswords(sql: Sql) {
     `;
   }
 
+  const [{ count: cleanedCount }] = await sql<{ count: number }[]>`
+    WITH cleaned AS (
+      UPDATE "user" u
+      SET "password" = NULL
+      FROM "account" a
+      WHERE a."providerId" = 'credential'
+        AND a."accountId" = u."id"
+        AND a."password" IS NOT NULL
+        AND u."password" IS NOT NULL
+      RETURNING u."id"
+    )
+    SELECT count(*)::int AS count FROM cleaned
+  `;
+
   console.log(`Migrated ${users.length} shortcut password account(s).`);
+  console.log(`Cleared ${cleanedCount} legacy plaintext password(s).`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
