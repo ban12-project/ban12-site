@@ -2,7 +2,7 @@
 
 import { Button } from '@repo/ui/components/button';
 import { Loader2 } from 'lucide-react';
-import { type ReactEventHandler, useActionState, useTransition } from 'react';
+import { type FormEventHandler, useActionState, useTransition } from 'react';
 
 import { login } from '#/app/[lang]/(auth)/actions';
 import { authClient } from '#/lib/auth-client';
@@ -15,13 +15,17 @@ export default function LoginForm() {
     authClient.useSession();
   const [isPending, startTransition] = useTransition();
 
-  const onSubmit: ReactEventHandler = (e) => {
+  const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name');
 
     startTransition(async () => {
       try {
         if (session) {
-          await authClient.passkey.addPasskey();
+          await authClient.passkey.addPasskey({
+            name: typeof name === 'string' ? name : undefined,
+          });
           return;
         }
 
