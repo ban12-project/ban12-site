@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+type FilePickerMimeType = `${string}/${string}`;
+
 function download(data: { blob: Blob; filename: string }[]) {
   for (const { blob, filename } of data) {
     const url = URL.createObjectURL(blob);
@@ -43,7 +45,7 @@ export function useSaveFile() {
             {
               description,
               accept: {
-                [blob.type as MIMEType]: [`.${ext}`],
+                [blob.type as FilePickerMimeType]: [`.${ext}`],
               },
             },
           ],

@@ -92,6 +92,13 @@
       "when": 1752723178444,
       "tag": "0012_secret_freak",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1778947200000,
+      "tag": "0013_better_auth",
+      "breakpoints": true
     }
   ]
 }

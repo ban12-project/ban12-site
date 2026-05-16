@@ -2,36 +2,30 @@
 
 import { Button } from '@repo/ui/components/button';
 import { Loader2 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
-import { signIn } from 'next-auth/webauthn';
 import { type ReactEventHandler, useActionState, useTransition } from 'react';
 
 import { login } from '#/app/[lang]/(auth)/actions';
+import { authClient } from '#/lib/auth-client';
 
 import CloudflareTurnstile from './cloudflare-turnstile';
 
 export default function LoginForm() {
   const [errorMessage, dispatch, pending] = useActionState(login, undefined);
-  const { status } = useSession();
+  const { data: session, isPending: isSessionPending } =
+    authClient.useSession();
   const [isPending, startTransition] = useTransition();
 
   const onSubmit: ReactEventHandler = (e) => {
     e.preventDefault();
 
-    const formData = new FormData(e.target as HTMLFormElement);
-    // const name = formData.get('name')
-    const email = formData.get('email');
-
     startTransition(async () => {
-      // if (status === 'authenticated') {
-      //   void signIn('passkey', { action: 'register', name, email })
-      // }
-
-      // if (status === 'unauthenticated') {
-      //   void signIn('passkey', { email })
-      // }
       try {
-        await signIn('passkey', { action: 'authenticate', email });
+        if (session) {
+          await authClient.passkey.addPasskey();
+          return;
+        }
+
+        await authClient.signIn.passkey();
       } catch (error) {
         console.error(error);
       }
@@ -100,7 +94,7 @@ export default function LoginForm() {
       </form>
 
       <form onSubmit={onSubmit} className="space-y-4">
-        {status === 'authenticated' && (
+        {session && (
           <div>
             <label
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
@@ -143,12 +137,12 @@ export default function LoginForm() {
 
         <Button
           className="w-full"
-          aria-disabled={status === 'loading' || isPending}
-          disabled={status === 'loading' || isPending}
+          aria-disabled={isSessionPending || isPending}
+          disabled={isSessionPending || isPending}
         >
-          {status === 'authenticated'
+          {session
             ? 'Register new Passkey'
-            : status === 'unauthenticated'
+            : !isSessionPending
               ? 'Sign in with Passkey'
               : 'Loading...'}
           {isPending && (

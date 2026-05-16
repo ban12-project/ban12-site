@@ -117,6 +117,7 @@
   :is(h2, h3, h4):where(:not(.not-prose, .not-prose *)) {
     scroll-margin-top: calc(var(--spacing) * 32);
     @variant lg {
+      /* biome-ignore lint/suspicious/noDuplicateProperties: Tailwind variant override. */
       scroll-margin-top: calc(var(--spacing) * 18);
     }
   }

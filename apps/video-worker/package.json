@@ -13,13 +13,13 @@
   "dependencies": {
     "@google/genai": "catalog:",
     "dotenv": "catalog:",
-    "inngest": "^3.40.1",
-    "postgres": "^3.4.5"
+    "inngest": "^4.4.0",
+    "postgres": "^3.4.9"
   },
   "devDependencies": {
-    "@tsconfig/node24": "^24.0.1",
+    "@tsconfig/node24": "^24.0.4",
     "@types/node": "catalog:",
-    "tsx": "^4.19.4",
+    "tsx": "^4.22.0",
     "typescript": "catalog:"
   }
 }
