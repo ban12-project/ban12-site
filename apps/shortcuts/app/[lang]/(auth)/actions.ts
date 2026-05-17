@@ -1,11 +1,11 @@
 'use server';
 
 import { revalidatePath, updateTag } from 'next/cache';
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { AuthError } from 'next-auth';
 import * as z from 'zod';
 
-import { auth } from '#/lib/auth';
+import { signIn } from '#/lib/auth';
 import {
   cfTurnstileResponseSchema,
   cfTurnstileVerify,
@@ -50,19 +50,21 @@ export async function login(
     if (!result.success)
       return result['error-codes'].join(', ').replace(/-/g, ' ');
 
-    await auth.api.signInEmail({
-      body: {
-        email,
-        password,
-      },
-      headers: await headers(),
+    await signIn('credentials', {
+      email,
+      password,
     });
   } catch (error) {
-    console.error(error);
-    return 'Invalid credentials.';
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
+      }
+    }
+    throw error;
   }
-
-  redirect('/dashboard');
 }
 
 const shortcutSchema = z.object({

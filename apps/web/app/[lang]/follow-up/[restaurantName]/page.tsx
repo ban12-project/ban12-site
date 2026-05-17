@@ -24,7 +24,7 @@ export default async function Page({
     getDictionary(lang as Locale),
   ]);
 
-  if (!restaurant?.ai_summarize) {
+  if (!restaurant || !restaurant.ai_summarize) {
     notFound();
   }
 
@@ -77,7 +77,7 @@ export async function generateMetadata({
   const { restaurant } =
     await getCachedRestaurantWithPostsByName(restaurantName);
 
-  if (!restaurant?.ai_summarize) {
+  if (!restaurant || !restaurant.ai_summarize) {
     notFound();
   }
 

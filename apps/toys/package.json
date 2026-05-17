@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm build-rust && next build --webpack",
+    "build": "pnpm build-rust && next build",
     "start": "next start",
     "lint": "biome check --write",
     "build-rust": "wasm-pack build ../../crates/calculate-hash && wasm-pack build ../../crates/similar-wasm-wrapper",
@@ -21,7 +21,7 @@
     "@opennextjs/cloudflare": "catalog:",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
-    "@uswriting/exiftool": "^1.0.6",
+    "@uswriting/exiftool": "^1.0.5",
     "gsap": "catalog:",
     "intl-messageformat": "catalog:",
     "lucide-react": "catalog:",
@@ -38,7 +38,7 @@
     "usehooks-ts": "catalog:",
     "vaul": "catalog:",
     "zod": "catalog:",
-    "zustand": "^5.0.13"
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "catalog:",
@@ -50,11 +50,11 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/react-highlight-words": "^0.20.0",
+    "@types/react-window": "catalog:",
     "@types/wicg-file-system-access": "^2023.10.5",
     "babel-plugin-react-compiler": "catalog:",
     "postcss": "catalog:",
     "typescript": "catalog:",
-    "wasm-pack": "^0.15.0",
     "wrangler": "catalog:"
   }
 }

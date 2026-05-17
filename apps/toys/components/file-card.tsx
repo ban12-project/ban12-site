@@ -1,12 +1,12 @@
 import { cn } from '@repo/ui/lib/utils';
 import { Check, Copy } from 'lucide-react';
-import type { RowComponentProps } from 'react-window';
+import type { ListChildComponentProps } from 'react-window';
 import { useCopyToClipboard } from '#/hooks/use-copy-to-clipboard';
 import { formatSize } from '#/lib/utils';
 
 import type { FileItem } from './file-explorer';
 
-type FileCardProps = RowComponentProps<{ data: FileItem[] }>;
+type FileCardProps = ListChildComponentProps<FileItem[]>;
 
 // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
 const DateTimeFormat = new Intl.DateTimeFormat('default', {
@@ -19,12 +19,7 @@ const DateTimeFormat = new Intl.DateTimeFormat('default', {
   hour12: false,
 });
 
-export default function FileCard({
-  index,
-  style,
-  data,
-  ariaAttributes,
-}: FileCardProps) {
+export default function FileCard({ index, style, data }: FileCardProps) {
   const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 });
 
   const onCopy = (content?: string) => {
@@ -36,7 +31,6 @@ export default function FileCard({
 
   return (
     <dl
-      {...ariaAttributes}
       style={style}
       className="grid grid-cols-1 gap-5 rounded-sm md:grid-cols-4 md:p-5"
     >

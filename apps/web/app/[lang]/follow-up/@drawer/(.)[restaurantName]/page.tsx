@@ -48,7 +48,7 @@ async function Suspended({
     getDictionary(lang as Locale),
   ]);
 
-  if (!restaurant?.ai_summarize || !posts) {
+  if (!restaurant || !restaurant.ai_summarize || !posts) {
     notFound();
   }
 

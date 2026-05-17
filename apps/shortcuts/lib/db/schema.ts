@@ -2,10 +2,10 @@ import { relations } from 'drizzle-orm';
 import {
   boolean,
   foreignKey,
-  index,
   integer,
   jsonb,
   pgTable,
+  primaryKey,
   serial,
   text,
   timestamp,
@@ -13,6 +13,7 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import type { AdapterAccountType } from 'next-auth/adapters';
 
 import type { Locale } from '#/lib/i18n';
 
@@ -20,105 +21,82 @@ export const users = pgTable('user', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  name: text('name').notNull(),
-  email: text('email').notNull().unique(),
-  emailVerified: boolean('emailVerified').default(false).notNull(),
+  name: text('name'),
+  email: text('email').unique(),
+  emailVerified: timestamp('emailVerified', { mode: 'date' }),
   image: text('image'),
-  createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow().notNull(),
-  updatedAt: timestamp('updatedAt', { mode: 'date' }).defaultNow().notNull(),
   password: text('password'),
 });
 
 export const accounts = pgTable(
   'account',
   {
-    id: text('id')
-      .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
-    createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow().notNull(),
-    updatedAt: timestamp('updatedAt', { mode: 'date' }).defaultNow().notNull(),
-    providerId: text('providerId').notNull(),
-    accountId: text('accountId').notNull(),
     userId: text('userId')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    accessToken: text('accessToken'),
-    refreshToken: text('refreshToken'),
-    idToken: text('idToken'),
-    accessTokenExpiresAt: timestamp('accessTokenExpiresAt', { mode: 'date' }),
-    refreshTokenExpiresAt: timestamp('refreshTokenExpiresAt', { mode: 'date' }),
+    type: text('type').$type<AdapterAccountType>().notNull(),
+    provider: text('provider').notNull(),
+    providerAccountId: text('providerAccountId').notNull(),
+    refresh_token: text('refresh_token'),
+    access_token: text('access_token'),
+    expires_at: integer('expires_at'),
+    token_type: text('token_type'),
     scope: text('scope'),
-    password: text('password'),
+    id_token: text('id_token'),
+    session_state: text('session_state'),
   },
   (account) => [
-    uniqueIndex('account_provider_account_id_idx').on(
-      account.providerId,
-      account.accountId,
-    ),
+    primaryKey({
+      columns: [account.provider, account.providerAccountId],
+    }),
   ],
 );
 
 export const sessions = pgTable('session', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow().notNull(),
-  updatedAt: timestamp('updatedAt', { mode: 'date' }).defaultNow().notNull(),
+  sessionToken: text('sessionToken').primaryKey(),
   userId: text('userId')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  expiresAt: timestamp('expiresAt', { mode: 'date' }).notNull(),
-  token: text('token').notNull().unique(),
-  ipAddress: text('ipAddress'),
-  userAgent: text('userAgent'),
+  expires: timestamp('expires', { mode: 'date' }).notNull(),
 });
 
-export const verifications = pgTable('verification', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow().notNull(),
-  updatedAt: timestamp('updatedAt', { mode: 'date' }).defaultNow().notNull(),
-  identifier: text('identifier').notNull(),
-  value: text('value').notNull(),
-  expiresAt: timestamp('expiresAt', { mode: 'date' }).notNull(),
-});
-
-export const passkeys = pgTable(
-  'passkey',
+export const verificationTokens = pgTable(
+  'verificationToken',
   {
-    id: text('id')
-      .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
-    name: text('name'),
-    publicKey: text('publicKey').notNull(),
+    identifier: text('identifier').notNull(),
+    token: text('token').notNull(),
+    expires: timestamp('expires', { mode: 'date' }).notNull(),
+  },
+  (verificationToken) => [
+    primaryKey({
+      columns: [verificationToken.identifier, verificationToken.token],
+    }),
+  ],
+);
+
+export const authenticator = pgTable(
+  'authenticator',
+  {
     credentialID: text('credentialID').notNull(),
-    userId: text('userId')
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
+    userId: text('userId').notNull(),
+    providerAccountId: text('providerAccountId').notNull(),
+    credentialPublicKey: text('credentialPublicKey').notNull(),
     counter: integer('counter').notNull(),
-    deviceType: text('deviceType').notNull(),
-    backedUp: boolean('backedUp').notNull(),
+    credentialDeviceType: text('credentialDeviceType').notNull(),
+    credentialBackedUp: boolean('credentialBackedUp').notNull(),
     transports: text('transports'),
-    createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow().notNull(),
-    aaguid: text('aaguid'),
   },
   (table) => [
-    uniqueIndex('passkey_credential_id_idx').on(table.credentialID),
-    index('passkey_user_id_idx').on(table.userId),
+    uniqueIndex('Authenticator_credentialID_key').using(
+      'btree',
+      table.credentialID,
+    ),
+    primaryKey({ columns: [table.userId, table.credentialID] }),
     foreignKey({ columns: [table.userId], foreignColumns: [users.id] })
       .onDelete('cascade')
       .onUpdate('cascade'),
   ],
 );
-
-export const authSchema = {
-  user: users,
-  account: accounts,
-  session: sessions,
-  verification: verifications,
-  passkey: passkeys,
-};
 
 export type LocalizedString = { [key in Locale]: string };
 

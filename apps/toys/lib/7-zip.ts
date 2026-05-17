@@ -21,19 +21,10 @@ export enum JS7zEventName {
   onExit = 'onExit',
 }
 
-type JS7zFileSystem = {
-  mkdir(path: string): void;
-  writeFile(path: string, data: Uint8Array): void;
-  readdir(path: string): string[];
-  readFile(path: string): Uint8Array;
-};
-
-interface JS7z {
+interface JS7z extends EmscriptenModule {
   /** https://emscripten.org/docs/api_reference/Filesystem-API.html */
-  FS: JS7zFileSystem;
+  FS: typeof FS;
 
-  print: (message: string) => void;
-  printErr: (message: string) => void;
   onAbort: (reason: string) => void;
   onExit: (exitCode: number) => void;
   /**

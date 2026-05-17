@@ -20,7 +20,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@repo/ui/components/sidebar';
-import type { User } from 'better-auth';
 import {
   BadgeCheck,
   Bell,
@@ -29,6 +28,7 @@ import {
   LogOut,
   Sparkles,
 } from 'lucide-react';
+import type { User } from 'next-auth';
 
 export function NavUser({
   user,

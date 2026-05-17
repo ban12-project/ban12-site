@@ -8,14 +8,14 @@ import {
 import { AppSidebar } from '#/components/app-sidebar';
 import Breadcrumb from '#/components/dashboard-breadcrumb';
 
-import { getSession, signOut } from '../auth';
+import { auth, signOut } from '../auth';
 
 type Props = Readonly<{
   children: React.ReactNode;
 }>;
 
 export default async function DashboardLayout({ children }: Props) {
-  const session = await getSession();
+  const session = await auth();
 
   return (
     <SidebarProvider>

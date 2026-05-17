@@ -15,7 +15,7 @@
     "react": "catalog:"
   },
   "dependencies": {
-    "@formatjs/intl-localematcher": "^0.8.8",
+    "@formatjs/intl-localematcher": "^0.5.5",
     "negotiator": "^1.0.0",
     "server-only": "^0.0.1"
   },

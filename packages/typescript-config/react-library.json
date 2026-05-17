@@ -2,9 +2,9 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./base.json",
   "compilerOptions": {
-    "lib": ["ES2022", "DOM"],
+    "lib": ["ES2015", "DOM"],
     "module": "ESNext",
-    "target": "ES2022",
+    "target": "ES6",
     "jsx": "react-jsx",
     "noEmit": true,
     "declaration": false,

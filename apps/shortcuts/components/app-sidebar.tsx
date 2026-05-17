@@ -9,7 +9,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@repo/ui/components/sidebar';
-import type { User } from 'better-auth';
 import {
   BookOpen,
   Bot,
@@ -21,6 +20,7 @@ import {
   Send,
   Settings,
 } from 'lucide-react';
+import type { User } from 'next-auth';
 import type * as React from 'react';
 
 import { NavMain } from '#/components/nav-main';
