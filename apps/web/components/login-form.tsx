@@ -12,34 +12,29 @@ import { Input } from '@repo/ui/components/input';
 import { Label } from '@repo/ui/components/label';
 import { cn } from '@repo/ui/lib/utils';
 import { LoaderCircleIcon } from 'lucide-react';
-import { useSession } from 'next-auth/react';
-import { signIn } from 'next-auth/webauthn';
 import { useTransition } from 'react';
+
+import { authClient } from '#/lib/auth-client';
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const { status } = useSession();
+  const { data: session, isPending: isSessionPending } =
+    authClient.useSession();
   const [isPending, startTransition] = useTransition();
 
   const onSubmit: React.ReactEventHandler = (e) => {
     e.preventDefault();
 
-    const formData = new FormData(e.target as HTMLFormElement);
-    // const name = formData.get('name')
-    const email = formData.get('email');
-
     startTransition(async () => {
       try {
-        // if (status === 'authenticated') {
-        //   await signIn('passkey', { action: 'register', name, email })
-        // }
+        if (session) {
+          await authClient.passkey.addPasskey();
+          return;
+        }
 
-        // if (status === 'unauthenticated') {
-        //   await signIn('passkey', { email })
-        // }
-        await signIn('passkey', { action: 'authenticate', email });
+        await authClient.signIn.passkey();
       } catch (error) {
         console.error(error);
       }
@@ -72,12 +67,12 @@ export function LoginForm({
                 <Button
                   variant="outline"
                   className="w-full"
-                  aria-disabled={status === 'loading' || isPending}
-                  disabled={status === 'loading' || isPending}
+                  aria-disabled={isSessionPending || isPending}
+                  disabled={isSessionPending || isPending}
                 >
-                  {status === 'authenticated'
+                  {session
                     ? 'Register new Passkey'
-                    : status === 'unauthenticated'
+                    : !isSessionPending
                       ? 'Sign in with Passkey'
                       : 'Loading...'}
                   {isPending && (

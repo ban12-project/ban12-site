@@ -1,4 +1,3 @@
-import { Inngest } from 'inngest'
-import { schemas } from "./types";
+import { Inngest } from "inngest";
 
-export const inngest = new Inngest({ id: 'video-worker', schemas })
+export const inngest = new Inngest({ id: "video-worker" });

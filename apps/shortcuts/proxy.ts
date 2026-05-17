@@ -1,7 +1,19 @@
+import { getSessionCookie } from 'better-auth/cookies';
 import { type NextProxy, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
 
+import { auth } from './lib/auth';
 import { i18n, middleware as i18nMiddleware } from './lib/i18n';
+
+async function hasValidSession(request: Request) {
+  const session = await auth.api.getSession({
+    headers: request.headers,
+    query: {
+      disableCookieCache: true,
+    },
+  });
+
+  return Boolean(session);
+}
 
 const protectedPaths: string[] = ['/dashboard'].flatMap((path) =>
   Object.keys(i18n.locales)
@@ -28,16 +40,13 @@ export async function proxy(...args: Parameters<NextProxy>) {
     return i18nMiddleware(...args);
   }
 
-  const token = await getToken({
-    req: request,
-    secret: process.env.AUTH_SECRET,
-    secureCookie: process.env.NODE_ENV !== 'development',
-  });
+  const sessionCookie = getSessionCookie(request);
+  const hasSession = sessionCookie ? await hasValidSession(request) : false;
   const locale = Object.keys(i18n.locales).find(
     (locale) => pathname.split('/')[1] === locale,
   );
 
-  if (!token && protectedPaths.some((url) => pathname.startsWith(url))) {
+  if (!hasSession && protectedPaths.some((url) => pathname.startsWith(url))) {
     const redirectUrl = encodeURIComponent(request.url);
 
     return NextResponse.redirect(
@@ -48,7 +57,10 @@ export async function proxy(...args: Parameters<NextProxy>) {
     );
   }
 
-  if (token && withTokenConflictPaths.some((url) => pathname.startsWith(url))) {
+  if (
+    hasSession &&
+    withTokenConflictPaths.some((url) => pathname.startsWith(url))
+  ) {
     return NextResponse.redirect(
       new URL(`${locale ? `/${locale}` : ''}/dashboard`, request.url),
     );

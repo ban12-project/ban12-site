@@ -3,8 +3,10 @@ import { cleanRestaurantCacheById } from '#/lib/db/queries';
 import { inngest } from './client';
 
 export const triggerRevalidation = inngest.createFunction(
-  { id: 'trigger-revalidation' },
-  { event: 'web/revalidation.trigger' },
+  {
+    id: 'trigger-revalidation',
+    triggers: [{ event: 'web/revalidation.trigger' }],
+  },
   async ({ event, step }) => {
     const { id } = event.data;
 

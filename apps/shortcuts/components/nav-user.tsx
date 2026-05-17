@@ -19,8 +19,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@repo/ui/components/sidebar';
+import type { User } from 'better-auth';
 import { ChevronsUpDown, LogOut } from 'lucide-react';
-import type { User } from 'next-auth';
 
 export function NavUser({
   user,
