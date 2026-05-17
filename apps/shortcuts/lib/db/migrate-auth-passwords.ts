@@ -14,9 +14,6 @@ export async function migrateAuthPasswords(sql: Sql) {
   `;
 
   for (const user of users) {
-    // Legacy NextAuth credentials compared the submitted password directly with
-    // user.password, so existing values are plaintext and must be hashed for
-    // Better Auth credential accounts.
     const hashedPassword = await hashPassword(user.password);
 
     await sql`

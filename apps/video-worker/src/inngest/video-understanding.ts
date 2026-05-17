@@ -2,13 +2,12 @@ import { createPartFromUri, createUserContent, GoogleGenAI, Type } from "@google
 
 import { sql } from "../db";
 import { inngest } from "./client";
-import { triggerRevalidation, videoUnderstanding } from "./types";
 
 export default inngest.createFunction(
   {
     id: "video-understanding",
     concurrency: 5,
-    triggers: [videoUnderstanding],
+    triggers: [{ event: "video/understanding" }],
   },
   async ({ event, step }) => {
     const { id, fileUri, part } = event.data;
@@ -90,7 +89,10 @@ export default inngest.createFunction(
         `;
       });
       await step.run("2b. Trigger revalidation for failure", async () => {
-        await inngest.send(triggerRevalidation.create({ id }));
+        await inngest.send({
+          name: "web/revalidation.trigger",
+          data: { id },
+        });
       });
       return { message: "No response text" };
     }
@@ -105,7 +107,10 @@ export default inngest.createFunction(
     });
 
     await step.run("3. Trigger revalidation for success", async () => {
-      await inngest.send(triggerRevalidation.create({ id }));
+      await inngest.send({
+        name: "web/revalidation.trigger",
+        data: { id },
+      });
     });
 
     return {

@@ -6,10 +6,9 @@ import { GoogleGenAI } from "@google/genai";
 
 import { sql } from "../db";
 import { inngest } from "./client";
-import { videoProcess, videoUnderstanding } from "./types";
 
 export default inngest.createFunction(
-  { id: "video-process", concurrency: 3, triggers: [videoProcess] },
+  { id: "video-process", concurrency: 3, triggers: [{ event: "video/process" }] },
   async ({ event, step }) => {
     const { postId, restaurantId } = event.data;
 
@@ -98,12 +97,13 @@ async function bilibiliHandler({ bvid, restaurantId }: { bvid: string; restauran
   }
 
   // send event to inngest for further processing
-  await inngest.send(
-    videoUnderstanding.create({
+  await inngest.send({
+    name: "video/understanding",
+    data: {
       id: restaurantId,
       part: { uri: myfile.uri, mimeType: myfile.mimeType },
-    }),
-  );
+    },
+  });
 
   // Clean up the temporary file
   await fs.unlink(filePath);
