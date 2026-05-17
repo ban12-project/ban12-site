@@ -2,7 +2,6 @@ import { config } from 'dotenv';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
-import { migrateAuthPasswords } from './migrate-auth-passwords';
 
 config({ path: ['.env'] });
 
@@ -18,7 +17,6 @@ const runMigrate = async () => {
 
   const start = Date.now();
   await migrate(db, { migrationsFolder: './lib/db/migrations' });
-  await migrateAuthPasswords(client);
   const end = Date.now();
 
   await client.end();
