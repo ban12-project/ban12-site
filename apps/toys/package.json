@@ -45,6 +45,7 @@
     "@repo/biome-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@svgr/webpack": "^8.1.0",
+    "@tailwindcss/postcss": "catalog:",
     "@types/emscripten": "^1.39.13",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
@@ -53,6 +54,7 @@
     "@types/wicg-file-system-access": "^2023.10.5",
     "babel-plugin-react-compiler": "catalog:",
     "postcss": "catalog:",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "wasm-pack": "^0.15.0",
     "wrangler": "catalog:"

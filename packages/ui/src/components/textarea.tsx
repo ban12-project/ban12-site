@@ -26,6 +26,7 @@ const Textarea = React.forwardRef<
 >(({ className, variant, ...props }, ref) => {
   return (
     <textarea
+      data-slot="textarea"
       className={cn(textareaVariants({ variant }), className)}
       ref={ref}
       {...props}
