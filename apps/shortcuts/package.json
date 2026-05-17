@@ -10,8 +10,8 @@
     "lint": "biome check --write",
     "type-check": "next typegen && tsc --noEmit",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "npx tsx lib/db/migrate.ts",
-    "db:migrate-auth-passwords": "tsx lib/db/migrate-auth-passwords.ts",
+    "db:migrate": "node --env-file=.env --import tsx lib/db/migrate.ts",
+    "db:migrate-auth-passwords": "node --env-file=.env --import tsx lib/db/migrate-auth-passwords.ts",
     "db:studio": "drizzle-kit studio",
     "db:push": "drizzle-kit push",
     "db:pull": "drizzle-kit pull",
@@ -32,7 +32,6 @@
     "@sentry/nextjs": "catalog:",
     "@upstash/redis": "catalog:",
     "better-auth": "catalog:",
-    "dotenv": "catalog:",
     "drizzle-orm": "catalog:",
     "gsap": "catalog:",
     "intl-messageformat": "catalog:",
@@ -62,6 +61,7 @@
     "babel-plugin-react-compiler": "catalog:",
     "drizzle-kit": "catalog:",
     "postcss": "catalog:",
+    "tsx": "^4.22.0",
     "typescript": "catalog:"
   }
 }

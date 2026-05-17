@@ -1,5 +1,4 @@
 import { hashPassword } from 'better-auth/crypto';
-import { config } from 'dotenv';
 import postgres from 'postgres';
 
 type Sql = ReturnType<typeof postgres>;
@@ -45,8 +44,6 @@ export async function migrateAuthPasswords(sql: Sql) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  config({ path: ['.env'] });
-
   const connectionString = process.env.DATABASE_URL;
 
   if (!connectionString) {
