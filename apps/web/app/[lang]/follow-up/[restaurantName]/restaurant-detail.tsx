@@ -29,7 +29,9 @@ export default function RestaurantDetail({
   const waitingTime = cleanText(summary.waitingTime);
   const dishes = cleanText(summary.dishes);
   const service = cleanText(summary.service);
-  const precautions = summary.precautions.map(cleanText).filter(Boolean);
+  const precautions = (summary.precautions ?? [])
+    .map(cleanText)
+    .filter(Boolean);
   const t = messages.followUp.detail;
   const expandableLabels = {
     showLess: t.showLess,

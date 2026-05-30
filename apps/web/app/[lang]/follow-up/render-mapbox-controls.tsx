@@ -131,7 +131,7 @@ export default function RenderMapboxControls({
       return true;
     });
 
-    return filtered.toSorted((a, b) => {
+    return filtered.sort((a, b) => {
       if (filters.sort === 'name') return a.name.localeCompare(b.name);
       if (filters.sort === 'distance' && location) {
         return (
@@ -1209,8 +1209,8 @@ function normalizeSort(value: string | null): SortMode {
 }
 
 function uniqueSorted(values: (string | null)[]) {
-  return Array.from(new Set(values.filter(Boolean) as string[])).toSorted(
-    (a, b) => a.localeCompare(b),
+  return Array.from(new Set(values.filter(Boolean) as string[])).sort((a, b) =>
+    a.localeCompare(b),
   );
 }
 
