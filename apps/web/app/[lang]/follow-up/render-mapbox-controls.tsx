@@ -322,8 +322,8 @@ function FollowUpPanel({
         });
       } catch (error) {
         toast.error(
-          error instanceof GeolocationPositionError
-            ? error.message
+          error && typeof error === 'object' && 'message' in error
+            ? (error as { message: string }).message
             : t.geolocationFailed,
         );
       }
@@ -1258,7 +1258,11 @@ function shortMetaLabel(
   return `${text.slice(0, 24).trim()}...`;
 }
 
-function formatMessage(template: string, values: Record<string, string>) {
+function formatMessage(
+  template: string | undefined,
+  values: Record<string, string>,
+) {
+  if (!template) return '';
   return template.replace(/\{(\w+)\}/g, (match, key) => values[key] ?? match);
 }
 

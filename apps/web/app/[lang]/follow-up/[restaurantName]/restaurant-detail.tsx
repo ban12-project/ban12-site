@@ -107,19 +107,21 @@ export default function RestaurantDetail({
         <ExpandableText text={service || 'N/A'} labels={expandableLabels} />
       </DetailSection>
 
-      <DetailSection title={t.precautions}>
-        <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
-          {precautions.map((precaution) => (
-            <li key={precaution}>
-              <ExpandableText
-                text={precaution}
-                labels={expandableLabels}
-                previewLines={3}
-              />
-            </li>
-          ))}
-        </ul>
-      </DetailSection>
+      {precautions.length > 0 && (
+        <DetailSection title={t.precautions}>
+          <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
+            {precautions.map((precaution) => (
+              <li key={precaution}>
+                <ExpandableText
+                  text={precaution}
+                  labels={expandableLabels}
+                  previewLines={3}
+                />
+              </li>
+            ))}
+          </ul>
+        </DetailSection>
+      )}
     </div>
   );
 }
