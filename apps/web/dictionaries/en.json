@@ -1,3 +1,53 @@
 {
-  "description": "Beyond the scenery, it's the imprint of life."
+  "description": "Beyond the scenery, it's the imprint of life.",
+  "followUp": {
+    "map": {
+      "searchRestaurants": "Search restaurants",
+      "useCurrentLocation": "Use current location",
+      "fitResults": "Fit results",
+      "geolocationUnsupported": "Geolocation is not supported by this browser.",
+      "geolocationFailed": "Unable to get current location.",
+      "expandPanel": "Expand restaurant panel",
+      "collapsePanel": "Collapse restaurant panel",
+      "sort": "Sort",
+      "topRated": "Top rated",
+      "nearest": "Nearest",
+      "nearestNeedsLocation": "Nearest needs location",
+      "name": "Name",
+      "rating": "Rating",
+      "anyRating": "Any rating",
+      "price": "Price",
+      "anyPrice": "Any price",
+      "radius": "Radius",
+      "anyDistance": "Any distance",
+      "distanceNeedsLocation": "Distance needs location",
+      "withinDistance": "Within {distance}",
+      "wait": "Wait",
+      "anyWaitTime": "Any wait time",
+      "reset": "Reset",
+      "noResults": "No restaurants match the current filters.",
+      "priceDetails": "Price details",
+      "waitDetails": "Wait details"
+    },
+    "detail": {
+      "loadingMapLinks": "Loading map links...",
+      "price": "Price",
+      "wait": "Wait",
+      "waitTime": "Wait Time",
+      "dishes": "Dishes",
+      "service": "Service",
+      "precautions": "Precautions",
+      "seeMoreRestaurants": "See more restaurants",
+      "showLess": "Show less",
+      "showMore": "Show more",
+      "free": "Free",
+      "goodValue": "Good value",
+      "premium": "Premium",
+      "shortWait": "Short wait",
+      "longWait": "Long wait"
+    },
+    "drawer": {
+      "closeRestaurantDetails": "Close restaurant details"
+    }
+  }
 }

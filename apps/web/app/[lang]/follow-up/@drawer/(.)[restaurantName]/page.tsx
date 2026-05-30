@@ -14,11 +14,14 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function Page({
+export default async function Page({
   params,
 }: PageProps<'/[lang]/follow-up/[restaurantName]'>) {
+  const { lang } = await params;
+  const messages = await getDictionary(lang as Locale);
+
   return (
-    <Drawer>
+    <Drawer closeLabel={messages.followUp.drawer.closeRestaurantDetails}>
       <Suspense
         fallback={
           <ViewTransition exit="mapbox-fallback-exit">
@@ -29,7 +32,7 @@ export default function Page({
         }
       >
         <ViewTransition enter="mapbox-enter">
-          <Suspended params={params} />
+          <Suspended params={params} messages={messages} />
         </ViewTransition>
       </Suspense>
     </Drawer>
@@ -37,16 +40,16 @@ export default function Page({
 }
 
 async function Suspended({
+  messages,
   params,
 }: {
+  messages: Awaited<ReturnType<typeof getDictionary>>;
   params: PageProps<'/[lang]/follow-up/[restaurantName]'>['params'];
 }) {
-  const { restaurantName, lang } = await params;
+  const { restaurantName } = await params;
 
-  const [{ restaurant, posts }, messages] = await Promise.all([
-    getCachedRestaurantWithPostsByName(restaurantName),
-    getDictionary(lang as Locale),
-  ]);
+  const { restaurant, posts } =
+    await getCachedRestaurantWithPostsByName(restaurantName);
 
   if (!restaurant?.ai_summarize || !posts) {
     notFound();

@@ -56,7 +56,7 @@ export default async function Page({
       />
 
       <Link className="inline-block py-2" href="/follow-up">
-        See more restaurants
+        {messages.followUp.detail.seeMoreRestaurants}
       </Link>
 
       <script
