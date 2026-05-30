@@ -242,13 +242,13 @@ function FollowUpPanel({
       else params.delete('q');
 
       const query = params.toString();
-      window.history.replaceState(
-        window.history.state,
-        '',
-        query ? `${pathname}?${query}` : pathname,
-      );
+      React.startTransition(() => {
+        router.replace(query ? `${pathname}?${query}` : pathname, {
+          scroll: false,
+        });
+      });
     },
-    [pathname, searchParams],
+    [pathname, router, searchParams],
   );
 
   const scheduleSearchUrlSync = React.useCallback(

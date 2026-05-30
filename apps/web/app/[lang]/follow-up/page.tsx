@@ -58,9 +58,13 @@ async function SuspendedMapbox({
   restaurants: ReturnType<typeof getFollowUpRestaurants>;
 }) {
   const awaitedSearchParams = await searchParams;
-  const location = awaitedSearchParams.location?.split(',').map(Number) as
-    | [number, number]
-    | undefined;
+  const parsedLocation = awaitedSearchParams.location?.split(',').map(Number);
+  const location =
+    parsedLocation &&
+    parsedLocation.length === 2 &&
+    parsedLocation.every(Number.isFinite)
+      ? (parsedLocation as [number, number])
+      : undefined;
 
   return (
     <Mapbox
