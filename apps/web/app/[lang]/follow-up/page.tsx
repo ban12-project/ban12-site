@@ -1,10 +1,8 @@
 import type { Metadata, Viewport } from 'next';
-import { headers } from 'next/headers';
 import { Suspense } from 'react';
-import { CommandMenu } from '#/components/command-menu';
 import { Mapbox, PreloadResources } from '#/components/mapbox';
-import { getRestaurants } from '#/lib/db/queries';
-import { i18n } from '#/lib/i18n';
+import { getDictionary, i18n, type Locale, type Messages } from '#/lib/i18n';
+import { getFollowUpRestaurants } from './actions';
 import RenderMapboxControls from './render-mapbox-controls';
 
 export const viewport: Viewport = {
@@ -28,66 +26,59 @@ export const metadata: Metadata = {
 export default async function FollowUpPage(
   props: PageProps<'/[lang]/follow-up'>,
 ) {
+  const { lang } = await props.params;
   // Start fetch immediately, pass promise to children
-  const restaurants = getRestaurants();
+  const restaurants = getFollowUpRestaurants();
+  const messages = await getDictionary(lang as Locale);
 
   return (
-    <>
-      <header className="p-safe-max-4 fixed z-10 flex w-full">
-        <div className="ml-auto">
-          <CommandMenu restaurants={restaurants} />
-        </div>
-      </header>
-      <main className="relative">
-        <Suspense>
-          <SuspendedMapbox
-            searchParams={props.searchParams}
-            restaurants={restaurants}
-          />
-        </Suspense>
-        <PreloadResources />
-      </main>
-    </>
+    <main className="relative h-dvh overflow-hidden">
+      <Suspense>
+        <SuspendedMapbox
+          messages={messages}
+          searchParams={props.searchParams}
+          restaurants={restaurants}
+        />
+      </Suspense>
+      <PreloadResources />
+    </main>
   );
 }
 
 async function SuspendedMapbox({
+  messages,
   searchParams,
   restaurants,
 }: {
+  messages: Messages;
   searchParams: Promise<{
     location?: string;
     marker?: string;
   }>;
-  restaurants: ReturnType<typeof getRestaurants>;
+  restaurants: ReturnType<typeof getFollowUpRestaurants>;
 }) {
-  const [headersList, awaitedSearchParams] = await Promise.all([
-    headers(),
-    searchParams,
-  ]);
-
-  const locationFromHeader = [
-    headersList.get('x-vercel-ip-longitude'),
-    headersList.get('x-vercel-ip-latitude'),
-  ]
-    .filter(Boolean)
-    .map(Number) as [number, number];
-  const location = awaitedSearchParams.location?.split(',').map(Number) as
-    | [number, number]
-    | undefined;
+  const awaitedSearchParams = await searchParams;
+  const parsedLocation = awaitedSearchParams.location?.split(',').map(Number);
+  const location =
+    parsedLocation &&
+    parsedLocation.length === 2 &&
+    parsedLocation.every(Number.isFinite)
+      ? (parsedLocation as [number, number])
+      : undefined;
 
   return (
     <Mapbox
-      className="min-h-screen"
+      className="h-dvh"
+      controls
       options={{
-        center:
-          location ||
-          (locationFromHeader.length ? locationFromHeader : undefined),
+        center: location,
         zoom: location ? 15 : 9,
+        cooperativeGestures: true,
       }}
     >
       <Suspense>
         <RenderMapboxControls
+          messages={messages}
           restaurants={restaurants}
           location={awaitedSearchParams?.marker ? location : undefined}
         />

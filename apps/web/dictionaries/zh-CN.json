@@ -1,3 +1,53 @@
 {
-  "description": "不止是风景，更是生活的印记。"
+  "description": "不止是风景，更是生活的印记。",
+  "followUp": {
+    "map": {
+      "searchRestaurants": "搜索餐厅",
+      "useCurrentLocation": "使用当前位置",
+      "fitResults": "显示全部结果",
+      "geolocationUnsupported": "当前浏览器不支持定位。",
+      "geolocationFailed": "无法获取当前位置。",
+      "expandPanel": "展开餐厅面板",
+      "collapsePanel": "收起餐厅面板",
+      "sort": "排序",
+      "topRated": "评分最高",
+      "nearest": "离我最近",
+      "nearestNeedsLocation": "定位后按距离排序",
+      "name": "名称",
+      "rating": "评分",
+      "anyRating": "不限评分",
+      "price": "价格",
+      "anyPrice": "不限价格",
+      "radius": "距离",
+      "anyDistance": "不限距离",
+      "distanceNeedsLocation": "定位后筛选距离",
+      "withinDistance": "{distance} 内",
+      "wait": "排队",
+      "anyWaitTime": "不限排队时间",
+      "reset": "重置",
+      "noResults": "没有餐厅符合当前筛选条件。",
+      "priceDetails": "价格详情",
+      "waitDetails": "排队详情"
+    },
+    "detail": {
+      "loadingMapLinks": "正在加载地图链接...",
+      "price": "价格",
+      "wait": "排队",
+      "waitTime": "排队时间",
+      "dishes": "菜品",
+      "service": "服务",
+      "precautions": "注意事项",
+      "seeMoreRestaurants": "查看更多餐厅",
+      "showLess": "收起",
+      "showMore": "展开",
+      "free": "免费",
+      "goodValue": "性价比高",
+      "premium": "偏高端",
+      "shortWait": "排队较短",
+      "longWait": "排队较久"
+    },
+    "drawer": {
+      "closeRestaurantDetails": "关闭餐厅详情"
+    }
+  }
 }
