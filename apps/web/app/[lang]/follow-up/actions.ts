@@ -21,9 +21,7 @@ export async function getCachedRestaurantWithPostsByName(name: string) {
   'use cache';
   cacheTag(`restaurant:${name}`);
 
-  const restaurant = await getRestaurantWithPostsByName(
-    decodeURIComponent(name),
-  );
+  const restaurant = await getRestaurantWithPostsByName(name);
   return restaurant;
 }
 

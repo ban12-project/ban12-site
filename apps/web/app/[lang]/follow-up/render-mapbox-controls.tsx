@@ -36,7 +36,7 @@ import type { Messages } from '#/lib/i18n';
 import type { FollowUpRestaurant } from './actions';
 import { restaurantTitleTransitionName } from './transition-names';
 
-gsap.registerPlugin(useGSAP, Flip);
+gsap.registerPlugin(Flip);
 
 type SortMode = 'rating' | 'distance' | 'name';
 type RestaurantFeatureProperties = {
@@ -131,14 +131,18 @@ export default function RenderMapboxControls({
       return true;
     });
 
+    if (filters.sort === 'distance' && location) {
+      return filtered
+        .map((restaurant) => ({
+          restaurant,
+          distance: distanceInKilometers(location, restaurant.coordinates),
+        }))
+        .sort((a, b) => a.distance - b.distance)
+        .map(({ restaurant }) => restaurant);
+    }
+
     return filtered.sort((a, b) => {
       if (filters.sort === 'name') return a.name.localeCompare(b.name);
-      if (filters.sort === 'distance' && location) {
-        return (
-          distanceInKilometers(location, a.coordinates) -
-          distanceInKilometers(location, b.coordinates)
-        );
-      }
 
       return (b.rating ?? 0) - (a.rating ?? 0) || a.name.localeCompare(b.name);
     });

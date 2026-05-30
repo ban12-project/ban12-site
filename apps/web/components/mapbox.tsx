@@ -75,9 +75,7 @@ export function Mapbox({
 
     return () => {
       newMap.off('error', onError);
-      queueMicrotask(() => {
-        if (newMap.getContainer()) newMap.remove();
-      });
+      newMap.remove();
       setMap(null);
     };
   }, []);
