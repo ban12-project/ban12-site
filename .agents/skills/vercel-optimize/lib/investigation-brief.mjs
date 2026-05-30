@@ -67,8 +67,6 @@ export function inferFrameworkPlaybook(signals) {
 // Empty result = no source files; investigate via evidence only (legitimate for platform_* candidates).
 // Workspace imports expand one level deep — keeps brief small. A thin shell page.tsx delegates work; bottleneck usually lives in workspace files.
 export function resolveFiles(candidate, signals) {
-  if (!candidate) return [];
-
   const route = candidate.route;
   const routes = signals?.codebase?.routes ?? [];
   if (Array.isArray(candidate.files) && candidate.files.length > 0) {
@@ -335,8 +333,6 @@ export function buildBrief({
   supportTopics = [],
   generatedAt,
 }) {
-  if (!candidate) return '';
-
   const stack = signals?.stack ?? signals?.codebase?.stack ?? {};
   const framework = stack.framework ?? 'unknown';
   const version = stack.frameworkVersion ?? 'unknown';

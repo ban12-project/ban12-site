@@ -498,8 +498,6 @@ function formatGatedTargets(targets, count) {
 function groupGatedCandidates(gated) {
   const byKey = new Map();
   for (const g of gated) {
-    if (!g) continue;
-
     const kind = formatKind(g.kind ?? '?');
     const reason = publicGatedReason(g.gatedReason ?? g.disqualifyReason ?? '(no reason recorded)');
     const target = formatRoute(g);
@@ -686,8 +684,6 @@ function priorityScore(rec) {
 function tierScore(t) { return ({ high: 100, medium: 50, low: 10 })[t] ?? 0; }
 
 function isPlatformScope(rec) {
-  if (!rec) return false;
-
   const k = String(rec.candidateRef ?? '').split(':')[0];
   return k.startsWith('platform_') || rec.scope === 'account';
 }
