@@ -13,6 +13,18 @@ const FILE_LINE_RE = /[\w/.\-()\[\]]+\.\w+:\d+/g;
 const W = { grounding: 0.35, evidence: 0.30, specificity: 0.20, actionability: 0.15 };
 
 export function gradeRecommendation(rec, ctx = {}) {
+  if (!rec) {
+    return {
+      specificity: 0,
+      actionability: 0,
+      grounding: 0,
+      evidence: 0,
+      overall: 0,
+      grade: 'Poor',
+      scope: 'route',
+    };
+  }
+
   const accountScope = isAccountScope(rec);
   const specificity = scoreSpecificity(rec);
   const actionability = scoreActionability(rec);
