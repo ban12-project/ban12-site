@@ -36,7 +36,7 @@ import type { Messages } from '#/lib/i18n';
 import type { FollowUpRestaurant } from './actions';
 import { restaurantTitleTransitionName } from './transition-names';
 
-gsap.registerPlugin(Flip);
+gsap.registerPlugin(useGSAP, Flip);
 
 type SortMode = 'rating' | 'distance' | 'name';
 type RestaurantFeatureProperties = {
