@@ -26,10 +26,17 @@ export default function ExpandableText({
 
   React.useEffect(() => {
     const element = textRef.current;
-    if (!element) return;
+    if (!element || expanded) {
+      setIsClamped(false);
+      return;
+    }
 
     const checkClamping = () => {
-      setIsClamped(element.scrollHeight > element.clientHeight + 1);
+      setIsClamped(
+        text.length > 0 &&
+          previewLines > 0 &&
+          element.scrollHeight > element.clientHeight + 1,
+      );
     };
 
     checkClamping();
@@ -44,7 +51,7 @@ export default function ExpandableText({
       resizeObserver?.disconnect();
       window.removeEventListener('resize', checkClamping);
     };
-  });
+  }, [expanded, previewLines, text]);
 
   const toggleExpanded = React.useCallback(() => {
     React.startTransition(() => {
