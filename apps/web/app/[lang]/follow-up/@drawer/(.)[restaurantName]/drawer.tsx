@@ -38,9 +38,7 @@ export default function PageDrawer({
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-40 bg-black/25 backdrop-blur-[2px]" />
         <Drawer.Content className="fixed z-50 flex flex-col border border-white/25 bg-background/72 shadow-2xl shadow-black/20 saturate-150 backdrop-blur-2xl outline-none dark:border-white/10 dark:bg-background/62 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:left-0 data-[vaul-drawer-direction=bottom]:right-0 data-[vaul-drawer-direction=bottom]:h-[82dvh] data-[vaul-drawer-direction=bottom]:rounded-t-lg data-[vaul-drawer-direction=right]:bottom-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:top-0 data-[vaul-drawer-direction=right]:w-[min(560px,42vw)]">
-          {!isDesktop && (
-            <div className="mx-auto mt-3 h-1.5 w-20 shrink-0 rounded-full bg-muted" />
-          )}
+          <div className="mx-auto mt-3 h-1.5 w-20 shrink-0 rounded-full bg-muted md:hidden" />
           <Drawer.Title className="sr-only">{title}</Drawer.Title>
           <Drawer.Description className="sr-only">
             {description}

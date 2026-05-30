@@ -1030,12 +1030,15 @@ function RestaurantLayers({
         pendingPrefetchId = null;
       };
 
+      const hasStyle = () =>
+        Boolean((map as mapboxgl.Map & { style?: unknown }).style);
+
       const prefetchVisible = () => {
         cancelPendingPrefetch();
 
         const run = () => {
           pendingPrefetchId = null;
-          if (!map.getLayer('restaurant-points-hit')) return;
+          if (!hasStyle() || !map.getLayer('restaurant-points-hit')) return;
 
           const features = map.queryRenderedFeatures({
             layers: ['restaurant-points-hit'],
@@ -1120,10 +1123,12 @@ function RestaurantLayers({
         map.off('moveend', prefetchVisible);
         map.off('idle', prefetchVisible);
 
-        for (const id of LAYER_IDS) {
-          if (map.getLayer(id)) map.removeLayer(id);
+        if (hasStyle()) {
+          for (const id of LAYER_IDS) {
+            if (map.getLayer(id)) map.removeLayer(id);
+          }
+          if (map.getSource('restaurants')) map.removeSource('restaurants');
         }
-        if (map.getSource('restaurants')) map.removeSource('restaurants');
       };
     },
     [locale, router, setFocusedId],
