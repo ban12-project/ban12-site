@@ -227,6 +227,9 @@ function FollowUpPanel({
   const scrollStopTimeoutRef = React.useRef<ReturnType<
     typeof setTimeout
   > | null>(null);
+  const hoverPreviewTimeoutRef = React.useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
   const searchUrlSyncTimeoutRef = React.useRef<ReturnType<
     typeof setTimeout
   > | null>(null);
@@ -283,6 +286,11 @@ function FollowUpPanel({
 
   const updateParams = React.useCallback(
     (updates: Record<string, string | null>) => {
+      if (searchUrlSyncTimeoutRef.current) {
+        clearTimeout(searchUrlSyncTimeoutRef.current);
+        searchUrlSyncTimeoutRef.current = null;
+      }
+
       const params = new URLSearchParams(searchParams);
       const currentSearch = searchDraft.trim();
       if (currentSearch) params.set('q', currentSearch);
@@ -385,8 +393,17 @@ function FollowUpPanel({
 
   const previewRestaurantWhenIdle = React.useCallback(
     (restaurant: FollowUpRestaurant) => {
+      if (hoverPreviewTimeoutRef.current) {
+        clearTimeout(hoverPreviewTimeoutRef.current);
+        hoverPreviewTimeoutRef.current = null;
+      }
       if (isListScrollingRef.current) return;
-      previewRestaurant(restaurant);
+
+      hoverPreviewTimeoutRef.current = setTimeout(() => {
+        hoverPreviewTimeoutRef.current = null;
+        if (isListScrollingRef.current) return;
+        previewRestaurant(restaurant);
+      }, 100);
     },
     [previewRestaurant],
   );
@@ -426,6 +443,9 @@ function FollowUpPanel({
     () => () => {
       if (scrollStopTimeoutRef.current) {
         clearTimeout(scrollStopTimeoutRef.current);
+      }
+      if (hoverPreviewTimeoutRef.current) {
+        clearTimeout(hoverPreviewTimeoutRef.current);
       }
       if (searchUrlSyncTimeoutRef.current) {
         clearTimeout(searchUrlSyncTimeoutRef.current);
@@ -725,6 +745,7 @@ function FollowUpPanel({
                       : null
                   }
                   hoveredRestaurantIdRef={hoveredRestaurantIdRef}
+                  hoverPreviewTimeoutRef={hoverPreviewTimeoutRef}
                   isListScrollingRef={isListScrollingRef}
                   previewRestaurant={previewRestaurantWhenIdle}
                   messages={messages}
@@ -780,6 +801,7 @@ function RestaurantListItem({
   selectedTitleTransitionId,
   distance,
   hoveredRestaurantIdRef,
+  hoverPreviewTimeoutRef,
   isListScrollingRef,
   messages,
   previewRestaurant,
@@ -791,6 +813,9 @@ function RestaurantListItem({
   selectedTitleTransitionId: string | null;
   distance: number | null;
   hoveredRestaurantIdRef: React.MutableRefObject<string | null>;
+  hoverPreviewTimeoutRef: React.MutableRefObject<ReturnType<
+    typeof setTimeout
+  > | null>;
   isListScrollingRef: React.MutableRefObject<boolean>;
   messages: Messages;
   previewRestaurant: (restaurant: FollowUpRestaurant) => void;
@@ -841,6 +866,10 @@ function RestaurantListItem({
         onMouseLeave={() => {
           if (hoveredRestaurantIdRef.current === restaurant.id) {
             hoveredRestaurantIdRef.current = null;
+          }
+          if (hoverPreviewTimeoutRef.current) {
+            clearTimeout(hoverPreviewTimeoutRef.current);
+            hoverPreviewTimeoutRef.current = null;
           }
           if (isListScrollingRef.current) return;
           setFocusedId(null);
@@ -1272,8 +1301,10 @@ function formatMessage(
 
 function distanceInKilometers(from: [number, number], to: [number, number]) {
   const earthRadius = 6371;
-  const [fromLng, fromLat] = from.map(toRadians);
-  const [toLng, toLat] = to.map(toRadians);
+  const fromLng = toRadians(from[0]);
+  const fromLat = toRadians(from[1]);
+  const toLng = toRadians(to[0]);
+  const toLat = toRadians(to[1]);
   const deltaLat = toLat - fromLat;
   const deltaLng = toLng - fromLng;
   const a =

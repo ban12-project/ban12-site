@@ -32,6 +32,15 @@ export default function RestaurantDetail({
   const precautions = (summary.precautions ?? [])
     .map(cleanText)
     .filter(Boolean);
+  const precautionKeyCounts = new Map<string, number>();
+  const precautionItems = precautions.map((precaution) => {
+    const count = (precautionKeyCounts.get(precaution) ?? 0) + 1;
+    precautionKeyCounts.set(precaution, count);
+    return {
+      key: `${precaution}-${count}`,
+      text: precaution,
+    };
+  });
   const t = messages.followUp.detail;
   const expandableLabels = {
     showLess: t.showLess,
@@ -110,10 +119,10 @@ export default function RestaurantDetail({
       {precautions.length > 0 && (
         <DetailSection title={t.precautions}>
           <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
-            {precautions.map((precaution) => (
-              <li key={precaution}>
+            {precautionItems.map((precaution) => (
+              <li key={precaution.key}>
                 <ExpandableText
-                  text={precaution}
+                  text={precaution.text}
                   labels={expandableLabels}
                   previewLines={3}
                 />
