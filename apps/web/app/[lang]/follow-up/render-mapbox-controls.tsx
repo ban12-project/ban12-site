@@ -1014,8 +1014,27 @@ function RestaurantLayers({
       }
       setRestaurantFocusPaint(map, focusedIdRef.current);
 
+      let pendingPrefetchId:
+        | number
+        | ReturnType<typeof globalThis.setTimeout>
+        | null = null;
+
+      const cancelPendingPrefetch = () => {
+        if (pendingPrefetchId === null) return;
+
+        if ('cancelIdleCallback' in window) {
+          window.cancelIdleCallback(pendingPrefetchId as number);
+        } else {
+          globalThis.clearTimeout(pendingPrefetchId);
+        }
+        pendingPrefetchId = null;
+      };
+
       const prefetchVisible = () => {
+        cancelPendingPrefetch();
+
         const run = () => {
+          pendingPrefetchId = null;
           if (!map.getLayer('restaurant-points-hit')) return;
 
           const features = map.queryRenderedFeatures({
@@ -1032,9 +1051,11 @@ function RestaurantLayers({
         };
 
         if ('requestIdleCallback' in window) {
-          window.requestIdleCallback(run, { timeout: 1500 });
+          pendingPrefetchId = window.requestIdleCallback(run, {
+            timeout: 1500,
+          });
         } else {
-          globalThis.setTimeout(run, 250);
+          pendingPrefetchId = globalThis.setTimeout(run, 250);
         }
       };
 
@@ -1089,6 +1110,7 @@ function RestaurantLayers({
       map.on('idle', prefetchVisible);
 
       return () => {
+        cancelPendingPrefetch();
         map.off('click', 'restaurant-clusters', clusterClick);
         map.off('click', 'restaurant-points-hit', pointClick);
         map.off('mouseenter', 'restaurant-clusters', pointerCursor);

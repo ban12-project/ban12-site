@@ -21,7 +21,31 @@ export default function ExpandableText({
   previewLines?: 3 | 4 | 5;
 }) {
   const [expanded, setExpanded] = React.useState(false);
-  const shouldClamp = text.length > 180;
+  const [isClamped, setIsClamped] = React.useState(false);
+  const textRef = React.useRef<HTMLParagraphElement>(null);
+
+  React.useEffect(() => {
+    const element = textRef.current;
+    if (!element) return;
+
+    const checkClamping = () => {
+      setIsClamped(element.scrollHeight > element.clientHeight + 1);
+    };
+
+    checkClamping();
+    const resizeObserver =
+      typeof ResizeObserver === 'undefined'
+        ? null
+        : new ResizeObserver(checkClamping);
+    resizeObserver?.observe(element);
+    window.addEventListener('resize', checkClamping);
+
+    return () => {
+      resizeObserver?.disconnect();
+      window.removeEventListener('resize', checkClamping);
+    };
+  });
+
   const toggleExpanded = React.useCallback(() => {
     React.startTransition(() => {
       setExpanded((value) => !value);
@@ -32,21 +56,21 @@ export default function ExpandableText({
     <div className="space-y-2">
       <ViewTransition update="morph" default="none">
         <p
+          ref={textRef}
           className={cn(
             'text-sm leading-6 text-muted-foreground',
-            shouldClamp &&
-              !expanded && {
-                'line-clamp-3': previewLines === 3,
-                'line-clamp-4': previewLines === 4,
-                'line-clamp-5': previewLines === 5,
-              },
+            !expanded && {
+              'line-clamp-3': previewLines === 3,
+              'line-clamp-4': previewLines === 4,
+              'line-clamp-5': previewLines === 5,
+            },
             className,
           )}
         >
           {text}
         </p>
       </ViewTransition>
-      {shouldClamp && (
+      {(isClamped || expanded) && (
         <Button
           type="button"
           variant="ghost"
