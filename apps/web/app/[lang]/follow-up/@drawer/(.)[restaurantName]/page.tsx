@@ -1,6 +1,6 @@
 import { LoaderCircle } from 'lucide-react';
 import { notFound } from 'next/navigation';
-import { Suspense, ViewTransition } from 'react';
+import { Suspense } from 'react';
 import { getRestaurants } from '#/lib/db/queries';
 import { getDictionary, type Locale } from '#/lib/i18n';
 import RestaurantDetail from '../../[restaurantName]/restaurant-detail';
@@ -17,23 +17,22 @@ export async function generateStaticParams() {
 export default async function Page({
   params,
 }: PageProps<'/[lang]/follow-up/[restaurantName]'>) {
-  const { lang } = await params;
+  const { lang, restaurantName } = await params;
   const messages = await getDictionary(lang as Locale);
 
   return (
-    <Drawer closeLabel={messages.followUp.drawer.closeRestaurantDetails}>
+    <Drawer
+      closeLabel={messages.followUp.drawer.closeRestaurantDetails}
+      routeKey={restaurantName}
+    >
       <Suspense
         fallback={
-          <ViewTransition exit="mapbox-fallback-exit">
-            <div className="slide-in-from-bottom-10 fade-in fill-mode-forwards animate-in flex h-full items-center justify-center ease-[cubic-bezier(0.7,0,0.3,1)]">
-              <LoaderCircle className="animate-spin" />
-            </div>
-          </ViewTransition>
+          <div className="fade-in fill-mode-forwards animate-in flex h-full items-center justify-center duration-200 ease-out">
+            <LoaderCircle className="animate-spin" />
+          </div>
         }
       >
-        <ViewTransition enter="mapbox-enter">
-          <Suspended params={params} messages={messages} />
-        </ViewTransition>
+        <Suspended params={params} messages={messages} />
       </Suspense>
     </Drawer>
   );
@@ -56,13 +55,14 @@ async function Suspended({
   }
 
   return (
-    <main className="container mx-auto px-4 py-12">
+    <main className="px-4 pt-2">
       <RestaurantDetail
         restaurant={
           restaurant as WithNonNullableKey<typeof restaurant, 'ai_summarize'>
         }
         posts={posts}
         messages={messages}
+        surface="drawer"
       />
     </main>
   );

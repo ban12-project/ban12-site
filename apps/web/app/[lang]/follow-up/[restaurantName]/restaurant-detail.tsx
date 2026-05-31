@@ -1,14 +1,13 @@
+import { cn } from '@repo/ui/lib/utils';
 import coordtransform from 'coordtransform';
 import { ExternalLink, Star } from 'lucide-react';
 import { headers } from 'next/headers';
 import { Suspense, ViewTransition } from 'react';
-
 import type { Messages } from '#/lib/i18n';
 import { generateMapLink } from '#/lib/map-links';
 
 import type { RestaurantWithPosts } from '../actions';
 import { restaurantTitleTransitionName } from '../transition-names';
-import ExpandableText from './expandable-text';
 
 type Restaurant = WithNonNullableKey<
   NonNullable<RestaurantWithPosts['restaurant']>,
@@ -19,11 +18,14 @@ export default function RestaurantDetail({
   messages,
   restaurant,
   posts,
+  surface = 'page',
 }: {
   restaurant: Restaurant;
   posts: RestaurantWithPosts['posts'];
   messages: Messages;
+  surface?: 'page' | 'drawer';
 }) {
+  const isDrawer = surface === 'drawer';
   const summary = restaurant.ai_summarize;
   const price = cleanText(summary.price);
   const waitingTime = cleanText(summary.waitingTime);
@@ -42,25 +44,36 @@ export default function RestaurantDetail({
     };
   });
   const t = messages.followUp.detail;
-  const expandableLabels = {
-    showLess: t.showLess,
-    showMore: t.showMore,
-  };
 
   return (
-    <div className="grid gap-6">
-      <section className="border-b pb-5">
-        <div className="flex flex-wrap items-start gap-3">
+    <div className={cn('grid', isDrawer ? 'gap-4' : 'gap-6')}>
+      <section className={cn('border-b', isDrawer ? 'pb-4' : 'pb-5')}>
+        <div
+          className={cn(
+            'flex flex-wrap items-center gap-3',
+            isDrawer && 'gap-2 pr-9',
+          )}
+        >
           <ViewTransition
             name={restaurantTitleTransitionName(restaurant.id)}
             share="text-morph"
             default="none"
           >
-            <h1 className="min-w-0 flex-1 text-2xl font-semibold tracking-normal text-foreground">
+            <h1
+              className={cn(
+                'min-w-0 flex-1 font-semibold tracking-normal text-foreground',
+                isDrawer ? 'text-xl leading-7' : 'text-2xl',
+              )}
+            >
               {summary.restaurantName}
             </h1>
           </ViewTransition>
-          <div className="inline-flex items-center gap-1 rounded-full border border-white/25 bg-background/60 px-2.5 py-1 text-sm backdrop-blur-xl dark:border-white/10">
+          <div
+            className={cn(
+              'inline-flex shrink-0 items-center gap-1 rounded-full border border-white/25 bg-background/60 px-2.5 py-1 text-sm backdrop-blur-xl dark:border-white/10',
+              isDrawer && 'mt-0.5',
+            )}
+          >
             <Star className="size-4 fill-amber-400 text-amber-400" />
             <span className="text-foreground">{summary.rating || 'N/A'}</span>
           </div>
@@ -69,63 +82,78 @@ export default function RestaurantDetail({
               href={`https://www.bilibili.com/video/${posts.metadata.bvid}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full text-sm text-muted-foreground underline-offset-4 hover:underline md:w-fit"
+              className={cn(
+                'block w-full text-sm text-muted-foreground underline-offset-4 hover:underline md:w-fit',
+                isDrawer && 'line-clamp-2 md:w-full',
+              )}
             >
               {posts.metadata.title}
               <ExternalLink className="ml-1 inline size-3" />
             </a>
           )}
         </div>
-        <div className="mt-3 items-center gap-2 space-y-2 text-sm text-muted-foreground md:flex md:space-y-0">
+        <div
+          className={cn(
+            'mt-3 gap-2 text-sm text-muted-foreground',
+            isDrawer
+              ? 'flex flex-col'
+              : 'items-center space-y-2 md:flex md:space-y-0',
+          )}
+        >
           <p className="min-w-0 flex-1">{summary.restaurantAddress}</p>
-          <Suspense fallback={<span>{t.loadingMapLinks}</span>}>
-            <JumpToThirdPartyMap restaurant={restaurant} />
-          </Suspense>
+          <div className="flex flex-wrap gap-x-3 gap-y-1">
+            <Suspense fallback={<span>{t.loadingMapLinks}</span>}>
+              <JumpToThirdPartyMap restaurant={restaurant} />
+            </Suspense>
+          </div>
         </div>
-        <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
-          <MetaSummary label={t.price} value={price} messages={messages} />
-          <MetaSummary label={t.wait} value={waitingTime} messages={messages} />
+        <div
+          className={cn(
+            'mt-4 grid grid-cols-1 gap-2',
+            isDrawer ? 'sm:grid-cols-2' : 'md:grid-cols-2',
+          )}
+        >
+          <MetaSummary
+            label={t.price}
+            value={price}
+            messages={messages}
+            surface={surface}
+          />
+          <MetaSummary
+            label={t.wait}
+            value={waitingTime}
+            messages={messages}
+            surface={surface}
+          />
         </div>
       </section>
 
       {price && isLongText(price) && (
-        <DetailSection title={t.price}>
-          <ExpandableText
-            text={price}
-            labels={expandableLabels}
-            previewLines={3}
-          />
+        <DetailSection title={t.price} surface={surface}>
+          <DetailText text={price} />
         </DetailSection>
       )}
 
       {waitingTime && isLongText(waitingTime) && (
-        <DetailSection title={t.waitTime}>
-          <ExpandableText
-            text={waitingTime}
-            labels={expandableLabels}
-            previewLines={3}
-          />
+        <DetailSection title={t.waitTime} surface={surface}>
+          <DetailText text={waitingTime} />
         </DetailSection>
       )}
 
-      <DetailSection title={t.dishes}>
-        <ExpandableText text={dishes || 'N/A'} labels={expandableLabels} />
+      <DetailSection title={t.dishes} surface={surface}>
+        <DetailText text={dishes || 'N/A'} />
       </DetailSection>
 
-      <DetailSection title={t.service}>
-        <ExpandableText text={service || 'N/A'} labels={expandableLabels} />
+      <DetailSection title={t.service} surface={surface}>
+        <DetailText text={service || 'N/A'} />
       </DetailSection>
 
       {precautions.length > 0 && (
-        <DetailSection title={t.precautions}>
+        <DetailSection title={t.precautions} surface={surface}>
           <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
             {precautionItems.map((precaution) => (
               <li key={precaution.key}>
-                <ExpandableText
-                  text={precaution.text}
-                  labels={expandableLabels}
-                  previewLines={3}
-                />
+                <DetailText text={precaution.text} />
               </li>
             ))}
           </ul>
@@ -135,16 +163,29 @@ export default function RestaurantDetail({
   );
 }
 
+function DetailText({ text }: { text: string }) {
+  return <p className="text-sm leading-6 text-muted-foreground">{text}</p>;
+}
+
 function DetailSection({
   title,
   children,
+  surface = 'page',
 }: {
   title: string;
   children: React.ReactNode;
+  surface?: 'page' | 'drawer';
 }) {
   return (
-    <section className="space-y-2">
-      <h2 className="text-base font-semibold text-foreground">{title}</h2>
+    <section className={cn(surface === 'drawer' ? 'space-y-1.5' : 'space-y-2')}>
+      <h2
+        className={cn(
+          'font-semibold text-foreground',
+          surface === 'drawer' ? 'text-sm' : 'text-base',
+        )}
+      >
+        {title}
+      </h2>
       {children}
     </section>
   );
@@ -154,15 +195,28 @@ function MetaSummary({
   label,
   value,
   messages,
+  surface = 'page',
 }: {
   label: string;
   value: string;
   messages: Messages;
+  surface?: 'page' | 'drawer';
 }) {
   return (
-    <div className="rounded-md border border-white/25 bg-background/55 px-3 py-2 text-sm backdrop-blur-xl dark:border-white/10">
+    <div
+      className={cn(
+        'rounded-md border border-white/25 bg-background/55 text-sm backdrop-blur-xl dark:border-white/10',
+        surface === 'drawer' ? 'px-2.5 py-2' : 'px-3 py-2',
+      )}
+    >
       <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="mt-1 truncate text-foreground" title={value || 'N/A'}>
+      <div
+        className={cn(
+          'mt-1 text-foreground',
+          surface === 'drawer' ? 'line-clamp-2 leading-5' : 'truncate',
+        )}
+        title={value || 'N/A'}
+      >
         {shortMetaLabel(value, messages) || 'N/A'}
       </div>
     </div>

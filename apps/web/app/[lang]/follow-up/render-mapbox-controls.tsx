@@ -210,6 +210,16 @@ function FollowUpPanel({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const activeDetailPath = React.useMemo(
+    () => pathname.replace(/^\/[^/]+(?=\/follow-up(?:\/|$))/, ''),
+    [pathname],
+  );
+  const activeDetailRestaurantId = React.useMemo(
+    () =>
+      allRestaurants.find((restaurant) => restaurant.href === activeDetailPath)
+        ?.id ?? null,
+    [activeDetailPath, allRestaurants],
+  );
   const [isPending, startTransition] = React.useTransition();
   const [isCollapsed, setIsCollapsed] = React.useState(false);
   const panelRef = React.useRef<HTMLElement>(null);
@@ -526,7 +536,7 @@ function FollowUpPanel({
     <aside
       ref={panelRef}
       className={cn(
-        'fixed bottom-safe-max-4 left-4 right-4 z-10 flex flex-col overflow-hidden rounded-lg md:bottom-auto md:left-safe-max-4 md:right-auto md:top-safe-max-4 md:w-[390px]',
+        'fixed bottom-safe-max-4 left-4 right-4 z-10 flex flex-col overflow-hidden rounded-lg md:bottom-auto md:left-safe-max-4 md:right-auto md:top-safe-max-4 md:w-97.5',
         isCollapsed ? 'max-h-16' : 'max-h-[62dvh] md:max-h-[calc(100dvh-2rem)]',
         glassClassName,
       )}
@@ -738,6 +748,7 @@ function FollowUpPanel({
                 <RestaurantListItem
                   restaurant={restaurant}
                   active={focusedId === restaurant.id}
+                  activeDetailRestaurantId={activeDetailRestaurantId}
                   selectedTitleTransitionId={selectedTitleTransitionId}
                   distance={
                     location
@@ -798,6 +809,7 @@ function RestaurantListTitle({ name }: { name: string }) {
 function RestaurantListItem({
   restaurant,
   active,
+  activeDetailRestaurantId,
   selectedTitleTransitionId,
   distance,
   hoveredRestaurantIdRef,
@@ -810,6 +822,7 @@ function RestaurantListItem({
 }: {
   restaurant: FollowUpRestaurant;
   active: boolean;
+  activeDetailRestaurantId: string | null;
   selectedTitleTransitionId: string | null;
   distance: number | null;
   hoveredRestaurantIdRef: React.MutableRefObject<string | null>;
@@ -825,6 +838,9 @@ function RestaurantListItem({
   const router = useRouter();
   const { locale } = useLocale();
   const t = messages.followUp.map;
+  const shouldShareTitle =
+    selectedTitleTransitionId !== restaurant.id &&
+    activeDetailRestaurantId !== restaurant.id;
   const handlePreview = React.useCallback(() => {
     previewRestaurant(restaurant);
   }, [previewRestaurant, restaurant]);
@@ -836,17 +852,10 @@ function RestaurantListItem({
       event.preventDefault();
       React.startTransition(() => {
         setSelectedTitleTransitionId(restaurant.id);
-        previewRestaurant(restaurant);
         router.push(`/${locale}${restaurant.href}`);
       });
     },
-    [
-      locale,
-      previewRestaurant,
-      restaurant,
-      router,
-      setSelectedTitleTransitionId,
-    ],
+    [locale, restaurant, router, setSelectedTitleTransitionId],
   );
 
   return (
@@ -880,9 +889,7 @@ function RestaurantListItem({
           <MapPin className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-300" />
           <div className="min-w-0 flex-1">
             <div className="flex items-start gap-2">
-              {selectedTitleTransitionId === restaurant.id ? (
-                <RestaurantListTitle name={restaurant.name} />
-              ) : (
+              {shouldShareTitle ? (
                 <ViewTransition
                   name={restaurantTitleTransitionName(restaurant.id)}
                   share="text-morph"
@@ -890,6 +897,8 @@ function RestaurantListItem({
                 >
                   <RestaurantListTitle name={restaurant.name} />
                 </ViewTransition>
+              ) : (
+                <RestaurantListTitle name={restaurant.name} />
               )}
               {restaurant.rating && (
                 <span className="inline-flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
