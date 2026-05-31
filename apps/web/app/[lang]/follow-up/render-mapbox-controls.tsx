@@ -228,6 +228,7 @@ function FollowUpPanel({
   const flipStateRef = React.useRef<ReturnType<typeof Flip.getState> | null>(
     null,
   );
+  const mobilePanelHeightRef = React.useRef<number | null>(null);
   const isListScrollingRef = React.useRef(false);
   const hoveredRestaurantIdRef = React.useRef<string | null>(null);
   const isComposingSearchRef = React.useRef(false);
@@ -484,20 +485,52 @@ function FollowUpPanel({
     () => {
       const panel = panelRef.current;
       const flipState = flipStateRef.current;
+      const mobileFromHeight = mobilePanelHeightRef.current;
 
       if (!panel) return;
 
       const reduceMotion = !window.matchMedia(
         '(prefers-reduced-motion: no-preference)',
       ).matches;
+      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
 
       gsap.killTweensOf([panel, toggleButtonRef.current].filter(Boolean));
 
       if (reduceMotion) {
         flipStateRef.current = null;
+        mobilePanelHeightRef.current = null;
+        gsap.set(panel, { clearProps: 'height' });
         return;
       }
 
+      if (!isDesktop) {
+        flipStateRef.current = null;
+        mobilePanelHeightRef.current = null;
+
+        if (!mobileFromHeight) return;
+
+        const mobileToHeight = panel.getBoundingClientRect().height;
+        if (
+          !mobileToHeight ||
+          Math.abs(mobileToHeight - mobileFromHeight) < 1
+        ) {
+          return;
+        }
+
+        gsap.fromTo(
+          panel,
+          { height: mobileFromHeight },
+          {
+            height: mobileToHeight,
+            duration: 0.32,
+            ease: 'power3.inOut',
+            clearProps: 'height',
+          },
+        );
+        return;
+      }
+
+      mobilePanelHeightRef.current = null;
       const tl = gsap.timeline({
         defaults: { duration: 0.34, ease: 'power3.inOut' },
         onComplete: () => {
@@ -522,8 +555,20 @@ function FollowUpPanel({
   );
 
   const toggleCollapsed = React.useCallback(() => {
-    const targets = [panelRef.current, toggleButtonRef.current].filter(Boolean);
-    flipStateRef.current = targets.length ? Flip.getState(targets) : null;
+    const panel = panelRef.current;
+    const targets = [panel, toggleButtonRef.current].filter(Boolean);
+    const isDesktop =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(min-width: 768px)').matches;
+
+    if (panel && !isDesktop) {
+      mobilePanelHeightRef.current = panel.getBoundingClientRect().height;
+      flipStateRef.current = null;
+    } else {
+      mobilePanelHeightRef.current = null;
+      flipStateRef.current = targets.length ? Flip.getState(targets) : null;
+    }
+
     React.startTransition(() => {
       setIsCollapsed((value) => !value);
     });
@@ -537,7 +582,9 @@ function FollowUpPanel({
       ref={panelRef}
       className={cn(
         'fixed bottom-safe-max-4 left-4 right-4 z-10 flex flex-col overflow-hidden rounded-lg md:bottom-auto md:left-safe-max-4 md:right-auto md:top-safe-max-4 md:w-97.5',
-        isCollapsed ? 'max-h-16' : 'max-h-[62dvh] md:max-h-[calc(100dvh-2rem)]',
+        isCollapsed
+          ? 'h-16 md:h-auto md:max-h-16'
+          : 'h-[62dvh] md:h-auto md:max-h-[calc(100dvh-2rem)]',
         glassClassName,
       )}
       data-collapsed={isCollapsed}

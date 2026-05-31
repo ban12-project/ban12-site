@@ -10,6 +10,7 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: dark)', color: '#292929' },
     { media: '(prefers-color-scheme: light)', color: '#fcfcfd' },
   ],
+  viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {
@@ -20,6 +21,10 @@ export const metadata: Metadata = {
     languages: Object.fromEntries(
       Object.keys(i18n.locales).map((lang) => [lang, `/${lang}/follow-up`]),
     ),
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
   },
 };
 
@@ -32,7 +37,7 @@ export default async function FollowUpPage(
   const messages = await getDictionary(lang as Locale);
 
   return (
-    <main className="relative h-dvh overflow-hidden">
+    <main className="relative h-lvh min-h-dvh overflow-hidden overscroll-none">
       <Suspense>
         <SuspendedMapbox
           messages={messages}
@@ -68,7 +73,7 @@ async function SuspendedMapbox({
 
   return (
     <Mapbox
-      className="h-dvh"
+      className="h-[100lvh] min-h-dvh"
       controls
       options={{
         center: location,
