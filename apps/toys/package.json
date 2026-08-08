@@ -5,20 +5,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm build-rust && next build --webpack",
+    "build": "wasm-pack build ../../crates/calculate-hash && wasm-pack build ../../crates/similar-wasm-wrapper && next build",
     "start": "next start",
     "lint": "biome check --write",
-    "build-rust": "wasm-pack build ../../crates/calculate-hash && wasm-pack build ../../crates/similar-wasm-wrapper",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "build-rust": "wasm-pack build ../../crates/calculate-hash && wasm-pack build ../../crates/similar-wasm-wrapper"
   },
   "dependencies": {
     "@gsap/react": "catalog:",
     "@hookform/resolvers": "catalog:",
     "@next/third-parties": "catalog:",
-    "@opennextjs/cloudflare": "catalog:",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
     "@uswriting/exiftool": "^1.0.6",
@@ -56,7 +51,6 @@
     "postcss": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
-    "wasm-pack": "^0.15.0",
-    "wrangler": "catalog:"
+    "wasm-pack": "^0.15.0"
   }
 }

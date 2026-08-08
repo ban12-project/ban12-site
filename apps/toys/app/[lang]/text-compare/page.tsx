@@ -4,6 +4,8 @@ import { getDictionary, type Locale } from '#/lib/i18n';
 
 import TextDiff from './text-diff';
 
+export const unstable_instant = { prefetch: 'static' };
+
 export async function generateMetadata({
   params,
 }: PageProps<'/[lang]/text-compare'>): Promise<Metadata> {
@@ -13,9 +15,13 @@ export async function generateMetadata({
     title: messages['text-compare'].title,
     keywords: messages['text-compare'].keywords,
     description: messages['text-compare'].description,
+    alternates: { canonical: `/${lang}/text-compare` },
   };
 }
 
-export default function TextComparePage() {
-  return <TextDiff />;
+export default async function TextComparePage({
+  params,
+}: PageProps<'/[lang]/text-compare'>) {
+  const { lang } = await params;
+  return <TextDiff locale={lang as Locale} />;
 }
