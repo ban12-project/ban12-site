@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
   },
   transpilePackages: ['@repo/ui'],
   experimental: {
-    useTypeScriptCli: true,
+    viewTransition: true,
   },
 };
 

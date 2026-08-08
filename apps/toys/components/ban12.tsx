@@ -18,21 +18,13 @@ export default function Ban12(props: React.ComponentProps<'a'>) {
       const container = containerRef.current;
       if (!container) return;
 
-      const circlesSvg =
-        container.querySelector<SVGSVGElement>('#ban12__circles');
-      const lettersSvg =
-        container.querySelector<SVGSVGElement>('#ban12__letters');
-      if (!circlesSvg || !lettersSvg) return;
-
+      const selector = gsap.utils.selector(container);
       const circles = MorphSVGPlugin.convertToPath(
-        Array.from(circlesSvg.querySelectorAll<SVGCircleElement>('circle')),
+        selector<SVGCircleElement>('#ban12__circles > circle'),
       );
-      const letters = Array.from(
-        lettersSvg.querySelectorAll<SVGPathElement>('path'),
-      );
-      if (circles.length !== letters.length || circles.length === 0) return;
+      const letters = selector<SVGPathElement>('#ban12__letters > path');
 
-      gsap.set(circlesSvg, { autoAlpha: 1 });
+      gsap.set('#ban12__circles', { autoAlpha: 1 });
       gsap.set(circles, { xPercent: -100, yPercent: 100 });
 
       const tl = gsap.timeline({

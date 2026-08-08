@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   reactCompiler: true,
   experimental: {
-    useTypeScriptCli: true,
+    viewTransition: true,
   },
 };
 

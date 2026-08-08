@@ -2,24 +2,30 @@ import type { MetadataRoute } from 'next';
 
 import { i18n } from '#/lib/i18n';
 
-const siteUrl = process.env.NEXT_PUBLIC_HOST_URL ?? 'https://toys.ban12.com';
+export const dynamic = 'force-dynamic';
+// export const runtime = 'edge'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const locales = Object.keys(i18n.locales);
 
-  const routes = ['', '/hash', '/7-zip', '/exif', '/text-compare', '/qr-code'];
+  const routesMap: MetadataRoute.Sitemap = [
+    '',
+    '/hash',
+    '/7-zip',
+    '/exif',
+    '/text-compare',
+  ].map((route) => ({
+    url: `${process.env.NEXT_PUBLIC_HOST_URL}${route}`,
+    lastModified: new Date(),
+    alternates: {
+      languages: Object.fromEntries(
+        locales.map((locale) => [
+          locale,
+          `${process.env.NEXT_PUBLIC_HOST_URL}/${locale}${route}`,
+        ]),
+      ),
+    },
+  }));
 
-  return locales.flatMap((locale) =>
-    routes.map((route) => ({
-      url: `${siteUrl}/${locale}${route}`,
-      alternates: {
-        languages: Object.fromEntries(
-          locales.map((alternate) => [
-            alternate,
-            `${siteUrl}/${alternate}${route}`,
-          ]),
-        ),
-      },
-    })),
-  );
+  return routesMap;
 }
