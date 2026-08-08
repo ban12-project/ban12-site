@@ -80,7 +80,7 @@ Examples of workspace names are `web`, `blog`, `shortcuts`, `toys`,
   Its `build` script runs `tsx lib/db/migrate` before `next build`, so ensure `DATABASE_URL` is available
   before running production builds locally.
 - `apps/shortcuts`: Next.js app with Drizzle/Postgres, auth, S3, Redis/KV, Turnstile, and Gemini usage.
-- `apps/toys`: Next.js app targeting Cloudflare/OpenNext workflows. Its `build` runs Rust/WASM compilation first:
+- `apps/toys`: Its `build` runs Rust/WASM compilation first:
   `wasm-pack build ../../crates/calculate-hash` and
   `wasm-pack build ../../crates/similar-wasm-wrapper`.
 - `apps/blog`: Next.js blog using Markdown/remark/rehype.
@@ -165,7 +165,6 @@ pnpm --filter <workspace-name> type-check
 ## Deployment Notes
 
 - Vercel-oriented apps use normal Next.js build/start scripts unless app-specific deployment docs say otherwise.
-- `apps/toys` has Cloudflare/OpenNext scripts: `preview`, `deploy`, `upload`, and `cf-typegen`.
 - `apps/video-worker` has a Docker workflow in `.github/workflows/docker-video-worker.yml`.
 - Before changing deployment behavior, read the relevant workflow under `.github/workflows/`.
 
