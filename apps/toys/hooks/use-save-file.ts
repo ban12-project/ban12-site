@@ -11,6 +11,7 @@ function download(data: { blob: Blob; filename: string }[]) {
     a.click();
     URL.revokeObjectURL(url);
   }
+  return true;
 }
 
 export function useSaveFile() {
@@ -52,10 +53,13 @@ export function useSaveFile() {
         });
         await writeFile(handle, blob);
       } catch (_error) {
-        // continue regardless of error
+        if (_error instanceof DOMException && _error.name === 'AbortError') {
+          return false;
+        }
+        throw _error;
       }
 
-      return;
+      return true;
     }
 
     try {
@@ -70,8 +74,13 @@ export function useSaveFile() {
         await writeFile(fileHandle, blob);
       }
     } catch (_error) {
-      // continue regardless of error
+      if (_error instanceof DOMException && _error.name === 'AbortError') {
+        return false;
+      }
+      throw _error;
     }
+
+    return true;
   };
 
   return { isSupportShowSaveFilePicker, saveFile };

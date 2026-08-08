@@ -5,7 +5,7 @@ import HomeHero from '#/components/home-hero';
 import HomeIntro from '#/components/home-intro';
 import { getDictionary, type Locale } from '#/lib/i18n';
 
-export const unstable_instant = { prefetch: 'static' };
+export const instant = true;
 
 export async function generateMetadata(
   props: PageProps<'/[lang]'>,

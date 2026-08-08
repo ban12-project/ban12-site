@@ -1,33 +1,28 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { QRCodeForm } from '#/components/qrcode-form';
-import { getDictionary, type Locale } from '#/lib/i18n';
+import type { Locale } from '#/lib/i18n';
+
+export const instant = true;
 
 export async function generateMetadata(
   props: PageProps<'/[lang]/qr-code'>,
 ): Promise<Metadata> {
   const params = await props.params;
-  const messages = await getDictionary(params.lang as Locale);
+  const lang = params.lang as Locale;
 
   return {
-    title: messages['page-hash'].title,
-    description: messages['page-hash'].description,
+    title: lang === 'zh-CN' ? '在线二维码生成器' : 'Online QR Code Generator',
+    description:
+      lang === 'zh-CN'
+        ? '在浏览器中生成链接、邮箱、电话、Wi-Fi 和联系人二维码。'
+        : 'Generate QR codes for links, email, phone numbers, Wi-Fi, and contacts in your browser.',
+    alternates: { canonical: `/${lang}/qr-code` },
   };
 }
 
-export default async function QRCodePage(props: PageProps<'/[lang]/qr-code'>) {
-  const params = await props.params;
-  const _messages = await getDictionary(params.lang as Locale);
-
-  return (
-    <section className="flex h-screen w-screen justify-center align-middle">
-      <QRCodeForm />
-
-      <Script
-        id="babylonjs-core"
-        strategy="beforeInteractive"
-        src="https://cdn.babylonjs.com/babylon.js"
-      />
-    </section>
-  );
+export default async function QRCodePage({
+  params,
+}: PageProps<'/[lang]/qr-code'>) {
+  const { lang } = await params;
+  return <QRCodeForm locale={lang as Locale} />;
 }
