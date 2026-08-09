@@ -159,6 +159,7 @@ export async function call({ command, payload }: Call) {
     }
 
     const promise = new Promise<Out[]>((resolve, reject) => {
+      let startupTimeoutId: number | undefined;
       const onExit = (e: GlobalEventHandlersEventMap['onExit']) => {
         cleanup();
         const exitCode = e.detail;
@@ -189,13 +190,34 @@ export async function call({ command, payload }: Call) {
         cleanup();
         reject(Error(`7Zip aborted${e.detail ? `: ${e.detail}` : ''}`));
       };
+      const onStart = () => {
+        if (startupTimeoutId !== undefined) {
+          window.clearTimeout(startupTimeoutId);
+          startupTimeoutId = undefined;
+        }
+        self.removeEventListener(JS7zEventName.print, onStart);
+      };
       const cleanup = () => {
-        self.removeEventListener('onExit', onExit);
-        self.removeEventListener('onAbort', onAbort);
+        if (startupTimeoutId !== undefined) {
+          window.clearTimeout(startupTimeoutId);
+          startupTimeoutId = undefined;
+        }
+        self.removeEventListener(JS7zEventName.print, onStart);
+        self.removeEventListener(JS7zEventName.onExit, onExit);
+        self.removeEventListener(JS7zEventName.onAbort, onAbort);
       };
 
-      self.addEventListener('onExit', onExit);
-      self.addEventListener('onAbort', onAbort);
+      self.addEventListener(JS7zEventName.print, onStart);
+      self.addEventListener(JS7zEventName.onExit, onExit);
+      self.addEventListener(JS7zEventName.onAbort, onAbort);
+      startupTimeoutId = window.setTimeout(() => {
+        cleanup();
+        reject(
+          new Error(
+            '7-Zip worker failed to start. Refresh the page and try again.',
+          ),
+        );
+      }, 15_000);
 
       try {
         js7z.callMain(command);
