@@ -116,9 +116,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  async rewrites() {
-    return [{ source: '/:lang/zeroperl.wasm', destination: '/zeroperl.wasm' }];
-  },
 };
 
 const withBundleAnalyzer = bundleAnalyzer({

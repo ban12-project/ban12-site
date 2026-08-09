@@ -7,6 +7,36 @@ import { useDragDrop } from '#/hooks/use-drag-drop';
 import { type ToolLocale, toolCopy } from '#/lib/tool-copy';
 import ToolHeader from './tool-header';
 
+const ZEROPERL_WASM_CDN_URL =
+  'https://cdn.jsdelivr.net/npm/@6over3/zeroperl-ts@1.0.10/dist/esm/zeroperl.wasm';
+const ZEROPERL_WASM_LOCAL_URL = '/zeroperl.wasm';
+
+async function fetchWasm(url: string) {
+  const response = await fetch(url, { cache: 'force-cache' });
+  const contentType = response.headers.get('content-type');
+  if (!response.ok || !contentType?.startsWith('application/wasm')) {
+    throw new Error(
+      `Unable to load zeroperl WebAssembly from ${url} (${response.status} ${contentType ?? 'unknown content type'})`,
+    );
+  }
+  return response;
+}
+
+async function fetchZeroPerlWasm() {
+  try {
+    return await fetchWasm(ZEROPERL_WASM_CDN_URL);
+  } catch (cdnError) {
+    try {
+      return await fetchWasm(ZEROPERL_WASM_LOCAL_URL);
+    } catch (localError) {
+      throw new AggregateError(
+        [cdnError, localError],
+        'Unable to load the ExifTool WebAssembly runtime',
+      );
+    }
+  }
+}
+
 export default function Exif({ locale }: { locale: ToolLocale }) {
   const copy = toolCopy[locale].exif;
   const [fileName, setFileName] = useState('');
@@ -24,7 +54,7 @@ export default function Exif({ locale }: { locale: ToolLocale }) {
 
       try {
         const { parseMetadata } = await import('@uswriting/exiftool');
-        const result = await parseMetadata(file);
+        const result = await parseMetadata(file, { fetch: fetchZeroPerlWasm });
         if (!result.success) {
           throw new Error(result.error || 'Unable to read metadata');
         }

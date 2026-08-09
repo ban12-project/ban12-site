@@ -69,10 +69,13 @@ export default function FileExplorer({ locale }: { locale: ToolLocale }) {
         if (event.data.progress === 1) finish();
       };
 
-      worker.onerror = () => {
+      const fail = (workerError: unknown) => {
+        console.error('SHA-256 worker failed', workerError);
         job.callback({ progress: -1, time: 0 });
         finish();
       };
+      worker.onerror = fail;
+      worker.onmessageerror = fail;
 
       const reader = new FileReader();
       reader.onload = (event) => {
