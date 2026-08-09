@@ -23,6 +23,7 @@ export enum JS7zEventName {
 
 type JS7zFileSystem = {
   mkdir(path: string): void;
+  unlink(path: string): void;
   writeFile(path: string, data: Uint8Array): void;
   readdir(path: string): string[];
   readFile(path: string): Uint8Array;
@@ -49,7 +50,7 @@ interface JS7z {
 
 declare global {
   interface Window {
-    JS7z: ({
+    JS7z?: ({
       print,
       printErr,
       onAbort,
@@ -84,20 +85,58 @@ function createCustomEvent(name: JS7zEventName) {
   };
 }
 
-export const SCRIPT_LOADED_EVENT = 'SCRIPT_LOADED_EVENT';
+function ensureDirectory(fs: JS7zFileSystem, path: string) {
+  try {
+    fs.mkdir(path);
+  } catch {
+    // js7z keeps its virtual filesystem between calls. Reusing the input and
+    // output directories is safe when they already exist.
+  }
+}
+
+function clearDirectory(fs: JS7zFileSystem, path: string) {
+  for (const file of fs.readdir(path)) {
+    if (file === '.' || file === '..') continue;
+    try {
+      fs.unlink(`${path}/${file}`);
+    } catch {
+      // Ignore entries that cannot be removed; the next 7-Zip call will
+      // surface a useful error if the virtual filesystem is unusable.
+    }
+  }
+}
+
+async function waitForEngine() {
+  if (window.JS7z) return;
+
+  await new Promise<void>((resolve, reject) => {
+    const startedAt = Date.now();
+    const check = () => {
+      if (window.JS7z) {
+        resolve();
+        return;
+      }
+      if (Date.now() - startedAt > 15_000) {
+        reject(
+          new Error(
+            '7-Zip engine failed to load. Refresh the page and try again.',
+          ),
+        );
+        return;
+      }
+      window.setTimeout(check, 50);
+    };
+    check();
+  });
+}
 
 export async function call({ command, payload }: Call) {
-  if (!window.JS7z) {
-    await new Promise<void>((resolve) => {
-      const listener = () => {
-        resolve();
-        window.removeEventListener(SCRIPT_LOADED_EVENT, listener);
-      };
-      window.addEventListener(SCRIPT_LOADED_EVENT, listener);
-    });
-  }
+  await waitForEngine();
 
-  const js7z = await window.JS7z({
+  const createJS7z = window.JS7z;
+  if (!createJS7z) throw new Error('7-Zip engine is unavailable');
+
+  const js7z = await createJS7z({
     print: createCustomEvent(JS7zEventName.print),
     printErr: createCustomEvent(JS7zEventName.printErr),
     onAbort: createCustomEvent(JS7zEventName.onAbort),
@@ -108,7 +147,10 @@ export async function call({ command, payload }: Call) {
     if (!payload) throw new Error('Payload is required');
 
     // Create the input folder
-    js7z.FS.mkdir('/in');
+    ensureDirectory(js7z.FS, '/in');
+    ensureDirectory(js7z.FS, '/out');
+    clearDirectory(js7z.FS, '/in');
+    clearDirectory(js7z.FS, '/out');
 
     // Write each file into the input folder
     for (const file of payload) {
@@ -117,11 +159,15 @@ export async function call({ command, payload }: Call) {
     }
 
     const promise = new Promise<Out[]>((resolve, reject) => {
-      self.addEventListener('onExit', (e) => {
+      let startupTimeoutId: number | undefined;
+      const onExit = (e: GlobalEventHandlersEventMap['onExit']) => {
+        cleanup();
         const exitCode = e.detail;
         // Compression unsuccessful
-        if (exitCode !== 0)
+        if (exitCode !== 0) {
           reject(Error(`7Zip failed with exit code ${exitCode}`));
+          return;
+        }
 
         const out: Out[] = [];
         const files = js7z.FS.readdir('/out');
@@ -139,10 +185,47 @@ export async function call({ command, payload }: Call) {
         }
 
         resolve(out);
-      });
-    });
+      };
+      const onAbort = (e: GlobalEventHandlersEventMap['onAbort']) => {
+        cleanup();
+        reject(Error(`7Zip aborted${e.detail ? `: ${e.detail}` : ''}`));
+      };
+      const onStart = () => {
+        if (startupTimeoutId !== undefined) {
+          window.clearTimeout(startupTimeoutId);
+          startupTimeoutId = undefined;
+        }
+        self.removeEventListener(JS7zEventName.print, onStart);
+      };
+      const cleanup = () => {
+        if (startupTimeoutId !== undefined) {
+          window.clearTimeout(startupTimeoutId);
+          startupTimeoutId = undefined;
+        }
+        self.removeEventListener(JS7zEventName.print, onStart);
+        self.removeEventListener(JS7zEventName.onExit, onExit);
+        self.removeEventListener(JS7zEventName.onAbort, onAbort);
+      };
 
-    js7z.callMain(command);
+      self.addEventListener(JS7zEventName.print, onStart);
+      self.addEventListener(JS7zEventName.onExit, onExit);
+      self.addEventListener(JS7zEventName.onAbort, onAbort);
+      startupTimeoutId = window.setTimeout(() => {
+        cleanup();
+        reject(
+          new Error(
+            '7-Zip worker failed to start. Refresh the page and try again.',
+          ),
+        );
+      }, 15_000);
+
+      try {
+        js7z.callMain(command);
+      } catch (error) {
+        cleanup();
+        reject(error);
+      }
+    });
 
     return promise;
   }

@@ -52,3 +52,6 @@ wasm-pack.log
 .next-docs/
 
 .pnpm-store/
+
+# Local Netlify folder
+.netlify
