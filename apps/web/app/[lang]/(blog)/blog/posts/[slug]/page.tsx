@@ -1,25 +1,27 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ViewTransition } from 'react';
-import Avatar from '#/components/avatar';
-import GridContainer from '#/components/grid-container';
-import { getAllPosts, getPostBySlug } from '#/lib/api';
-import markdownToHtml from '#/lib/markdownToHtml';
-import { formatDate } from '#/lib/utils';
 
-export default async function Post(props: Params) {
-  const params = await props.params;
-  const post = await getPostBySlug(params.slug);
+import Avatar from '#/components/blog/avatar';
+import GridContainer from '#/components/blog/grid-container';
+import { getAllPosts, getPostBySlug } from '#/lib/blog/api';
+import markdownToHtml from '#/lib/blog/markdown-to-html';
+import { formatDate } from '#/lib/blog/utils';
+import { i18n } from '#/lib/i18n';
 
-  if (!post) {
-    return notFound();
-  }
+export default async function PostPage(
+  props: PageProps<'/[lang]/blog/posts/[slug]'>,
+) {
+  const { slug } = await props.params;
+  const post = await getPostBySlug(slug);
 
-  const content = await markdownToHtml(post.content || '');
+  if (!post) notFound();
+
+  const content = await markdownToHtml(post.content ?? '');
 
   return (
     <div className="xl:max-w-5/6 mx-auto grid grid-cols-1 xl:grid-cols-[22rem_2.5rem_auto] xl:grid-rows-[1fr_auto]">
-      <div className="col-start-2 row-span-2 border-l border-r border-gray-950/5 max-xl:hidden dark:border-white/10"></div>
+      <div className="col-start-2 row-span-2 border-l border-r border-gray-950/5 max-xl:hidden dark:border-white/10" />
 
       <div className="max-xl:max-w-(--breakpoint-md) max-xl:mx-auto max-xl:w-full">
         <div className="mt-16 px-4 font-mono text-sm/7 font-medium uppercase tracking-widest text-gray-500 lg:px-2">
@@ -38,7 +40,7 @@ export default async function Post(props: Params) {
       </div>
 
       <div className="max-xl:max-w-(--breakpoint-md) max-xl:mx-auto max-xl:w-full">
-        <div className="flex flex-col gap-4 sticky top-0">
+        <div className="sticky top-0 flex flex-col gap-4">
           <GridContainer
             direction="to-left"
             className="max-xl:before:-left-[100vw]! max-xl:after:-left-[100vw]! flex items-center whitespace-nowrap px-4 py-2 font-medium xl:px-2 xl:before:hidden"
@@ -54,9 +56,9 @@ export default async function Post(props: Params) {
         <GridContainer className="px-4 py-2 lg:px-2">
           <article
             className="prose prose-blog max-w-(--breakpoint-md)"
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: markdownToHtml
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: Content is trusted repository Markdown.
             dangerouslySetInnerHTML={{ __html: content }}
-          ></article>
+          />
         </GridContainer>
       </div>
 
@@ -80,27 +82,34 @@ export default async function Post(props: Params) {
   );
 }
 
-type Params = {
-  params: Promise<{
-    slug: string;
-  }>;
-};
+export async function generateMetadata(
+  props: PageProps<'/[lang]/blog/posts/[slug]'>,
+): Promise<Metadata> {
+  const { lang, slug } = await props.params;
+  const post = await getPostBySlug(slug);
 
-export async function generateMetadata(props: Params): Promise<Metadata> {
-  const params = await props.params;
-  const post = await getPostBySlug(params.slug);
-
-  if (!post) {
-    return notFound();
-  }
-
-  const title = `${post.title}`;
+  if (!post) notFound();
 
   return {
-    title,
+    title: post.title,
     description: post.excerpt,
+    alternates: {
+      canonical:
+        lang === i18n.defaultLocale
+          ? `/blog/posts/${slug}`
+          : `/${lang}/blog/posts/${slug}`,
+      languages: Object.fromEntries(
+        Object.keys(i18n.locales).map((locale) => [
+          locale,
+          locale === i18n.defaultLocale
+            ? `/blog/posts/${slug}`
+            : `/${locale}/blog/posts/${slug}`,
+        ]),
+      ),
+    },
     openGraph: {
-      title,
+      title: post.title,
+      description: post.excerpt,
       images: [post.ogImage.url],
     },
   };
@@ -109,7 +118,7 @@ export async function generateMetadata(props: Params): Promise<Metadata> {
 export async function generateStaticParams() {
   const posts = await getAllPosts();
 
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+  return Object.keys(i18n.locales).flatMap((lang) =>
+    posts.map((post) => ({ lang, slug: post.slug })),
+  );
 }

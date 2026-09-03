@@ -1,5 +1,5 @@
 ---
-title: '自动化部署 Next.js'
+title: "自动化部署 Next.js"
 excerpt: '使用 Github Actions 构建 Next.js 项目，并上传至你自己的 VPS'
 coverImage: 'https://assets.ban12.com/blog/self-hosted-nextjs-with-github-actions/actions-hero.svg'
 date: '2024-06-05T01:39:53.723Z'

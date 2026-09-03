@@ -1,5 +1,5 @@
 ---
-title: '让缓存飞一会儿：深入理解 SWR 策略与 Next.js 实践'
+title: "让缓存飞一会儿：深入理解 SWR 策略与 Next.js 实践"
 excerpt: '师爷，你给翻译翻译，什么叫 Stale-while-revalidate？就是让缓存先飞一会儿。'
 date: '2025-12-24T15:49:05.000Z'
 author:

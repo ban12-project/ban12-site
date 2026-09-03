@@ -8,11 +8,10 @@ This projects includes the following packages/apps:
 
 ### Apps and Packages
 
-- `web`: [ban12](https://ban12.com/)
-- `blog`: a [blog](https://blog.ban12.com/) app with [Tailwind CSS](https://tailwindcss.com/)
+- `web`: the main [Ban12](https://ban12.com/) site and [blog](https://ban12.com/blog), built with Next.js and Tailwind CSS
 - `shortcuts`: the app for sharing [shortcuts](https://support.apple.com/guide/shortcuts/welcome/ios) access online [here](https://shortcuts.ban12.com/)
 - `@repo/i18n`: minimal i18n routing and translations
-- `@repo/ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `blog` applications
+- `@repo/ui`: a shared React component library styled with [Tailwind CSS](https://tailwindcss.com/)
 - `@repo/biome-config`: `biome` configurations
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 

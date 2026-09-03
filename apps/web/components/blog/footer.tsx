@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import GridContainer from '#/components/grid-container';
+import GridContainer from './grid-container';
 
 export default function Footer() {
   return (
