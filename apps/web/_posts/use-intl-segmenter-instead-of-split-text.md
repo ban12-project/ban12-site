@@ -1,5 +1,5 @@
 ---
-title: 'Intl.Segmenter'
+title: "Intl.Segmenter"
 excerpt: '使用 Intl.Segmenter 替代 split 方法分割文本'
 date: '2025-04-28T10:27:31.155Z'
 author:

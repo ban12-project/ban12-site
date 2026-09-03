@@ -1,5 +1,5 @@
 ---
-title: '浏览器缓存外部JS文件策略'
+title: "浏览器缓存外部JS文件策略"
 excerpt: '浏览器缓存外部 JavaScript 文件：跨域共享与分区机制的深度解析'
 date: '2025-07-09T10:57:20.082Z'
 author:

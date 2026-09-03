@@ -1,5 +1,5 @@
 ---
-title: 'Next.js Server Actions 渐进增强表单'
+title: "Next.js Server Actions 渐进增强表单"
 excerpt: '结合 next.js / server action / zod / react-hook-form 创建渐进增强表单'
 date: '2025-06-16T06:28:38.837Z'
 author:

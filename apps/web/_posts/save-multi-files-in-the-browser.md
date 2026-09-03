@@ -1,5 +1,5 @@
 ---
-title: '浏览器中的多文件保存'
+title: "浏览器中的多文件保存"
 excerpt: '使用 File System API 访问系统文件以及文件夹'
 coverImage: 'https://assets.ban12.com/blog/save-multi-files-in-the-browser/cover.png'
 date: '2024-11-28T08:52:13.575Z'

@@ -1,5 +1,5 @@
 ---
-title: '博客技术揭秘：驱动这个博客的技术栈'
+title: "博客技术揭秘：驱动这个博客的技术栈"
 excerpt: '深入了解构建和维护这个博客所使用的技术和自动化流程，重点关注性能、开发者体验和内容工作流。'
 date: '2025-04-28T10:44:49.816Z'
 author:
@@ -32,7 +32,7 @@ ogImage:
 
 ## 内容：Markdown & MDX
 
-博客文章主要使用 **Markdown (`.md`)** 编写。它简单、被广泛采用，并且专注于内容而非复杂的格式。这些文件直接存放在项目仓库中（`apps/blog/_posts/`）。
+博客文章主要使用 **Markdown (`.md`)** 编写。它简单、被广泛采用，并且专注于内容而非复杂的格式。这些文件直接存放在项目仓库中（`apps/web/_posts/`）。
 
 ```
 apps/
@@ -56,11 +56,11 @@ apps/
 
 取而代之的是，我使用了一个 **GitHub Actions 工作流** (`.github/workflows/blog-revalidate.yml`)。它的工作原理如下：
 
-1.  **触发:** 每当有更改被推送到 `main` 分支，并且这些更改影响到 `apps/blog/_posts/` 目录（我的 Markdown 内容）下的文件时，该工作流就会自动运行。
+1.  **触发:** 每当有更改被推送到 `main` 分支，并且这些更改影响到 `apps/web/_posts/` 目录（我的 Markdown 内容）下的文件时，该工作流就会自动运行。
 2.  **检测更改:** 它会精确识别出在这次推送中哪些 `.md` 或 `.mdx` 文件被修改了。
 3.  **提取 Slug:** 对于每个更改的文件，它会提取文章的 slug（例如，`my-cool-post.md` 变成 `my-cool-post`）。
 4.  **调用重新验证 API:** 它向我博客上的特定 API 端点 (`/api/revalidate`) 发送一个 `PUT` 请求。该请求包含：
-    *   一个需要重新验证的 URL 路径列表（例如 `/posts/my-cool-post`）。
+    *   一个需要重新验证的 URL 路径列表（例如 `/blog/posts/my-cool-post`）。
     *   一个标签 (`posts`)，用于可能重新验证相关的索引页面。
     *   一个安全存储在 GitHub Secrets 中的密钥令牌 (`REVALIDATE_TOKEN`)，用于授权该请求。
 5.  **Next.js 重新验证:** Next.js 后端接收到这个请求，验证令牌，并通知托管平台（很可能是 Vercel）为指定的路径重新生成静态页面，而**无需**进行完整的网站重建。
@@ -76,7 +76,7 @@ apps/
   env:
     ALL_CHANGED_FILES: ${{ steps.changed-markdown-files.outputs.all_changed_files }}
     REVALIDATE_TOKEN: ${{ secrets.REVALIDATE_TOKEN }} # 使用 GitHub Secret 存储令牌
-    REVALIDATE_URL: 'https://blog.ban12.com/api/revalidate' # 我的生产环境 URL
+    REVALIDATE_URL: 'https://ban12.com/api/revalidate' # 我的生产环境 URL
   run: |
     # ... (构建包含路径/标签的 JSON 负载的脚本) ...
 

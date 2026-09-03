@@ -1,5 +1,5 @@
 ---
-title: '在 Vue CLI 愉快的配置 CDN'
+title: "在 Vue CLI 愉快的配置 CDN"
 excerpt: '📝 搬砖积累下来的实用配置，持续更新哈！！！webpack externals cdn 依赖 package.json 自动获取版本生成链接'
 coverImage: 'https://cli.vuejs.org/cli-new-project.png'
 date: '2021-05-23T10:50:11.181Z'

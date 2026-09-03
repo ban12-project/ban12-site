@@ -107,7 +107,7 @@ function NavMenu() {
               </Link>
             </li>
             <li className="flex">
-              <Link className="w-full py-4" href="https://blog.ban12.com">
+              <Link className="w-full py-4" href="/blog">
                 Blog
               </Link>
             </li>
@@ -155,7 +155,7 @@ function NavMenu() {
               asChild
               className={navigationMenuTriggerStyle()}
             >
-              <Link href="https://blog.ban12.com">Blog</Link>
+              <Link href="/blog">Blog</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>

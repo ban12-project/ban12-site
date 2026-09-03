@@ -11,7 +11,6 @@ This is a pnpm 10 + Turborepo monorepo for the Ban12 web properties.
 ban12-site/
 ├── apps/
 │   ├── web/                 # ban12.com Next.js app
-│   ├── blog/                # blog.ban12.com Next.js app
 │   ├── shortcuts/           # shortcuts.ban12.com Next.js app
 │   ├── toys/                # tools/toys Next.js app, includes Rust/WASM builds
 │   ├── two-weeks-in-china/  # Next.js app with Drizzle/Postgres
@@ -45,7 +44,7 @@ Rust crates are managed by the root `Cargo.toml` workspace.
 
 ```bash
 pnpm --filter web dev
-pnpm --filter blog type-check
+pnpm --filter web type-check
 pnpm --filter @repo/ui lint
 ```
 
@@ -71,7 +70,7 @@ pnpm --filter <workspace-name> lint
 pnpm --filter <workspace-name> type-check
 ```
 
-Examples of workspace names are `web`, `blog`, `shortcuts`, `toys`,
+Examples of workspace names are `web`, `shortcuts`, `toys`,
 `two-weeks-in-china`, `video-worker`, `@repo/ui`, and `@repo/i18n`.
 
 ## App Notes
@@ -83,7 +82,7 @@ Examples of workspace names are `web`, `blog`, `shortcuts`, `toys`,
 - `apps/toys`: Its `build` runs Rust/WASM compilation first:
   `wasm-pack build ../../crates/calculate-hash` and
   `wasm-pack build ../../crates/similar-wasm-wrapper`.
-- `apps/blog`: Next.js blog using Markdown/remark/rehype.
+- `apps/web`: also serves the Markdown blog at `/blog` and `/blog/posts/[slug]`.
 - `apps/two-weeks-in-china`: Next.js app with MDX and Drizzle/Postgres.
 - `apps/video-worker`: Node/TypeScript worker. Use `pnpm --filter video-worker build` for `tsc`.
 

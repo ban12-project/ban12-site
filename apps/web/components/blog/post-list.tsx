@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { Fragment, ViewTransition } from 'react';
 
-import type { Post } from '#/lib/api';
-import { formatDate } from '#/lib/utils';
+import type { Post } from '#/lib/blog/api';
+import { formatDate } from '#/lib/blog/utils';
 
 import Avatar from './avatar';
 import GridContainer from './grid-container';
 
-export default function Post({ posts }: { posts: Post[] }) {
+export default function PostList({ posts }: { posts: readonly Post[] }) {
   return (
     <div className="xl:max-w-5/6 relative mx-auto my-12 grid grid-cols-1 max-lg:max-w-2xl lg:my-24 lg:grid-cols-[24rem_2.5rem_minmax(0,1fr)]">
       {posts.map(({ date, author, slug, title, excerpt }, index) => (
@@ -31,7 +31,7 @@ export default function Post({ posts }: { posts: Post[] }) {
                 </div>
 
                 <ViewTransition name={`title-${slug}`}>
-                  <Link href={`/posts/${slug}`} className="font-semibold">
+                  <Link href={`/blog/posts/${slug}`} className="font-semibold">
                     {title}
                   </Link>
                 </ViewTransition>
@@ -39,7 +39,7 @@ export default function Post({ posts }: { posts: Post[] }) {
                   {excerpt}
                 </div>
                 <Link
-                  href={`/posts/${slug}`}
+                  href={`/blog/posts/${slug}`}
                   className="mt-4 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 dark:text-orange-400"
                 >
                   Read more
