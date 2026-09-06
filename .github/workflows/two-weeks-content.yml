@@ -1,0 +1,43 @@
+name: Two Weeks content
+
+on:
+  pull_request:
+    paths:
+      - 'apps/two-weeks-in-china/**'
+      - 'packages/ui/**'
+      - 'packages/i18n/**'
+      - 'packages/typescript-config/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/two-weeks-content.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'apps/two-weeks-in-china/**'
+      - 'packages/ui/**'
+      - 'packages/i18n/**'
+      - 'packages/typescript-config/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/two-weeks-content.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Content regression tests
+        run: pnpm --filter two-weeks-in-china test:content
+      - name: Type check
+        run: pnpm --filter two-weeks-in-china type-check
+      - name: Validate real content and build without a database
+        run: env -u DATABASE_URL -u CONTENT_DATABASE_URL pnpm --filter two-weeks-in-china build

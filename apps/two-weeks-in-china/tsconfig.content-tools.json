@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": ".",
+    "outDir": ".content-tools",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ],
+    "noEmit": false
+  },
+  "include": [
+    "lib/content/core.ts",
+    "lib/content/types.ts",
+    "scripts/content/**/*.ts",
+    "tests/content.test.ts"
+  ]
+}
