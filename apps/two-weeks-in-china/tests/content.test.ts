@@ -1,17 +1,14 @@
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
 import {
-  existsSync,
   mkdirSync,
   mkdtempSync,
-  readdirSync,
   readFileSync,
   rmSync,
   symlinkSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { afterEach, test } from 'node:test';
 import {
   buildMenu,
@@ -34,7 +31,6 @@ import type {
   Page,
   PageFrontmatter,
 } from '../lib/content/types';
-import { importSnapshot } from '../scripts/content/importer';
 
 // Synthetic fixtures only. They are never copied into production content.
 const directories: string[] = [];
@@ -101,10 +97,22 @@ function snapshot(): ContentSnapshot {
     ],
   };
 }
-function imported() {
+
+// The production importer has been retired. Build synthetic file fixtures directly;
+// tests must not depend on Neon, psql, migration CLIs or production content.
+function fixtureCatalog() {
   const root = directory();
-  const data = snapshot();
-  importSnapshot(data, root);
+  const data = validateSnapshot(snapshot());
+  for (const { content, ...fields } of data.pages) {
+    const file = join(root, 'pages', `${fields.path.slice(1)}.mdx`);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, serializePage({ ...fields, draft: false }, content));
+  }
+  writeFileSync(join(root, 'countries.json'), JSON.stringify(data.countries));
+  writeFileSync(
+    join(root, 'migration.json'),
+    JSON.stringify(createManifest(data)),
+  );
   return { root, data, catalog: readCatalog(root) };
 }
 
@@ -318,44 +326,27 @@ test('missing or awaiting-export manifest blocks reads before empty content can 
   );
   assert.throws(() => readCatalog(root), /not complete/);
 });
-test('import preserves all article fields and country values and verifies hashes', () => {
-  const { catalog, data } = imported();
+test('catalog preserves all article fields and country values and verifies hashes', () => {
+  const { catalog, data } = fixtureCatalog();
   verifySnapshot(catalog, validateSnapshot(data));
   assert.equal(catalog.pages[0].format, 'mdx');
   assert.deepEqual(catalog.countries, data.countries);
   assert.equal(catalog.migration.pageCount, data.pages.length);
   assert.equal(catalog.migration.countryCount, data.countries.length);
 });
-test('import keeps content docs and templates intact', () => {
-  const root = directory();
-  writeFileSync(join(root, 'README.md'), 'retained');
-  mkdirSync(join(root, 'templates'));
-  writeFileSync(join(root, 'templates/article.md'), 'retained template');
-  importSnapshot(snapshot(), root);
-  assert.equal(readFileSync(join(root, 'README.md'), 'utf8'), 'retained');
-  assert.equal(
-    readFileSync(join(root, 'templates/article.md'), 'utf8'),
-    'retained template',
-  );
-});
-test('identical reimport is idempotent and a changed snapshot is refused', () => {
-  const { root, data } = imported();
-  importSnapshot(data, root);
-  const changed = structuredClone(data);
-  changed.pages[0].content += 'changed';
-  assert.throws(() => importSnapshot(changed, root), /does not match/);
-  verifySnapshot(readCatalog(root), validateSnapshot(data));
-});
-test('edited article is preserved and reimport refuses to overwrite it', () => {
-  const { root, data, catalog } = imported();
+test('editorial changes load normally but differ from initial snapshot checksums', () => {
+  const { root, data, catalog } = fixtureCatalog();
   const file = join(root, 'pages/en/plan-trip/fixture.mdx');
   const { content: _content, format: _format, ...fields } = catalog.pages[0];
   writeFileSync(file, serializePage(fields, 'Reviewed editorial change'));
-  assert.throws(() => importSnapshot(data, root), /differs from the export/);
+  assert.throws(
+    () => verifySnapshot(readCatalog(root), data),
+    /differs from the export/,
+  );
   assert.equal(readCatalog(root).pages[0].content, 'Reviewed editorial change');
 });
 test('baseline article deletion or conversion to draft fails', () => {
-  const { root, catalog } = imported();
+  const { root, catalog } = fixtureCatalog();
   const file = join(root, 'pages/en/plan-trip/fixture.mdx');
   const { content, format: _format, ...fields } = catalog.pages[0];
   writeFileSync(file, serializePage({ ...fields, draft: true }, content));
@@ -364,7 +355,7 @@ test('baseline article deletion or conversion to draft fails', () => {
   assert.throws(() => readCatalog(root), /No article files/);
 });
 test('new drafts are allowed without changing the migration baseline', () => {
-  const { root } = imported();
+  const { root } = fixtureCatalog();
   writeFileSync(
     join(root, 'pages/en/plan-trip/draft.md'),
     serializePage(
@@ -377,38 +368,21 @@ test('new drafts are allowed without changing the migration baseline', () => {
   assert.equal(publishedPages(catalog.pages).length, 1);
 });
 test('same path with both md and mdx extensions fails', () => {
-  const { root } = imported();
+  const { root } = fixtureCatalog();
   const file = join(root, 'pages/en/plan-trip/fixture.mdx');
   writeFileSync(file.replace(/mdx$/, 'md'), readFileSync(file));
   assert.throws(() => readCatalog(root), /Duplicate content path/);
 });
-test('case-only path collision fails without installing staged data', () => {
-  const root = directory();
-  writeFileSync(join(root, 'README.md'), 'untouched');
-  const data = snapshot();
-  data.pages.push({ ...data.pages[0], id: 2, path: '/en/plan-trip/Fixture' });
-  assert.throws(() => importSnapshot(data, root), /Case-colliding/);
-  assert.deepEqual(readdirSync(root), ['README.md']);
-});
-test('invalid import does not partially write pages or a completion manifest', () => {
-  const root = directory();
-  const data = snapshot();
-  data.pages[0].path = '/en/../escape';
-  assert.throws(() => importSnapshot(data, root), /Unsafe/);
-  assert.equal(existsSync(join(root, 'migration.json')), false);
-  assert.deepEqual(readdirSync(root), []);
-});
-test('symlinked files cannot be read or overwritten during import', () => {
-  const { root, data } = imported();
+test('catalog rejects symlinked articles without touching the target', () => {
+  const { root } = fixtureCatalog();
   const outside = directory();
   writeFileSync(join(outside, 'secret.md'), 'do not read');
   symlinkSync(join(outside, 'secret.md'), join(root, 'pages/secret.md'));
   assert.throws(() => readCatalog(root), /Symlink/);
-  assert.throws(() => importSnapshot(data, root), /symlinked/);
   assert.equal(readFileSync(join(outside, 'secret.md'), 'utf8'), 'do not read');
 });
 test('tampered country values fail initial acceptance check', () => {
-  const { root, data } = imported();
+  const { root, data } = fixtureCatalog();
   writeFileSync(
     join(root, 'countries.json'),
     JSON.stringify([{ ...data.countries[0], policyDetails: 'changed' }]),
@@ -419,7 +393,7 @@ test('tampered country values fail initial acceptance check', () => {
   );
 });
 test('tampered manifest counts fail initial acceptance check', () => {
-  const { root, data } = imported();
+  const { root, data } = fixtureCatalog();
   writeFileSync(
     join(root, 'migration.json'),
     JSON.stringify({ ...createManifest(data), countryCount: 3 }),
@@ -429,95 +403,49 @@ test('tampered manifest counts fail initial acceptance check', () => {
     /manifest count/,
   );
 });
-
-function mockExport() {
-  const root = directory();
-  const data = snapshot();
-  const capture = join(root, 'capture.json');
-  const fake = join(root, 'psql');
+test('catalog rejects case-only paths across Markdown and MDX on every filesystem', () => {
+  const { root } = fixtureCatalog();
+  // Distinct extensions allow this fixture even on case-insensitive macOS.
   writeFileSync(
-    fake,
-    `#!${process.execPath}
-const fs = require('node:fs');
-` +
-      `fs.writeFileSync(${JSON.stringify(capture)}, JSON.stringify({argv: process.argv.slice(2), env: process.env, sql: fs.readFileSync(0, 'utf8')}));
-` +
-      `process.stdout.write(${JSON.stringify(JSON.stringify(data))});
-`,
-    { mode: 0o700 },
+    join(root, 'pages/en/plan-trip/Fixture.md'),
+    serializePage(
+      frontmatter({ id: 2, path: '/en/plan-trip/Fixture' }),
+      'Other body',
+    ),
   );
-  const output = join(root, 'export.json');
-  const env: NodeJS.ProcessEnv = {
-    NODE_ENV: 'test',
-    PATH: root,
-    CONTENT_DATABASE_URL:
-      'postgresql://fixture:synthetic-password@db.example.invalid/fixture',
-    PGSERVICE: 'wrong-database',
-    PGHOSTADDR: '192.0.2.1',
-    DATABASE_URL: 'unrelated-placeholder',
-  };
-  const run = () =>
-    spawnSync(
-      process.execPath,
-      [join(__dirname, '../scripts/content/export.js'), output],
-      { env, encoding: 'utf8' },
-    );
-  return { root, data, capture, fake, output, env, run };
-}
-test('exporter uses read-only SQL, verified TLS, UTF-8 and no credentials in arguments', () => {
-  const setup = mockExport();
-  const result = setup.run();
-  assert.equal(result.status, 0, result.stderr);
-  const captured = JSON.parse(readFileSync(setup.capture, 'utf8'));
-  assert.match(captured.sql, /REPEATABLE READ READ ONLY/);
-  assert.match(captured.sql, /FROM public.pages/);
-  assert.match(captured.sql, /FROM public.countries/);
-  assert.equal(captured.env.PGSSLMODE, 'verify-full');
-  assert.equal(captured.env.PGCLIENTENCODING, 'UTF8');
-  assert.equal(captured.env.PGSERVICE, undefined);
-  assert.equal(captured.env.PGHOSTADDR, undefined);
-  assert.equal(captured.env.DATABASE_URL, undefined);
-  assert.equal(captured.env.CONTENT_DATABASE_URL, undefined);
-  assert.equal(captured.argv.join(' ').includes('synthetic-password'), false);
-  assert.equal(
-    (result.stdout + result.stderr).includes('synthetic-password'),
-    false,
+  assert.throws(() => readCatalog(root), /Case-colliding/);
+});
+test('catalog rejects duplicate legacy IDs across different paths', () => {
+  const { root } = fixtureCatalog();
+  writeFileSync(
+    join(root, 'pages/en/plan-trip/other.md'),
+    serializePage(frontmatter({ path: '/en/plan-trip/other' }), 'Other body'),
   );
+  assert.throws(() => readCatalog(root), /Duplicate legacy page id/);
+});
+test('repeated catalog reads preserve stored articles, countries and manifest', () => {
+  const { root } = fixtureCatalog();
+  const files = [
+    'pages/en/plan-trip/fixture.mdx',
+    'countries.json',
+    'migration.json',
+  ];
+  const before = files.map((file) => readFileSync(join(root, file), 'utf8'));
+  assert.deepEqual(readCatalog(root), readCatalog(root));
   assert.deepEqual(
-    JSON.parse(readFileSync(setup.output, 'utf8')),
-    validateSnapshot(setup.data),
+    files.map((file) => readFileSync(join(root, file), 'utf8')),
+    before,
   );
 });
-test('exporter refuses to overwrite an existing snapshot', () => {
-  const setup = mockExport();
-  writeFileSync(setup.output, 'previous backup');
-  const result = setup.run();
-  assert.notEqual(result.status, 0);
-  assert.equal(readFileSync(setup.output, 'utf8'), 'previous backup');
-});
-test('exporter redacts psql failure details and writes no partial export', () => {
-  const setup = mockExport();
-  writeFileSync(
-    setup.fake,
-    `#!${process.execPath}\nprocess.stderr.write('synthetic-password'); process.exit(2);\n`,
-  );
-  const result = setup.run();
-  assert.notEqual(result.status, 0);
-  assert.equal(
-    (result.stdout + result.stderr).includes('synthetic-password'),
-    false,
-  );
-  assert.equal(existsSync(setup.output), false);
-});
-test('exporter with no credential fails before invoking psql', () => {
-  const setup = mockExport();
-  const result = spawnSync(
-    process.execPath,
-    [join(__dirname, '../scripts/content/export.js'), setup.output],
-    { env: { NODE_ENV: 'test', PATH: setup.root }, encoding: 'utf8' },
-  );
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /CONTENT_DATABASE_URL is required/);
-  assert.equal(existsSync(setup.capture), false);
-  assert.equal(existsSync(setup.output), false);
-});
+for (const name of ['countries.json', 'migration.json']) {
+  test(`catalog rejects symlinked ${name}`, () => {
+    const { root } = fixtureCatalog();
+    const outside = join(directory(), name);
+    const content = readFileSync(join(root, name), 'utf8');
+    writeFileSync(outside, content);
+    rmSync(join(root, name));
+    symlinkSync(outside, join(root, name));
+    assert.throws(() => readCatalog(root), /Symlink/);
+    assert.equal(readFileSync(outside, 'utf8'), content);
+  });
+}

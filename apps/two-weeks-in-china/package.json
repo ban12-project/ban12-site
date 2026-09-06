@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "biome check --write",
     "type-check": "next typegen && tsc --noEmit",
-    "content:compile": "tsc -p tsconfig.content-tools.json",
+    "content:compile": "node -e \"require('node:fs').rmSync('.content-tools', { recursive: true, force: true })\" && tsc -p tsconfig.content-tools.json",
     "test:content": "pnpm content:compile && node --test .content-tools/tests/*.test.js",
     "content:check": "pnpm content:compile && node .content-tools/scripts/content/check.js"
   },

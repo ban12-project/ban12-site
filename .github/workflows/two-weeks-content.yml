@@ -35,6 +35,14 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Seed obsolete output to verify clean compilation
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const dir = 'apps/two-weeks-in-china/.content-tools/tests';
+          fs.mkdirSync(dir, { recursive: true });
+          fs.writeFileSync(`${dir}/retired.test.js`, 'throw new Error("Stale compiled test was not removed");');
+          NODE
       - name: Content regression tests
         run: pnpm --filter two-weeks-in-china test:content
       - name: Type check
@@ -69,6 +77,14 @@ jobs:
           }
           NODE
       - run: pnpm install --frozen-lockfile
+      - name: Seed obsolete output to verify clean compilation
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const dir = 'apps/two-weeks-in-china/.content-tools/tests';
+          fs.mkdirSync(dir, { recursive: true });
+          fs.writeFileSync(`${dir}/retired.test.js`, 'throw new Error("Stale compiled test was not removed");');
+          NODE
       - name: Content regression tests
         run: pnpm --filter two-weeks-in-china test:content
       - name: Type check
