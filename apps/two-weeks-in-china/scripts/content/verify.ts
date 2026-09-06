@@ -4,10 +4,17 @@ import { readSnapshot } from './importer';
 
 try {
   const input = process.argv[2];
-  if (!input || process.argv.length !== 3) throw new Error('Usage: pnpm content:verify-export /absolute/path/export.json');
+  if (!input || process.argv.length !== 3)
+    throw new Error(
+      'Usage: pnpm content:verify-export /absolute/path/export.json',
+    );
   verifySnapshot(readCatalog(resolve('content')), readSnapshot(resolve(input)));
-  console.log('Original article paths, content, metadata, dates, IDs, and country records match the export.');
+  console.log(
+    'Original article paths, content, metadata, dates, IDs, and country records match the export.',
+  );
 } catch (error) {
-  console.error(error instanceof Error ? error.message : 'Export verification failed');
+  console.error(
+    error instanceof Error ? error.message : 'Export verification failed',
+  );
   process.exitCode = 1;
 }

@@ -46,7 +46,9 @@ export interface Page extends PageFrontmatter {
 export interface ContentSnapshot {
   version: 1;
   exportedAt: string;
-  pages: Array<Omit<PageFrontmatter, 'draft'> & { id: number; content: string }>;
+  pages: Array<
+    Omit<PageFrontmatter, 'draft'> & { id: number; content: string }
+  >;
   countries: Country[];
 }
 

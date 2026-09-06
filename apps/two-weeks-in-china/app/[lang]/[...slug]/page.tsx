@@ -33,7 +33,10 @@ export async function generateMetadata({
   const { lang, slug } = await params;
   const page = await getPageByPath(`/${lang}/${slug.join('/')}`);
   if (!page) return { title: 'Not Found' };
-  return { title: `${page.title} | Two Weeks in China`, description: page.subtitle };
+  return {
+    title: `${page.title} | Two Weeks in China`,
+    description: page.subtitle,
+  };
 }
 
 const mdxOptions: Record<ContentFormat, MDXRemoteOptions> = {
@@ -41,12 +44,24 @@ const mdxOptions: Record<ContentFormat, MDXRemoteOptions> = {
   mdx: { mdxOptions: { format: 'mdx', remarkPlugins: [remarkGfm] } },
 };
 
-async function CachedMDX({ content, format }: { content: string; format: ContentFormat }) {
+async function CachedMDX({
+  content,
+  format,
+}: {
+  content: string;
+  format: ContentFormat;
+}) {
   'use cache';
   cacheLife('hours');
   // A .md file is deliberately not evaluated as executable MDX. Legacy .mdx
   // remains trusted repository code and retains the existing custom components.
-  return <MDXRemote source={content} options={mdxOptions[format]} components={useMDXComponents({})} />;
+  return (
+    <MDXRemote
+      source={content}
+      options={mdxOptions[format]}
+      components={useMDXComponents({})}
+    />
+  );
 }
 
 export default async function Page({
@@ -60,8 +75,12 @@ export default async function Page({
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold tracking-tight text-dark mb-2">{page.title}</h1>
-        {page.subtitle && <p className="text-xl text-dark/60 font-medium">{page.subtitle}</p>}
+        <h1 className="text-4xl font-bold tracking-tight text-dark mb-2">
+          {page.title}
+        </h1>
+        {page.subtitle && (
+          <p className="text-xl text-dark/60 font-medium">{page.subtitle}</p>
+        )}
       </div>
       <div className="prose prose-lg max-w-none">
         <Suspense fallback={<LoadingComponent />}>

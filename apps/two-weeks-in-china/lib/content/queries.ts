@@ -19,7 +19,9 @@ export async function getCountryByName(name: string) {
 }
 
 export async function getCountriesByPolicy(policy: VisaPolicyType) {
-  return (await getAllCountries()).filter((country) => country.visaPolicy === policy);
+  return (await getAllCountries()).filter(
+    (country) => country.visaPolicy === policy,
+  );
 }
 
 export async function getAllPages() {
@@ -31,8 +33,11 @@ export const getPageByPath = cache(async (path: string) => {
 });
 
 export async function getPagesByPathPrefix(prefix: string) {
-  return pagesByPrefix(await getAllPages(), prefix).sort((a, b) =>
-    (a.metadata?.order ?? 99) - (b.metadata?.order ?? 99) || a.path.localeCompare(b.path, 'en'));
+  return pagesByPrefix(await getAllPages(), prefix).sort(
+    (a, b) =>
+      (a.metadata?.order ?? 99) - (b.metadata?.order ?? 99) ||
+      a.path.localeCompare(b.path, 'en'),
+  );
 }
 
 export async function getGlobalMenu(lang: string) {
