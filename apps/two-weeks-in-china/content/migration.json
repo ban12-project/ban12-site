@@ -1,5 +1,203 @@
 {
   "version": 1,
-  "status": "awaiting-export",
-  "reason": "The original Neon pages and countries have not been exported. Do not deploy or invent replacement content."
+  "status": "complete",
+  "exportedAt": "2026-09-06T10:34:33.763Z",
+  "sourceSha256": "6e02f8965aee3ee935449d64870a3abc264e21bbed3c9a28b3728210ec3fcac9",
+  "pageCount": 48,
+  "countryCount": 67,
+  "pages": [
+    {
+      "path": "/en/destinations/beijing-north",
+      "sha256": "76ee7b895d79ae58f973c4d5f28e58f5b05a12e6eeff44d151ce88751b86fa22"
+    },
+    {
+      "path": "/en/destinations/chengdu-west",
+      "sha256": "f29a2158db810bb788cdd35a4d3a71dea521f3a108a95cd7853eee4a31d57213"
+    },
+    {
+      "path": "/en/destinations/guangdong-gba",
+      "sha256": "03ff4fac77cecb81973b37acdc3b71ef17070405a06bc076b870db204a0da76c"
+    },
+    {
+      "path": "/en/destinations/shanghai-east",
+      "sha256": "3f88179619c7c0e9e0cd7a6caac8a2ad6d7488353cd737fc4a144e633d53f195"
+    },
+    {
+      "path": "/en/digital-survival/apps",
+      "sha256": "e78b1e74ac1a01b9e08ea0957515b88c04b7764a8fa52492152e14d0bb29f861"
+    },
+    {
+      "path": "/en/digital-survival/esim-vpn",
+      "sha256": "55970ad8da7595eafd3252c595a06665989d125f614ea74b8ceaa2631bd68153"
+    },
+    {
+      "path": "/en/digital-survival/payment-setup",
+      "sha256": "e5bdd4c658560c19a2d7fc7b4a284cfb733554023a3261a5daaac3f996b87a46"
+    },
+    {
+      "path": "/en/digital-survival/train-booking",
+      "sha256": "736be376943148e1faf4f1704cb8d71aa0e31ea69cac7262bf169b3e90876bee"
+    },
+    {
+      "path": "/en/entry-logistics/accommodation-registration",
+      "sha256": "56cfaa10aaaba9ca4dc9889b35d897c324710c6d67caf737cca1372c7eabb0b9"
+    },
+    {
+      "path": "/en/entry-logistics/arrival-card",
+      "sha256": "66d9487a5425318b52ed3fea08b4c6db3ab4f3aa48ee9549ff537665884e930c"
+    },
+    {
+      "path": "/en/entry-logistics/flights-tickets",
+      "sha256": "753a13e4f232ba7e5e0ddf8af88d3bd15e52f22aa5cbf42bd709f12bea7d6354"
+    },
+    {
+      "path": "/en/entry-logistics/health-declaration",
+      "sha256": "397167aabb3aea02d8510da8ce52d093c71736877733a22fce10765a69a20a6d"
+    },
+    {
+      "path": "/en/itineraries/family-trips",
+      "sha256": "826f3b4c68e33910ac61aa18ce2c63a6bd66d56d27938b7fd75db22d8d7bef78"
+    },
+    {
+      "path": "/en/itineraries/routes-240h",
+      "sha256": "79ac5e500990bd69a32f24b1ad9c18de09490e743e84edd04e3aa76084ea0cf5"
+    },
+    {
+      "path": "/en/itineraries/routes-72h",
+      "sha256": "19380619187831bcbf8ce5bb54c52fdbf4daa0eb18abcaa60ee3a50842ed2e8d"
+    },
+    {
+      "path": "/en/itineraries/train-tours",
+      "sha256": "e217e2f7a3e2aa9f8a1e9514a5f846ad8fa11093a596f064927235e1557c11e1"
+    },
+    {
+      "path": "/en/k-visa-business/business-entry-channels",
+      "sha256": "00e105e3861e2694c560325857290b817c7702dd6f6a06c31c031ff72b995d07"
+    },
+    {
+      "path": "/en/k-visa-business/business-travel",
+      "sha256": "449cafed4fa35bce7c0758f0c9d0545f6f7894c58534210c154b5df4fbdf4634"
+    },
+    {
+      "path": "/en/k-visa-business/k-visa",
+      "sha256": "998b529920b349935e73a6ca7acee86044f37332e1eca291e9d190c1e8b7aae0"
+    },
+    {
+      "path": "/en/k-visa-business/trade-fairs",
+      "sha256": "ca48ecf1f751e7b9875e34a7dabf6774afa0a963adc47750bdec5b842689b7b7"
+    },
+    {
+      "path": "/en/plan-trip/best-time",
+      "sha256": "48d0a49f6193f8755c611084a0cbdb37a7243bc4401bafaa25fd4fa3b169a282"
+    },
+    {
+      "path": "/en/plan-trip/cost",
+      "sha256": "8246b683f6245516655a626d4b45456dfd02b2fda4a7d810d9b6b4cc788d93de"
+    },
+    {
+      "path": "/en/plan-trip/safety",
+      "sha256": "5a9b428c319dcad67f3db5ae5db696d63a8338a2a2e1bf8d3a1497a2f9aa3a4d"
+    },
+    {
+      "path": "/en/plan-trip/visa-policy",
+      "sha256": "32b2f6039e7cdf00e67c746dbaa6222bb2fb6bc9183a2c78095b15bc7dec628b"
+    },
+    {
+      "path": "/zh/destinations/beijing-north",
+      "sha256": "84cd3cf9e7462339ac68a6c16fe28ce91b088ba6a65a1acfc544afe4b02c6418"
+    },
+    {
+      "path": "/zh/destinations/chengdu-west",
+      "sha256": "bb62042c84addcbf11b4da0bad25acd26a064197d191e8ecc36c726ce84d3d4d"
+    },
+    {
+      "path": "/zh/destinations/guangdong-gba",
+      "sha256": "1dd8fa431bbe0728079c0d29aa9cf9dd62d8b40f682377437c7e778512eb6a4b"
+    },
+    {
+      "path": "/zh/destinations/shanghai-east",
+      "sha256": "8f77fbf9b55bd0883883749ede08774fd0fcda1e3166a465ddd8aa0282122335"
+    },
+    {
+      "path": "/zh/digital-survival/apps",
+      "sha256": "2d72a777c2a3ef76ba70680a554948ce7532fbf125a38733f6f120bab276ff4c"
+    },
+    {
+      "path": "/zh/digital-survival/esim-vpn",
+      "sha256": "5537402acad189d1cb4dc5a5bac7f89334d6e516e9a374f62bf18852f689eff9"
+    },
+    {
+      "path": "/zh/digital-survival/payment-setup",
+      "sha256": "f1fcf3255e55c27d7ac07a4f864f22878846452f51a177cef65c19f20d9cdc68"
+    },
+    {
+      "path": "/zh/digital-survival/train-booking",
+      "sha256": "8f5e8313dd629f1701e24e085a065697ec305e3196abe215753f82ada53787f8"
+    },
+    {
+      "path": "/zh/entry-logistics/accommodation-registration",
+      "sha256": "9d4e6dacd3cf2c5c09a07f56b204b1e5f6b720a6bc4ed22212eb886d39ff51c5"
+    },
+    {
+      "path": "/zh/entry-logistics/arrival-card",
+      "sha256": "d70a7e4e7fc7128fa2a71a61c0d2aed0afa3386987495a8298c48a51a36ff415"
+    },
+    {
+      "path": "/zh/entry-logistics/flights-tickets",
+      "sha256": "3621ab908d4884251576d3801f80d38415370d530d549c412e5b468507a93593"
+    },
+    {
+      "path": "/zh/entry-logistics/health-declaration",
+      "sha256": "55a87299cc946a66164e3dbf3cbfd0f2d784282bfcdecf2eed3d0445ba6630d5"
+    },
+    {
+      "path": "/zh/itineraries/family-trips",
+      "sha256": "87cadb9e1566bd349ed056b0883f0017380f34ce8e65e2808de1882dac419fb0"
+    },
+    {
+      "path": "/zh/itineraries/routes-240h",
+      "sha256": "f03eb6aa96e217b74c734b0e9c4ee965ea99e11114c4b42e8697fa6579bf192f"
+    },
+    {
+      "path": "/zh/itineraries/routes-72h",
+      "sha256": "5b592433681204ede7352b6f8da134fbef7face8c80f2f067c7684f63cf310ea"
+    },
+    {
+      "path": "/zh/itineraries/train-tours",
+      "sha256": "0ca7f73cf6f3c981b454ce715804efbf1996b7afb80ee48499b8d527bcaa0700"
+    },
+    {
+      "path": "/zh/k-visa-business/business-entry-channels",
+      "sha256": "7806e5e62ada6339f5aa1d9b85589a11e08f188e23a1a1076670b35a608b969e"
+    },
+    {
+      "path": "/zh/k-visa-business/business-travel",
+      "sha256": "dddcc0a3c20d6f31984d48b197ffb109bcb68d5eb0a8931ccedd9e61e02ae24b"
+    },
+    {
+      "path": "/zh/k-visa-business/k-visa",
+      "sha256": "538c957b2cc453c413d4d02e094185d6e1602cba64aa80e8cc07ff0773b92946"
+    },
+    {
+      "path": "/zh/k-visa-business/trade-fairs",
+      "sha256": "908fa8de1bf19a750021c21655681b77949e2b286848256a45f7dbe1cfdd48ce"
+    },
+    {
+      "path": "/zh/plan-trip/best-time",
+      "sha256": "5aba8c3f8716064a16ab6f5c2ac5e90cea26eb698b6eaea89f58b882e26c499d"
+    },
+    {
+      "path": "/zh/plan-trip/cost",
+      "sha256": "1ef6ec47d311a076887009f4af95ef9a717b98ed3571d7bd372c3f8421631f18"
+    },
+    {
+      "path": "/zh/plan-trip/safety",
+      "sha256": "def31883ed151418e136c4dcbe2ca85867f0816f567109cc8eaea0b11ccdd9f0"
+    },
+    {
+      "path": "/zh/plan-trip/visa-policy",
+      "sha256": "4397ed19d0f6e71f116f0233723e1d9b1ec96d8685c4f349402b88c76e7bd2cd"
+    }
+  ],
+  "countriesSha256": "84521cfd017c9402f95519c263df3fd2aa113ea4350de19dc5561e473480154e"
 }
