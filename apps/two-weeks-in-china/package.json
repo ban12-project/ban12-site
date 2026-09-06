@@ -4,17 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm content:check && next build",
     "start": "next start",
     "lint": "biome check --write",
     "type-check": "next typegen && tsc --noEmit",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "npx tsx lib/db/migrate.ts",
-    "db:studio": "drizzle-kit studio",
-    "db:push": "drizzle-kit push",
-    "db:pull": "drizzle-kit pull",
-    "db:check": "drizzle-kit check",
-    "db:up": "drizzle-kit up"
+    "content:compile": "node -e \"require('node:fs').rmSync('.content-tools', { recursive: true, force: true })\" && tsc -p tsconfig.content-tools.json",
+    "test:content": "pnpm content:compile && node --test .content-tools/tests/*.test.js",
+    "content:check": "pnpm content:compile && node .content-tools/scripts/content/check.js"
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
@@ -24,13 +20,11 @@
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
-    "@neondatabase/serverless": "^1.1.0",
     "@next/mdx": "^16.3.4",
     "@next/third-parties": "catalog:",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
     "@types/mdx": "^2.0.13",
-    "drizzle-orm": "catalog:",
     "lucide-react": "catalog:",
     "next": "catalog:",
     "next-mdx-remote-client": "^2.1.10",
@@ -47,7 +41,6 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "babel-plugin-react-compiler": "catalog:",
-    "drizzle-kit": "catalog:",
     "postcss": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"

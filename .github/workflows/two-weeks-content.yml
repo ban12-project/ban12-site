@@ -1,0 +1,91 @@
+name: Two Weeks content
+
+on:
+  pull_request:
+    paths:
+      - 'apps/two-weeks-in-china/**'
+      - 'packages/ui/**'
+      - 'packages/i18n/**'
+      - 'packages/typescript-config/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/two-weeks-content.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'apps/two-weeks-in-china/**'
+      - 'packages/ui/**'
+      - 'packages/i18n/**'
+      - 'packages/typescript-config/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/two-weeks-content.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Seed obsolete output to verify clean compilation
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const dir = 'apps/two-weeks-in-china/.content-tools/tests';
+          fs.mkdirSync(dir, { recursive: true });
+          fs.writeFileSync(`${dir}/retired.test.js`, 'throw new Error("Stale compiled test was not removed");');
+          NODE
+      - name: Content regression tests
+        run: pnpm --filter two-weeks-in-china test:content
+      - name: Type check
+        run: pnpm --filter two-weeks-in-china type-check
+      - name: Validate real content and build without a database
+        run: env -u DATABASE_URL -u CONTENT_DATABASE_URL pnpm --filter two-weeks-in-china build
+
+  content-macos:
+    name: Content tests (macOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+      - name: Verify case-insensitive filesystem coverage
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const { tmpdir } = require('node:os');
+          const { join } = require('node:path');
+          const root = fs.mkdtempSync(join(tmpdir(), 'two-weeks-case-probe-'));
+          try {
+            fs.writeFileSync(join(root, 'fixture'), '', { flag: 'wx' });
+            const insensitive = fs.existsSync(join(root, 'Fixture'));
+            console.log(`Case-insensitive temp filesystem: ${insensitive}`);
+            if (!insensitive) throw new Error('This job must exercise a case-insensitive filesystem.');
+          } finally {
+            fs.rmSync(root, { recursive: true, force: true });
+          }
+          NODE
+      - run: pnpm install --frozen-lockfile
+      - name: Seed obsolete output to verify clean compilation
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const dir = 'apps/two-weeks-in-china/.content-tools/tests';
+          fs.mkdirSync(dir, { recursive: true });
+          fs.writeFileSync(`${dir}/retired.test.js`, 'throw new Error("Stale compiled test was not removed");');
+          NODE
+      - name: Content regression tests
+        run: pnpm --filter two-weeks-in-china test:content
+      - name: Type check
+        run: pnpm --filter two-weeks-in-china type-check

@@ -6,14 +6,11 @@ const nextConfig: NextConfig = {
   transpilePackages: ['@repo/ui', '@repo/i18n'],
   cacheComponents: true,
   reactCompiler: true,
+  outputFileTracingIncludes: { '/*': ['./content/**/*'] },
   experimental: {
     useTypeScriptCli: true,
   },
 };
 
-const withMDX = createMDX({
-  // Add markdown plugins here, as desired
-});
-
-// Merge MDX config with Next.js config
+const withMDX = createMDX({ extension: /\.(md|mdx)$/ });
 export default withMDX(nextConfig);

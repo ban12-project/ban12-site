@@ -1,6 +1,6 @@
 import { Link } from '@repo/i18n/client';
 import NextLink from 'next/link';
-import { getGlobalMenu } from '#/lib/db/queries';
+import { getGlobalMenu } from '#/lib/content/queries';
 import type { Messages } from '#/lib/i18n';
 
 export async function Footer({ dict, lang }: { dict: Messages; lang: string }) {

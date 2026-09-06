@@ -1,0 +1,605 @@
+[
+  {
+    "id": 1,
+    "name": "Albania",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:23:57.577429",
+    "updatedAt": "2026-01-30T07:47:50.664"
+  },
+  {
+    "id": 2,
+    "name": "Argentina",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:23:58.880417",
+    "updatedAt": "2026-01-30T07:47:52.246"
+  },
+  {
+    "id": 3,
+    "name": "Australia",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:23:59.119343",
+    "updatedAt": "2026-01-30T07:47:53.783"
+  },
+  {
+    "id": 4,
+    "name": "Austria",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:23:59.357199",
+    "updatedAt": "2026-01-30T07:47:54.146"
+  },
+  {
+    "id": 5,
+    "name": "Bangladesh",
+    "code": null,
+    "visaPolicy": "visa_required",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:23:59.594958",
+    "updatedAt": "2026-01-30T07:47:54.406"
+  },
+  {
+    "id": 6,
+    "name": "Belarus",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:23:59.847802",
+    "updatedAt": "2026-01-30T07:47:54.677"
+  },
+  {
+    "id": 7,
+    "name": "Belgium",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:00.085904",
+    "updatedAt": "2026-01-30T07:47:54.88"
+  },
+  {
+    "id": 8,
+    "name": "Bosnia and Herzegovina",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:00.406833",
+    "updatedAt": "2026-01-30T07:47:55.152"
+  },
+  {
+    "id": 9,
+    "name": "Brazil",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:00.649851",
+    "updatedAt": "2026-01-30T07:47:55.356"
+  },
+  {
+    "id": 10,
+    "name": "Brunei",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:00.922038",
+    "updatedAt": "2026-01-30T07:47:55.626"
+  },
+  {
+    "id": 11,
+    "name": "Bulgaria",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:01.159796",
+    "updatedAt": "2026-01-30T07:47:55.83"
+  },
+  {
+    "id": 12,
+    "name": "Canada",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:01.428993",
+    "updatedAt": "2026-01-30T07:47:56.207"
+  },
+  {
+    "id": 13,
+    "name": "Chile",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:01.666375",
+    "updatedAt": "2026-01-30T07:47:56.53"
+  },
+  {
+    "id": 14,
+    "name": "Croatia",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:01.904625",
+    "updatedAt": "2026-01-30T07:47:56.892"
+  },
+  {
+    "id": 15,
+    "name": "Cyprus",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:02.142339",
+    "updatedAt": "2026-01-30T07:47:57.097"
+  },
+  {
+    "id": 16,
+    "name": "Czech Republic",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:02.380686",
+    "updatedAt": "2026-01-30T07:47:57.369"
+  },
+  {
+    "id": 17,
+    "name": "Denmark",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:02.617093",
+    "updatedAt": "2026-01-30T07:47:57.598"
+  },
+  {
+    "id": 18,
+    "name": "Egypt",
+    "code": null,
+    "visaPolicy": "visa_required",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:02.964425",
+    "updatedAt": "2026-01-30T07:47:57.949"
+  },
+  {
+    "id": 19,
+    "name": "Estonia",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:03.201749",
+    "updatedAt": "2026-01-30T07:47:58.153"
+  },
+  {
+    "id": 20,
+    "name": "Finland",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:03.481779",
+    "updatedAt": "2026-01-30T07:47:58.46"
+  },
+  {
+    "id": 21,
+    "name": "France",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:03.721387",
+    "updatedAt": "2026-01-30T07:47:58.664"
+  },
+  {
+    "id": 22,
+    "name": "Georgia",
+    "code": null,
+    "visaPolicy": "visa_free_30",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:03.991318",
+    "updatedAt": "2026-01-30T07:47:58.971"
+  },
+  {
+    "id": 23,
+    "name": "Germany",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:04.229068",
+    "updatedAt": "2026-01-30T07:47:59.204"
+  },
+  {
+    "id": 24,
+    "name": "Greece",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:04.466716",
+    "updatedAt": "2026-01-30T07:47:59.586"
+  },
+  {
+    "id": 25,
+    "name": "Hungary",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:04.703387",
+    "updatedAt": "2026-01-30T07:47:59.791"
+  },
+  {
+    "id": 26,
+    "name": "Iceland",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:05.015783",
+    "updatedAt": "2026-01-30T07:48:00.062"
+  },
+  {
+    "id": 27,
+    "name": "India",
+    "code": null,
+    "visaPolicy": "visa_required",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:05.252234",
+    "updatedAt": "2026-01-30T07:48:00.265"
+  },
+  {
+    "id": 28,
+    "name": "Indonesia",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:05.488841",
+    "updatedAt": "2026-01-30T07:48:00.611"
+  },
+  {
+    "id": 29,
+    "name": "Ireland",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:05.72653",
+    "updatedAt": "2026-01-30T07:48:00.819"
+  },
+  {
+    "id": 30,
+    "name": "Italy",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:06.041133",
+    "updatedAt": "2026-01-30T07:48:01.121"
+  },
+  {
+    "id": 31,
+    "name": "Japan",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:06.279531",
+    "updatedAt": "2026-01-30T07:48:01.326"
+  },
+  {
+    "id": 32,
+    "name": "Latvia",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:06.551375",
+    "updatedAt": "2026-01-30T07:48:01.598"
+  },
+  {
+    "id": 33,
+    "name": "Lithuania",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:06.792044",
+    "updatedAt": "2026-01-30T07:48:01.803"
+  },
+  {
+    "id": 34,
+    "name": "Luxembourg",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:07.027216",
+    "updatedAt": "2026-01-30T07:48:02.146"
+  },
+  {
+    "id": 35,
+    "name": "Malaysia",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:07.262964",
+    "updatedAt": "2026-01-30T07:48:02.35"
+  },
+  {
+    "id": 36,
+    "name": "Malta",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:07.498896",
+    "updatedAt": "2026-01-30T07:48:02.621"
+  },
+  {
+    "id": 37,
+    "name": "Mexico",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:07.73481",
+    "updatedAt": "2026-01-30T07:48:02.825"
+  },
+  {
+    "id": 38,
+    "name": "Monaco",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:08.157282",
+    "updatedAt": "2026-01-30T07:48:03.099"
+  },
+  {
+    "id": 39,
+    "name": "Montenegro",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:08.393427",
+    "updatedAt": "2026-01-30T07:48:03.304"
+  },
+  {
+    "id": 40,
+    "name": "Netherlands",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:08.702338",
+    "updatedAt": "2026-01-30T07:48:03.575"
+  },
+  {
+    "id": 41,
+    "name": "New Zealand",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:08.940778",
+    "updatedAt": "2026-01-30T07:48:03.778"
+  },
+  {
+    "id": 42,
+    "name": "Nigeria",
+    "code": null,
+    "visaPolicy": "visa_required",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:09.179775",
+    "updatedAt": "2026-01-30T07:48:04.091"
+  },
+  {
+    "id": 43,
+    "name": "North Macedonia",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:09.416054",
+    "updatedAt": "2026-01-30T07:48:04.295"
+  },
+  {
+    "id": 44,
+    "name": "Norway",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:09.658683",
+    "updatedAt": "2026-01-30T07:48:04.604"
+  },
+  {
+    "id": 45,
+    "name": "Pakistan",
+    "code": null,
+    "visaPolicy": "visa_required",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:09.906869",
+    "updatedAt": "2026-01-30T07:48:04.809"
+  },
+  {
+    "id": 46,
+    "name": "Philippines",
+    "code": null,
+    "visaPolicy": "visa_required",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:10.144886",
+    "updatedAt": "2026-01-30T07:48:05.081"
+  },
+  {
+    "id": 47,
+    "name": "Poland",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:10.682987",
+    "updatedAt": "2026-01-30T07:48:05.493"
+  },
+  {
+    "id": 48,
+    "name": "Portugal",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:10.922454",
+    "updatedAt": "2026-01-30T07:48:05.831"
+  },
+  {
+    "id": 49,
+    "name": "Qatar",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:11.161796",
+    "updatedAt": "2026-01-30T07:48:06.034"
+  },
+  {
+    "id": 50,
+    "name": "Romania",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:11.398262",
+    "updatedAt": "2026-01-30T07:48:06.344"
+  },
+  {
+    "id": 51,
+    "name": "Russia",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:11.634947",
+    "updatedAt": "2026-01-30T07:48:06.552"
+  },
+  {
+    "id": 52,
+    "name": "Serbia",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:11.872805",
+    "updatedAt": "2026-01-30T07:48:06.855"
+  },
+  {
+    "id": 53,
+    "name": "Singapore",
+    "code": null,
+    "visaPolicy": "visa_free_30",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:12.109081",
+    "updatedAt": "2026-01-30T07:48:07.061"
+  },
+  {
+    "id": 54,
+    "name": "Slovakia",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:12.388905",
+    "updatedAt": "2026-01-30T07:48:07.367"
+  },
+  {
+    "id": 55,
+    "name": "Slovenia",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:12.625882",
+    "updatedAt": "2026-01-30T07:48:07.772"
+  },
+  {
+    "id": 56,
+    "name": "South Africa",
+    "code": null,
+    "visaPolicy": "visa_required",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:12.900427",
+    "updatedAt": "2026-01-30T07:48:08.084"
+  },
+  {
+    "id": 57,
+    "name": "South Korea",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:13.134696",
+    "updatedAt": "2026-01-30T07:48:08.29"
+  },
+  {
+    "id": 58,
+    "name": "Spain",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:13.413113",
+    "updatedAt": "2026-01-30T07:48:08.564"
+  },
+  {
+    "id": 59,
+    "name": "Sweden",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:13.650079",
+    "updatedAt": "2026-01-30T07:48:08.768"
+  },
+  {
+    "id": 60,
+    "name": "Switzerland",
+    "code": null,
+    "visaPolicy": "visa_free_15",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:13.92597",
+    "updatedAt": "2026-01-30T07:48:09.048"
+  },
+  {
+    "id": 61,
+    "name": "Thailand",
+    "code": null,
+    "visaPolicy": "visa_free_30",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:14.165662",
+    "updatedAt": "2026-01-30T07:48:09.253"
+  },
+  {
+    "id": 62,
+    "name": "Turkey",
+    "code": null,
+    "visaPolicy": "visa_required",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:14.438401",
+    "updatedAt": "2026-01-30T07:48:09.575"
+  },
+  {
+    "id": 63,
+    "name": "Ukraine",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:14.676425",
+    "updatedAt": "2026-01-30T07:48:09.789"
+  },
+  {
+    "id": 64,
+    "name": "United Arab Emirates",
+    "code": null,
+    "visaPolicy": "visa_free_30",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:14.947276",
+    "updatedAt": "2026-01-30T07:48:10.273"
+  },
+  {
+    "id": 65,
+    "name": "United Kingdom",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:15.183517",
+    "updatedAt": "2026-01-30T07:48:10.477"
+  },
+  {
+    "id": 66,
+    "name": "United States",
+    "code": null,
+    "visaPolicy": "transit_240h",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:15.461142",
+    "updatedAt": "2026-01-30T07:48:10.85"
+  },
+  {
+    "id": 67,
+    "name": "Vietnam",
+    "code": null,
+    "visaPolicy": "visa_required",
+    "policyDetails": null,
+    "createdAt": "2026-01-30T06:24:15.697883",
+    "updatedAt": "2026-01-30T07:48:11.053"
+  }
+]

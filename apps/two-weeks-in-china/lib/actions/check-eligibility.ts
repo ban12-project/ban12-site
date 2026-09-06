@@ -1,7 +1,7 @@
 'use server';
 
-import { getCountryByName } from '../db/queries';
-import type { VisaPolicyType } from '../db/schema/countries';
+import { getCountryByName } from '../content/queries';
+import type { VisaPolicyType } from '../content/types';
 
 export type EligibilityResult = {
   policy: VisaPolicyType;

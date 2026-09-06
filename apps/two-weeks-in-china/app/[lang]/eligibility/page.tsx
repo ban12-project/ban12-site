@@ -1,7 +1,7 @@
 import { Skeleton } from '@repo/ui/components/skeleton';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { getAllCountries } from '#/lib/db/queries';
+import { getAllCountries } from '#/lib/content/queries';
 import { getDictionary, type Locale, type Messages } from '#/lib/i18n';
 import { EligibilityForm } from '../components/eligibility-form';
 import { PolicyExplanation } from './components/policy-explanation';
