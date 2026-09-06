@@ -35,6 +35,25 @@ export function importSnapshot(
   destination: string,
 ): ContentSnapshot {
   const snapshot = validateSnapshot(value);
+  // Preflight the actual file and directory spellings before any filesystem I/O.
+  // On a case-insensitive volume, writing first would throw EEXIST or merge
+  // differently cased directories before readCatalog can diagnose the conflict.
+  // Fold only lookup keys; never change the original URLs or filenames.
+  const spellings = new Map<string, string>();
+  for (const page of snapshot.pages) {
+    const parts = `${page.path.slice(1)}.mdx`.split('/');
+    for (let length = 1; length <= parts.length; length++) {
+      const filename = parts.slice(0, length).join('/');
+      const key = filename.toLowerCase();
+      const previous = spellings.get(key);
+      if (previous !== undefined && previous !== filename) {
+        throw new Error(
+          `Case-colliding content paths: ${previous} and ${filename}`,
+        );
+      }
+      spellings.set(key, filename);
+    }
+  }
   const target = resolve(destination);
   const parent = dirname(target);
   mkdirSync(parent, { recursive: true });
