@@ -9,7 +9,7 @@
     "lint": "biome check --write",
     "type-check": "next typegen && tsc --noEmit",
     "content:compile": "tsc -p tsconfig.content-tools.json",
-    "test:content": "pnpm content:compile && node --test .content-tools/tests/content.test.js",
+    "test:content": "pnpm content:compile && node --test .content-tools/tests/*.test.js",
     "content:check": "pnpm content:compile && node .content-tools/scripts/content/check.js",
     "content:export": "pnpm content:compile && node .content-tools/scripts/content/export.js",
     "content:import": "pnpm content:compile && node .content-tools/scripts/content/import.js",

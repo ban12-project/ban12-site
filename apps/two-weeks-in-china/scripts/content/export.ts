@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { validateSnapshot } from '../../lib/content/core';
+import { describePsqlFailure } from './psql-errors';
 
 const QUERY = `
 BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY;
@@ -57,6 +58,8 @@ try {
   const env: NodeJS.ProcessEnv = {
     ...inherited,
     NODE_ENV: process.env.NODE_ENV ?? 'production',
+    // Stable client diagnostics only; database text still uses UTF-8 below.
+    LC_ALL: 'C',
     PGHOST: url.hostname,
     PGPORT: url.port || '5432',
     PGDATABASE: decodeURIComponent(url.pathname.slice(1)),
@@ -74,6 +77,7 @@ try {
     'psql',
     [
       '--no-psqlrc',
+      '--no-password',
       '--quiet',
       '--tuples-only',
       '--no-align',
@@ -88,10 +92,8 @@ try {
     },
   );
   if (result.error || result.status !== 0) {
-    // psql stderr can include connection information. Do not echo it.
-    throw new Error(
-      'Read-only export failed. Check psql 16+, connectivity and CONTENT_DATABASE_URL; no content was written.',
-    );
+    // Classify stderr locally; never print credentials or raw database output.
+    throw new Error(`${describePsqlFailure(result)} No content was written.`);
   }
   const snapshot = validateSnapshot(JSON.parse(result.stdout.trim()));
   writeFileSync(resolve(output), `${JSON.stringify(snapshot, null, 2)}\n`, {
