@@ -11,13 +11,19 @@ This app uses repository Markdown/MDX and static JSON. This local guidance repla
 any older root guidance describing this app as Drizzle/Postgres-backed. Do not add
 a database driver, ORM, database URL requirement, CMS, or runtime GitHub fetch.
 
-## Initial migration
+## Imported baseline
 
-Do not mark migration complete without the real `pages` and `countries` export.
-Use the scripts documented in README.md and preserve every original URL, body,
-ID, nullable field, metadata field and timestamp. Existing MDX remains `.mdx`.
+The original articles and country records are committed under `content/`. Preserve
+original URLs, bodies, IDs, nullable fields, metadata and timestamps unless making
+an explicit reviewed editorial change. Existing MDX remains `.mdx`.
 Never manufacture country-policy rows or replacement articles to make builds pass.
-Do not delete the remote database as part of this code change.
+Keep `content/migration.json`; the loader still checks this historical URL baseline.
+Do not delete the remote database as part of a code cleanup.
+
+The one-time migration CLIs have been retired. Tests must use synthetic temporary
+Markdown/JSON fixtures, not import deleted tools or require Neon/psql. `content:compile`
+cleans generated `.content-tools/` before compiling. Keep content validation and the
+Linux/macOS CI coverage; do not disable tests to work around missing migration files.
 
 ## Agent article workflow
 
@@ -42,6 +48,6 @@ MDX, hidden tool instructions, secrets, or remote executable imports.
 
 Country data is in `content/countries.json`. Preserve IDs and exact names/codes.
 Allowed `visaPolicy` values are defined in `lib/content/types.ts`. Updating policy
-is a separately sourced editorial change, not part of the mechanical migration.
-The importer never replaces files after editorial edits. Keep raw exports outside
-the repository and do not modify historical checksums to hide migration failures.
+is a separately sourced editorial change, not mechanical migration maintenance.
+Keep raw exports outside the repository and do not modify historical checksums to
+hide migration failures. Historical migration tooling is available in Git history.
