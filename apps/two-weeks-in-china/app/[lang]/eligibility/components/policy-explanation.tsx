@@ -1,5 +1,5 @@
 import { AlertTriangle, Plane } from 'lucide-react';
-import { getCountriesByPolicy } from '#/lib/db/queries';
+import { getCountriesByPolicy } from '#/lib/content/queries';
 import type { Messages } from '#/lib/i18n';
 
 export async function PolicyExplanation({ dict }: { dict: Messages }) {

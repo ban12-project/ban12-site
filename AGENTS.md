@@ -13,7 +13,7 @@ ban12-site/
 │   ├── web/                 # ban12.com Next.js app
 │   ├── shortcuts/           # shortcuts.ban12.com Next.js app
 │   ├── toys/                # tools/toys Next.js app, includes Rust/WASM builds
-│   ├── two-weeks-in-china/  # Next.js app with Drizzle/Postgres
+│   ├── two-weeks-in-china/  # Next.js app with repository Markdown/MDX and JSON
 │   └── video-worker/        # Node/TypeScript worker for video processing
 ├── packages/
 │   ├── ui/                  # Shared React components, hooks, and global CSS
@@ -83,7 +83,7 @@ Examples of workspace names are `web`, `shortcuts`, `toys`,
   `wasm-pack build ../../crates/calculate-hash` and
   `wasm-pack build ../../crates/similar-wasm-wrapper`.
 - `apps/web`: also serves the Markdown blog at `/blog` and `/blog/posts/[slug]`.
-- `apps/two-weeks-in-china`: Next.js app with MDX and Drizzle/Postgres.
+- `apps/two-weeks-in-china`: Next.js app with repository Markdown/MDX and JSON; no runtime database.
 - `apps/video-worker`: Node/TypeScript worker. Use `pnpm --filter video-worker build` for `tsc`.
 
 ## TypeScript, Imports, and Shared Packages
@@ -114,7 +114,7 @@ Examples of workspace names are `web`, `shortcuts`, `toys`,
 
 ## Database and Migrations
 
-- Drizzle is used in `apps/web`, `apps/shortcuts`, and `apps/two-weeks-in-china`.
+- Drizzle is used in `apps/web` and `apps/shortcuts`. `two-weeks-in-china` uses repository files.
 - Schema files live under each app's `lib/db/schema.ts` or `lib/db/schema`.
 - Migration files live under each app's `lib/db/migrations`.
 - Use the app-local scripts for database work:
@@ -123,7 +123,7 @@ Examples of workspace names are `web`, `shortcuts`, `toys`,
 pnpm --filter web db:generate
 pnpm --filter web db:migrate
 pnpm --filter shortcuts db:check
-pnpm --filter two-weeks-in-china db:studio
+pnpm --filter two-weeks-in-china content:check
 ```
 
 - Do not hand-edit generated migration snapshots unless you are deliberately repairing migration metadata and have

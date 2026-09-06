@@ -5,7 +5,7 @@ import {
   CardTitle,
 } from '@repo/ui/components/card';
 import { CheckCircle2 } from 'lucide-react';
-import { getAllCountries } from '#/lib/db/queries';
+import { getAllCountries } from '#/lib/content/queries';
 import type { Messages } from '#/lib/i18n';
 import { EligibilityForm } from './eligibility-form';
 

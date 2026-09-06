@@ -1,7 +1,7 @@
 import { Link } from '@repo/i18n/client';
 import { Button } from '@repo/ui/components/button';
 import { DesktopNav, MobileNav } from '#/components/global-menu';
-import { getGlobalMenu } from '#/lib/db/queries';
+import { getGlobalMenu } from '#/lib/content/queries';
 import type { Messages } from '#/lib/i18n';
 
 function Logo() {

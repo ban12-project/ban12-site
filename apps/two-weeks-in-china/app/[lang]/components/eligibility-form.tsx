@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 import { Fragment, useState, useTransition } from 'react';
 import { checkEligibility, type EligibilityResult } from '#/lib/actions';
-import type { Country } from '#/lib/db/schema/countries';
+import type { Country } from '#/lib/content/types';
 import type { Messages } from '#/lib/i18n';
 
 interface Props extends React.ComponentProps<typeof Card> {
