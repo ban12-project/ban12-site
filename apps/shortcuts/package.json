@@ -19,11 +19,11 @@
     "db:up": "drizzle-kit up"
   },
   "dependencies": {
+    "@ai-sdk/google": "catalog:",
     "@aws-sdk/client-s3": "^3.1048.0",
     "@aws-sdk/s3-request-presigner": "^3.1048.0",
     "@better-auth/drizzle-adapter": "catalog:",
     "@better-auth/passkey": "catalog:",
-    "@google/genai": "catalog:",
     "@gsap/react": "catalog:",
     "@hookform/resolvers": "catalog:",
     "@next/third-parties": "catalog:",
@@ -31,6 +31,7 @@
     "@repo/ui": "workspace:*",
     "@sentry/nextjs": "catalog:",
     "@upstash/redis": "catalog:",
+    "ai": "catalog:",
     "better-auth": "catalog:",
     "drizzle-orm": "catalog:",
     "gsap": "catalog:",

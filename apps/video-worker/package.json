@@ -5,15 +5,19 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "test": "pnpm build && node --import tsx --experimental-test-module-mocks --test tests/*.test.mts",
     "start": "node --env-file-if-exists=.env dist/index.js",
     "dev": "node --env-file-if-exists=.env --import tsx --watch src/index.ts"
   },
   "author": "google gemini",
   "license": "MIT",
   "dependencies": {
-    "@google/genai": "catalog:",
+    "@ai-sdk/google": "catalog:",
+    "ai": "catalog:",
     "inngest": "^4.4.0",
-    "postgres": "^3.4.9"
+    "postgres": "^3.4.9",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.4",

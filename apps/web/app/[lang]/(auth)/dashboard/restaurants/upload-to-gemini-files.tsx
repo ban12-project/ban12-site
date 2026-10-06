@@ -1,4 +1,3 @@
-import { GoogleGenAI } from '@google/genai';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@repo/ui/components/button';
 import {
@@ -49,36 +48,38 @@ export default function UploadToGeminiFiles({
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
       const { key, file } = values;
-      await uploadToGeminiFiles(key, file);
-      setOpen(false);
+      const toastId = toast.loading('Uploading video');
+      try {
+        await uploadToGeminiFiles(key, file);
+        toast.success('Video processing started', { id: toastId });
+        setOpen(false);
+      } catch {
+        toast.error('Upload or processing failed', { id: toastId });
+      }
     });
   }
 
   const [pending, startTransition] = React.useTransition();
 
   const uploadToGeminiFiles = async (apiKey: string, file: File) => {
-    const ai = new GoogleGenAI({ apiKey });
-
-    const myfile = await ai.files.upload({
-      file,
-      config: { mimeType: 'video/mp4' },
+    const [{ createGoogle }, { uploadFile }] = await Promise.all([
+      import('@ai-sdk/google'),
+      import('ai'),
+    ]);
+    const google = createGoogle({ apiKey });
+    const { providerReference, mediaType } = await uploadFile({
+      api: google.files(),
+      data: new Uint8Array(await file.arrayBuffer()),
+      mediaType: file.type || 'video/mp4',
+      providerOptions: { google: { displayName: file.name } },
     });
+    const uri = providerReference.google;
+    if (!uri || !mediaType) throw new Error('Upload failed');
 
-    if (!myfile.uri || !myfile.mimeType) return toast.error('Upload failed');
-
-    toast.promise(
-      startVideoUnderstanding({
-        part: { uri: myfile.uri, mimeType: myfile.mimeType },
-        id: row.id,
-      }),
-      {
-        loading: 'Processing',
-        success: () => {
-          return `${row.id} already start processing`;
-        },
-        error: 'Error',
-      },
-    );
+    await startVideoUnderstanding({
+      part: { uri, mimeType: mediaType },
+      id: row.id,
+    });
   };
 
   return (

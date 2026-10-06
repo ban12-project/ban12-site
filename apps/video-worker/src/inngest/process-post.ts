@@ -2,7 +2,8 @@ import { createWriteStream } from "node:fs";
 import fs from "node:fs/promises";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
-import { GoogleGenAI } from "@google/genai";
+import { createGoogle } from "@ai-sdk/google";
+import { uploadFile } from "ai";
 
 import { sql } from "../db";
 import { inngest } from "./client";
@@ -87,26 +88,30 @@ async function bilibiliHandler({ bvid, restaurantId }: { bvid: string; restauran
   // biome-ignore lint/suspicious/noExplicitAny: nodejs ReadableStream
   await pipeline(Readable.fromWeb(fileResponse.body as any), createWriteStream(filePath));
 
-  // Upload the video file to Google Gemini files
-  const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
-  const myfile = await ai.files.upload({
-    file: filePath,
-    config: { mimeType: "video/mp4" },
-  });
-  if (!myfile.uri || !myfile.mimeType) {
-    throw new Error("Upload failed: No URI or MIME type returned");
+  try {
+    if (!process.env.GOOGLE_API_KEY) throw new Error("Google Gemini API key not set");
+    const google = createGoogle({ apiKey: process.env.GOOGLE_API_KEY });
+    // Google uploads wait until the video is ready for generation.
+    const { providerReference, mediaType } = await uploadFile({
+      api: google.files(),
+      data: await fs.readFile(filePath),
+      mediaType: "video/mp4",
+      providerOptions: { google: { displayName: fileName } },
+    });
+    const uri = providerReference.google;
+    if (!uri || !mediaType) {
+      throw new Error("Upload failed: No URI or MIME type returned");
+    }
+
+    await inngest.send(
+      videoUnderstanding.create({
+        id: restaurantId,
+        part: { uri, mimeType: mediaType },
+      }),
+    );
+  } finally {
+    await fs.unlink(filePath);
   }
-
-  // send event to inngest for further processing
-  await inngest.send(
-    videoUnderstanding.create({
-      id: restaurantId,
-      part: { uri: myfile.uri, mimeType: myfile.mimeType },
-    }),
-  );
-
-  // Clean up the temporary file
-  await fs.unlink(filePath);
 
   return {
     success: true,

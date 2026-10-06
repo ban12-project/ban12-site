@@ -3,9 +3,9 @@ packages:
   - packages/*
 
 catalog:
+  "@ai-sdk/google": ^4.0.88
   "@better-auth/drizzle-adapter": ^1.6.11
   "@better-auth/passkey": ^1.6.11
-  "@google/genai": ^2.3.0
   "@gsap/react": ^2.1.2
   "@hookform/resolvers": ^5.2.2
   "@next/bundle-analyzer": ^16.3.4
@@ -23,6 +23,7 @@ catalog:
   "@types/react": ^19.2.18
   "@types/react-dom": ^19.2.7
   "@upstash/redis": ^1.38.0
+  ai: ^7.0.128
   babel-plugin-react-compiler: ^1.0.0
   better-auth: ^1.6.22
   drizzle-kit: ^0.31.10
@@ -51,7 +52,6 @@ catalog:
   zod: ^4.4.3
 
 onlyBuiltDependencies:
-  - "@google/genai"
   - "@prisma/client"
   - "@sentry/cli"
   - "@tailwindcss/oxide"

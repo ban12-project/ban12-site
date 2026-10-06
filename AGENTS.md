@@ -38,7 +38,7 @@ Rust crates are managed by the root `Cargo.toml` workspace.
 ## Package Manager and Runtime
 
 - Use `pnpm`, not npm or yarn.
-- Node must satisfy `>=20`; pnpm must satisfy `>=10`.
+- Node must satisfy `>=22`; pnpm must satisfy `>=10`.
 - The repo is pinned to `pnpm@10.28.0` in `package.json`.
 - Prefer workspace-aware commands from the repo root:
 
