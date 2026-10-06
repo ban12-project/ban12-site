@@ -20,19 +20,24 @@ export default async function PostPage(
   const content = await markdownToHtml(post.content ?? '');
 
   return (
-    <div className="xl:max-w-5/6 mx-auto grid grid-cols-1 xl:grid-cols-[22rem_2.5rem_auto] xl:grid-rows-[1fr_auto]">
+    <div
+      lang={post.lang}
+      className="xl:max-w-5/6 mx-auto grid grid-cols-1 xl:grid-cols-[22rem_2.5rem_auto] xl:grid-rows-[1fr_auto]"
+    >
       <div className="col-start-2 row-span-2 border-l border-r border-gray-950/5 max-xl:hidden dark:border-white/10" />
 
       <div className="max-xl:max-w-(--breakpoint-md) max-xl:mx-auto max-xl:w-full">
         <div className="mt-16 px-4 font-mono text-sm/7 font-medium uppercase tracking-widest text-gray-500 lg:px-2">
           <ViewTransition name={`date-${post.slug}`}>
-            <time dateTime={post.date}>{formatDate(post.date)}</time>
+            <time lang="en" dateTime={post.date}>
+              {formatDate(post.date)}
+            </time>
           </ViewTransition>
         </div>
 
         <GridContainer className="mb-6 px-4 lg:px-2 xl:mb-16">
           <ViewTransition name={`title-${post.slug}`}>
-            <h1 className="max-w-(--breakpoint-md) inline-block text-pretty text-[2.5rem]/10 tracking-tight text-gray-950 max-lg:font-medium lg:text-6xl dark:text-gray-200">
+            <h1 className="max-w-(--breakpoint-md) inline-block text-pretty text-[2.5rem]/10 [&:lang(en)]:tracking-tight text-gray-950 max-lg:font-medium lg:text-6xl dark:text-gray-200">
               {post.title}
             </h1>
           </ViewTransition>

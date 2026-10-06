@@ -113,7 +113,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     // Override default elements
     h1: ({ children }) => (
-      <h1 className="text-4xl font-bold tracking-tight text-dark mb-4">
+      <h1 className="text-4xl font-bold [&:lang(en)]:tracking-tight text-dark mb-4">
         {children}
       </h1>
     ),

@@ -1,7 +1,7 @@
 @import "@repo/ui/globals.css";
 
 @theme inline {
-  --font-sans: var(--font-space-grotesk);
+  --font-sans: var(--font-space-grotesk), var(--font-system-sans);
   --color-dark: #191a23;
   --color-light: #ffffff;
   --color-grey: #f3f3f3;

@@ -8,6 +8,7 @@ export type Author = {
 };
 
 export type Post = {
+  lang: string;
   slug: string;
   title: string;
   date: string;
@@ -29,7 +30,8 @@ const posts = fs
     const fileContents = fs.readFileSync(join(postsDirectory, file), 'utf8');
     const { data, content } = matter(fileContents);
 
-    return { ...data, slug, content } as Post;
+    // Existing articles are Chinese regardless of the surrounding UI locale.
+    return { ...data, slug, content, lang: data.lang ?? 'zh-CN' } as Post;
   })
   .toSorted((post1, post2) => (post1.date > post2.date ? -1 : 1));
 

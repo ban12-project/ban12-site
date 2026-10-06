@@ -7,7 +7,7 @@ import type { Messages } from '#/lib/i18n';
 function Logo() {
   return (
     <Link href="/" className="relative z-10 group">
-      <div className="text-2xl font-bold tracking-tighter flex items-center gap-2">
+      <div className="text-2xl font-bold [&:lang(en)]:tracking-tighter flex items-center gap-2">
         <span className="bg-primary text-dark px-2 py-1 rounded-lg border-2 border-dark translate-y-0 group-hover:-translate-y-1 transition-transform duration-300">
           <span className="md:hidden">2</span>
           <span className="hidden md:inline">Two</span>
