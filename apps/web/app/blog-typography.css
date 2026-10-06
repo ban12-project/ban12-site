@@ -68,7 +68,9 @@
   h1:where(:not(.not-prose, .not-prose *)) {
     font-size: var(--text-xl);
     line-height: calc(28 / 18);
-    letter-spacing: -0.025em;
+    &:lang(en) {
+      letter-spacing: -0.025em;
+    }
     color: var(--prose-code-color);
     font-weight: var(--font-weight-semibold);
     margin-top: calc(var(--spacing) * 24);
@@ -77,7 +79,9 @@
   h2:where(:not(.not-prose, .not-prose *)) {
     font-size: var(--text-lg);
     line-height: calc(28 / 18);
-    letter-spacing: -0.025em;
+    &:lang(en) {
+      letter-spacing: -0.025em;
+    }
     color: var(--prose-code-color);
     font-weight: var(--font-weight-semibold);
     margin-top: calc(var(--spacing) * 20);
@@ -89,7 +93,9 @@
     font-weight: var(--font-weight-medium);
     font-family: var(--font-mono);
     font-variant-ligatures: none;
-    letter-spacing: 0.1em;
+    &:lang(en) {
+      letter-spacing: 0.1em;
+    }
     color: var(--prose-color);
     text-transform: uppercase;
   }

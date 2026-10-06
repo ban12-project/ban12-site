@@ -10,7 +10,7 @@ export function HeroSection({ dict }: { dict: Messages }) {
         </span>
       </div>
 
-      <h1 className="text-6xl md:text-8xl font-medium tracking-tight text-dark leading-[1.1]">
+      <h1 className="text-6xl md:text-8xl font-medium [&:lang(en)]:tracking-tight text-dark leading-[1.1]">
         {dict.hero.title_line1}
         <br />
         <span className="bg-primary px-2 leading-normal box-decoration-clone">

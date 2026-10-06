@@ -75,7 +75,7 @@ export default async function Page({
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold tracking-tight text-dark mb-2">
+        <h1 className="text-4xl font-bold [&:lang(en)]:tracking-tight text-dark mb-2">
           {page.title}
         </h1>
         {page.subtitle && (

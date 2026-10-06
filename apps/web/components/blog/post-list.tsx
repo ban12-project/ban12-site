@@ -10,7 +10,7 @@ import GridContainer from './grid-container';
 export default function PostList({ posts }: { posts: readonly Post[] }) {
   return (
     <div className="xl:max-w-5/6 relative mx-auto my-12 grid grid-cols-1 max-lg:max-w-2xl lg:my-24 lg:grid-cols-[24rem_2.5rem_minmax(0,1fr)]">
-      {posts.map(({ date, author, slug, title, excerpt }, index) => (
+      {posts.map(({ date, author, slug, title, excerpt, lang }, index) => (
         <Fragment key={slug}>
           <GridContainer className="col-span-3 grid grid-cols-subgrid divide-x divide-gray-950/5 dark:divide-white/10">
             <div className="space-y-3 px-2 max-lg:hidden">
@@ -24,7 +24,7 @@ export default function PostList({ posts }: { posts: readonly Post[] }) {
               </ViewTransition>
             </div>
             <div className="max-lg:hidden" />
-            <div className="text-md px-2">
+            <div className="text-md px-2" lang={lang}>
               <div className="max-w-(--container-2xl)">
                 <div className="mb-4 font-mono text-sm/6 font-medium uppercase tracking-widest text-gray-500 lg:hidden">
                   {formatDate(date)}
@@ -39,6 +39,7 @@ export default function PostList({ posts }: { posts: readonly Post[] }) {
                   {excerpt}
                 </div>
                 <Link
+                  lang="en"
                   href={`/blog/posts/${slug}`}
                   className="mt-4 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 dark:text-orange-400"
                 >

@@ -1,5 +1,10 @@
 @import "@repo/ui/globals.css";
 
+@theme inline {
+  --font-sans:
+    var(--font-inter, var(--font-system-sans)), var(--font-system-sans);
+}
+
 @theme {
   --animate-slide-down-and-fade: slideDownAndFade 400ms
     cubic-bezier(0.16, 1, 0.3, 1);

@@ -13,7 +13,7 @@ export async function Footer({ dict, lang }: { dict: Messages; lang: string }) {
           {/* Brand & Description */}
           <div className="lg:w-1/4 space-y-8">
             <Link href="/" className="block">
-              <h2 className="text-3xl font-bold tracking-tighter">
+              <h2 className="text-3xl font-bold [&:lang(en)]:tracking-tighter">
                 Two Weeks in <span className="text-primary">China</span>
               </h2>
             </Link>

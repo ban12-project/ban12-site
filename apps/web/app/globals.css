@@ -1,6 +1,10 @@
 @import "@repo/ui/globals.css";
 @import "./blog-typography.css" layer(components);
 
+@theme inline {
+  --font-sans: var(--font-inter), var(--font-system-sans);
+}
+
 @layer base {
   :root {
     --duration-exit: 150ms;

@@ -6,14 +6,13 @@ import '#/app/globals.css';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { LocaleProvider } from '@repo/i18n/client';
 import { Toaster } from '@repo/ui/components/sonner';
-import { cn } from '@repo/ui/lib/utils';
 import { ThemeProvider } from 'next-themes';
 import { WebVitals } from '#/components/web-vitals';
 import { getDictionary, i18n, type Locale } from '#/lib/i18n';
 
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-sans',
+  variable: '--font-inter',
   display: 'swap',
 });
 
@@ -95,13 +94,8 @@ export default async function RootLayout({
   const { lang } = await params;
 
   return (
-    <html suppressHydrationWarning lang={lang}>
-      <body
-        className={cn(
-          'min-h-screen bg-background font-sans antialiased',
-          inter.variable,
-        )}
-      >
+    <html suppressHydrationWarning lang={lang} className={inter.variable}>
+      <body className="min-h-screen bg-background font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

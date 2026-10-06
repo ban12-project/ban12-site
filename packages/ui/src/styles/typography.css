@@ -1,0 +1,67 @@
+/* Shared by every web app. See https://skywt.cn/blog/apple-typography-details. */
+:root {
+  --font-cjk-sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC";
+  --font-system-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", var(--font-cjk-sans), sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+@theme inline {
+  --font-sans: var(--font-system-sans);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    /* Adds visual spacing without changing stored text, copying, or search. */
+    text-autospace: normal;
+  }
+
+  :where(:lang(zh)) {
+    line-break: strict;
+    /* Keep fullwidth punctuation; trim only at line starts and adjacent punctuation. */
+    text-spacing-trim: trim-start;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    text-wrap: balance;
+  }
+
+  :where(p) {
+    text-wrap: pretty;
+  }
+
+  /* Literal values and editors retain predictable spacing and wrapping.
+     Use data-typography="literal" for a custom editor or machine-readable output. */
+  :where(
+    pre,
+    code,
+    kbd,
+    samp,
+    input,
+    textarea,
+    select,
+    [contenteditable]:not([contenteditable="false"]),
+    .font-mono,
+    [data-typography="literal"]
+  ),
+  :where(
+      pre,
+      code,
+      kbd,
+      samp,
+      input,
+      textarea,
+      select,
+      [contenteditable]:not([contenteditable="false"]),
+      .font-mono,
+      [data-typography="literal"]
+    )
+    * {
+    text-autospace: no-autospace;
+    text-spacing-trim: space-all;
+    line-break: auto;
+    text-wrap-style: auto;
+  }
+}
