@@ -1,0 +1,20 @@
+@import "@repo/ui/globals.css";
+
+@theme inline {
+  --font-sans: var(--font-space-grotesk);
+  --color-dark: #191a23;
+  --color-light: #ffffff;
+  --color-grey: #f3f3f3;
+}
+
+:root {
+  /* Override Primary to Green */
+  --primary: oklch(0.92 0.2 130.22);
+  --primary-foreground: oklch(0.22 0.02 279.92);
+}
+
+.dark {
+  /* Ensure Green Primary in Dark Mode */
+  --primary: oklch(0.92 0.2 130.22);
+  --primary-foreground: oklch(0.22 0.02 279.92);
+}

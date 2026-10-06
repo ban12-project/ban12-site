@@ -1,12 +1,13 @@
+import { cn } from '@repo/ui/lib/utils';
 import coordtransform from 'coordtransform';
 import { ExternalLink, Star } from 'lucide-react';
 import { headers } from 'next/headers';
-import { Suspense } from 'react';
-
+import { Suspense, ViewTransition } from 'react';
 import type { Messages } from '#/lib/i18n';
 import { generateMapLink } from '#/lib/map-links';
 
 import type { RestaurantWithPosts } from '../actions';
+import { restaurantTitleTransitionName } from '../transition-names';
 
 type Restaurant = WithNonNullableKey<
   NonNullable<RestaurantWithPosts['restaurant']>,
@@ -14,86 +15,244 @@ type Restaurant = WithNonNullableKey<
 >;
 
 export default function RestaurantDetail({
+  messages,
   restaurant,
   posts,
+  surface = 'page',
 }: {
   restaurant: Restaurant;
   posts: RestaurantWithPosts['posts'];
   messages: Messages;
+  surface?: 'page' | 'drawer';
 }) {
+  const isDrawer = surface === 'drawer';
+  const summary = restaurant.ai_summarize;
+  const price = cleanText(summary.price);
+  const waitingTime = cleanText(summary.waitingTime);
+  const dishes = cleanText(summary.dishes);
+  const service = cleanText(summary.service);
+  const precautions = (summary.precautions ?? [])
+    .map(cleanText)
+    .filter(Boolean);
+  const precautionKeyCounts = new Map<string, number>();
+  const precautionItems = precautions.map((precaution) => {
+    const count = (precautionKeyCounts.get(precaution) ?? 0) + 1;
+    precautionKeyCounts.set(precaution, count);
+    return {
+      key: `${precaution}-${count}`,
+      text: precaution,
+    };
+  });
+  const t = messages.followUp.detail;
+
   return (
-    <div className="grid gap-8">
-      <section className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
-        <div className="flex flex-wrap gap-4">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            {restaurant.ai_summarize.restaurantName}
-          </h1>
-          <div className="flex items-center">
-            <span className="mr-2 text-yellow-500">
-              <Star className="h-5 w-5 fill-current" />
-            </span>
-            <span className="text-gray-700 dark:text-gray-200">
-              {restaurant.ai_summarize.rating || 'N/A'}
-            </span>
+    <div className={cn('grid', isDrawer ? 'gap-4' : 'gap-6')}>
+      <section className={cn('border-b', isDrawer ? 'pb-4' : 'pb-5')}>
+        <div
+          className={cn(
+            'flex flex-wrap items-center gap-3',
+            isDrawer && 'gap-2 pr-9',
+          )}
+        >
+          <ViewTransition
+            name={restaurantTitleTransitionName(restaurant.id)}
+            share="text-morph"
+            default="none"
+          >
+            <h1
+              className={cn(
+                'min-w-0 flex-1 font-semibold tracking-normal text-foreground',
+                isDrawer ? 'text-xl leading-7' : 'text-2xl',
+              )}
+            >
+              {summary.restaurantName}
+            </h1>
+          </ViewTransition>
+          <div
+            className={cn(
+              'inline-flex shrink-0 items-center gap-1 rounded-full border border-white/25 bg-background/60 px-2.5 py-1 text-sm backdrop-blur-xl dark:border-white/10',
+              isDrawer && 'mt-0.5',
+            )}
+          >
+            <Star className="size-4 fill-amber-400 text-amber-400" />
+            <span className="text-foreground">{summary.rating || 'N/A'}</span>
           </div>
           {posts && (
             <a
               href={`https://www.bilibili.com/video/${posts.metadata.bvid}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-auto block w-full self-end md:w-fit"
+              className={cn(
+                'block w-full text-sm text-muted-foreground underline-offset-4 hover:underline md:w-fit',
+                isDrawer && 'line-clamp-2 md:w-full',
+              )}
             >
               {posts.metadata.title}
               <ExternalLink className="ml-1 inline size-3" />
             </a>
           )}
         </div>
-        <div className="mt-2 items-center space-x-2 text-sm text-gray-600 md:flex dark:text-gray-300">
-          <p>{restaurant.ai_summarize.restaurantAddress}</p>
-          <Suspense fallback={<span>Loading map links...</span>}>
-            <JumpToThirdPartyMap restaurant={restaurant} />
-          </Suspense>
+        <div
+          className={cn(
+            'mt-3 gap-2 text-sm text-muted-foreground',
+            isDrawer
+              ? 'flex flex-col'
+              : 'items-center space-y-2 md:flex md:space-y-0',
+          )}
+        >
+          <p className="min-w-0 flex-1">{summary.restaurantAddress}</p>
+          <div className="flex flex-wrap gap-x-3 gap-y-1">
+            <Suspense fallback={<span>{t.loadingMapLinks}</span>}>
+              <JumpToThirdPartyMap restaurant={restaurant} />
+            </Suspense>
+          </div>
         </div>
-        <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
-          <span className="rounded-2xl bg-gray-100 px-3 py-1 text-sm text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-            Price: {restaurant.ai_summarize.price || 'N/A'}
-          </span>
-          <span className="rounded-2xl bg-gray-100 px-3 py-1 text-sm text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-            Wait Time: {restaurant.ai_summarize.waitingTime || 'N/A'}
-          </span>
+        <div
+          className={cn(
+            'mt-4 grid grid-cols-1 gap-2',
+            isDrawer ? 'sm:grid-cols-2' : 'md:grid-cols-2',
+          )}
+        >
+          <MetaSummary
+            label={t.price}
+            value={price}
+            messages={messages}
+            surface={surface}
+          />
+          <MetaSummary
+            label={t.wait}
+            value={waitingTime}
+            messages={messages}
+            surface={surface}
+          />
         </div>
       </section>
 
-      <section className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-          Dishes
-        </h2>
-        <p className="mt-2 text-gray-600 dark:text-gray-300">
-          {restaurant.ai_summarize.dishes}
-        </p>
-      </section>
+      {price && isLongText(price) && (
+        <DetailSection title={t.price} surface={surface}>
+          <DetailText text={price} />
+        </DetailSection>
+      )}
 
-      <section className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-          Service
-        </h2>
-        <p className="mt-2 text-gray-600 dark:text-gray-300">
-          {restaurant.ai_summarize.service}
-        </p>
-      </section>
+      {waitingTime && isLongText(waitingTime) && (
+        <DetailSection title={t.waitTime} surface={surface}>
+          <DetailText text={waitingTime} />
+        </DetailSection>
+      )}
 
-      <section className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-          Precautions
-        </h2>
-        <ul className="mt-2 list-disc pl-5 text-gray-600 dark:text-gray-300">
-          {restaurant.ai_summarize.precautions.map((precaution) => (
-            <li key={precaution}>{precaution}</li>
-          ))}
-        </ul>
-      </section>
+      <DetailSection title={t.dishes} surface={surface}>
+        <DetailText text={dishes || 'N/A'} />
+      </DetailSection>
+
+      <DetailSection title={t.service} surface={surface}>
+        <DetailText text={service || 'N/A'} />
+      </DetailSection>
+
+      {precautions.length > 0 && (
+        <DetailSection title={t.precautions} surface={surface}>
+          <ul className="list-disc space-y-1 pl-5 text-sm leading-6 text-muted-foreground">
+            {precautionItems.map((precaution) => (
+              <li key={precaution.key}>
+                <DetailText text={precaution.text} />
+              </li>
+            ))}
+          </ul>
+        </DetailSection>
+      )}
     </div>
   );
+}
+
+function DetailText({ text }: { text: string }) {
+  return <p className="text-sm leading-6 text-muted-foreground">{text}</p>;
+}
+
+function DetailSection({
+  title,
+  children,
+  surface = 'page',
+}: {
+  title: string;
+  children: React.ReactNode;
+  surface?: 'page' | 'drawer';
+}) {
+  return (
+    <section className={cn(surface === 'drawer' ? 'space-y-1.5' : 'space-y-2')}>
+      <h2
+        className={cn(
+          'font-semibold text-foreground',
+          surface === 'drawer' ? 'text-sm' : 'text-base',
+        )}
+      >
+        {title}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+function MetaSummary({
+  label,
+  value,
+  messages,
+  surface = 'page',
+}: {
+  label: string;
+  value: string;
+  messages: Messages;
+  surface?: 'page' | 'drawer';
+}) {
+  return (
+    <div
+      className={cn(
+        'rounded-md border border-white/25 bg-background/55 text-sm backdrop-blur-xl dark:border-white/10',
+        surface === 'drawer' ? 'px-2.5 py-2' : 'px-3 py-2',
+      )}
+    >
+      <div className="text-xs text-muted-foreground">{label}</div>
+      <div
+        className={cn(
+          'mt-1 text-foreground',
+          surface === 'drawer' ? 'line-clamp-2 leading-5' : 'truncate',
+        )}
+        title={value || 'N/A'}
+      >
+        {shortMetaLabel(value, messages) || 'N/A'}
+      </div>
+    </div>
+  );
+}
+
+function cleanText(value: string | null | undefined) {
+  return (value ?? '').replace(/\s+/g, ' ').trim();
+}
+
+function isLongText(value: string) {
+  return value.length > 48;
+}
+
+function shortMetaLabel(value: string, messages: Messages) {
+  const t = messages.followUp.detail;
+  if (!value) return '';
+  if (value.length <= 34) return value;
+
+  const priceMatch = value.match(
+    /(?:around|approx(?:imately)?|about)?\s*(?:[\d.]+[-–~到至]?)?[\d.]+\s*(?:rmb|yuan|元|¥|cny)/i,
+  );
+  if (priceMatch) return cleanText(priceMatch[0]);
+  if (/free|complimentary|免费/i.test(value)) return t.free;
+  if (/affordable|good value|实惠|划算/i.test(value)) return t.goodValue;
+  if (/expensive|high-end|高端|贵/i.test(value)) return t.premium;
+  if (
+    /short|fast|quick|prompt|minimal|no significant|无需|短|快/i.test(value)
+  ) {
+    return t.shortWait;
+  }
+  if (/long|queue|half an hour|crowded|排队|久/i.test(value)) {
+    return t.longWait;
+  }
+
+  return `${value.slice(0, 30).trim()}...`;
 }
 
 async function JumpToThirdPartyMap({ restaurant }: { restaurant: Restaurant }) {

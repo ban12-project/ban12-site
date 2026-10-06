@@ -1,4 +1,4 @@
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { createGoogle } from '@ai-sdk/google';
 import { generateText } from 'ai';
 
 import type { LocalizedString } from './db/schema';
@@ -13,7 +13,7 @@ export async function answerAlbumId(
     if (!process.env.GOOGLE_GEMINI_KEY || !process.env.GOOGLE_GEMINI_MODEL)
       throw new Error('Google Gemini API key or model not set');
 
-    const google = createGoogleGenerativeAI({
+    const google = createGoogle({
       apiKey: process.env.GOOGLE_GEMINI_KEY,
     });
 
@@ -44,7 +44,7 @@ export async function answerTranslate(input: string): Promise<LocalizedString> {
     if (!process.env.GOOGLE_GEMINI_KEY || !process.env.GOOGLE_GEMINI_MODEL)
       throw new Error('Google Gemini API key or model not set');
 
-    const google = createGoogleGenerativeAI({
+    const google = createGoogle({
       apiKey: process.env.GOOGLE_GEMINI_KEY,
     });
 

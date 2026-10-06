@@ -1,33 +1,49 @@
-import { EventSchemas } from 'inngest'
+import { eventType, staticSchema } from "inngest";
 
-type VideoProcess = {
-  name: 'video/process'
-  data: {
-    postId: number
-    restaurantId: string
-  }
-}
+type VideoProcessData = {
+  postId: number;
+  restaurantId: string;
+};
 
-type VideoUnderstanding = {
-  name: 'video/understanding'
-  data: {
-    id: string
-    fileUri?: string
-    part?: {
-      uri: string
-      mimeType: string
-    }
-  }
-}
+type VideoUnderstandingData = {
+  id: string;
+  fileUri?: string;
+  part?: {
+    uri: string;
+    mimeType: string;
+  };
+};
 
-type TriggerRevalidation = {
-  name: 'web/revalidation.trigger'
-  data: {
-    /** restaurant ID */
-    id: string
-  }
-}
+type TriggerRevalidationData = {
+  /** restaurant ID */
+  id: string;
+};
 
-type Events = VideoProcess | VideoUnderstanding | TriggerRevalidation
+export type VideoProcess = {
+  name: "video/process";
+  data: VideoProcessData;
+};
 
-export const schemas = new EventSchemas().fromUnion<Events>()
+export type VideoUnderstanding = {
+  name: "video/understanding";
+  data: VideoUnderstandingData;
+};
+
+export type TriggerRevalidation = {
+  name: "web/revalidation.trigger";
+  data: TriggerRevalidationData;
+};
+
+export type Events = VideoProcess | VideoUnderstanding | TriggerRevalidation;
+
+export const videoProcess = eventType("video/process", {
+  schema: staticSchema<VideoProcessData>(),
+});
+
+export const videoUnderstanding = eventType("video/understanding", {
+  schema: staticSchema<VideoUnderstandingData>(),
+});
+
+export const triggerRevalidation = eventType("web/revalidation.trigger", {
+  schema: staticSchema<TriggerRevalidationData>(),
+});

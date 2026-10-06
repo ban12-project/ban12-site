@@ -1,8 +1,5 @@
-import { config } from 'dotenv';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { migrate } from 'drizzle-orm/neon-http/migrator';
-
-config({ path: ['.env'] });
 
 const runMigrate = async () => {
   if (!process.env.DATABASE_URL) {

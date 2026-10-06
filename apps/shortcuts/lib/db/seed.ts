@@ -1,12 +1,9 @@
-import { config } from 'dotenv';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 
 import { answerTranslate } from '#/lib/prompt';
 
 import { album, collection, type LocalizedString, shortcut } from './schema';
-
-config({ path: ['.env.production.local', '.env.local', '.env'] });
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) throw new Error('Not valid database url');

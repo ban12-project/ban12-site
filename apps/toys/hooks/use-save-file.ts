@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+type FilePickerMimeType = `${string}/${string}`;
+
 function download(data: { blob: Blob; filename: string }[]) {
   for (const { blob, filename } of data) {
     const url = URL.createObjectURL(blob);
@@ -9,6 +11,7 @@ function download(data: { blob: Blob; filename: string }[]) {
     a.click();
     URL.revokeObjectURL(url);
   }
+  return true;
 }
 
 export function useSaveFile() {
@@ -43,17 +46,20 @@ export function useSaveFile() {
             {
               description,
               accept: {
-                [blob.type as MIMEType]: [`.${ext}`],
+                [blob.type as FilePickerMimeType]: [`.${ext}`],
               },
             },
           ],
         });
         await writeFile(handle, blob);
       } catch (_error) {
-        // continue regardless of error
+        if (_error instanceof DOMException && _error.name === 'AbortError') {
+          return false;
+        }
+        throw _error;
       }
 
-      return;
+      return true;
     }
 
     try {
@@ -68,8 +74,13 @@ export function useSaveFile() {
         await writeFile(fileHandle, blob);
       }
     } catch (_error) {
-      // continue regardless of error
+      if (_error instanceof DOMException && _error.name === 'AbortError') {
+        return false;
+      }
+      throw _error;
     }
+
+    return true;
   };
 
   return { isSupportShowSaveFilePicker, saveFile };

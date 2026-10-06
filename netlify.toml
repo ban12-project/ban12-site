@@ -1,0 +1,21 @@
+[build]
+  base = "apps/toys"
+  command = "pnpm build"
+  publish = ".next"
+
+[build.environment]
+  NETLIFY_NEXT_SKEW_PROTECTION = "true"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "require-corp"
+
+[[headers]]
+  for = "/js7z-mt-fs-ec-2.4.1/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "require-corp"
+
+[dev]
+  command = "pnpm dev"
+  targetPort = 3000

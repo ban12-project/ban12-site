@@ -12,14 +12,14 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@repo/ui/components/sidebar';
-import type { User } from 'next-auth';
+import type { User } from 'better-auth';
 import { AppSidebar } from '#/components/app-sidebar';
-import { auth, signOut } from '#/lib/auth';
+import { getSession, signOut } from '#/lib/auth';
 
 export default async function DashboardLayout({
   children,
 }: LayoutProps<'/[lang]/dashboard'>) {
-  const session = await auth();
+  const session = await getSession();
 
   return (
     <SidebarProvider>

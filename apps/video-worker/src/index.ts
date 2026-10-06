@@ -1,8 +1,6 @@
 import { createServer } from "node:http";
 import { ConnectionState, connect } from "inngest/connect";
 
-import "dotenv/config";
-
 import { serve } from "inngest/node";
 
 import { sql } from "./db";

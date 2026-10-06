@@ -1,14 +1,15 @@
 import { type ReactEventHandler, useRef } from 'react';
 
 import { useDragDrop } from '#/hooks/use-drag-drop';
-
+import type { HashCopy } from '#/lib/tool-copy';
 import type { Append } from './file-explorer';
 
 interface FileFormProps {
   append: Append;
+  copy: HashCopy;
 }
 
-export default function Form({ append }: FileFormProps) {
+export default function Form({ append, copy }: FileFormProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit: ReactEventHandler = (e) => {
@@ -16,6 +17,7 @@ export default function Form({ append }: FileFormProps) {
     const files = inputRef.current?.files;
     if (!files) return;
     for (let i = 0, len = files.length; i < len; i++) append(files[i]);
+    if (inputRef.current) inputRef.current.value = '';
   };
 
   const callback = useRef((files: File[]) => {
@@ -24,13 +26,14 @@ export default function Form({ append }: FileFormProps) {
   const { isHovering } = useDragDrop(() => window, callback);
 
   return (
-    <form onSubmit={onSubmit} className="h-[100px]">
+    <form onSubmit={onSubmit} className="h-[140px]">
       <label
         htmlFor="file"
         data-drag-over={isHovering}
-        className="text-grayA10 flex h-full w-full cursor-pointer items-center justify-center rounded-lg border-4 border-dotted border-blue-400 p-2 hover:border-orange-500 data-[drag-over=true]:border-orange-500"
+        className="text-grayA10 flex h-full w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-4 border-dotted border-blue-400 p-2 text-center hover:border-orange-500 data-[drag-over=true]:border-orange-500"
       >
-        Drag one or multi files to this page ...
+        <span className="font-medium">{copy.drop}</span>
+        <span className="text-sm">{copy.privacy}</span>
       </label>
       <input
         className="sr-only"
@@ -41,9 +44,6 @@ export default function Form({ append }: FileFormProps) {
         multiple
         onChange={onSubmit}
       />
-      <button type="submit" className="sr-only">
-        submit
-      </button>
     </form>
   );
 }

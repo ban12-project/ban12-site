@@ -1,0 +1,48 @@
+{
+  "name": "two-weeks-in-china",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "pnpm content:check && next build",
+    "start": "next start",
+    "lint": "biome check --write",
+    "type-check": "next typegen && tsc --noEmit",
+    "content:compile": "node -e \"require('node:fs').rmSync('.content-tools', { recursive: true, force: true })\" && tsc -p tsconfig.content-tools.json",
+    "test:content": "pnpm content:compile && node --test .content-tools/tests/*.test.js",
+    "content:check": "pnpm content:compile && node .content-tools/scripts/content/check.js"
+  },
+  "lint-staged": {
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^3.1.1",
+    "@mdx-js/react": "^3.1.1",
+    "@next/mdx": "^16.3.4",
+    "@next/third-parties": "catalog:",
+    "@repo/i18n": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "@types/mdx": "^2.0.13",
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "next-mdx-remote-client": "^2.1.10",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "remark-gfm": "^4.0.1",
+    "server-only": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/biome-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@tailwindcss/postcss": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "babel-plugin-react-compiler": "catalog:",
+    "postcss": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}

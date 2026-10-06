@@ -1,10 +1,7 @@
-import { config } from 'dotenv';
 import { desc } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/neon-http';
 
 import { restaurant } from './schema';
-
-config({ path: ['.env'] });
 
 const db = drizzle(process.env.DATABASE_URL!);
 

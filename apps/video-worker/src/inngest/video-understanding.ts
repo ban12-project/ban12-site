@@ -1,9 +1,10 @@
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { generateText, Output } from "ai";
+import { createGoogle } from "@ai-sdk/google";
+import { generateText, NoObjectGeneratedError, NoOutputGeneratedError, Output } from "ai";
 import { z } from "zod";
 
 import { sql } from "../db";
 import { inngest } from "./client";
+import { triggerRevalidation, videoUnderstanding } from "./types";
 
 const restaurantSchema = z.object({
   restaurantName: z.string(),
@@ -17,49 +18,55 @@ const restaurantSchema = z.object({
 });
 
 export default inngest.createFunction(
-  { id: "video-understanding", concurrency: 5 },
-  { event: "video/understanding" },
+  {
+    id: "video-understanding",
+    concurrency: 5,
+    triggers: [videoUnderstanding],
+  },
   async ({ event, step }) => {
     const { id, fileUri, part } = event.data;
 
-    const invalidPart = typeof part !== "object" || typeof part.uri !== "string" || typeof part.mimeType !== "string";
-    if ((!fileUri && invalidPart) || !id) {
+    const validPart = part != null && typeof part.uri === "string" && typeof part.mimeType === "string";
+    const uri = validPart ? part.uri : fileUri;
+    if (!uri || !id) {
       return { message: `Invalid input: ${JSON.stringify(event.data)}` };
     }
 
-    const result = await step.run("1. Call Gemini for video understanding", async () => {
-      const google = createGoogleGenerativeAI({
-        apiKey: process.env.GOOGLE_API_KEY,
-      });
+    const aiSummary = await step.run("1. Generate structured restaurant summary", async () => {
+      if (!process.env.GOOGLE_API_KEY || !process.env.GOOGLE_GEMINI_MODEL) {
+        throw new Error("Google Gemini API key or model not set");
+      }
 
-      const uri = part ? part.uri : fileUri!;
-      const mimeType = part ? part.mimeType : "video/mp4";
-
-      const { output } = await generateText({
-        model: google(process.env.GOOGLE_GEMINI_MODEL!),
-        output: Output.object({ schema: restaurantSchema }),
-        messages: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "file",
-                data: uri,
-                mediaType: mimeType,
-              },
-              {
-                type: "text",
-                text: "Based on the video description, provide the restaurant's name and restaurant's address, give a recommendation rating (out of five points) in terms of price, waiting time, dishes, and service, and offer precautions for diners visiting this place, with all fields in Chinese.",
-              },
-            ],
-          },
-        ],
-      });
-
-      return output;
+      const google = createGoogle({ apiKey: process.env.GOOGLE_API_KEY });
+      try {
+        const { output } = await generateText({
+          model: google(process.env.GOOGLE_GEMINI_MODEL),
+          output: Output.object({ schema: restaurantSchema }),
+          messages: [
+            {
+              role: "user",
+              content: [
+                {
+                  type: "file",
+                  data: new URL(uri),
+                  mediaType: validPart ? part.mimeType : "video/mp4",
+                },
+                {
+                  type: "text",
+                  text: "Based on the video description, provide the restaurant's name and restaurant's address, give a recommendation rating (out of five points) in terms of price, waiting time, dishes, and service, and offer precautions for diners visiting this place, with all fields in Chinese.",
+                },
+              ],
+            },
+          ],
+        });
+        return output;
+      } catch (error) {
+        if (!NoObjectGeneratedError.isInstance(error) && !NoOutputGeneratedError.isInstance(error)) throw error;
+        return null;
+      }
     });
 
-    if (!result) {
+    if (!aiSummary) {
       await step.run("2a. Update status to failed", async () => {
         await sql`
           UPDATE restaurant
@@ -68,28 +75,22 @@ export default inngest.createFunction(
         `;
       });
       await step.run("2b. Trigger revalidation for failure", async () => {
-        await inngest.send({
-          name: "web/revalidation.trigger",
-          data: { id },
-        });
+        await inngest.send(triggerRevalidation.create({ id }));
       });
-      return { message: "No response output" };
+      return { message: "Invalid or empty response output" };
     }
 
     await step.run("2. Update database with AI summary and success status", async () => {
       await sql`
-          UPDATE restaurant
-          SET ai_summarize = ${JSON.stringify(result)},
-              status = 'success'
-          WHERE id = ${id}
-        `;
+        UPDATE restaurant
+        SET ai_summarize = ${sql.json(aiSummary)},
+            status = 'success'
+        WHERE id = ${id}
+      `;
     });
 
     await step.run("3. Trigger revalidation for success", async () => {
-      await inngest.send({
-        name: "web/revalidation.trigger",
-        data: { id },
-      });
+      await inngest.send(triggerRevalidation.create({ id }));
     });
 
     return {

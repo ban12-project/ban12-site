@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from '@repo/ui/components/select';
 import { Loader2 } from 'lucide-react';
-import Script from 'next/script';
 import {
   type ChangeEventHandler,
   type RefObject,
@@ -33,12 +32,8 @@ import { toast } from 'sonner';
 import * as z from 'zod';
 import { useDragDrop } from '#/hooks/use-drag-drop';
 import { useSaveFile } from '#/hooks/use-save-file';
-import {
-  call,
-  JS7zEventName,
-  type Out,
-  SCRIPT_LOADED_EVENT,
-} from '#/lib/7-zip';
+import { call, JS7zEventName, type Out } from '#/lib/7-zip';
+import { type SevenZipCopy, type ToolLocale, toolCopy } from '#/lib/tool-copy';
 
 /** @see https://www.7-zip.org/ */
 const supportedFormats = {
@@ -80,59 +75,67 @@ const supportedFormats = {
 } as const;
 
 type Format = (typeof supportedFormats.packingAndUnpacking)[number];
+type Operation = 'compress' | 'extract';
 
-export default function SevenZip() {
+const archiveExtensions = [
+  ...supportedFormats.packingAndUnpacking,
+  ...supportedFormats.onlyUnpacking,
+].map((format) => `.${format.toLowerCase()}`);
+
+export default function SevenZip({ locale }: { locale: ToolLocale }) {
+  const copy = toolCopy[locale].sevenZip;
   const [pending, setPending] = useState(false);
+  const pendingRef = useRef(false);
   const outputFilesRef = useRef<Out[]>([]);
+  const [outputCount, setOutputCount] = useState(0);
 
-  const resolve = async (files: File[], format: Format) => {
-    if (pending) return;
+  const resolve = async (
+    files: File[],
+    operation: Operation,
+    format: Format,
+  ) => {
+    if (pendingRef.current) return;
+    if (files.length === 0) return;
+    pendingRef.current = true;
+    outputFilesRef.current = [];
+    setOutputCount(0);
+    progress.reset();
     setPending(true);
 
-    const isExtract =
-      files.length === 1 &&
-      [
-        ...supportedFormats.packingAndUnpacking,
-        ...supportedFormats.onlyUnpacking,
-      ].some((format) =>
-        files[0].name.toUpperCase().endsWith(`.${format.toUpperCase()}`),
-      );
+    try {
+      const result = await call({
+        command:
+          operation === 'extract'
+            ? ['e', '/in/*', '-o/out']
+            : ['a', `/out/archive.${format.toLowerCase()}`, '/in/*'],
+        payload: files,
+      });
 
-    const result = await call({
-      command: isExtract
-        ? ['e', '/in/*', '-o/out']
-        : ['a', `/out/archive.${format.toLowerCase()}`, '/in/*'],
-      payload: files,
-    });
-
-    if (result) outputFilesRef.current = result;
-    setPending(false);
+      if (result) {
+        outputFilesRef.current = result;
+        setOutputCount(result.length);
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : '7-Zip failed');
+    } finally {
+      pendingRef.current = false;
+      setPending(false);
+    }
   };
 
-  const _benchmark = useCallback(() => {
-    call({ command: ['b'] });
-  }, []);
-
-  useTotalToast();
   useLogPrint();
   const progress = useExtractProgressFromStdout();
 
   return (
-    <>
-      <FormComponent
-        pending={pending}
-        outputFilesRef={outputFilesRef}
-        resolve={resolve}
-        progress={progress}
-      />
-      <Script
-        src="/js7z-mt-fs-ec-2.4.1/js7z.js"
-        onLoad={() => {
-          const event = new CustomEvent(SCRIPT_LOADED_EVENT);
-          window.dispatchEvent(event);
-        }}
-      />
-    </>
+    <FormComponent
+      pending={pending}
+      outputFilesRef={outputFilesRef}
+      resolve={resolve}
+      copy={copy}
+      progress={progress.value}
+      outputCount={outputCount}
+      onOutputSaved={() => setOutputCount(0)}
+    />
   );
 }
 
@@ -169,7 +172,7 @@ function useExtractProgressFromStdout() {
     };
   }, [onAbort, onExit, onPrint]);
 
-  return progress;
+  return { value: progress, reset: () => setProgress(0) };
 }
 
 function useLogPrint() {
@@ -188,62 +191,6 @@ function useLogPrint() {
   }, []);
 }
 
-export function useTotalToast() {
-  const info = useRef({
-    in: { number: 0, size: '' },
-    out: { number: 0, size: '' },
-  });
-
-  useEffect(() => {
-    const total = (e: { detail: string }) => {
-      const text = e.detail;
-
-      // 2 files, 1609920 bytes (1573 KiB)
-      // 1 file, 91237 bytes (90 KiB)
-      const inMatch = text.match(/(\d+) files?, \d+ bytes \((\d+ [A-Z]iB)\)/);
-      if (inMatch) {
-        const number = parseInt(inMatch[1], 10);
-        const size = inMatch[2];
-        info.current.in = { number, size };
-      }
-
-      // Files: 2
-      // Size:       165356
-      // Archive size: 888101 bytes (868 KiB)
-      const outMatch = text.match(
-        /Files: (\d+)|Size:\s+(\d+)|Archive size: \d+ bytes \((\d+ [A-Z]iB)\)/,
-      );
-      if (outMatch) {
-        const number =
-          parseInt(outMatch[1], 10) || info.current.out.number || 1;
-        const size = outMatch[2]
-          ? `${parseInt(outMatch[2], 10)} bytes`
-          : outMatch[3];
-        info.current.out = { number, size };
-      }
-    };
-
-    const showToast = () => {
-      toast('task completed', {
-        description: `In: ${info.current.in.number} files, ${info.current.in.size}, Out: ${info.current.out.number} files, ${info.current.out.size}`,
-        duration: Infinity,
-        action: {
-          label: 'Undo',
-          onClick: () => console.log('Undo'),
-        },
-      });
-    };
-
-    window.addEventListener(JS7zEventName.print, total);
-    window.addEventListener(JS7zEventName.onExit, showToast);
-
-    return () => {
-      window.removeEventListener(JS7zEventName.print, total);
-      window.removeEventListener(JS7zEventName.onExit, showToast);
-    };
-  }, []);
-}
-
 const FormSchema = z.object({
   format: z.enum(supportedFormats.packingAndUnpacking, {
     error: (issue) =>
@@ -257,20 +204,22 @@ function FormComponent({
   pending,
   outputFilesRef,
   resolve,
+  copy,
   progress,
+  outputCount,
+  onOutputSaved,
 }: {
   pending: boolean;
   outputFilesRef: RefObject<Out[]>;
-  resolve: (files: File[], format: Format) => void;
+  resolve: (files: File[], operation: Operation, format: Format) => void;
+  copy: SevenZipCopy;
   progress: number;
+  outputCount: number;
+  onOutputSaved: () => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-
-  const callback = useRef((files: File[]) => {
-    resolve(files, format);
-  }).current;
-  const { isHovering } = useDragDrop(() => window, callback);
+  const [operation, setOperation] = useState<Operation>('compress');
 
   const { saveFile } = useSaveFile();
 
@@ -283,20 +232,34 @@ function FormComponent({
 
   const format = useWatch({ name: 'format', control: form.control });
 
+  const callback = useCallback(
+    (files: File[]) => resolve(files, operation, format),
+    [format, operation, resolve],
+  );
+  const { isHovering } = useDragDrop(() => window, callback);
+
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const files = e.target.files;
     if (!files) return;
-    resolve(Array.from(files), format);
+    resolve(Array.from(files), operation, format);
+    e.target.value = '';
   };
 
   const onSubmit = async (/* data: z.infer<typeof FormSchema> */) => {
-    if (outputFilesRef.current.length === 0) {
+    if (outputCount === 0) {
       return inputRef.current?.click();
     }
 
-    await saveFile(outputFilesRef.current);
-
-    outputFilesRef.current.length = 0;
+    try {
+      const saved = await saveFile(outputFilesRef.current);
+      if (!saved) return;
+      outputFilesRef.current.length = 0;
+      onOutputSaved();
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : 'Unable to save output',
+      );
+    }
   };
 
   return (
@@ -304,47 +267,127 @@ function FormComponent({
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         ref={formRef}
-        className="flex min-h-dvh items-center justify-center"
+        className="rounded-2xl border bg-white/70 p-5 shadow-sm dark:bg-slate-950/40 sm:p-8"
         data-drag-over={isHovering}
+        aria-busy={pending}
       >
-        <input
-          className="sr-only"
-          type="file"
-          multiple
-          ref={inputRef}
-          onChange={onChange}
-        />
+        <div className="flex flex-col gap-5">
+          <fieldset className="flex w-full rounded-lg border p-1 sm:w-fit">
+            <legend className="sr-only">{copy.operation}</legend>
+            <button
+              type="button"
+              className="flex-1 rounded-md px-4 py-2 text-sm transition-colors hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 data-[active=true]:bg-slate-900 data-[active=true]:text-white dark:hover:bg-slate-800 dark:data-[active=true]:bg-white dark:data-[active=true]:text-slate-900 sm:flex-none"
+              data-active={operation === 'compress'}
+              aria-pressed={operation === 'compress'}
+              onClick={() => setOperation('compress')}
+            >
+              {copy.compress}
+            </button>
+            <button
+              type="button"
+              className="flex-1 rounded-md px-4 py-2 text-sm transition-colors hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 data-[active=true]:bg-slate-900 data-[active=true]:text-white dark:hover:bg-slate-800 dark:data-[active=true]:bg-white dark:data-[active=true]:text-slate-900 sm:flex-none"
+              data-active={operation === 'extract'}
+              aria-pressed={operation === 'extract'}
+              onClick={() => setOperation('extract')}
+            >
+              {copy.extract}
+            </button>
+          </fieldset>
 
-        <FormField
-          control={form.control}
-          name="format"
-          render={({ field }) => (
-            <FormItem>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a format to packing" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {supportedFormats.packingAndUnpacking.map((format) => (
-                    <SelectItem key={format} value={format}>
-                      {format}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormItem>
+          <input
+            className="sr-only"
+            id="archive-file"
+            name="archive-file"
+            type="file"
+            accept={
+              operation === 'extract' ? archiveExtensions.join(',') : undefined
+            }
+            multiple={operation === 'compress'}
+            ref={inputRef}
+            onChange={onChange}
+          />
+
+          {operation === 'compress' && (
+            <FormField
+              control={form.control}
+              name="format"
+              render={({ field }) => (
+                <FormItem>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a format to pack" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {supportedFormats.packingAndUnpacking.map((format) => (
+                        <SelectItem key={format} value={format}>
+                          {format}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
           )}
-        />
 
-        <Button disabled={pending}>
-          {pending && <Loader2 className="animate-spin" />}
-          {outputFilesRef.current.length !== 0
-            ? 'Save'
-            : 'Select files to continue'}{' '}
-          progress: {progress}
-        </Button>
+          <label
+            htmlFor="archive-file"
+            className="flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-5 text-center transition-colors hover:border-slate-500 hover:bg-slate-50 focus-within:outline-2 focus-within:outline-offset-2 data-[drag-over=true]:border-blue-600 data-[drag-over=true]:bg-blue-50 dark:hover:bg-slate-900 dark:data-[drag-over=true]:bg-blue-950/30"
+            data-drag-over={isHovering}
+          >
+            <span className="font-medium">
+              {outputCount > 0
+                ? copy.saveReady(outputCount)
+                : operation === 'extract'
+                  ? copy.chooseArchive
+                  : copy.chooseFiles}
+            </span>
+            <span className="mt-1 text-sm text-slate-500">
+              {outputCount > 0
+                ? copy.saveHint
+                : operation === 'extract'
+                  ? copy.archiveSupport
+                  : copy.multiple}
+            </span>
+          </label>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              type="submit"
+              disabled={pending}
+              className="touch-manipulation"
+            >
+              {pending && (
+                <Loader2 className="animate-spin" aria-hidden="true" />
+              )}
+              {outputCount !== 0 ? copy.save : copy.choose}
+            </Button>
+            {pending && (
+              <div className="min-w-44 flex-1" aria-live="polite">
+                <div className="mb-1 flex justify-between text-sm">
+                  <span>{copy.processing}</span>
+                  <span className="tabular-nums">{progress}%</span>
+                </div>
+                <progress className="h-2 w-full" max={100} value={progress}>
+                  {progress}%
+                </progress>
+              </div>
+            )}
+          </div>
+          {!pending && outputCount > 0 && (
+            <p
+              className="text-sm text-green-700 dark:text-green-400"
+              role="status"
+            >
+              {copy.complete}
+            </p>
+          )}
+        </div>
       </form>
     </Form>
   );

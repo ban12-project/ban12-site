@@ -24,7 +24,7 @@ export default async function Page({
     getDictionary(lang as Locale),
   ]);
 
-  if (!restaurant || !restaurant.ai_summarize) {
+  if (!restaurant?.ai_summarize) {
     notFound();
   }
 
@@ -56,7 +56,7 @@ export default async function Page({
       />
 
       <Link className="inline-block py-2" href="/follow-up">
-        See more restaurants
+        {messages.followUp.detail.seeMoreRestaurants}
       </Link>
 
       <script
@@ -77,7 +77,7 @@ export async function generateMetadata({
   const { restaurant } =
     await getCachedRestaurantWithPostsByName(restaurantName);
 
-  if (!restaurant || !restaurant.ai_summarize) {
+  if (!restaurant?.ai_summarize) {
     notFound();
   }
 

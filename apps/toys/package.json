@@ -5,23 +5,18 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm build-rust && next build",
+    "build": "wasm-pack build ../../crates/calculate-hash && wasm-pack build ../../crates/similar-wasm-wrapper && next build",
     "start": "next start",
     "lint": "biome check --write",
-    "build-rust": "wasm-pack build ../../crates/calculate-hash && wasm-pack build ../../crates/similar-wasm-wrapper",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "build-rust": "wasm-pack build ../../crates/calculate-hash && wasm-pack build ../../crates/similar-wasm-wrapper"
   },
   "dependencies": {
     "@gsap/react": "catalog:",
     "@hookform/resolvers": "catalog:",
     "@next/third-parties": "catalog:",
-    "@opennextjs/cloudflare": "catalog:",
     "@repo/i18n": "workspace:*",
     "@repo/ui": "workspace:*",
-    "@uswriting/exiftool": "^1.0.5",
+    "@uswriting/exiftool": "^1.0.6",
     "gsap": "catalog:",
     "intl-messageformat": "catalog:",
     "lucide-react": "catalog:",
@@ -38,23 +33,24 @@
     "usehooks-ts": "catalog:",
     "vaul": "catalog:",
     "zod": "catalog:",
-    "zustand": "^5.0.1"
+    "zustand": "^5.0.13"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "catalog:",
     "@repo/biome-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@svgr/webpack": "^8.1.0",
+    "@tailwindcss/postcss": "catalog:",
     "@types/emscripten": "^1.39.13",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/react-highlight-words": "^0.20.0",
-    "@types/react-window": "catalog:",
     "@types/wicg-file-system-access": "^2023.10.5",
     "babel-plugin-react-compiler": "catalog:",
     "postcss": "catalog:",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:",
-    "wrangler": "catalog:"
+    "wasm-pack": "^0.15.0"
   }
 }
