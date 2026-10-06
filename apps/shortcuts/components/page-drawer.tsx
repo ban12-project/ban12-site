@@ -4,7 +4,7 @@ import { Button } from '@repo/ui/components/button';
 import { useResponsive } from '@repo/ui/hooks/use-responsive';
 import { cn } from '@repo/ui/lib/utils';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 import useRootDirection from '#/hooks/use-root-direction';
 import type { Messages } from '#/lib/i18n';
@@ -29,6 +29,13 @@ export default function PageDrawer({
 }: PageDrawerProps) {
   const router = useRouter();
   const [open, setOpen] = useState(true);
+
+  useLayoutEffect(() => {
+    return () => {
+      // Activity preserves this page when hidden; reopen on the next visit.
+      setOpen(true);
+    };
+  }, []);
 
   const { breakpoints } = useResponsive();
   const direction = useRootDirection((dir) =>
