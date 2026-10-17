@@ -54,3 +54,12 @@ Allowed `visaPolicy` values are defined in `lib/content/types.ts`. Updating poli
 is a separately sourced editorial change, not mechanical migration maintenance.
 Keep raw exports outside the repository and do not modify historical checksums to
 hide migration failures. Historical migration tooling is available in Git history.
+
+## Reusable content editor
+
+For editorial research, updates, or translations, follow
+[`china-content-editor`](../../.agents/skills/china-content-editor/SKILL.md).
+It provides the source ledger, verified format reference, image-rights requirements,
+and local-first issue/PR workflow. This does not mark legacy articles as fact-checked.
+For existing published articles, keep their published status on the branch; the
+new-article draft workflow must not remove a historical URL.
