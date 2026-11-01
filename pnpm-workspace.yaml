@@ -4,7 +4,7 @@ packages:
 
 catalog:
   "@ai-sdk/google": ^4.0.88
-  "@better-auth/drizzle-adapter": ^1.6.11
+  "@better-auth/drizzle-adapter": ^1.7.7
   "@better-auth/passkey": ^1.6.11
   "@gsap/react": ^2.1.2
   "@hookform/resolvers": ^5.2.2
