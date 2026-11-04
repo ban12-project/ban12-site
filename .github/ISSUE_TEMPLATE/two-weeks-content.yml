@@ -1,0 +1,41 @@
+name: Two Weeks 内容更新
+description: 权威来源、图文说明与本地验证的内容编辑任务
+title: '[content] '
+body:
+  - type: textarea
+    id: scope
+    attributes:
+      label: 读者问题与范围
+      description: 主题、现有路径、语言、读者、变更原因；是否涉及国家政策数据或首页。
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: 候选权威来源
+      description: 具体官方原文 URL、机构、已知日期；候选链接不代表已完成事实核验。
+    validations:
+      required: true
+  - type: textarea
+    id: visuals
+    attributes:
+      label: 图文与格式
+      description: 图片/流程图目的、来源与授权或原创依据；现有 Markdown/MDX 能否满足。
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: 待核验或冲突
+      description: 政策适用范围、有效期、翻译、来源冲突、旧内容影响；未知项不能猜测。
+  - type: checkboxes
+    id: acceptance
+    attributes:
+      label: 验收标准（完成后勾选）
+      options:
+        - label: 已阅读 app AGENTS、content README 和渲染实现，确认格式
+        - label: 事实逐条对应权威原文，正文可见来源与核验日期，并保存台账
+        - label: 图像许可/原创依据、alt、图注与文字替代完整
+        - label: 中英及相关页面影响已核对，未决问题已注明
+        - label: 本地内容测试、校验、lint、类型检查和构建通过，图文页面完成桌面/手机检查
+        - label: 本地收敛后集中推送，关联 PR，不直接合并或部署
