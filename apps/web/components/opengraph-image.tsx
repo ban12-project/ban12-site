@@ -45,6 +45,9 @@ export default async function Image(props: Props) {
     sizeFit,
   } = props;
 
+  // Next OG's automatic Noto Sans Arabic fallback uses GSUB lookups that its
+  // OpenType renderer cannot handle. Explicitly use a compatible Arabic font.
+  const hasArabicTitle = /\p{Script=Arabic}/u.test(title ?? '');
   const size = scale(height, 48, 630, 48, title ? 160 : 630);
   const fontSize = scale(height, 48, 630, 26, title ? 36 : 100);
 
@@ -74,16 +77,25 @@ export default async function Image(props: Props) {
       >
         {size <= 64 ? process.env.SITE_NAME!.charAt(0) : process.env.SITE_NAME}
       </div>
-      {title && <p tw="mt-12 text-6xl font-bold">{title}</p>}
+      {title && (
+        <p
+          tw="mt-12 text-6xl font-bold"
+          style={{
+            fontFamily: hasArabicTitle ? 'IBM Plex Sans Arabic' : 'Inter',
+          }}
+        >
+          {title}
+        </p>
+      )}
     </div>,
     {
       width,
       height,
       fonts: [
         {
-          name: 'Inter',
+          name: hasArabicTitle ? 'IBM Plex Sans Arabic' : 'Inter',
           data: await loadGoogleFont(
-            'Inter',
+            hasArabicTitle ? 'IBM+Plex+Sans+Arabic' : 'Inter',
             [700],
             `${process.env.SITE_NAME} ${title}`,
           ),
