@@ -6,6 +6,11 @@ import { notFound } from 'next/navigation';
 import ShortcutCard from '#/components/shortcut-card';
 import { getShortcutByUuid } from '#/lib/db/queries';
 import type { Locale, Messages } from '#/lib/i18n';
+import {
+  getLegacyRideCouponContent,
+  getShortcutDescription,
+  rideCouponAuthorUrl,
+} from '#/lib/shortcut-content';
 
 export interface ShortcutAddProps extends React.ComponentProps<'div'> {
   params: { id: string; lang: Locale };
@@ -24,6 +29,26 @@ export default async function ShortcutAdd({
 
   if (!shortcut) notFound();
 
+  const description = getShortcutDescription(shortcut, lang);
+  const legacyContent = getLegacyRideCouponContent(shortcut.uuid, lang);
+  const legacyNotice = legacyContent ? (
+    <div
+      className="space-y-3 text-start text-base text-zinc-500/90"
+      dir={lang === 'ar' ? 'rtl' : undefined}
+    >
+      {legacyContent.paragraphs.map((paragraph) => (
+        <p key={paragraph}>{paragraph}</p>
+      ))}
+      <a
+        className="text-blue-500 underline"
+        href={rideCouponAuthorUrl}
+        rel="noopener noreferrer"
+      >
+        {legacyContent.authorLink}
+      </a>
+    </div>
+  ) : null;
+
   return (
     <>
       <div
@@ -37,12 +62,14 @@ export default async function ShortcutAdd({
         <section className="p-safe-max-4 flex-1 space-y-4 overflow-auto text-center">
           <h3 className="text-3xl font-bold">{shortcut.name[lang]}</h3>
 
-          {shortcut.description[lang].split('\n').map((item, index) => (
+          {description.split('\n').map((item, index) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: order is stable
             <p key={index} className="text-lg text-zinc-500/90">
               {item}
             </p>
           ))}
+
+          {legacyNotice}
 
           <SuperEllipse asChild svgProps={{ width: 176, height: 128, n: 8 }}>
             <ShortcutCard
@@ -121,9 +148,8 @@ export default async function ShortcutAdd({
         <div className="flex">
           <div className="flex-1 space-y-2">
             <h5 className="font-semibold">Description</h5>
-            <p className="text-zinc-500/90">
-              {shortcut.description[lang] || '-'}
-            </p>
+            <p className="text-zinc-500/90">{description || '-'}</p>
+            {legacyNotice}
           </div>
 
           {/* <div className="flex-1 space-y-2">
