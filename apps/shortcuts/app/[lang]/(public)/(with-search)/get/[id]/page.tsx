@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import ShortcutAdd, { type ShortcutAddProps } from '#/components/shortcut-add';
 import { getShortcutByUuid, getShortcuts } from '#/lib/db/queries';
 import { getDictionary, i18n } from '#/lib/i18n';
+import { getShortcutDescription } from '#/lib/shortcut-content';
 
 type Props = {
   params: Promise<ShortcutAddProps['params']>;
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: shortcut.name[lang],
-    description: shortcut.description[lang],
+    description: getShortcutDescription(shortcut, lang),
     metadataBase: new URL(process.env.NEXT_PUBLIC_HOST_URL),
     alternates: {
       canonical: `/get/${id}`,

@@ -1,5 +1,6 @@
 import type { SelectShortcut } from '#/lib/db/schema';
 import type { Locale } from '#/lib/i18n';
+import { getShortcutDescription } from '#/lib/shortcut-content';
 
 import ShortcutCard from './shortcut-card';
 
@@ -16,7 +17,7 @@ export default function ShortcutList({ shortcuts, lang }: ShortcutListProps) {
             item={item}
           />
           <p className="ms-3 h-full overflow-hidden text-ellipsis leading-[25.6px] text-zinc-500/90">
-            {item.description[lang]}
+            {getShortcutDescription(item, lang)}
           </p>
         </li>
       ))}
